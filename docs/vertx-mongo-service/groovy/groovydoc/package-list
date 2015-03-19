@@ -1,0 +1,5 @@
+examples
+io.vertx.ext.mongo
+io.vertx.ext.mongo.impl.codec
+io.vertx.ext.mongo.impl.config
+io.vertx.groovy.ext.mongo

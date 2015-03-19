@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: test_context.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: test_context.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+/** @module vertx-unit-js/test_context */
+var utils = require('vertx-js/util/utils');
+var Async = require('vertx-unit-js/async');
+
+var io = Packages.io;
+var JsonObject = io.vertx.core.json.JsonObject;
+var JTestContext = io.vertx.ext.unit.TestContext;
+
+/**
+ The test context is used for performing test assertions and manage the completion of the test. This context
+ is provided by &lt;i>vertx-unit&lt;/i> as argument of the test case.
+
+ @class
+*/
+var TestContext = function(j_val) {
+
+  var j_testContext = j_val;
+  var that = this;
+
+  /**
+   Get some data from the context.
+
+   @public
+   @param key {string} the key of the data 
+   @return {Object} the data
+   */
+  this.get = function(key) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      return utils.convReturnTypeUnknown(j_testContext.get(key));
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Put some data in the context.
+   &lt;p>
+   This can be used to share data between different tests and before/after phases.
+
+   @public
+   @param key {string} the key of the data 
+   @param value {Object} the data 
+   @return {Object} the previous object when it exists
+   */
+  this.put = function(key, value) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'string' && true) {
+      return utils.convReturnTypeUnknown(j_testContext.put(key, utils.convParamTypeUnknown(value)));
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Remove some data from the context.
+
+   @public
+   @param key {string} the key to remove 
+   @return {Object} the removed object when it exists
+   */
+  this.remove = function(key) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      return utils.convReturnTypeUnknown(j_testContext.remove(key));
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Assert the &lt;code>expected&lt;/code> argument is &lt;code>null&lt;/code>. If the argument is not, an assertion error is thrown
+   otherwise the execution continue.
+
+   @public
+   @param expected {Object} the argument being asserted to be null 
+   @param message {string} the failure message 
+   @return {TestContext} a reference to this, so the API can be used fluently
+   */
+  this.assertNull = function() {
+    var __args = arguments;
+    if (__args.length === 1 && true) {
+      j_testContext.assertNull(utils.convParamTypeUnknown(__args[0]));
+      return that;
+    }  else if (__args.length === 2 && true && typeof __args[1] === 'string') {
+      j_testContext.assertNull(utils.convParamTypeUnknown(__args[0]), __args[1]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Assert the &lt;code>expected&lt;/code> argument is not &lt;code>null&lt;/code>. If the argument is &lt;code>null&lt;/code>, an assertion error is thrown
+   otherwise the execution continue.
+
+   @public
+   @param expected {Object} the argument being asserted to be not null 
+   @param message {string} the failure message 
+   @return {TestContext} a reference to this, so the API can be used fluently
+   */
+  this.assertNotNull = function() {
+    var __args = arguments;
+    if (__args.length === 1 && true) {
+      j_testContext.assertNotNull(utils.convParamTypeUnknown(__args[0]));
+      return that;
+    }  else if (__args.length === 2 && true && typeof __args[1] === 'string') {
+      j_testContext.assertNotNull(utils.convParamTypeUnknown(__args[0]), __args[1]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Assert the specified &lt;code>condition&lt;/code> is &lt;code>true&lt;/code>. If the condition is &lt;code>false&lt;/code>, an assertion error is thrown
+   otherwise the execution continue.
+
+   @public
+   @param condition {boolean} the condition to assert 
+   @param message {string} the failure message 
+   @return {TestContext} a reference to this, so the API can be used fluently
+   */
+  this.assertTrue = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] ==='boolean') {
+      j_testContext.assertTrue(__args[0]);
+      return that;
+    }  else if (__args.length === 2 && typeof __args[0] ==='boolean' && typeof __args[1] === 'string') {
+      j_testContext.assertTrue(__args[0], __args[1]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Assert the specified &lt;code>condition&lt;/code> is &lt;code>false&lt;/code>. If the condition is &lt;code>true&lt;/code>, an assertion error is thrown
+   otherwise the execution continue.
+
+   @public
+   @param condition {boolean} the condition to assert 
+   @param message {string} the failure message 
+   @return {TestContext} a reference to this, so the API can be used fluently
+   */
+  this.assertFalse = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] ==='boolean') {
+      j_testContext.assertFalse(__args[0]);
+      return that;
+    }  else if (__args.length === 2 && typeof __args[0] ==='boolean' && typeof __args[1] === 'string') {
+      j_testContext.assertFalse(__args[0], __args[1]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Assert the &lt;code>expected&lt;/code> argument is equals to the &lt;code>actual&lt;/code> argument. If the arguments are not equals
+   an assertion error is thrown otherwise the execution continue.
+
+   @public
+   @param expected {Object} the object the actual object is supposedly equals to 
+   @param actual {Object} the actual object to test 
+   @param message {string} the failure message 
+   @return {TestContext} a reference to this, so the API can be used fluently
+   */
+  this.assertEquals = function() {
+    var __args = arguments;
+    if (__args.length === 2 && true && true) {
+      j_testContext.assertEquals(utils.convParamTypeUnknown(__args[0]), utils.convParamTypeUnknown(__args[1]));
+      return that;
+    }  else if (__args.length === 3 && true && true && typeof __args[2] === 'string') {
+      j_testContext.assertEquals(utils.convParamTypeUnknown(__args[0]), utils.convParamTypeUnknown(__args[1]), __args[2]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Asserts that the &lt;code>expected&lt;/code> double argument is equals to the &lt;code>actual&lt;/code> double argument
+   within a positive delta. If the arguments do not satisfy this, an assertion error is thrown otherwise
+   the execution continue.
+
+   @public
+   @param expected {number} the object the actual object is supposedly equals to 
+   @param actual {number} the actual object to test 
+   @param delta {number} the maximum delta 
+   @param message {string} the failure message 
+   @return {TestContext} a reference to this, so the API can be used fluently
+   */
+  this.assertInRange = function() {
+    var __args = arguments;
+    if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] ==='number' && typeof __args[2] ==='number') {
+      j_testContext.assertInRange(__args[0], __args[1], __args[2]);
+      return that;
+    }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] ==='number' && typeof __args[2] ==='number' && typeof __args[3] === 'string') {
+      j_testContext.assertInRange(__args[0], __args[1], __args[2], __args[3]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Assert the &lt;code>first&lt;/code> argument is not equals to the &lt;code>second&lt;/code> argument. If the arguments are equals
+   an assertion error is thrown otherwise the execution continue.
+
+   @public
+   @param first {Object} the first object to test 
+   @param second {Object} the second object to test 
+   @param message {string} the failure message 
+   @return {TestContext} a reference to this, so the API can be used fluently
+   */
+  this.assertNotEquals = function() {
+    var __args = arguments;
+    if (__args.length === 2 && true && true) {
+      j_testContext.assertNotEquals(utils.convParamTypeUnknown(__args[0]), utils.convParamTypeUnknown(__args[1]));
+      return that;
+    }  else if (__args.length === 3 && true && true && typeof __args[2] === 'string') {
+      j_testContext.assertNotEquals(utils.convParamTypeUnknown(__args[0]), utils.convParamTypeUnknown(__args[1]), __args[2]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Throw a failure with the specified failure &lt;code>message&lt;/code>.
+
+   @public
+   @param message {string} the failure message 
+   */
+  this.fail = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      j_testContext.fail();
+    }  else if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_testContext.fail(__args[0]);
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Create and returns a new async object, the returned async controls the completion of the test. The test case
+   will complete when all the async objects have their {@link Async#complete} method called
+   at least once.&lt;p/>
+  
+   This method shall be used for creating asynchronous exit points for the executed test.
+
+   @public
+
+   @return {Async} the async instance
+   */
+  this.async = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return new Async(j_testContext.async());
+    } else utils.invalidArgs();
+  };
+
+  // A reference to the underlying Java delegate
+  // NOTE! This is an internal API and must not be used in user code.
+  // If you rely on this property your code is likely to break if we change it / remove it without warning.
+  this._jdel = j_testContext;
+};
+
+// We export the Constructor function
+module.exports = TestContext;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="async.html">vertx-unit-js/async</a></li><li><a href="event_bus_collector.html">vertx-unit-js/event_bus_collector</a></li><li><a href="failure.html">vertx-unit-js/failure</a></li><li><a href="test_case.html">vertx-unit-js/test_case</a></li><li><a href="test_case_report.html">vertx-unit-js/test_case_report</a></li><li><a href="test_completion.html">vertx-unit-js/test_completion</a></li><li><a href="test_context.html">vertx-unit-js/test_context</a></li><li><a href="test_result.html">vertx-unit-js/test_result</a></li><li><a href="test_suite.html">vertx-unit-js/test_suite</a></li><li><a href="test_suite_report.html">vertx-unit-js/test_suite_report</a></li></ul><h3>Classes</h3><ul><li><a href="async-Async.html">Async</a></li><li><a href="event_bus_collector-EventBusCollector.html">EventBusCollector</a></li><li><a href="failure-Failure.html">Failure</a></li><li><a href="test_case_report-TestCaseReport.html">TestCaseReport</a></li><li><a href="test_case-TestCase.html">TestCase</a></li><li><a href="test_completion-TestCompletion.html">TestCompletion</a></li><li><a href="test_context-TestContext.html">TestContext</a></li><li><a href="test_result-TestResult.html">TestResult</a></li><li><a href="test_suite_report-TestSuiteReport.html">TestSuiteReport</a></li><li><a href="test_suite-TestSuite.html">TestSuite</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 16 2015 21:09:33 GMT-0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,2414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: HttpClientRequest</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Class: HttpClientRequest</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+        <span class="ancestors"><a href="http_client_request.html">vertx-js/http_client_request</a>~</span>
+    
+    HttpClientRequest
+    </h2>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="HttpClientRequest"><span class="type-signature"></span>new HttpClientRequest<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Represents a client-side HTTP request.
+ <p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="continueHandler"><span class="type-signature"></span>continueHandler<span class="signature">(handler)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        If you send an HTTP request with the header <code>Expect</code> set to the value <code>100-continue</code>
+   and the server responds with an interim HTTP response with a status code of <code>100</code> and a continue handler
+   has been set using this method, then the <code>handler</code> will be called.
+   <p>
+   You can then continue to write data to the request body and later end it. This is normally used in conjunction with
+   the HttpClientRequest#sendHead method to force the request header to be written before the request has ended.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line281">line 281</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a reference to this, so the API can be used fluently
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="drainHandler"><span class="type-signature"></span>drainHandler<span class="signature">(handler)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line113">line 113</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="end"><span class="type-signature"></span>end<span class="signature">(chunk, enc)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Same as HttpClientRequest#end but writes a String with the specified encoding
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>chunk</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>enc</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line315">line 315</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="endHandler"><span class="type-signature"></span>endHandler<span class="signature">(endHandler)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>endHandler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line171">line 171</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="exceptionHandler"><span class="type-signature"></span>exceptionHandler<span class="signature">(handler)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="handler"><span class="type-signature"></span>handler<span class="signature">(handler)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line127">line 127</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="headers"><span class="type-signature"></span>headers<span class="signature">()</span><span class="type-signature"> &rarr; {MultiMap}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line243">line 243</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    <ul>
+            <li>
+<div class="param-desc">
+    The HTTP headers
+</div>
+
+
+</li>
+        
+            <li>
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">MultiMap</span>
+
+
+	</dd>
+</dl>
+</li>
+        </ul>
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isChunked"><span class="type-signature"></span>isChunked<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line201">line 201</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    <ul>
+            <li>
+<div class="param-desc">
+    Is the request chunked?
+</div>
+
+
+</li>
+        
+            <li>
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+</li>
+        </ul>
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="method"><span class="type-signature"></span>method<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        The HTTP method for the request.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line215">line 215</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="pause"><span class="type-signature"></span>pause<span class="signature">()</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line143">line 143</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="putHeader"><span class="type-signature"></span>putHeader<span class="signature">(name, value)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Put an HTTP header
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The header name</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The header value</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line261">line 261</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a reference to this, so the API can be used fluently
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="resume"><span class="type-signature"></span>resume<span class="signature">()</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line157">line 157</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="sendHead"><span class="type-signature"></span>sendHead<span class="signature">()</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Forces the head of the request to be written before HttpClientRequest#end is called on the request or any data is
+   written to it.
+   <p>
+   This is normally used to implement HTTP 100-continue handling, see HttpClientRequest#continueHandler for
+   more information.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line300">line 300</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a reference to this, so the API can be used fluently
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setChunked"><span class="type-signature"></span>setChunked<span class="signature">(chunked)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        If chunked is true then the request will be set into HTTP chunked mode
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>chunked</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">true if chunked encoding</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line186">line 186</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a reference to this, so the API can be used fluently
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setTimeout"><span class="type-signature"></span>setTimeout<span class="signature">(timeoutMs)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set's the amount of time after which if a response is not received TimeoutException
+   will be sent to the exception handler of this request.
+   <p>
+    Calling this method more than once
+   has the effect of canceling any existing timeout and starting the timeout from scratch.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>timeoutMs</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The quantity of time in milliseconds.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line339">line 339</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a reference to this, so the API can be used fluently
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setWriteQueueMaxSize"><span class="type-signature"></span>setWriteQueueMaxSize<span class="signature">(maxSize)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>maxSize</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line99">line 99</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="uri"><span class="type-signature"></span>uri<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line229">line 229</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    <ul>
+            <li>
+<div class="param-desc">
+    The URI of the request.
+</div>
+
+
+</li>
+        
+            <li>
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+</li>
+        </ul>
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="write"><span class="type-signature"></span>write<span class="signature">(chunk, enc)</span><span class="type-signature"> &rarr; {HttpClientRequest}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Write a  to the request body, encoded using the encoding <code>enc</code>.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>chunk</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>enc</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    @return a reference to this, so the API can be used fluently
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">HttpClientRequest</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="writeQueueFull"><span class="type-signature"></span>writeQueueFull<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        This will return <code>true</code> if there are more bytes in the write queue than the value set using HttpClientRequest#setWriteQueueMaxSize
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="http_client_request.js.html">http_client_request.js</a>, <a href="http_client_request.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    true if write queue is full
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="async_file.html">vertx-js/async_file</a></li><li><a href="async_map.html">vertx-js/async_map</a></li><li><a href="buffer.html">vertx-js/buffer</a></li><li><a href="context.html">vertx-js/context</a></li><li><a href="counter.html">vertx-js/counter</a></li><li><a href="datagram_packet.html">vertx-js/datagram_packet</a></li><li><a href="datagram_socket.html">vertx-js/datagram_socket</a></li><li><a href="dns_client.html">vertx-js/dns_client</a></li><li><a href="event_bus.html">vertx-js/event_bus</a></li><li><a href="file_props.html">vertx-js/file_props</a></li><li><a href="file_system.html">vertx-js/file_system</a></li><li><a href="file_system_props.html">vertx-js/file_system_props</a></li><li><a href="future.html">vertx-js/future</a></li><li><a href="http_client.html">vertx-js/http_client</a></li><li><a href="http_client_request.html">vertx-js/http_client_request</a></li><li><a href="http_client_response.html">vertx-js/http_client_response</a></li><li><a href="http_server.html">vertx-js/http_server</a></li><li><a href="http_server_file_upload.html">vertx-js/http_server_file_upload</a></li><li><a href="http_server_request.html">vertx-js/http_server_request</a></li><li><a href="http_server_request_stream.html">vertx-js/http_server_request_stream</a></li><li><a href="http_server_response.html">vertx-js/http_server_response</a></li><li><a href="local_map.html">vertx-js/local_map</a></li><li><a href="lock.html">vertx-js/lock</a></li><li><a href="measured.html">vertx-js/measured</a></li><li><a href="message.html">vertx-js/message</a></li><li><a href="message_consumer.html">vertx-js/message_consumer</a></li><li><a href="message_producer.html">vertx-js/message_producer</a></li><li><a href="multi_map.html">vertx-js/multi_map</a></li><li><a href="mx_record.html">vertx-js/mx_record</a></li><li><a href="net_client.html">vertx-js/net_client</a></li><li><a href="net_server.html">vertx-js/net_server</a></li><li><a href="net_socket.html">vertx-js/net_socket</a></li><li><a href="net_socket_stream.html">vertx-js/net_socket_stream</a></li><li><a href="packet_writestream.html">vertx-js/packet_writestream</a></li><li><a href="pump.html">vertx-js/pump</a></li><li><a href="read_stream.html">vertx-js/read_stream</a></li><li><a href="server_web_socket.html">vertx-js/server_web_socket</a></li><li><a href="server_web_socket_stream.html">vertx-js/server_web_socket_stream</a></li><li><a href="shared_data.html">vertx-js/shared_data</a></li><li><a href="socket_address.html">vertx-js/socket_address</a></li><li><a href="srv_record.html">vertx-js/srv_record</a></li><li><a href="stream_base.html">vertx-js/stream_base</a></li><li><a href="timeout_stream.html">vertx-js/timeout_stream</a></li><li><a href="vertx.html">vertx-js/vertx</a></li><li><a href="web_socket.html">vertx-js/web_socket</a></li><li><a href="web_socket_base.html">vertx-js/web_socket_base</a></li><li><a href="web_socket_frame.html">vertx-js/web_socket_frame</a></li><li><a href="web_socket_stream.html">vertx-js/web_socket_stream</a></li><li><a href="write_stream.html">vertx-js/write_stream</a></li></ul><h3>Classes</h3><ul><li><a href="async_file-AsyncFile.html">AsyncFile</a></li><li><a href="async_map-AsyncMap.html">AsyncMap</a></li><li><a href="buffer-Buffer.html">Buffer</a></li><li><a href="context-Context.html">Context</a></li><li><a href="counter-Counter.html">Counter</a></li><li><a href="datagram_packet-DatagramPacket.html">DatagramPacket</a></li><li><a href="datagram_socket-DatagramSocket.html">DatagramSocket</a></li><li><a href="dns_client-DnsClient.html">DnsClient</a></li><li><a href="event_bus-EventBus.html">EventBus</a></li><li><a href="file_props-FileProps.html">FileProps</a></li><li><a href="file_system_props-FileSystemProps.html">FileSystemProps</a></li><li><a href="file_system-FileSystem.html">FileSystem</a></li><li><a href="future-Future.html">Future</a></li><li><a href="http_client_request-HttpClientRequest.html">HttpClientRequest</a></li><li><a href="http_client_response-HttpClientResponse.html">HttpClientResponse</a></li><li><a href="http_client-HttpClient.html">HttpClient</a></li><li><a href="http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></li><li><a href="http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></li><li><a href="http_server_request-HttpServerRequest.html">HttpServerRequest</a></li><li><a href="http_server_response-HttpServerResponse.html">HttpServerResponse</a></li><li><a href="http_server-HttpServer.html">HttpServer</a></li><li><a href="local_map-LocalMap.html">LocalMap</a></li><li><a href="lock-Lock.html">Lock</a></li><li><a href="measured-Measured.html">Measured</a></li><li><a href="message_consumer-MessageConsumer.html">MessageConsumer</a></li><li><a href="message_producer-MessageProducer.html">MessageProducer</a></li><li><a href="message-Message.html">Message</a></li><li><a href="multi_map-MultiMap.html">MultiMap</a></li><li><a href="mx_record-MxRecord.html">MxRecord</a></li><li><a href="net_client-NetClient.html">NetClient</a></li><li><a href="net_server-NetServer.html">NetServer</a></li><li><a href="net_socket_stream-NetSocketStream.html">NetSocketStream</a></li><li><a href="net_socket-NetSocket.html">NetSocket</a></li><li><a href="packet_writestream-PacketWritestream.html">PacketWritestream</a></li><li><a href="pump-Pump.html">Pump</a></li><li><a href="read_stream-ReadStream.html">ReadStream</a></li><li><a href="server_web_socket_stream-ServerWebSocketStream.html">ServerWebSocketStream</a></li><li><a href="server_web_socket-ServerWebSocket.html">ServerWebSocket</a></li><li><a href="shared_data-SharedData.html">SharedData</a></li><li><a href="socket_address-SocketAddress.html">SocketAddress</a></li><li><a href="srv_record-SrvRecord.html">SrvRecord</a></li><li><a href="stream_base-StreamBase.html">StreamBase</a></li><li><a href="timeout_stream-TimeoutStream.html">TimeoutStream</a></li><li><a href="vertx-Vertx.html">Vertx</a></li><li><a href="web_socket_base-WebSocketBase.html">WebSocketBase</a></li><li><a href="web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></li><li><a href="web_socket_stream-WebSocketStream.html">WebSocketStream</a></li><li><a href="web_socket-WebSocket.html">WebSocket</a></li><li><a href="write_stream-WriteStream.html">WriteStream</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 16 2015 22:28:05 GMT-0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

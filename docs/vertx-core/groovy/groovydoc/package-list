@@ -1,0 +1,12 @@
+io.vertx.groovy.core
+io.vertx.groovy.core.buffer
+io.vertx.groovy.core.datagram
+io.vertx.groovy.core.dns
+io.vertx.groovy.core.eventbus
+io.vertx.groovy.core.file
+io.vertx.groovy.core.http
+io.vertx.groovy.core.metrics
+io.vertx.groovy.core.net
+io.vertx.groovy.core.shareddata
+io.vertx.groovy.core.streams
+io.vertx.lang.groovy

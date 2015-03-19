@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: http_server_response.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: http_server_response.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+/** @module vertx-js/http_server_response */
+var utils = require('vertx-js/util/utils');
+var Buffer = require('vertx-js/buffer');
+var WriteStream = require('vertx-js/write_stream');
+var MultiMap = require('vertx-js/multi_map');
+
+var io = Packages.io;
+var JsonObject = io.vertx.core.json.JsonObject;
+var JHttpServerResponse = io.vertx.core.http.HttpServerResponse;
+
+/**
+ Represents a server-side HTTP response.
+ &lt;p>
+ An instance of this is created and associated to every instance of
+ @class
+*/
+var HttpServerResponse = function(j_val) {
+
+  var j_httpServerResponse = j_val;
+  var that = this;
+  WriteStream.call(this, j_val);
+
+  /**
+   This will return &lt;code>true&lt;/code> if there are more bytes in the write queue than the value set using {@link HttpServerResponse#setWriteQueueMaxSize}
+
+   @public
+
+   @return {boolean} true if write queue is full
+   */
+  this.writeQueueFull = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_httpServerResponse.writeQueueFull();
+    } else utils.invalidArgs();
+  };
+
+  /**
+
+   @public
+   @param handler {function} 
+   @return {HttpServerResponse}
+   */
+  this.exceptionHandler = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_httpServerResponse.exceptionHandler(function(jVal) {
+      handler(utils.convReturnTypeUnknown(jVal));
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Write a  to the response body, encoded using the encoding &lt;code>enc&lt;/code>.
+
+   @public
+   @param chunk {string} the string to write 
+   @param enc {string} the encoding to use 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.write = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
+      j_httpServerResponse.write(__args[0]._jdel);
+      return that;
+    }  else if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_httpServerResponse.write(__args[0]);
+      return that;
+    }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
+      j_httpServerResponse.write(__args[0], __args[1]);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+
+   @public
+   @param maxSize {number} 
+   @return {HttpServerResponse}
+   */
+  this.setWriteQueueMaxSize = function(maxSize) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] ==='number') {
+      j_httpServerResponse.setWriteQueueMaxSize(maxSize);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+
+   @public
+   @param handler {function} 
+   @return {HttpServerResponse}
+   */
+  this.drainHandler = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_httpServerResponse.drainHandler(handler);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   @return the HTTP status code of the response. The default is &lt;code>200&lt;/code> representing &lt;code>OK&lt;/code>.
+
+   @public
+
+   @return {number}
+   */
+  this.getStatusCode = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_httpServerResponse.getStatusCode();
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Set the status code. If the status message hasn't been explicitly set, a default status message corresponding
+   to the code will be looked-up and used.
+
+   @public
+   @param statusCode {number} 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.setStatusCode = function(statusCode) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] ==='number') {
+      j_httpServerResponse.setStatusCode(statusCode);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   @return the HTTP status message of the response. If this is not specified a default value will be used depending on what
+   {@link HttpServerResponse#setStatusCode} has been set to.
+
+   @public
+
+   @return {string}
+   */
+  this.getStatusMessage = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_httpServerResponse.getStatusMessage();
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Set the status message
+
+   @public
+   @param statusMessage {string} 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.setStatusMessage = function(statusMessage) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_httpServerResponse.setStatusMessage(statusMessage);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   If &lt;code>chunked&lt;/code> is &lt;code>true&lt;/code>, this response will use HTTP chunked encoding, and each call to write to the body
+   will correspond to a new HTTP chunk sent on the wire.
+   &lt;p>
+   If chunked encoding is used the HTTP header &lt;code>Transfer-Encoding&lt;/code> with a value of &lt;code>Chunked&lt;/code> will be
+   automatically inserted in the response.
+   &lt;p>
+   If &lt;code>chunked&lt;/code> is &lt;code>false&lt;/code>, this response will not use HTTP chunked encoding, and therefore the total size
+   of any data that is written in the respone body must be set in the &lt;code>Content-Length&lt;/code> header &lt;b>before&lt;/b> any
+   data is written out.
+   &lt;p>
+   An HTTP chunked response is typically used when you do not know the total size of the request body up front.
+
+   @public
+   @param chunked {boolean} 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.setChunked = function(chunked) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] ==='boolean') {
+      j_httpServerResponse.setChunked(chunked);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   @return is the response chunked?
+
+   @public
+
+   @return {boolean}
+   */
+  this.isChunked = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_httpServerResponse.isChunked();
+    } else utils.invalidArgs();
+  };
+
+  /**
+   @return The HTTP headers
+
+   @public
+
+   @return {MultiMap}
+   */
+  this.headers = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      if (that.cachedheaders == null) {
+        that.cachedheaders = new MultiMap(j_httpServerResponse.headers());
+      }
+      return that.cachedheaders;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Put an HTTP header
+
+   @public
+   @param name {string} the header name 
+   @param value {string} the header value. 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.putHeader = function(name, value) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
+      j_httpServerResponse.putHeader(name, value);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   @return The HTTP trailers
+
+   @public
+
+   @return {MultiMap}
+   */
+  this.trailers = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      if (that.cachedtrailers == null) {
+        that.cachedtrailers = new MultiMap(j_httpServerResponse.trailers());
+      }
+      return that.cachedtrailers;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Put an HTTP trailer
+
+   @public
+   @param name {string} the trailer name 
+   @param value {string} the trailer value 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.putTrailer = function(name, value) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
+      j_httpServerResponse.putTrailer(name, value);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Set a close handler for the response. This will be called if the underlying connection closes before the response
+   is complete.
+
+   @public
+   @param handler {function} the handler 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.closeHandler = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_httpServerResponse.closeHandler(handler);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Same as {@link HttpServerResponse#end} but writes a String with the specified encoding before ending the response.
+
+   @public
+   @param chunk {string} the string to write before ending the response 
+   @param enc {string} the encoding to use 
+   */
+  this.end = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      j_httpServerResponse.end();
+    }  else if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_httpServerResponse.end(__args[0]);
+    }  else if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
+      j_httpServerResponse.end(__args[0]._jdel);
+    }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
+      j_httpServerResponse.end(__args[0], __args[1]);
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Like {@link HttpServerResponse#sendFile} but providing a handler which will be notified once the file has been completely
+   written to the wire.
+
+   @public
+   @param filename {string} path to the file to serve 
+   @param resultHandler {function} handler that will be called on completion 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.sendFile = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_httpServerResponse.sendFile(__args[0]);
+      return that;
+    }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
+      j_httpServerResponse.sendFile(__args[0], function(ar) {
+      if (ar.succeeded()) {
+        __args[1](null, null);
+      } else {
+        __args[1](null, ar.cause());
+      }
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Close the underlying TCP connection corresponding to the request.
+
+   @public
+
+   */
+  this.close = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      j_httpServerResponse.close();
+    } else utils.invalidArgs();
+  };
+
+  /**
+   @return has the response already ended?
+
+   @public
+
+   @return {boolean}
+   */
+  this.ended = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_httpServerResponse.ended();
+    } else utils.invalidArgs();
+  };
+
+  /**
+   @return have the headers for the response already been written?
+
+   @public
+
+   @return {boolean}
+   */
+  this.headWritten = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_httpServerResponse.headWritten();
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Provide a handler that will be called just before the headers are written to the wire.&lt;p>
+   This provides a hook allowing you to add any more headers or do any more operations before this occurs.
+
+   @public
+   @param handler {function} the handler 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.headersEndHandler = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_httpServerResponse.headersEndHandler(handler);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Provide a handler that will be called just before the last part of the body is written to the wire
+   and the response is ended.&lt;p>
+   This provides a hook allowing you to do any more operations before this occurs.
+
+   @public
+   @param handler {function} the handler 
+   @return {HttpServerResponse} a reference to this, so the API can be used fluently
+   */
+  this.bodyEndHandler = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_httpServerResponse.bodyEndHandler(handler);
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  // A reference to the underlying Java delegate
+  // NOTE! This is an internal API and must not be used in user code.
+  // If you rely on this property your code is likely to break if we change it / remove it without warning.
+  this._jdel = j_httpServerResponse;
+};
+
+// We export the Constructor function
+module.exports = HttpServerResponse;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="async_file.html">vertx-js/async_file</a></li><li><a href="async_map.html">vertx-js/async_map</a></li><li><a href="buffer.html">vertx-js/buffer</a></li><li><a href="context.html">vertx-js/context</a></li><li><a href="counter.html">vertx-js/counter</a></li><li><a href="datagram_packet.html">vertx-js/datagram_packet</a></li><li><a href="datagram_socket.html">vertx-js/datagram_socket</a></li><li><a href="dns_client.html">vertx-js/dns_client</a></li><li><a href="event_bus.html">vertx-js/event_bus</a></li><li><a href="file_props.html">vertx-js/file_props</a></li><li><a href="file_system.html">vertx-js/file_system</a></li><li><a href="file_system_props.html">vertx-js/file_system_props</a></li><li><a href="future.html">vertx-js/future</a></li><li><a href="http_client.html">vertx-js/http_client</a></li><li><a href="http_client_request.html">vertx-js/http_client_request</a></li><li><a href="http_client_response.html">vertx-js/http_client_response</a></li><li><a href="http_server.html">vertx-js/http_server</a></li><li><a href="http_server_file_upload.html">vertx-js/http_server_file_upload</a></li><li><a href="http_server_request.html">vertx-js/http_server_request</a></li><li><a href="http_server_request_stream.html">vertx-js/http_server_request_stream</a></li><li><a href="http_server_response.html">vertx-js/http_server_response</a></li><li><a href="local_map.html">vertx-js/local_map</a></li><li><a href="lock.html">vertx-js/lock</a></li><li><a href="measured.html">vertx-js/measured</a></li><li><a href="message.html">vertx-js/message</a></li><li><a href="message_consumer.html">vertx-js/message_consumer</a></li><li><a href="message_producer.html">vertx-js/message_producer</a></li><li><a href="multi_map.html">vertx-js/multi_map</a></li><li><a href="mx_record.html">vertx-js/mx_record</a></li><li><a href="net_client.html">vertx-js/net_client</a></li><li><a href="net_server.html">vertx-js/net_server</a></li><li><a href="net_socket.html">vertx-js/net_socket</a></li><li><a href="net_socket_stream.html">vertx-js/net_socket_stream</a></li><li><a href="packet_writestream.html">vertx-js/packet_writestream</a></li><li><a href="pump.html">vertx-js/pump</a></li><li><a href="read_stream.html">vertx-js/read_stream</a></li><li><a href="server_web_socket.html">vertx-js/server_web_socket</a></li><li><a href="server_web_socket_stream.html">vertx-js/server_web_socket_stream</a></li><li><a href="shared_data.html">vertx-js/shared_data</a></li><li><a href="socket_address.html">vertx-js/socket_address</a></li><li><a href="srv_record.html">vertx-js/srv_record</a></li><li><a href="stream_base.html">vertx-js/stream_base</a></li><li><a href="timeout_stream.html">vertx-js/timeout_stream</a></li><li><a href="vertx.html">vertx-js/vertx</a></li><li><a href="web_socket.html">vertx-js/web_socket</a></li><li><a href="web_socket_base.html">vertx-js/web_socket_base</a></li><li><a href="web_socket_frame.html">vertx-js/web_socket_frame</a></li><li><a href="web_socket_stream.html">vertx-js/web_socket_stream</a></li><li><a href="write_stream.html">vertx-js/write_stream</a></li></ul><h3>Classes</h3><ul><li><a href="async_file-AsyncFile.html">AsyncFile</a></li><li><a href="async_map-AsyncMap.html">AsyncMap</a></li><li><a href="buffer-Buffer.html">Buffer</a></li><li><a href="context-Context.html">Context</a></li><li><a href="counter-Counter.html">Counter</a></li><li><a href="datagram_packet-DatagramPacket.html">DatagramPacket</a></li><li><a href="datagram_socket-DatagramSocket.html">DatagramSocket</a></li><li><a href="dns_client-DnsClient.html">DnsClient</a></li><li><a href="event_bus-EventBus.html">EventBus</a></li><li><a href="file_props-FileProps.html">FileProps</a></li><li><a href="file_system_props-FileSystemProps.html">FileSystemProps</a></li><li><a href="file_system-FileSystem.html">FileSystem</a></li><li><a href="future-Future.html">Future</a></li><li><a href="http_client_request-HttpClientRequest.html">HttpClientRequest</a></li><li><a href="http_client_response-HttpClientResponse.html">HttpClientResponse</a></li><li><a href="http_client-HttpClient.html">HttpClient</a></li><li><a href="http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></li><li><a href="http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></li><li><a href="http_server_request-HttpServerRequest.html">HttpServerRequest</a></li><li><a href="http_server_response-HttpServerResponse.html">HttpServerResponse</a></li><li><a href="http_server-HttpServer.html">HttpServer</a></li><li><a href="local_map-LocalMap.html">LocalMap</a></li><li><a href="lock-Lock.html">Lock</a></li><li><a href="measured-Measured.html">Measured</a></li><li><a href="message_consumer-MessageConsumer.html">MessageConsumer</a></li><li><a href="message_producer-MessageProducer.html">MessageProducer</a></li><li><a href="message-Message.html">Message</a></li><li><a href="multi_map-MultiMap.html">MultiMap</a></li><li><a href="mx_record-MxRecord.html">MxRecord</a></li><li><a href="net_client-NetClient.html">NetClient</a></li><li><a href="net_server-NetServer.html">NetServer</a></li><li><a href="net_socket_stream-NetSocketStream.html">NetSocketStream</a></li><li><a href="net_socket-NetSocket.html">NetSocket</a></li><li><a href="packet_writestream-PacketWritestream.html">PacketWritestream</a></li><li><a href="pump-Pump.html">Pump</a></li><li><a href="read_stream-ReadStream.html">ReadStream</a></li><li><a href="server_web_socket_stream-ServerWebSocketStream.html">ServerWebSocketStream</a></li><li><a href="server_web_socket-ServerWebSocket.html">ServerWebSocket</a></li><li><a href="shared_data-SharedData.html">SharedData</a></li><li><a href="socket_address-SocketAddress.html">SocketAddress</a></li><li><a href="srv_record-SrvRecord.html">SrvRecord</a></li><li><a href="stream_base-StreamBase.html">StreamBase</a></li><li><a href="timeout_stream-TimeoutStream.html">TimeoutStream</a></li><li><a href="vertx-Vertx.html">Vertx</a></li><li><a href="web_socket_base-WebSocketBase.html">WebSocketBase</a></li><li><a href="web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></li><li><a href="web_socket_stream-WebSocketStream.html">WebSocketStream</a></li><li><a href="web_socket-WebSocket.html">WebSocket</a></li><li><a href="write_stream-WriteStream.html">WriteStream</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 16 2015 22:28:02 GMT-0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
