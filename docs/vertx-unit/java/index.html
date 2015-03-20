@@ -1268,6 +1268,22 @@ be used when the thread running the test suite is not the same than the current 
 completion.await();</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>The <code>await</code> throws an exception when the thread is interrupted or a timeout is fired.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestCompletion.html#awaitSuccess--">awaitSuccess</a></code> is a variation that throws an exception when
+the test suite fails.</p>
+</div>
+<div class="listingblock">
+<div class="title">Blocking until the test suite succeeds</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TestCompletion completion = suite.run();
+
+// Wait until the test suite succeeds otherwise throw an exception
+completion.awaitSuccess();</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_time_out">Time out</h3>
@@ -1573,7 +1589,7 @@ via the method name:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-16 21:07:18 GMT
+Last updated 2015-03-19 21:29:24 GMT
 </div>
 </div>
 </body>
