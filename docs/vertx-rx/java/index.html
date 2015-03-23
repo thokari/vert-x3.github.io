@@ -930,8 +930,19 @@ Observable&lt;Long&gt; timer = Observable.timer(100, 100, TimeUnit.MILLISECONDS,
 </div>
 </div>
 <div class="paragraph">
+<p>For blocking scheduled actions, a scheduler can be created with the <code><a href="../../apidocs/io/vertx/rx/java/RxHelper.html#blockingScheduler-io.vertx.core.Vertx-">RxHelper.blockingScheduler</a></code>
+method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Scheduler scheduler = RxHelper.blockingScheduler(vertx);
+Observable&lt;Integer&gt; obs = blockingObservable.observeOn(scheduler);</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>RxJava can also be reconfigured to use the Vert.x scheduler, thanks to the scheduler hook created with
-<code><a href="../../apidocs/io/vertx/rx/java/RxHelper.html#schedulerHook-io.vertx.core.Vertx-">RxHelper.schedulerHook</a></code>:</p>
+<code><a href="../../apidocs/io/vertx/rx/java/RxHelper.html#schedulerHook-io.vertx.core.Vertx-">RxHelper.schedulerHook</a></code>, the returned scheduler hook
+uses a blocking scheduler for IO actions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1323,7 +1334,7 @@ socketObservable.subscribe(
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-19 18:19:22 GMT
+Last updated 2015-03-22 19:01:36 GMT
 </div>
 </div>
 </body>
