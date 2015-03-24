@@ -82,7 +82,7 @@ var FileSystem = function(j_val) {
   this.copy = function(from, to, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.copy(from, to, function(ar) {
+      j_fileSystem["copy(java.lang.String,java.lang.String,io.vertx.core.Handler)"](from, to, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -104,7 +104,7 @@ var FileSystem = function(j_val) {
   this.copyBlocking = function(from, to) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.copyBlocking(from, to);
+      j_fileSystem["copyBlocking(java.lang.String,java.lang.String)"](from, to);
       return that;
     } else utils.invalidArgs();
   };
@@ -127,7 +127,7 @@ var FileSystem = function(j_val) {
   this.copyRecursive = function(from, to, recursive, handler) {
     var __args = arguments;
     if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] ==='boolean' && typeof __args[3] === 'function') {
-      j_fileSystem.copyRecursive(from, to, recursive, function(ar) {
+      j_fileSystem["copyRecursive(java.lang.String,java.lang.String,boolean,io.vertx.core.Handler)"](from, to, recursive, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -150,7 +150,7 @@ var FileSystem = function(j_val) {
   this.copyRecursiveBlocking = function(from, to, recursive) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] ==='boolean') {
-      j_fileSystem.copyRecursiveBlocking(from, to, recursive);
+      j_fileSystem["copyRecursiveBlocking(java.lang.String,java.lang.String,boolean)"](from, to, recursive);
       return that;
     } else utils.invalidArgs();
   };
@@ -169,7 +169,7 @@ var FileSystem = function(j_val) {
   this.move = function(from, to, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.move(from, to, function(ar) {
+      j_fileSystem["move(java.lang.String,java.lang.String,io.vertx.core.Handler)"](from, to, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -191,7 +191,7 @@ var FileSystem = function(j_val) {
   this.moveBlocking = function(from, to) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.moveBlocking(from, to);
+      j_fileSystem["moveBlocking(java.lang.String,java.lang.String)"](from, to);
       return that;
     } else utils.invalidArgs();
   };
@@ -210,7 +210,7 @@ var FileSystem = function(j_val) {
   this.truncate = function(path, len, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] ==='number' && typeof __args[2] === 'function') {
-      j_fileSystem.truncate(path, len, function(ar) {
+      j_fileSystem["truncate(java.lang.String,long,io.vertx.core.Handler)"](path, len, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -232,7 +232,7 @@ var FileSystem = function(j_val) {
   this.truncateBlocking = function(path, len) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] ==='number') {
-      j_fileSystem.truncateBlocking(path, len);
+      j_fileSystem["truncateBlocking(java.lang.String,long)"](path, len);
       return that;
     } else utils.invalidArgs();
   };
@@ -252,7 +252,7 @@ var FileSystem = function(j_val) {
   this.chmod = function(path, perms, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.chmod(path, perms, function(ar) {
+      j_fileSystem["chmod(java.lang.String,java.lang.String,io.vertx.core.Handler)"](path, perms, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -274,7 +274,7 @@ var FileSystem = function(j_val) {
   this.chmodBlocking = function(path, perms) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.chmodBlocking(path, perms);
+      j_fileSystem["chmodBlocking(java.lang.String,java.lang.String)"](path, perms);
       return that;
     } else utils.invalidArgs();
   };
@@ -297,7 +297,7 @@ var FileSystem = function(j_val) {
   this.chmodRecursive = function(path, perms, dirPerms, handler) {
     var __args = arguments;
     if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      j_fileSystem.chmodRecursive(path, perms, dirPerms, function(ar) {
+      j_fileSystem["chmodRecursive(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.Handler)"](path, perms, dirPerms, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -320,7 +320,7 @@ var FileSystem = function(j_val) {
   this.chmodRecursiveBlocking = function(path, perms, dirPerms) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      j_fileSystem.chmodRecursiveBlocking(path, perms, dirPerms);
+      j_fileSystem["chmodRecursiveBlocking(java.lang.String,java.lang.String,java.lang.String)"](path, perms, dirPerms);
       return that;
     } else utils.invalidArgs();
   };
@@ -338,7 +338,7 @@ var FileSystem = function(j_val) {
   this.chown = function(path, user, group, handler) {
     var __args = arguments;
     if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      j_fileSystem.chown(path, user, group, function(ar) {
+      j_fileSystem["chown(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.Handler)"](path, user, group, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -362,7 +362,7 @@ var FileSystem = function(j_val) {
   this.chownBlocking = function(path, user, group) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      j_fileSystem.chownBlocking(path, user, group);
+      j_fileSystem["chownBlocking(java.lang.String,java.lang.String,java.lang.String)"](path, user, group);
       return that;
     } else utils.invalidArgs();
   };
@@ -380,7 +380,7 @@ var FileSystem = function(j_val) {
   this.props = function(path, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.props(path, function(ar) {
+      j_fileSystem["props(java.lang.String,io.vertx.core.Handler)"](path, function(ar) {
       if (ar.succeeded()) {
         handler(new FileProps(ar.result()), null);
       } else {
@@ -401,7 +401,7 @@ var FileSystem = function(j_val) {
   this.propsBlocking = function(path) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new FileProps(j_fileSystem.propsBlocking(path));
+      return new FileProps(j_fileSystem["propsBlocking(java.lang.String)"](path));
     } else utils.invalidArgs();
   };
 
@@ -418,7 +418,7 @@ var FileSystem = function(j_val) {
   this.lprops = function(path, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.lprops(path, function(ar) {
+      j_fileSystem["lprops(java.lang.String,io.vertx.core.Handler)"](path, function(ar) {
       if (ar.succeeded()) {
         handler(new FileProps(ar.result()), null);
       } else {
@@ -439,7 +439,7 @@ var FileSystem = function(j_val) {
   this.lpropsBlocking = function(path) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new FileProps(j_fileSystem.lpropsBlocking(path));
+      return new FileProps(j_fileSystem["lpropsBlocking(java.lang.String)"](path));
     } else utils.invalidArgs();
   };
 
@@ -455,7 +455,7 @@ var FileSystem = function(j_val) {
   this.link = function(link, existing, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.link(link, existing, function(ar) {
+      j_fileSystem["link(java.lang.String,java.lang.String,io.vertx.core.Handler)"](link, existing, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -477,7 +477,7 @@ var FileSystem = function(j_val) {
   this.linkBlocking = function(link, existing) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.linkBlocking(link, existing);
+      j_fileSystem["linkBlocking(java.lang.String,java.lang.String)"](link, existing);
       return that;
     } else utils.invalidArgs();
   };
@@ -494,7 +494,7 @@ var FileSystem = function(j_val) {
   this.symlink = function(link, existing, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.symlink(link, existing, function(ar) {
+      j_fileSystem["symlink(java.lang.String,java.lang.String,io.vertx.core.Handler)"](link, existing, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -516,7 +516,7 @@ var FileSystem = function(j_val) {
   this.symlinkBlocking = function(link, existing) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.symlinkBlocking(link, existing);
+      j_fileSystem["symlinkBlocking(java.lang.String,java.lang.String)"](link, existing);
       return that;
     } else utils.invalidArgs();
   };
@@ -532,7 +532,7 @@ var FileSystem = function(j_val) {
   this.unlink = function(link, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.unlink(link, function(ar) {
+      j_fileSystem["unlink(java.lang.String,io.vertx.core.Handler)"](link, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -553,7 +553,7 @@ var FileSystem = function(j_val) {
   this.unlinkBlocking = function(link) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_fileSystem.unlinkBlocking(link);
+      j_fileSystem["unlinkBlocking(java.lang.String)"](link);
       return that;
     } else utils.invalidArgs();
   };
@@ -569,7 +569,7 @@ var FileSystem = function(j_val) {
   this.readSymlink = function(link, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.readSymlink(link, function(ar) {
+      j_fileSystem["readSymlink(java.lang.String,io.vertx.core.Handler)"](link, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -590,7 +590,7 @@ var FileSystem = function(j_val) {
   this.readSymlinkBlocking = function(link) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_fileSystem.readSymlinkBlocking(link);
+      return j_fileSystem["readSymlinkBlocking(java.lang.String)"](link);
     } else utils.invalidArgs();
   };
 
@@ -605,7 +605,7 @@ var FileSystem = function(j_val) {
   this.delete = function(path, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.delete(path, function(ar) {
+      j_fileSystem["delete(java.lang.String,io.vertx.core.Handler)"](path, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -626,7 +626,7 @@ var FileSystem = function(j_val) {
   this.deleteBlocking = function(path) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_fileSystem.deleteBlocking(path);
+      j_fileSystem["deleteBlocking(java.lang.String)"](path);
       return that;
     } else utils.invalidArgs();
   };
@@ -646,7 +646,7 @@ var FileSystem = function(j_val) {
   this.deleteRecursive = function(path, recursive, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] ==='boolean' && typeof __args[2] === 'function') {
-      j_fileSystem.deleteRecursive(path, recursive, function(ar) {
+      j_fileSystem["deleteRecursive(java.lang.String,boolean,io.vertx.core.Handler)"](path, recursive, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -668,7 +668,7 @@ var FileSystem = function(j_val) {
   this.deleteRecursiveBlocking = function(path, recursive) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] ==='boolean') {
-      j_fileSystem.deleteRecursiveBlocking(path, recursive);
+      j_fileSystem["deleteRecursiveBlocking(java.lang.String,boolean)"](path, recursive);
       return that;
     } else utils.invalidArgs();
   };
@@ -692,7 +692,7 @@ var FileSystem = function(j_val) {
   this.mkdir = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.mkdir(__args[0], function(ar) {
+      j_fileSystem["mkdir(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](null, null);
       } else {
@@ -701,7 +701,7 @@ var FileSystem = function(j_val) {
     });
       return that;
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.mkdir(__args[0], __args[1], function(ar) {
+      j_fileSystem["mkdir(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(ar) {
       if (ar.succeeded()) {
         __args[2](null, null);
       } else {
@@ -723,10 +723,10 @@ var FileSystem = function(j_val) {
   this.mkdirBlocking = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_fileSystem.mkdirBlocking(__args[0]);
+      j_fileSystem["mkdirBlocking(java.lang.String)"](__args[0]);
       return that;
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.mkdirBlocking(__args[0], __args[1]);
+      j_fileSystem["mkdirBlocking(java.lang.String,java.lang.String)"](__args[0], __args[1]);
       return that;
     } else utils.invalidArgs();
   };
@@ -750,7 +750,7 @@ var FileSystem = function(j_val) {
   this.mkdirs = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.mkdirs(__args[0], function(ar) {
+      j_fileSystem["mkdirs(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](null, null);
       } else {
@@ -759,7 +759,7 @@ var FileSystem = function(j_val) {
     });
       return that;
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.mkdirs(__args[0], __args[1], function(ar) {
+      j_fileSystem["mkdirs(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(ar) {
       if (ar.succeeded()) {
         __args[2](null, null);
       } else {
@@ -781,10 +781,10 @@ var FileSystem = function(j_val) {
   this.mkdirsBlocking = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_fileSystem.mkdirsBlocking(__args[0]);
+      j_fileSystem["mkdirsBlocking(java.lang.String)"](__args[0]);
       return that;
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.mkdirsBlocking(__args[0], __args[1]);
+      j_fileSystem["mkdirsBlocking(java.lang.String,java.lang.String)"](__args[0], __args[1]);
       return that;
     } else utils.invalidArgs();
   };
@@ -806,7 +806,7 @@ var FileSystem = function(j_val) {
   this.readDir = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.readDir(__args[0], function(ar) {
+      j_fileSystem["readDir(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](ar.result(), null);
       } else {
@@ -815,7 +815,7 @@ var FileSystem = function(j_val) {
     });
       return that;
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.readDir(__args[0], __args[1], function(ar) {
+      j_fileSystem["readDir(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(ar) {
       if (ar.succeeded()) {
         __args[2](ar.result(), null);
       } else {
@@ -837,9 +837,9 @@ var FileSystem = function(j_val) {
   this.readDirBlocking = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_fileSystem.readDirBlocking(__args[0]);
+      return j_fileSystem["readDirBlocking(java.lang.String)"](__args[0]);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return j_fileSystem.readDirBlocking(__args[0], __args[1]);
+      return j_fileSystem["readDirBlocking(java.lang.String,java.lang.String)"](__args[0], __args[1]);
     } else utils.invalidArgs();
   };
 
@@ -856,7 +856,7 @@ var FileSystem = function(j_val) {
   this.readFile = function(path, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.readFile(path, function(ar) {
+      j_fileSystem["readFile(java.lang.String,io.vertx.core.Handler)"](path, function(ar) {
       if (ar.succeeded()) {
         handler(new Buffer(ar.result()), null);
       } else {
@@ -877,7 +877,7 @@ var FileSystem = function(j_val) {
   this.readFileBlocking = function(path) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new Buffer(j_fileSystem.readFileBlocking(path));
+      return new Buffer(j_fileSystem["readFileBlocking(java.lang.String)"](path));
     } else utils.invalidArgs();
   };
 
@@ -894,7 +894,7 @@ var FileSystem = function(j_val) {
   this.writeFile = function(path, data, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel && typeof __args[2] === 'function') {
-      j_fileSystem.writeFile(path, data._jdel, function(ar) {
+      j_fileSystem["writeFile(java.lang.String,io.vertx.core.buffer.Buffer,io.vertx.core.Handler)"](path, data._jdel, function(ar) {
       if (ar.succeeded()) {
         handler(null, null);
       } else {
@@ -916,7 +916,7 @@ var FileSystem = function(j_val) {
   this.writeFileBlocking = function(path, data) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel) {
-      j_fileSystem.writeFileBlocking(path, data._jdel);
+      j_fileSystem["writeFileBlocking(java.lang.String,io.vertx.core.buffer.Buffer)"](path, data._jdel);
       return that;
     } else utils.invalidArgs();
   };
@@ -935,7 +935,7 @@ var FileSystem = function(j_val) {
   this.open = function(path, options, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && typeof __args[2] === 'function') {
-      j_fileSystem.open(path, options != null ? new OpenOptions(new JsonObject(JSON.stringify(options))) : null, function(ar) {
+      j_fileSystem["open(java.lang.String,io.vertx.core.file.OpenOptions,io.vertx.core.Handler)"](path, options != null ? new OpenOptions(new JsonObject(JSON.stringify(options))) : null, function(ar) {
       if (ar.succeeded()) {
         handler(new AsyncFile(ar.result()), null);
       } else {
@@ -957,7 +957,7 @@ var FileSystem = function(j_val) {
   this.openBlocking = function(path, options) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'object') {
-      return new AsyncFile(j_fileSystem.openBlocking(path, options != null ? new OpenOptions(new JsonObject(JSON.stringify(options))) : null));
+      return new AsyncFile(j_fileSystem["openBlocking(java.lang.String,io.vertx.core.file.OpenOptions)"](path, options != null ? new OpenOptions(new JsonObject(JSON.stringify(options))) : null));
     } else utils.invalidArgs();
   };
 
@@ -973,7 +973,7 @@ var FileSystem = function(j_val) {
   this.createFile = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.createFile(__args[0], function(ar) {
+      j_fileSystem["createFile(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](null, null);
       } else {
@@ -982,7 +982,7 @@ var FileSystem = function(j_val) {
     });
       return that;
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_fileSystem.createFile(__args[0], __args[1], function(ar) {
+      j_fileSystem["createFile(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(ar) {
       if (ar.succeeded()) {
         __args[2](null, null);
       } else {
@@ -1004,10 +1004,10 @@ var FileSystem = function(j_val) {
   this.createFileBlocking = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_fileSystem.createFileBlocking(__args[0]);
+      j_fileSystem["createFileBlocking(java.lang.String)"](__args[0]);
       return that;
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_fileSystem.createFileBlocking(__args[0], __args[1]);
+      j_fileSystem["createFileBlocking(java.lang.String,java.lang.String)"](__args[0], __args[1]);
       return that;
     } else utils.invalidArgs();
   };
@@ -1023,7 +1023,7 @@ var FileSystem = function(j_val) {
   this.exists = function(path, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.exists(path, function(ar) {
+      j_fileSystem["exists(java.lang.String,io.vertx.core.Handler)"](path, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -1044,7 +1044,7 @@ var FileSystem = function(j_val) {
   this.existsBlocking = function(path) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_fileSystem.existsBlocking(path);
+      return j_fileSystem["existsBlocking(java.lang.String)"](path);
     } else utils.invalidArgs();
   };
 
@@ -1059,7 +1059,7 @@ var FileSystem = function(j_val) {
   this.fsProps = function(path, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_fileSystem.fsProps(path, function(ar) {
+      j_fileSystem["fsProps(java.lang.String,io.vertx.core.Handler)"](path, function(ar) {
       if (ar.succeeded()) {
         handler(new FileSystemProps(ar.result()), null);
       } else {
@@ -1080,7 +1080,7 @@ var FileSystem = function(j_val) {
   this.fsPropsBlocking = function(path) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new FileSystemProps(j_fileSystem.fsPropsBlocking(path));
+      return new FileSystemProps(j_fileSystem["fsPropsBlocking(java.lang.String)"](path));
     } else utils.invalidArgs();
   };
 
@@ -1107,7 +1107,7 @@ module.exports = FileSystem;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

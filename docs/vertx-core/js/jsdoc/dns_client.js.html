@@ -73,7 +73,7 @@ var DnsClient = function(j_val) {
   this.lookup = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.lookup(name, function(ar) {
+      j_dnsClient["lookup(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -95,7 +95,7 @@ var DnsClient = function(j_val) {
   this.lookup4 = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.lookup4(name, function(ar) {
+      j_dnsClient["lookup4(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -117,7 +117,7 @@ var DnsClient = function(j_val) {
   this.lookup6 = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.lookup6(name, function(ar) {
+      j_dnsClient["lookup6(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -139,7 +139,7 @@ var DnsClient = function(j_val) {
   this.resolveA = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolveA(name, function(ar) {
+      j_dnsClient["resolveA(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -161,7 +161,7 @@ var DnsClient = function(j_val) {
   this.resolveAAAA = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolveAAAA(name, function(ar) {
+      j_dnsClient["resolveAAAA(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -183,7 +183,7 @@ var DnsClient = function(j_val) {
   this.resolveCNAME = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolveCNAME(name, function(ar) {
+      j_dnsClient["resolveCNAME(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -205,7 +205,7 @@ var DnsClient = function(j_val) {
   this.resolveMX = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolveMX(name, function(ar) {
+      j_dnsClient["resolveMX(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(utils.convReturnListSetVertxGen(ar.result(), MxRecord), null);
       } else {
@@ -227,7 +227,7 @@ var DnsClient = function(j_val) {
   this.resolveTXT = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolveTXT(name, function(ar) {
+      j_dnsClient["resolveTXT(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -249,7 +249,7 @@ var DnsClient = function(j_val) {
   this.resolvePTR = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolvePTR(name, function(ar) {
+      j_dnsClient["resolvePTR(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -271,7 +271,7 @@ var DnsClient = function(j_val) {
   this.resolveNS = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolveNS(name, function(ar) {
+      j_dnsClient["resolveNS(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -293,7 +293,7 @@ var DnsClient = function(j_val) {
   this.resolveSRV = function(name, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.resolveSRV(name, function(ar) {
+      j_dnsClient["resolveSRV(java.lang.String,io.vertx.core.Handler)"](name, function(ar) {
       if (ar.succeeded()) {
         handler(utils.convReturnListSetVertxGen(ar.result(), SrvRecord), null);
       } else {
@@ -316,7 +316,7 @@ var DnsClient = function(j_val) {
   this.reverseLookup = function(ipaddress, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_dnsClient.reverseLookup(ipaddress, function(ar) {
+      j_dnsClient["reverseLookup(java.lang.String,io.vertx.core.Handler)"](ipaddress, function(ar) {
       if (ar.succeeded()) {
         handler(ar.result(), null);
       } else {
@@ -350,7 +350,7 @@ module.exports = DnsClient;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

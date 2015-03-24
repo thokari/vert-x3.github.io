@@ -106,7 +106,7 @@ var Vertx = function(j_val) {
   this.metricBaseName = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_vertx.metricBaseName();
+      return j_vertx["metricBaseName()"]();
     } else utils.invalidArgs();
   };
 
@@ -120,7 +120,7 @@ var Vertx = function(j_val) {
   this.getOrCreateContext = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new Context(j_vertx.getOrCreateContext());
+      return new Context(j_vertx["getOrCreateContext()"]());
     } else utils.invalidArgs();
   };
 
@@ -134,9 +134,9 @@ var Vertx = function(j_val) {
   this.createNetServer = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new NetServer(j_vertx.createNetServer());
+      return new NetServer(j_vertx["createNetServer()"]());
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new NetServer(j_vertx.createNetServer(__args[0] != null ? new NetServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return new NetServer(j_vertx["createNetServer(io.vertx.core.net.NetServerOptions)"](__args[0] != null ? new NetServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
     } else utils.invalidArgs();
   };
 
@@ -150,9 +150,9 @@ var Vertx = function(j_val) {
   this.createNetClient = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new NetClient(j_vertx.createNetClient());
+      return new NetClient(j_vertx["createNetClient()"]());
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new NetClient(j_vertx.createNetClient(__args[0] != null ? new NetClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return new NetClient(j_vertx["createNetClient(io.vertx.core.net.NetClientOptions)"](__args[0] != null ? new NetClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
     } else utils.invalidArgs();
   };
 
@@ -166,9 +166,9 @@ var Vertx = function(j_val) {
   this.createHttpServer = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new HttpServer(j_vertx.createHttpServer());
+      return new HttpServer(j_vertx["createHttpServer()"]());
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new HttpServer(j_vertx.createHttpServer(__args[0] != null ? new HttpServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return new HttpServer(j_vertx["createHttpServer(io.vertx.core.http.HttpServerOptions)"](__args[0] != null ? new HttpServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
     } else utils.invalidArgs();
   };
 
@@ -182,9 +182,9 @@ var Vertx = function(j_val) {
   this.createHttpClient = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new HttpClient(j_vertx.createHttpClient());
+      return new HttpClient(j_vertx["createHttpClient()"]());
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new HttpClient(j_vertx.createHttpClient(__args[0] != null ? new HttpClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return new HttpClient(j_vertx["createHttpClient(io.vertx.core.http.HttpClientOptions)"](__args[0] != null ? new HttpClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
     } else utils.invalidArgs();
   };
 
@@ -198,9 +198,9 @@ var Vertx = function(j_val) {
   this.createDatagramSocket = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new DatagramSocket(j_vertx.createDatagramSocket());
+      return new DatagramSocket(j_vertx["createDatagramSocket()"]());
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new DatagramSocket(j_vertx.createDatagramSocket(__args[0] != null ? new DatagramSocketOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return new DatagramSocket(j_vertx["createDatagramSocket(io.vertx.core.datagram.DatagramSocketOptions)"](__args[0] != null ? new DatagramSocketOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
     } else utils.invalidArgs();
   };
 
@@ -215,7 +215,7 @@ var Vertx = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedfileSystem == null) {
-        that.cachedfileSystem = new FileSystem(j_vertx.fileSystem());
+        that.cachedfileSystem = new FileSystem(j_vertx["fileSystem()"]());
       }
       return that.cachedfileSystem;
     } else utils.invalidArgs();
@@ -232,7 +232,7 @@ var Vertx = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedeventBus == null) {
-        that.cachedeventBus = new EventBus(j_vertx.eventBus());
+        that.cachedeventBus = new EventBus(j_vertx["eventBus()"]());
       }
       return that.cachedeventBus;
     } else utils.invalidArgs();
@@ -249,7 +249,7 @@ var Vertx = function(j_val) {
   this.createDnsClient = function(port, host) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] ==='number' && typeof __args[1] === 'string') {
-      return new DnsClient(j_vertx.createDnsClient(port, host));
+      return new DnsClient(j_vertx["createDnsClient(int,java.lang.String)"](port, host));
     } else utils.invalidArgs();
   };
 
@@ -264,7 +264,7 @@ var Vertx = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedsharedData == null) {
-        that.cachedsharedData = new SharedData(j_vertx.sharedData());
+        that.cachedsharedData = new SharedData(j_vertx["sharedData()"]());
       }
       return that.cachedsharedData;
     } else utils.invalidArgs();
@@ -282,7 +282,7 @@ var Vertx = function(j_val) {
   this.setTimer = function(delay, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] ==='number' && typeof __args[1] === 'function') {
-      return j_vertx.setTimer(delay, function(jVal) {
+      return j_vertx["setTimer(long,io.vertx.core.Handler)"](delay, function(jVal) {
       handler(jVal);
     });
     } else utils.invalidArgs();
@@ -299,7 +299,7 @@ var Vertx = function(j_val) {
   this.timerStream = function(delay) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      return new TimeoutStream(j_vertx.timerStream(delay));
+      return new TimeoutStream(j_vertx["timerStream(long)"](delay));
     } else utils.invalidArgs();
   };
 
@@ -315,7 +315,7 @@ var Vertx = function(j_val) {
   this.setPeriodic = function(delay, handler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] ==='number' && typeof __args[1] === 'function') {
-      return j_vertx.setPeriodic(delay, function(jVal) {
+      return j_vertx["setPeriodic(long,io.vertx.core.Handler)"](delay, function(jVal) {
       handler(jVal);
     });
     } else utils.invalidArgs();
@@ -332,7 +332,7 @@ var Vertx = function(j_val) {
   this.periodicStream = function(delay) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      return new TimeoutStream(j_vertx.periodicStream(delay));
+      return new TimeoutStream(j_vertx["periodicStream(long)"](delay));
     } else utils.invalidArgs();
   };
 
@@ -346,7 +346,7 @@ var Vertx = function(j_val) {
   this.cancelTimer = function(id) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      return j_vertx.cancelTimer(id);
+      return j_vertx["cancelTimer(long)"](id);
     } else utils.invalidArgs();
   };
 
@@ -360,7 +360,7 @@ var Vertx = function(j_val) {
   this.runOnContext = function(action) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_vertx.runOnContext(action);
+      j_vertx["runOnContext(io.vertx.core.Handler)"](action);
     } else utils.invalidArgs();
   };
 
@@ -373,9 +373,9 @@ var Vertx = function(j_val) {
   this.close = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_vertx.close();
+      j_vertx["close()"]();
     }  else if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_vertx.close(function(ar) {
+      j_vertx["close(io.vertx.core.Handler)"](function(ar) {
       if (ar.succeeded()) {
         __args[0](null, null);
       } else {
@@ -397,9 +397,9 @@ var Vertx = function(j_val) {
   this.deployVerticle = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_vertx.deployVerticle(__args[0]);
+      j_vertx["deployVerticle(java.lang.String)"](__args[0]);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_vertx.deployVerticle(__args[0], function(ar) {
+      j_vertx["deployVerticle(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](ar.result(), null);
       } else {
@@ -407,9 +407,9 @@ var Vertx = function(j_val) {
       }
     });
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'object') {
-      j_vertx.deployVerticle(__args[0], __args[1] != null ? new DeploymentOptions(new JsonObject(JSON.stringify(__args[1]))) : null);
+      j_vertx["deployVerticle(java.lang.String,io.vertx.core.DeploymentOptions)"](__args[0], __args[1] != null ? new DeploymentOptions(new JsonObject(JSON.stringify(__args[1]))) : null);
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && typeof __args[2] === 'function') {
-      j_vertx.deployVerticle(__args[0], __args[1] != null ? new DeploymentOptions(new JsonObject(JSON.stringify(__args[1]))) : null, function(ar) {
+      j_vertx["deployVerticle(java.lang.String,io.vertx.core.DeploymentOptions,io.vertx.core.Handler)"](__args[0], __args[1] != null ? new DeploymentOptions(new JsonObject(JSON.stringify(__args[1]))) : null, function(ar) {
       if (ar.succeeded()) {
         __args[2](ar.result(), null);
       } else {
@@ -429,9 +429,9 @@ var Vertx = function(j_val) {
   this.undeploy = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_vertx.undeploy(__args[0]);
+      j_vertx["undeploy(java.lang.String)"](__args[0]);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_vertx.undeploy(__args[0], function(ar) {
+      j_vertx["undeploy(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](null, null);
       } else {
@@ -451,7 +451,21 @@ var Vertx = function(j_val) {
   this.deploymentIDs = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return utils.convReturnSet(j_vertx.deploymentIDs());
+      return utils.convReturnSet(j_vertx["deploymentIDs()"]());
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Is this Vert.x instance clustered?
+
+   @public
+
+   @return {boolean} true if clustered
+   */
+  this.isClustered = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_vertx["isClustered()"]();
     } else utils.invalidArgs();
   };
 
@@ -474,7 +488,7 @@ var Vertx = function(j_val) {
   this.executeBlocking = function(blockingCodeHandler, resultHandler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'function' && typeof __args[1] === 'function') {
-      j_vertx.executeBlocking(function(jVal) {
+      j_vertx["executeBlocking(io.vertx.core.Handler,io.vertx.core.Handler)"](function(jVal) {
       blockingCodeHandler(new Future(jVal));
     }, function(ar) {
       if (ar.succeeded()) {
@@ -502,9 +516,9 @@ var Vertx = function(j_val) {
 Vertx.vertx = function() {
   var __args = arguments;
   if (__args.length === 0) {
-    return new Vertx(JVertx.vertx());
+    return new Vertx(JVertx["vertx()"]());
   }else if (__args.length === 1 && typeof __args[0] === 'object') {
-    return new Vertx(JVertx.vertx(__args[0] != null ? new VertxOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+    return new Vertx(JVertx["vertx(io.vertx.core.VertxOptions)"](__args[0] != null ? new VertxOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
   } else utils.invalidArgs();
 };
 
@@ -520,7 +534,7 @@ Vertx.vertx = function() {
 Vertx.clusteredVertx = function(options, resultHandler) {
   var __args = arguments;
   if (__args.length === 2 && typeof __args[0] === 'object' && typeof __args[1] === 'function') {
-    JVertx.clusteredVertx(options != null ? new VertxOptions(new JsonObject(JSON.stringify(options))) : null, function(ar) {
+    JVertx["clusteredVertx(io.vertx.core.VertxOptions,io.vertx.core.Handler)"](options != null ? new VertxOptions(new JsonObject(JSON.stringify(options))) : null, function(ar) {
     if (ar.succeeded()) {
       resultHandler(new Vertx(ar.result()), null);
     } else {
@@ -540,7 +554,7 @@ Vertx.clusteredVertx = function(options, resultHandler) {
 Vertx.currentContext = function() {
   var __args = arguments;
   if (__args.length === 0) {
-    return new Context(JVertx.currentContext());
+    return new Context(JVertx["currentContext()"]());
   } else utils.invalidArgs();
 };
 
@@ -561,7 +575,7 @@ module.exports = Vertx;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

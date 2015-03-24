@@ -73,7 +73,7 @@ var AsyncFile = function(j_val) {
   this.writeQueueFull = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_asyncFile.writeQueueFull();
+      return j_asyncFile["writeQueueFull()"]();
     } else utils.invalidArgs();
   };
 
@@ -86,7 +86,7 @@ var AsyncFile = function(j_val) {
   this.handler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_asyncFile.handler(function(jVal) {
+      j_asyncFile["handler(io.vertx.core.Handler)"](function(jVal) {
       handler(new Buffer(jVal));
     });
       return that;
@@ -102,7 +102,7 @@ var AsyncFile = function(j_val) {
   this.pause = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_asyncFile.pause();
+      j_asyncFile["pause()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -116,7 +116,7 @@ var AsyncFile = function(j_val) {
   this.resume = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_asyncFile.resume();
+      j_asyncFile["resume()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -130,7 +130,7 @@ var AsyncFile = function(j_val) {
   this.endHandler = function(endHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_asyncFile.endHandler(endHandler);
+      j_asyncFile["endHandler(io.vertx.core.Handler)"](endHandler);
       return that;
     } else utils.invalidArgs();
   };
@@ -155,10 +155,10 @@ var AsyncFile = function(j_val) {
   this.write = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
-      j_asyncFile.write(__args[0]._jdel);
+      j_asyncFile["write(io.vertx.core.buffer.Buffer)"](__args[0]._jdel);
       return that;
     }  else if (__args.length === 3 && typeof __args[0] === 'object' && __args[0]._jdel && typeof __args[1] ==='number' && typeof __args[2] === 'function') {
-      j_asyncFile.write(__args[0]._jdel, __args[1], function(ar) {
+      j_asyncFile["write(io.vertx.core.buffer.Buffer,long,io.vertx.core.Handler)"](__args[0]._jdel, __args[1], function(ar) {
       if (ar.succeeded()) {
         __args[2](null, null);
       } else {
@@ -178,7 +178,7 @@ var AsyncFile = function(j_val) {
   this.setWriteQueueMaxSize = function(maxSize) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      j_asyncFile.setWriteQueueMaxSize(maxSize);
+      j_asyncFile["setWriteQueueMaxSize(int)"](maxSize);
       return that;
     } else utils.invalidArgs();
   };
@@ -192,7 +192,7 @@ var AsyncFile = function(j_val) {
   this.drainHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_asyncFile.drainHandler(handler);
+      j_asyncFile["drainHandler(io.vertx.core.Handler)"](handler);
       return that;
     } else utils.invalidArgs();
   };
@@ -206,7 +206,7 @@ var AsyncFile = function(j_val) {
   this.exceptionHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_asyncFile.exceptionHandler(function(jVal) {
+      j_asyncFile["exceptionHandler(io.vertx.core.Handler)"](function(jVal) {
       handler(utils.convReturnTypeUnknown(jVal));
     });
       return that;
@@ -223,9 +223,9 @@ var AsyncFile = function(j_val) {
   this.close = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_asyncFile.close();
+      j_asyncFile["close()"]();
     }  else if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_asyncFile.close(function(ar) {
+      j_asyncFile["close(io.vertx.core.Handler)"](function(ar) {
       if (ar.succeeded()) {
         __args[0](null, null);
       } else {
@@ -256,7 +256,7 @@ var AsyncFile = function(j_val) {
   this.read = function(buffer, offset, position, length, handler) {
     var __args = arguments;
     if (__args.length === 5 && typeof __args[0] === 'object' && __args[0]._jdel && typeof __args[1] ==='number' && typeof __args[2] ==='number' && typeof __args[3] ==='number' && typeof __args[4] === 'function') {
-      j_asyncFile.read(buffer._jdel, offset, position, length, function(ar) {
+      j_asyncFile["read(io.vertx.core.buffer.Buffer,int,long,int,io.vertx.core.Handler)"](buffer._jdel, offset, position, length, function(ar) {
       if (ar.succeeded()) {
         handler(new Buffer(ar.result()), null);
       } else {
@@ -277,10 +277,10 @@ var AsyncFile = function(j_val) {
   this.flush = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_asyncFile.flush();
+      j_asyncFile["flush()"]();
       return that;
     }  else if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_asyncFile.flush(function(ar) {
+      j_asyncFile["flush(io.vertx.core.Handler)"](function(ar) {
       if (ar.succeeded()) {
         __args[0](null, null);
       } else {
@@ -301,7 +301,7 @@ var AsyncFile = function(j_val) {
   this.setReadPos = function(readPos) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      j_asyncFile.setReadPos(readPos);
+      j_asyncFile["setReadPos(long)"](readPos);
       return that;
     } else utils.invalidArgs();
   };
@@ -316,7 +316,7 @@ var AsyncFile = function(j_val) {
   this.setWritePos = function(writePos) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      j_asyncFile.setWritePos(writePos);
+      j_asyncFile["setWritePos(long)"](writePos);
       return that;
     } else utils.invalidArgs();
   };
@@ -344,7 +344,7 @@ module.exports = AsyncFile;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

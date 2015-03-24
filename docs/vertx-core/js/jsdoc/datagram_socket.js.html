@@ -75,7 +75,7 @@ var DatagramSocket = function(j_val) {
   this.metricBaseName = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_datagramSocket.metricBaseName();
+      return j_datagramSocket["metricBaseName()"]();
     } else utils.invalidArgs();
   };
 
@@ -94,7 +94,7 @@ var DatagramSocket = function(j_val) {
   this.send = function() {
     var __args = arguments;
     if (__args.length === 4 && typeof __args[0] === 'object' && __args[0]._jdel && typeof __args[1] ==='number' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      j_datagramSocket.send(__args[0]._jdel, __args[1], __args[2], function(ar) {
+      j_datagramSocket["send(io.vertx.core.buffer.Buffer,int,java.lang.String,io.vertx.core.Handler)"](__args[0]._jdel, __args[1], __args[2], function(ar) {
       if (ar.succeeded()) {
         __args[3](new DatagramSocket(ar.result()), null);
       } else {
@@ -103,7 +103,7 @@ var DatagramSocket = function(j_val) {
     });
       return that;
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] ==='number' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      j_datagramSocket.send(__args[0], __args[1], __args[2], function(ar) {
+      j_datagramSocket["send(java.lang.String,int,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(ar) {
       if (ar.succeeded()) {
         __args[3](new DatagramSocket(ar.result()), null);
       } else {
@@ -112,7 +112,7 @@ var DatagramSocket = function(j_val) {
     });
       return that;
     }  else if (__args.length === 5 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] ==='number' && typeof __args[3] === 'string' && typeof __args[4] === 'function') {
-      j_datagramSocket.send(__args[0], __args[1], __args[2], __args[3], function(ar) {
+      j_datagramSocket["send(java.lang.String,java.lang.String,int,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], __args[3], function(ar) {
       if (ar.succeeded()) {
         __args[4](new DatagramSocket(ar.result()), null);
       } else {
@@ -135,7 +135,7 @@ var DatagramSocket = function(j_val) {
   this.sender = function(port, host) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] ==='number' && typeof __args[1] === 'string') {
-      return new PacketWritestream(j_datagramSocket.sender(port, host));
+      return new PacketWritestream(j_datagramSocket["sender(int,java.lang.String)"](port, host));
     } else utils.invalidArgs();
   };
 
@@ -149,9 +149,9 @@ var DatagramSocket = function(j_val) {
   this.close = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_datagramSocket.close();
+      j_datagramSocket["close()"]();
     }  else if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_datagramSocket.close(function(ar) {
+      j_datagramSocket["close(io.vertx.core.Handler)"](function(ar) {
       if (ar.succeeded()) {
         __args[0](null, null);
       } else {
@@ -173,7 +173,7 @@ var DatagramSocket = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedlocalAddress == null) {
-        that.cachedlocalAddress = new SocketAddress(j_datagramSocket.localAddress());
+        that.cachedlocalAddress = new SocketAddress(j_datagramSocket["localAddress()"]());
       }
       return that.cachedlocalAddress;
     } else utils.invalidArgs();
@@ -193,7 +193,7 @@ var DatagramSocket = function(j_val) {
   this.listenMulticastGroup = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_datagramSocket.listenMulticastGroup(__args[0], function(ar) {
+      j_datagramSocket["listenMulticastGroup(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](new DatagramSocket(ar.result()), null);
       } else {
@@ -202,7 +202,7 @@ var DatagramSocket = function(j_val) {
     });
       return that;
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      j_datagramSocket.listenMulticastGroup(__args[0], __args[1], __args[2], function(ar) {
+      j_datagramSocket["listenMulticastGroup(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(ar) {
       if (ar.succeeded()) {
         __args[3](new DatagramSocket(ar.result()), null);
       } else {
@@ -227,7 +227,7 @@ var DatagramSocket = function(j_val) {
   this.unlistenMulticastGroup = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_datagramSocket.unlistenMulticastGroup(__args[0], function(ar) {
+      j_datagramSocket["unlistenMulticastGroup(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](new DatagramSocket(ar.result()), null);
       } else {
@@ -236,7 +236,7 @@ var DatagramSocket = function(j_val) {
     });
       return that;
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      j_datagramSocket.unlistenMulticastGroup(__args[0], __args[1], __args[2], function(ar) {
+      j_datagramSocket["unlistenMulticastGroup(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(ar) {
       if (ar.succeeded()) {
         __args[3](new DatagramSocket(ar.result()), null);
       } else {
@@ -261,7 +261,7 @@ var DatagramSocket = function(j_val) {
   this.blockMulticastGroup = function() {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_datagramSocket.blockMulticastGroup(__args[0], __args[1], function(ar) {
+      j_datagramSocket["blockMulticastGroup(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(ar) {
       if (ar.succeeded()) {
         __args[2](new DatagramSocket(ar.result()), null);
       } else {
@@ -270,7 +270,7 @@ var DatagramSocket = function(j_val) {
     });
       return that;
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      j_datagramSocket.blockMulticastGroup(__args[0], __args[1], __args[2], function(ar) {
+      j_datagramSocket["blockMulticastGroup(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(ar) {
       if (ar.succeeded()) {
         __args[3](new DatagramSocket(ar.result()), null);
       } else {
@@ -293,7 +293,7 @@ var DatagramSocket = function(j_val) {
   this.listen = function(port, host, handler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      j_datagramSocket.listen(port, host, function(ar) {
+      j_datagramSocket["listen(int,java.lang.String,io.vertx.core.Handler)"](port, host, function(ar) {
       if (ar.succeeded()) {
         handler(new DatagramSocket(ar.result()), null);
       } else {
@@ -313,7 +313,7 @@ var DatagramSocket = function(j_val) {
   this.pause = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_datagramSocket.pause();
+      j_datagramSocket["pause()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -327,7 +327,7 @@ var DatagramSocket = function(j_val) {
   this.resume = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_datagramSocket.resume();
+      j_datagramSocket["resume()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -341,7 +341,7 @@ var DatagramSocket = function(j_val) {
   this.endHandler = function(endHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_datagramSocket.endHandler(endHandler);
+      j_datagramSocket["endHandler(io.vertx.core.Handler)"](endHandler);
       return that;
     } else utils.invalidArgs();
   };
@@ -355,7 +355,7 @@ var DatagramSocket = function(j_val) {
   this.handler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_datagramSocket.handler(function(jVal) {
+      j_datagramSocket["handler(io.vertx.core.Handler)"](function(jVal) {
       handler(new DatagramPacket(jVal));
     });
       return that;
@@ -371,7 +371,7 @@ var DatagramSocket = function(j_val) {
   this.exceptionHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_datagramSocket.exceptionHandler(function(jVal) {
+      j_datagramSocket["exceptionHandler(io.vertx.core.Handler)"](function(jVal) {
       handler(utils.convReturnTypeUnknown(jVal));
     });
       return that;
@@ -401,7 +401,7 @@ module.exports = DatagramSocket;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

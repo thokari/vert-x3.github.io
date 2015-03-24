@@ -78,7 +78,7 @@ var HttpServerRequest = function(j_val) {
   this.exceptionHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerRequest.exceptionHandler(function(jVal) {
+      j_httpServerRequest["exceptionHandler(io.vertx.core.Handler)"](function(jVal) {
       handler(utils.convReturnTypeUnknown(jVal));
     });
       return that;
@@ -94,7 +94,7 @@ var HttpServerRequest = function(j_val) {
   this.handler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerRequest.handler(function(jVal) {
+      j_httpServerRequest["handler(io.vertx.core.Handler)"](function(jVal) {
       handler(new Buffer(jVal));
     });
       return that;
@@ -110,7 +110,7 @@ var HttpServerRequest = function(j_val) {
   this.pause = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_httpServerRequest.pause();
+      j_httpServerRequest["pause()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -124,7 +124,7 @@ var HttpServerRequest = function(j_val) {
   this.resume = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_httpServerRequest.resume();
+      j_httpServerRequest["resume()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -138,7 +138,7 @@ var HttpServerRequest = function(j_val) {
   this.endHandler = function(endHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerRequest.endHandler(endHandler);
+      j_httpServerRequest["endHandler(io.vertx.core.Handler)"](endHandler);
       return that;
     } else utils.invalidArgs();
   };
@@ -153,7 +153,7 @@ var HttpServerRequest = function(j_val) {
   this.version = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return (j_httpServerRequest.version()).toString();
+      return (j_httpServerRequest["version()"]()).toString();
     } else utils.invalidArgs();
   };
 
@@ -167,7 +167,7 @@ var HttpServerRequest = function(j_val) {
   this.method = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return (j_httpServerRequest.method()).toString();
+      return (j_httpServerRequest["method()"]()).toString();
     } else utils.invalidArgs();
   };
 
@@ -181,7 +181,7 @@ var HttpServerRequest = function(j_val) {
   this.uri = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerRequest.uri();
+      return j_httpServerRequest["uri()"]();
     } else utils.invalidArgs();
   };
 
@@ -195,7 +195,7 @@ var HttpServerRequest = function(j_val) {
   this.path = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerRequest.path();
+      return j_httpServerRequest["path()"]();
     } else utils.invalidArgs();
   };
 
@@ -209,7 +209,7 @@ var HttpServerRequest = function(j_val) {
   this.query = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerRequest.query();
+      return j_httpServerRequest["query()"]();
     } else utils.invalidArgs();
   };
 
@@ -225,7 +225,7 @@ var HttpServerRequest = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedresponse == null) {
-        that.cachedresponse = new HttpServerResponse(j_httpServerRequest.response());
+        that.cachedresponse = new HttpServerResponse(j_httpServerRequest["response()"]());
       }
       return that.cachedresponse;
     } else utils.invalidArgs();
@@ -242,7 +242,7 @@ var HttpServerRequest = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedheaders == null) {
-        that.cachedheaders = new MultiMap(j_httpServerRequest.headers());
+        that.cachedheaders = new MultiMap(j_httpServerRequest["headers()"]());
       }
       return that.cachedheaders;
     } else utils.invalidArgs();
@@ -258,7 +258,7 @@ var HttpServerRequest = function(j_val) {
   this.getHeader = function(headerName) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_httpServerRequest.getHeader(headerName);
+      return j_httpServerRequest["getHeader(java.lang.String)"](headerName);
     } else utils.invalidArgs();
   };
 
@@ -273,7 +273,7 @@ var HttpServerRequest = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedparams == null) {
-        that.cachedparams = new MultiMap(j_httpServerRequest.params());
+        that.cachedparams = new MultiMap(j_httpServerRequest["params()"]());
       }
       return that.cachedparams;
     } else utils.invalidArgs();
@@ -289,7 +289,7 @@ var HttpServerRequest = function(j_val) {
   this.getParam = function(paramName) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_httpServerRequest.getParam(paramName);
+      return j_httpServerRequest["getParam(java.lang.String)"](paramName);
     } else utils.invalidArgs();
   };
 
@@ -304,7 +304,7 @@ var HttpServerRequest = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedremoteAddress == null) {
-        that.cachedremoteAddress = new SocketAddress(j_httpServerRequest.remoteAddress());
+        that.cachedremoteAddress = new SocketAddress(j_httpServerRequest["remoteAddress()"]());
       }
       return that.cachedremoteAddress;
     } else utils.invalidArgs();
@@ -321,7 +321,7 @@ var HttpServerRequest = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedlocalAddress == null) {
-        that.cachedlocalAddress = new SocketAddress(j_httpServerRequest.localAddress());
+        that.cachedlocalAddress = new SocketAddress(j_httpServerRequest["localAddress()"]());
       }
       return that.cachedlocalAddress;
     } else utils.invalidArgs();
@@ -337,7 +337,7 @@ var HttpServerRequest = function(j_val) {
   this.absoluteURI = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerRequest.absoluteURI();
+      return j_httpServerRequest["absoluteURI()"]();
     } else utils.invalidArgs();
   };
 
@@ -354,7 +354,7 @@ var HttpServerRequest = function(j_val) {
   this.bodyHandler = function(bodyHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerRequest.bodyHandler(function(jVal) {
+      j_httpServerRequest["bodyHandler(io.vertx.core.Handler)"](function(jVal) {
       bodyHandler(new Buffer(jVal));
     });
       return that;
@@ -378,7 +378,7 @@ var HttpServerRequest = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachednetSocket == null) {
-        that.cachednetSocket = new NetSocket(j_httpServerRequest.netSocket());
+        that.cachednetSocket = new NetSocket(j_httpServerRequest["netSocket()"]());
       }
       return that.cachednetSocket;
     } else utils.invalidArgs();
@@ -395,7 +395,7 @@ var HttpServerRequest = function(j_val) {
   this.setExpectMultipart = function(expect) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='boolean') {
-      j_httpServerRequest.setExpectMultipart(expect);
+      j_httpServerRequest["setExpectMultipart(boolean)"](expect);
       return that;
     } else utils.invalidArgs();
   };
@@ -410,7 +410,7 @@ var HttpServerRequest = function(j_val) {
   this.isExpectMultipart = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerRequest.isExpectMultipart();
+      return j_httpServerRequest["isExpectMultipart()"]();
     } else utils.invalidArgs();
   };
 
@@ -425,7 +425,7 @@ var HttpServerRequest = function(j_val) {
   this.uploadHandler = function(uploadHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerRequest.uploadHandler(function(jVal) {
+      j_httpServerRequest["uploadHandler(io.vertx.core.Handler)"](function(jVal) {
       uploadHandler(new HttpServerFileUpload(jVal));
     });
       return that;
@@ -448,7 +448,7 @@ var HttpServerRequest = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedformAttributes == null) {
-        that.cachedformAttributes = new MultiMap(j_httpServerRequest.formAttributes());
+        that.cachedformAttributes = new MultiMap(j_httpServerRequest["formAttributes()"]());
       }
       return that.cachedformAttributes;
     } else utils.invalidArgs();
@@ -464,7 +464,7 @@ var HttpServerRequest = function(j_val) {
   this.getFormAttribute = function(attributeName) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_httpServerRequest.getFormAttribute(attributeName);
+      return j_httpServerRequest["getFormAttribute(java.lang.String)"](attributeName);
     } else utils.invalidArgs();
   };
 
@@ -481,7 +481,7 @@ var HttpServerRequest = function(j_val) {
   this.upgrade = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new ServerWebSocket(j_httpServerRequest.upgrade());
+      return new ServerWebSocket(j_httpServerRequest["upgrade()"]());
     } else utils.invalidArgs();
   };
 
@@ -508,7 +508,7 @@ module.exports = HttpServerRequest;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

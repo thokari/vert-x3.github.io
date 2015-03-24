@@ -81,7 +81,7 @@ var HttpClient = function(j_val) {
   this.metricBaseName = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpClient.metricBaseName();
+      return j_httpClient["metricBaseName()"]();
     } else utils.invalidArgs();
   };
 
@@ -100,21 +100,21 @@ var HttpClient = function(j_val) {
   this.request = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.request(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1]));
+      return new HttpClientRequest(j_httpClient["request(io.vertx.core.http.HttpMethod,java.lang.String)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new HttpClientRequest(j_httpClient.request(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2]));
+      return new HttpClientRequest(j_httpClient["request(io.vertx.core.http.HttpMethod,java.lang.String,java.lang.String)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.request(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["request(io.vertx.core.http.HttpMethod,java.lang.String,io.vertx.core.Handler)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] ==='number' && typeof __args[2] === 'string' && typeof __args[3] === 'string') {
-      return new HttpClientRequest(j_httpClient.request(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2], __args[3]));
+      return new HttpClientRequest(j_httpClient["request(io.vertx.core.http.HttpMethod,int,java.lang.String,java.lang.String)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2], __args[3]));
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClientRequest(j_httpClient.request(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2], function(jVal) {
+      return new HttpClientRequest(j_httpClient["request(io.vertx.core.http.HttpMethod,java.lang.String,java.lang.String,io.vertx.core.Handler)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 5 && typeof __args[0] === 'string' && typeof __args[1] ==='number' && typeof __args[2] === 'string' && typeof __args[3] === 'string' && typeof __args[4] === 'function') {
-      return new HttpClientRequest(j_httpClient.request(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2], __args[3], function(jVal) {
+      return new HttpClientRequest(j_httpClient["request(io.vertx.core.http.HttpMethod,int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], __args[2], __args[3], function(jVal) {
       __args[4](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -133,9 +133,9 @@ var HttpClient = function(j_val) {
   this.requestAbs = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.requestAbs(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1]));
+      return new HttpClientRequest(j_httpClient["requestAbs(io.vertx.core.http.HttpMethod,java.lang.String)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.requestAbs(io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["requestAbs(io.vertx.core.http.HttpMethod,java.lang.String,io.vertx.core.Handler)"](io.vertx.core.http.HttpMethod.valueOf(__args[0]), __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -155,21 +155,21 @@ var HttpClient = function(j_val) {
   this.get = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.get(__args[0]));
+      return new HttpClientRequest(j_httpClient["get(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.get(__args[0], __args[1]));
+      return new HttpClientRequest(j_httpClient["get(java.lang.String,java.lang.String)"](__args[0], __args[1]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.get(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["get(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new HttpClientRequest(j_httpClient.get(__args[0], __args[1], __args[2]));
+      return new HttpClientRequest(j_httpClient["get(int,java.lang.String,java.lang.String)"](__args[0], __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.get(__args[0], __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["get(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClientRequest(j_httpClient.get(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClientRequest(j_httpClient["get(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -187,9 +187,9 @@ var HttpClient = function(j_val) {
   this.getAbs = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.getAbs(__args[0]));
+      return new HttpClientRequest(j_httpClient["getAbs(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.getAbs(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["getAbs(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -209,15 +209,15 @@ var HttpClient = function(j_val) {
   this.getNow = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClient(j_httpClient.getNow(__args[0], function(jVal) {
+      return new HttpClient(j_httpClient["getNow(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClient(j_httpClient.getNow(__args[0], __args[1], function(jVal) {
+      return new HttpClient(j_httpClient["getNow(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClient(j_httpClient.getNow(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClient(j_httpClient["getNow(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -237,21 +237,21 @@ var HttpClient = function(j_val) {
   this.post = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.post(__args[0]));
+      return new HttpClientRequest(j_httpClient["post(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.post(__args[0], __args[1]));
+      return new HttpClientRequest(j_httpClient["post(java.lang.String,java.lang.String)"](__args[0], __args[1]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.post(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["post(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new HttpClientRequest(j_httpClient.post(__args[0], __args[1], __args[2]));
+      return new HttpClientRequest(j_httpClient["post(int,java.lang.String,java.lang.String)"](__args[0], __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.post(__args[0], __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["post(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClientRequest(j_httpClient.post(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClientRequest(j_httpClient["post(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -269,9 +269,9 @@ var HttpClient = function(j_val) {
   this.postAbs = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.postAbs(__args[0]));
+      return new HttpClientRequest(j_httpClient["postAbs(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.postAbs(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["postAbs(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -291,21 +291,21 @@ var HttpClient = function(j_val) {
   this.head = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.head(__args[0]));
+      return new HttpClientRequest(j_httpClient["head(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.head(__args[0], __args[1]));
+      return new HttpClientRequest(j_httpClient["head(java.lang.String,java.lang.String)"](__args[0], __args[1]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.head(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["head(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new HttpClientRequest(j_httpClient.head(__args[0], __args[1], __args[2]));
+      return new HttpClientRequest(j_httpClient["head(int,java.lang.String,java.lang.String)"](__args[0], __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.head(__args[0], __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["head(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClientRequest(j_httpClient.head(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClientRequest(j_httpClient["head(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -323,9 +323,9 @@ var HttpClient = function(j_val) {
   this.headAbs = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.headAbs(__args[0]));
+      return new HttpClientRequest(j_httpClient["headAbs(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.headAbs(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["headAbs(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -345,15 +345,15 @@ var HttpClient = function(j_val) {
   this.headNow = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClient(j_httpClient.headNow(__args[0], function(jVal) {
+      return new HttpClient(j_httpClient["headNow(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClient(j_httpClient.headNow(__args[0], __args[1], function(jVal) {
+      return new HttpClient(j_httpClient["headNow(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClient(j_httpClient.headNow(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClient(j_httpClient["headNow(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -373,21 +373,21 @@ var HttpClient = function(j_val) {
   this.options = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.options(__args[0]));
+      return new HttpClientRequest(j_httpClient["options(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.options(__args[0], __args[1]));
+      return new HttpClientRequest(j_httpClient["options(java.lang.String,java.lang.String)"](__args[0], __args[1]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.options(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["options(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new HttpClientRequest(j_httpClient.options(__args[0], __args[1], __args[2]));
+      return new HttpClientRequest(j_httpClient["options(int,java.lang.String,java.lang.String)"](__args[0], __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.options(__args[0], __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["options(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClientRequest(j_httpClient.options(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClientRequest(j_httpClient["options(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -405,9 +405,9 @@ var HttpClient = function(j_val) {
   this.optionsAbs = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.optionsAbs(__args[0]));
+      return new HttpClientRequest(j_httpClient["optionsAbs(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.optionsAbs(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["optionsAbs(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -427,15 +427,15 @@ var HttpClient = function(j_val) {
   this.optionsNow = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClient(j_httpClient.optionsNow(__args[0], function(jVal) {
+      return new HttpClient(j_httpClient["optionsNow(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClient(j_httpClient.optionsNow(__args[0], __args[1], function(jVal) {
+      return new HttpClient(j_httpClient["optionsNow(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClient(j_httpClient.optionsNow(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClient(j_httpClient["optionsNow(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -455,21 +455,21 @@ var HttpClient = function(j_val) {
   this.put = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.put(__args[0]));
+      return new HttpClientRequest(j_httpClient["put(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.put(__args[0], __args[1]));
+      return new HttpClientRequest(j_httpClient["put(java.lang.String,java.lang.String)"](__args[0], __args[1]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.put(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["put(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new HttpClientRequest(j_httpClient.put(__args[0], __args[1], __args[2]));
+      return new HttpClientRequest(j_httpClient["put(int,java.lang.String,java.lang.String)"](__args[0], __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.put(__args[0], __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["put(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClientRequest(j_httpClient.put(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClientRequest(j_httpClient["put(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -487,9 +487,9 @@ var HttpClient = function(j_val) {
   this.putAbs = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.putAbs(__args[0]));
+      return new HttpClientRequest(j_httpClient["putAbs(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.putAbs(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["putAbs(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -509,21 +509,21 @@ var HttpClient = function(j_val) {
   this.delete = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.delete(__args[0]));
+      return new HttpClientRequest(j_httpClient["delete(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new HttpClientRequest(j_httpClient.delete(__args[0], __args[1]));
+      return new HttpClientRequest(j_httpClient["delete(java.lang.String,java.lang.String)"](__args[0], __args[1]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.delete(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["delete(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new HttpClientRequest(j_httpClient.delete(__args[0], __args[1], __args[2]));
+      return new HttpClientRequest(j_httpClient["delete(int,java.lang.String,java.lang.String)"](__args[0], __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClientRequest(j_httpClient.delete(__args[0], __args[1], function(jVal) {
+      return new HttpClientRequest(j_httpClient["delete(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new HttpClientResponse(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClientRequest(j_httpClient.delete(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClientRequest(j_httpClient["delete(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -541,9 +541,9 @@ var HttpClient = function(j_val) {
   this.deleteAbs = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new HttpClientRequest(j_httpClient.deleteAbs(__args[0]));
+      return new HttpClientRequest(j_httpClient["deleteAbs(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClientRequest(j_httpClient.deleteAbs(__args[0], function(jVal) {
+      return new HttpClientRequest(j_httpClient["deleteAbs(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new HttpClientResponse(jVal));
     }));
     } else utils.invalidArgs();
@@ -566,51 +566,51 @@ var HttpClient = function(j_val) {
   this.websocket = function() {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
       __args[1](new WebSocket(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], function(jVal) {
       __args[2](new WebSocket(jVal));
     }));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel && typeof __args[2] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1]._jdel, function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,io.vertx.core.MultiMap,io.vertx.core.Handler)"](__args[0], __args[1]._jdel, function(jVal) {
       __args[2](new WebSocket(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], __args[2], function(jVal) {
+      return new HttpClient(j_httpClient["websocket(int,java.lang.String,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], function(jVal) {
       __args[3](new WebSocket(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'object' && __args[2]._jdel && typeof __args[3] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], __args[2]._jdel, function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.Handler)"](__args[0], __args[1], __args[2]._jdel, function(jVal) {
       __args[3](new WebSocket(jVal));
     }));
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2]), function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,io.vertx.core.Handler)"](__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2]), function(jVal) {
       __args[3](new WebSocket(jVal));
     }));
     }  else if (__args.length === 5 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'object' && __args[3]._jdel && typeof __args[4] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], __args[2], __args[3]._jdel, function(jVal) {
+      return new HttpClient(j_httpClient["websocket(int,java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], __args[3]._jdel, function(jVal) {
       __args[4](new WebSocket(jVal));
     }));
     }  else if (__args.length === 5 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'object' && __args[2]._jdel && typeof __args[3] === 'string' && typeof __args[4] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3]), function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,io.vertx.core.Handler)"](__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3]), function(jVal) {
       __args[4](new WebSocket(jVal));
     }));
     }  else if (__args.length === 5 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel && typeof __args[2] === 'string' && typeof __args[3] === 'string' && typeof __args[4] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2]), __args[3], function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2]), __args[3], function(jVal) {
       __args[4](new WebSocket(jVal));
     }));
     }  else if (__args.length === 6 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'object' && __args[3]._jdel && typeof __args[4] === 'string' && typeof __args[5] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4]), function(jVal) {
+      return new HttpClient(j_httpClient["websocket(int,java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4]), function(jVal) {
       __args[5](new WebSocket(jVal));
     }));
     }  else if (__args.length === 6 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'object' && __args[2]._jdel && typeof __args[3] === 'string' && typeof __args[4] === 'string' && typeof __args[5] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3]), __args[4], function(jVal) {
+      return new HttpClient(j_httpClient["websocket(java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3]), __args[4], function(jVal) {
       __args[5](new WebSocket(jVal));
     }));
     }  else if (__args.length === 7 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'object' && __args[3]._jdel && typeof __args[4] === 'string' && typeof __args[5] === 'string' && typeof __args[6] === 'function') {
-      return new HttpClient(j_httpClient.websocket(__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4]), __args[5], function(jVal) {
+      return new HttpClient(j_httpClient["websocket(int,java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,java.lang.String,io.vertx.core.Handler)"](__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4]), __args[5], function(jVal) {
       __args[6](new WebSocket(jVal));
     }));
     } else utils.invalidArgs();
@@ -632,29 +632,29 @@ var HttpClient = function(j_val) {
   this.websocketStream = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0]));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String)"](__args[0]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1]));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String,java.lang.String)"](__args[0], __args[1]));
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel) {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1]._jdel));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String,io.vertx.core.MultiMap)"](__args[0], __args[1]._jdel));
     }  else if (__args.length === 3 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1], __args[2]));
+      return new WebSocketStream(j_httpClient["websocketStream(int,java.lang.String,java.lang.String)"](__args[0], __args[1], __args[2]));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'object' && __args[2]._jdel) {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1], __args[2]._jdel));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String,java.lang.String,io.vertx.core.MultiMap)"](__args[0], __args[1], __args[2]._jdel));
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel && typeof __args[2] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2])));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion)"](__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2])));
     }  else if (__args.length === 4 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'object' && __args[3]._jdel) {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1], __args[2], __args[3]._jdel));
+      return new WebSocketStream(j_httpClient["websocketStream(int,java.lang.String,java.lang.String,io.vertx.core.MultiMap)"](__args[0], __args[1], __args[2], __args[3]._jdel));
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'object' && __args[2]._jdel && typeof __args[3] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3])));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion)"](__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3])));
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1]._jdel && typeof __args[2] === 'string' && typeof __args[3] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2]), __args[3]));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,java.lang.String)"](__args[0], __args[1]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[2]), __args[3]));
     }  else if (__args.length === 5 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'object' && __args[3]._jdel && typeof __args[4] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4])));
+      return new WebSocketStream(j_httpClient["websocketStream(int,java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion)"](__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4])));
     }  else if (__args.length === 5 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'object' && __args[2]._jdel && typeof __args[3] === 'string' && typeof __args[4] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3]), __args[4]));
+      return new WebSocketStream(j_httpClient["websocketStream(java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,java.lang.String)"](__args[0], __args[1], __args[2]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[3]), __args[4]));
     }  else if (__args.length === 6 && typeof __args[0] ==='number' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'object' && __args[3]._jdel && typeof __args[4] === 'string' && typeof __args[5] === 'string') {
-      return new WebSocketStream(j_httpClient.websocketStream(__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4]), __args[5]));
+      return new WebSocketStream(j_httpClient["websocketStream(int,java.lang.String,java.lang.String,io.vertx.core.MultiMap,io.vertx.core.http.WebsocketVersion,java.lang.String)"](__args[0], __args[1], __args[2], __args[3]._jdel, io.vertx.core.http.WebsocketVersion.valueOf(__args[4]), __args[5]));
     } else utils.invalidArgs();
   };
 
@@ -668,7 +668,7 @@ var HttpClient = function(j_val) {
   this.close = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_httpClient.close();
+      j_httpClient["close()"]();
     } else utils.invalidArgs();
   };
 
@@ -695,7 +695,7 @@ module.exports = HttpClient;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

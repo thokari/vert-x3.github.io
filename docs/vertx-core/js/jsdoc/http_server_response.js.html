@@ -73,7 +73,7 @@ var HttpServerResponse = function(j_val) {
   this.writeQueueFull = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerResponse.writeQueueFull();
+      return j_httpServerResponse["writeQueueFull()"]();
     } else utils.invalidArgs();
   };
 
@@ -86,7 +86,7 @@ var HttpServerResponse = function(j_val) {
   this.exceptionHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerResponse.exceptionHandler(function(jVal) {
+      j_httpServerResponse["exceptionHandler(io.vertx.core.Handler)"](function(jVal) {
       handler(utils.convReturnTypeUnknown(jVal));
     });
       return that;
@@ -104,13 +104,13 @@ var HttpServerResponse = function(j_val) {
   this.write = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
-      j_httpServerResponse.write(__args[0]._jdel);
+      j_httpServerResponse["write(io.vertx.core.buffer.Buffer)"](__args[0]._jdel);
       return that;
     }  else if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_httpServerResponse.write(__args[0]);
+      j_httpServerResponse["write(java.lang.String)"](__args[0]);
       return that;
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_httpServerResponse.write(__args[0], __args[1]);
+      j_httpServerResponse["write(java.lang.String,java.lang.String)"](__args[0], __args[1]);
       return that;
     } else utils.invalidArgs();
   };
@@ -124,7 +124,7 @@ var HttpServerResponse = function(j_val) {
   this.setWriteQueueMaxSize = function(maxSize) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      j_httpServerResponse.setWriteQueueMaxSize(maxSize);
+      j_httpServerResponse["setWriteQueueMaxSize(int)"](maxSize);
       return that;
     } else utils.invalidArgs();
   };
@@ -138,7 +138,7 @@ var HttpServerResponse = function(j_val) {
   this.drainHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerResponse.drainHandler(handler);
+      j_httpServerResponse["drainHandler(io.vertx.core.Handler)"](handler);
       return that;
     } else utils.invalidArgs();
   };
@@ -153,7 +153,7 @@ var HttpServerResponse = function(j_val) {
   this.getStatusCode = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerResponse.getStatusCode();
+      return j_httpServerResponse["getStatusCode()"]();
     } else utils.invalidArgs();
   };
 
@@ -168,7 +168,7 @@ var HttpServerResponse = function(j_val) {
   this.setStatusCode = function(statusCode) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      j_httpServerResponse.setStatusCode(statusCode);
+      j_httpServerResponse["setStatusCode(int)"](statusCode);
       return that;
     } else utils.invalidArgs();
   };
@@ -184,7 +184,7 @@ var HttpServerResponse = function(j_val) {
   this.getStatusMessage = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerResponse.getStatusMessage();
+      return j_httpServerResponse["getStatusMessage()"]();
     } else utils.invalidArgs();
   };
 
@@ -198,7 +198,7 @@ var HttpServerResponse = function(j_val) {
   this.setStatusMessage = function(statusMessage) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_httpServerResponse.setStatusMessage(statusMessage);
+      j_httpServerResponse["setStatusMessage(java.lang.String)"](statusMessage);
       return that;
     } else utils.invalidArgs();
   };
@@ -223,7 +223,7 @@ var HttpServerResponse = function(j_val) {
   this.setChunked = function(chunked) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='boolean') {
-      j_httpServerResponse.setChunked(chunked);
+      j_httpServerResponse["setChunked(boolean)"](chunked);
       return that;
     } else utils.invalidArgs();
   };
@@ -238,7 +238,7 @@ var HttpServerResponse = function(j_val) {
   this.isChunked = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerResponse.isChunked();
+      return j_httpServerResponse["isChunked()"]();
     } else utils.invalidArgs();
   };
 
@@ -253,7 +253,7 @@ var HttpServerResponse = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedheaders == null) {
-        that.cachedheaders = new MultiMap(j_httpServerResponse.headers());
+        that.cachedheaders = new MultiMap(j_httpServerResponse["headers()"]());
       }
       return that.cachedheaders;
     } else utils.invalidArgs();
@@ -270,7 +270,7 @@ var HttpServerResponse = function(j_val) {
   this.putHeader = function(name, value) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_httpServerResponse.putHeader(name, value);
+      j_httpServerResponse["putHeader(java.lang.String,java.lang.String)"](name, value);
       return that;
     } else utils.invalidArgs();
   };
@@ -286,7 +286,7 @@ var HttpServerResponse = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedtrailers == null) {
-        that.cachedtrailers = new MultiMap(j_httpServerResponse.trailers());
+        that.cachedtrailers = new MultiMap(j_httpServerResponse["trailers()"]());
       }
       return that.cachedtrailers;
     } else utils.invalidArgs();
@@ -303,7 +303,7 @@ var HttpServerResponse = function(j_val) {
   this.putTrailer = function(name, value) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_httpServerResponse.putTrailer(name, value);
+      j_httpServerResponse["putTrailer(java.lang.String,java.lang.String)"](name, value);
       return that;
     } else utils.invalidArgs();
   };
@@ -319,7 +319,7 @@ var HttpServerResponse = function(j_val) {
   this.closeHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerResponse.closeHandler(handler);
+      j_httpServerResponse["closeHandler(io.vertx.core.Handler)"](handler);
       return that;
     } else utils.invalidArgs();
   };
@@ -334,13 +334,13 @@ var HttpServerResponse = function(j_val) {
   this.end = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_httpServerResponse.end();
+      j_httpServerResponse["end()"]();
     }  else if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_httpServerResponse.end(__args[0]);
+      j_httpServerResponse["end(java.lang.String)"](__args[0]);
     }  else if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
-      j_httpServerResponse.end(__args[0]._jdel);
+      j_httpServerResponse["end(io.vertx.core.buffer.Buffer)"](__args[0]._jdel);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'string') {
-      j_httpServerResponse.end(__args[0], __args[1]);
+      j_httpServerResponse["end(java.lang.String,java.lang.String)"](__args[0], __args[1]);
     } else utils.invalidArgs();
   };
 
@@ -356,10 +356,10 @@ var HttpServerResponse = function(j_val) {
   this.sendFile = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_httpServerResponse.sendFile(__args[0]);
+      j_httpServerResponse["sendFile(java.lang.String)"](__args[0]);
       return that;
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_httpServerResponse.sendFile(__args[0], function(ar) {
+      j_httpServerResponse["sendFile(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
       if (ar.succeeded()) {
         __args[1](null, null);
       } else {
@@ -379,7 +379,7 @@ var HttpServerResponse = function(j_val) {
   this.close = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_httpServerResponse.close();
+      j_httpServerResponse["close()"]();
     } else utils.invalidArgs();
   };
 
@@ -393,7 +393,7 @@ var HttpServerResponse = function(j_val) {
   this.ended = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerResponse.ended();
+      return j_httpServerResponse["ended()"]();
     } else utils.invalidArgs();
   };
 
@@ -407,7 +407,7 @@ var HttpServerResponse = function(j_val) {
   this.headWritten = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpServerResponse.headWritten();
+      return j_httpServerResponse["headWritten()"]();
     } else utils.invalidArgs();
   };
 
@@ -422,7 +422,7 @@ var HttpServerResponse = function(j_val) {
   this.headersEndHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerResponse.headersEndHandler(handler);
+      j_httpServerResponse["headersEndHandler(io.vertx.core.Handler)"](handler);
       return that;
     } else utils.invalidArgs();
   };
@@ -439,7 +439,7 @@ var HttpServerResponse = function(j_val) {
   this.bodyEndHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpServerResponse.bodyEndHandler(handler);
+      j_httpServerResponse["bodyEndHandler(io.vertx.core.Handler)"](handler);
       return that;
     } else utils.invalidArgs();
   };
@@ -467,7 +467,7 @@ module.exports = HttpServerResponse;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -72,7 +72,7 @@ var HttpClientResponse = function(j_val) {
   this.resume = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_httpClientResponse.resume();
+      j_httpClientResponse["resume()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -86,7 +86,7 @@ var HttpClientResponse = function(j_val) {
   this.exceptionHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpClientResponse.exceptionHandler(function(jVal) {
+      j_httpClientResponse["exceptionHandler(io.vertx.core.Handler)"](function(jVal) {
       handler(utils.convReturnTypeUnknown(jVal));
     });
       return that;
@@ -102,7 +102,7 @@ var HttpClientResponse = function(j_val) {
   this.handler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpClientResponse.handler(function(jVal) {
+      j_httpClientResponse["handler(io.vertx.core.Handler)"](function(jVal) {
       handler(new Buffer(jVal));
     });
       return that;
@@ -118,7 +118,7 @@ var HttpClientResponse = function(j_val) {
   this.pause = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_httpClientResponse.pause();
+      j_httpClientResponse["pause()"]();
       return that;
     } else utils.invalidArgs();
   };
@@ -132,7 +132,7 @@ var HttpClientResponse = function(j_val) {
   this.endHandler = function(endHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpClientResponse.endHandler(endHandler);
+      j_httpClientResponse["endHandler(io.vertx.core.Handler)"](endHandler);
       return that;
     } else utils.invalidArgs();
   };
@@ -147,7 +147,7 @@ var HttpClientResponse = function(j_val) {
   this.statusCode = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpClientResponse.statusCode();
+      return j_httpClientResponse["statusCode()"]();
     } else utils.invalidArgs();
   };
 
@@ -161,7 +161,7 @@ var HttpClientResponse = function(j_val) {
   this.statusMessage = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_httpClientResponse.statusMessage();
+      return j_httpClientResponse["statusMessage()"]();
     } else utils.invalidArgs();
   };
 
@@ -176,7 +176,7 @@ var HttpClientResponse = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedheaders == null) {
-        that.cachedheaders = new MultiMap(j_httpClientResponse.headers());
+        that.cachedheaders = new MultiMap(j_httpClientResponse["headers()"]());
       }
       return that.cachedheaders;
     } else utils.invalidArgs();
@@ -192,7 +192,7 @@ var HttpClientResponse = function(j_val) {
   this.getHeader = function(headerName) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_httpClientResponse.getHeader(headerName);
+      return j_httpClientResponse["getHeader(java.lang.String)"](headerName);
     } else utils.invalidArgs();
   };
 
@@ -206,7 +206,7 @@ var HttpClientResponse = function(j_val) {
   this.getTrailer = function(trailerName) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return j_httpClientResponse.getTrailer(trailerName);
+      return j_httpClientResponse["getTrailer(java.lang.String)"](trailerName);
     } else utils.invalidArgs();
   };
 
@@ -221,7 +221,7 @@ var HttpClientResponse = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedtrailers == null) {
-        that.cachedtrailers = new MultiMap(j_httpClientResponse.trailers());
+        that.cachedtrailers = new MultiMap(j_httpClientResponse["trailers()"]());
       }
       return that.cachedtrailers;
     } else utils.invalidArgs();
@@ -238,7 +238,7 @@ var HttpClientResponse = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedcookies == null) {
-        that.cachedcookies = j_httpClientResponse.cookies();
+        that.cachedcookies = j_httpClientResponse["cookies()"]();
       }
       return that.cachedcookies;
     } else utils.invalidArgs();
@@ -257,7 +257,7 @@ var HttpClientResponse = function(j_val) {
   this.bodyHandler = function(bodyHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_httpClientResponse.bodyHandler(function(jVal) {
+      j_httpClientResponse["bodyHandler(io.vertx.core.Handler)"](function(jVal) {
       bodyHandler(new Buffer(jVal));
     });
       return that;
@@ -280,7 +280,7 @@ var HttpClientResponse = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachednetSocket == null) {
-        that.cachednetSocket = new NetSocket(j_httpClientResponse.netSocket());
+        that.cachednetSocket = new NetSocket(j_httpClientResponse["netSocket()"]());
       }
       return that.cachednetSocket;
     } else utils.invalidArgs();
@@ -309,7 +309,7 @@ module.exports = HttpClientResponse;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Mar 22 2015 19:02:07 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 14:58:29 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
