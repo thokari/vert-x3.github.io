@@ -739,7 +739,7 @@ interacting with it over the event bus, either directly by sending messages, or 
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject().put("host", "mymysqldb.mycompany");
 DeploymentOptions options = new DeploymentOptions().setConfig(config);
 
-vertx.deployVerticle("service:io.vertx:vertx-jdbc-service", options, res -&gt; {
+vertx.deployVerticle("service:io.vertx.jdbc-service", options, res -&gt; {
   if (res.succeeded()) {
     // Deployed ok
   } else {
@@ -938,7 +938,7 @@ service.start();</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-19 06:30:56 GMT
+Last updated 2015-03-26 13:34:56 GMT
 </div>
 </div>
 </body>

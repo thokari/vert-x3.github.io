@@ -1169,7 +1169,7 @@ route.handler(function (routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var route = router.route("/some/path/");
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var route = router.route("/some/path/*");
 
 route.handler(function (routingContext) {
   // This handler will be called same as previous example
@@ -1803,7 +1803,7 @@ would invoke the  API.</p>
 var mainRouter = Router.router(vertx);
 
 // Handle static resources
-mainRouter.route("/static").handler(myStaticHandler);
+mainRouter.route("/static/*").handler(myStaticHandler);
 
 mainRouter.route(".*\\.templ").handler(myTemplateHandler);</code></pre>
 </div>
@@ -1817,7 +1817,7 @@ mainRouter.route(".*\\.templ").handler(myTemplateHandler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This means the REST API is not accessible via paths like: <code>/productsAPI/products/product1234</code></p>
+<p>This means the REST API is now accessible via paths like: <code>/productsAPI/products/product1234</code></p>
 </div>
 </div>
 </div>
@@ -1854,7 +1854,7 @@ to paths that start with <code>/somepath/</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var route = router.get("/somepath/");
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var route = router.get("/somepath/*");
 
 route.failureHandler(function (frc) {
 
@@ -1899,7 +1899,7 @@ route2.handler(function (routingContext) {
 
 // Define a failure handler
 // This will get called for any failures in the above handlers
-var route3 = router.get("/somepath/");
+var route3 = router.get("/somepath/*");
 
 route3.failureHandler(function (failureRoutingContext) {
 
@@ -2296,10 +2296,13 @@ whether you have rights for some resource).</p>
 <div class="sect2">
 <h3 id="_creating_an_auth_handler">Creating an auth handler</h3>
 <div class="paragraph">
-<p>To create an auth handler you need an instance of <code><a href="../../vertx-auth-service/js/jsdoc/auth_service-AuthService.html">AuthService</a></code>. Auth service is
+<p>To create an auth handler you need an instance of <code><a href="../../vertx-auth-service/js/jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code>. Auth service is
 (unsurprisingly) a Vert.x service that is used for authentication and authorisation of users. It uses a simple
 role/permission model and, by default, is backed by Apache Shiro. For full information on the auth service and how
 to use and configure it please consult the auth service documentation.</p>
+</div>
+<div class="paragraph">
+<p>^^ FIXME above is incorrect</p>
 </div>
 <div class="paragraph">
 <p>Like many services in Vert.x they can be instantiated locally, or you can create a proxy to an existing auth service
@@ -2313,7 +2316,7 @@ an auth handler from that, but it&#8217;s the same principle whatever concrete a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShiroAuthService = require("vertx-auth-js/shiro_auth_service");
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShiroAuthProvider = require("vertx-auth-js/shiro_auth_provider");
 var BasicAuthHandler = require("vertx-apex-js/basic_auth_handler");
 
 // Create a simple local auth service that gets user data from properties file
@@ -2322,24 +2325,10 @@ var BasicAuthHandler = require("vertx-apex-js/basic_auth_handler");
 var config = {
 };
 config.Java.type("io.vertx.ext.auth.shiro.PropertiesAuthRealmConstants").PROPERTIES_PROPS_PATH_FIELD = "classpath:test-auth.properties";
-var authService = ShiroAuthService.create(vertx, 'PROPERTIES', config);
 
-var basicAuthHandler = BasicAuthHandler.create(authService);</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And here&#8217;s an example of creating an auth service proxy to an existing auth service that is deployed elsewhere:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var AuthService = require("vertx-auth-js/auth_service");
-var BasicAuthHandler = require("vertx-apex-js/basic_auth_handler");
+var authProvider = ShiroAuthProvider.create(vertx, 'PROPERTIES', config);
 
-// Let's say you already have an auth service somewhere on your network listening on event bus address `acme.authservice`.
-
-var authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
-
-var basicAuthHandler = BasicAuthHandler.create(authService);</code></pre>
+var basicAuthHandler = BasicAuthHandler.create(authProvider);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2350,14 +2339,12 @@ var basicAuthHandler = BasicAuthHandler.create(authService);</code></pre>
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CookieHandler = require("vertx-apex-js/cookie_handler");
 var SessionHandler = require("vertx-apex-js/session_handler");
 var LocalSessionStore = require("vertx-apex-js/local_session_store");
-var AuthService = require("vertx-auth-js/auth_service");
 var BasicAuthHandler = require("vertx-apex-js/basic_auth_handler");
 
 router.route().handler(CookieHandler.create().handle);
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)).handle);
 
-var authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
-var basicAuthHandler = BasicAuthHandler.create(authService);</code></pre>
+var basicAuthHandler = BasicAuthHandler.create(authProvider);</code></pre>
 </div>
 </div>
 </div>
@@ -2379,10 +2366,10 @@ router.route().handler(CookieHandler.create().handle);
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)).handle);
 
 var authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
-var basicAuthHandler = BasicAuthHandler.create(authService);
+var basicAuthHandler = BasicAuthHandler.create(authProvider);
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/").handler(basicAuthHandler.handle);
+router.route("/private/*").handler(basicAuthHandler.handle);
 
 router.route("/someotherpath").handler(function (routingContext) {
 
@@ -2401,9 +2388,10 @@ router.route("/private/somepath").handler(function (routingContext) {
 </div>
 </div>
 <div class="paragraph">
-<p>If the auth handler has successfully authenticated and authorised the user it will set the login ID on the
-session object, and the session will be marked as logged in. You can query the logged in status and get the
-login ID with <code><a href="jsdoc/session-Session.html#isLoggedIn">isLoggedIn</a></code> and <code><a href="jsdoc/session-Session.html#getLoginID">getLoginID</a></code>.</p>
+<p>If the auth handler has successfully authenticated and authorised the user it will set the principal on the
+session object, and the session will be marked as logged in. You can query th login status with
+ <code><a href="jsdoc/session-Session.html#isLoggedIn">isLoggedIn</a></code> and you can get the principal with
+<code><a href="jsdoc/session-Session.html#getPrincipal">getPrincipal</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you want to cause the user to be logged out you can call <code><a href="jsdoc/session-Session.html#logout">logout</a></code>.</p>
@@ -2429,7 +2417,7 @@ prompt the user to enter their username and password.</p>
 and password encoded in Base64.</p>
 </div>
 <div class="paragraph">
-<p>When the basic auth handler receives this information, it calls the configured <code><a href="../../vertx-auth-service/js/jsdoc/auth_service-AuthService.html">auth service</a></code>
+<p>When the basic auth handler receives this information, it calls the configured <code><a href="../../vertx-auth-service/js/jsdoc/auth_provider-AuthProvider.html">auth service</a></code>
 with the username and password to authenticate the user. If the authentication is successful the handler attempts
 to authorise the user. If that is successful then the routing of the request is allowed to continue to the application
 handlers, otherwise a <code>403</code> response is returned to signify that access is denied.</p>
@@ -2474,13 +2462,13 @@ router.route().handler(CookieHandler.create().handle);
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)).handle);
 
 var authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
-var redirectAuthHandler = RedirectAuthHandler.create(authService);
+var redirectAuthHandler = RedirectAuthHandler.create(authProvider);
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/").handler(redirectAuthHandler.handle);
+router.route("/private/*").handler(redirectAuthHandler.handle);
 
 // Handle the actual login
-router.route("/login").handler(FormLoginHandler.create(authService).handle);
+router.route("/login").handler(FormLoginHandler.create(authProvider).handle);
 
 // Set a static server to serve static resources, e.g. the login page
 router.route().handler(StaticHandler.create().handle);
@@ -2517,13 +2505,13 @@ app:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var RedirectAuthHandler = require("vertx-apex-js/redirect_auth_handler");
 
-var managerAuthHandler = RedirectAuthHandler.create(authService);
+var managerAuthHandler = RedirectAuthHandler.create(authProvider);
 managerAuthHandler.addRole("manager").addRole("admin");
 
 // Roles "manager" and "admin" have access to /private/managers
 router.route("/private/managers").handler(managerAuthHandler.handle);
 
-var settingsAuthHandler = RedirectAuthHandler.create(authService);
+var settingsAuthHandler = RedirectAuthHandler.create(authProvider);
 settingsAuthHandler.addRole("admin");
 
 // Only "admin" has access to /private/settings
@@ -2561,7 +2549,7 @@ or from the classpath. The default static file directory is <code>webroot</code>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var StaticHandler = require("vertx-apex-js/static_handler");
 
-router.route("/static/").handler(StaticHandler.create().handle);</code></pre>
+router.route("/static/*").handler(StaticHandler.create().handle);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3392,7 +3380,7 @@ var SockJSHandler = require("vertx-apex-js/sock_js_handler");
 var CookieHandler = require("vertx-apex-js/cookie_handler");
 var SessionHandler = require("vertx-apex-js/session_handler");
 var LocalSessionStore = require("vertx-apex-js/local_session_store");
-var ShiroAuthService = require("vertx-auth-js/shiro_auth_service");
+var ShiroAuthProvider = require("vertx-auth-js/shiro_auth_provider");
 var BasicAuthHandler = require("vertx-apex-js/basic_auth_handler");
 
 var router = Router.router(vertx);
@@ -3420,8 +3408,9 @@ router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)).ha
 var authConfig = {
 };
 authConfig.Java.type("io.vertx.ext.auth.shiro.PropertiesAuthRealmConstants").PROPERTIES_PROPS_PATH_FIELD = "classpath:test-auth.properties";
-var authService = ShiroAuthService.create(vertx, 'PROPERTIES', authConfig);
-var basicAuthHandler = BasicAuthHandler.create(authService);
+var authProvider = ShiroAuthProvider.create(vertx, 'PROPERTIES', authConfig);
+
+var basicAuthHandler = BasicAuthHandler.create(authProvider);
 
 router.route("/eventbus/").handler(basicAuthHandler.handle);
 
@@ -3435,7 +3424,7 @@ router.route("/eventbus/").handler(sockJSHandler.handle);</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-23 11:18:20 GMT
+Last updated 2015-04-01 16:23:58 BST
 </div>
 </div>
 </body>

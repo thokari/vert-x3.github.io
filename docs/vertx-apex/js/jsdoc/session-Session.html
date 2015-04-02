@@ -342,98 +342,7 @@
         
             
 <dt>
-    <h4 class="name" id="getAuthService"><span class="type-signature"></span>getAuthService<span class="signature">()</span><span class="type-signature"> &rarr; {AuthService}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Get the auth service
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line296">line 296</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    the auth service
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">AuthService</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="getLoginID"><span class="type-signature"></span>getLoginID<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="getPrincipal"><span class="type-signature"></span>getPrincipal<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
 </dt>
@@ -470,7 +379,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line148">line 148</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line172">line 172</a>
     </li></ul></dd>
     
     
@@ -492,17 +401,8 @@
     
     
     <h5>Returns:</h5>
-    <ul>
-            <li>
-<div class="param-desc">
-    the login ID of the logged in user (if any). Must be used in conjunction with a
-   AuthHandler.
-</div>
-
-
-</li>
-        
-            <li>
+    
+            
 
 
 <dl>
@@ -511,13 +411,13 @@
 	</dt>
 	<dd>
 		
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
 	</dd>
 </dl>
-</li>
-        </ul>
+
+        
     
     
 </dd>
@@ -637,7 +537,147 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line196">line 196</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line206">line 206</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="hasPermissions"><span class="type-signature"></span>hasPermissions<span class="signature">(permissions, resultHandler)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Does the logged in user have the specified permissions?  Information is cached for the lifetime of the session
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>permissions</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the permissions</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>resultHandler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">will be called with a result true/false</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line246">line 246</a>
     </li></ul></dd>
     
     
@@ -777,7 +817,147 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line176">line 176</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line186">line 186</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="hasRoles"><span class="type-signature"></span>hasRoles<span class="signature">(roles, resultHandler)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Does the logged in user have the specified roles?  Information is cached for the lifetime of the session
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>roles</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the roles</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>resultHandler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">will be called with a result true/false</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line226">line 226</a>
     </li></ul></dd>
     
     
@@ -1024,7 +1204,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line162">line 162</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line147">line 147</a>
     </li></ul></dd>
     
     
@@ -1210,7 +1390,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line215">line 215</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line265">line 265</a>
     </li></ul></dd>
     
     
@@ -1576,7 +1756,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line243">line 243</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line293">line 293</a>
     </li></ul></dd>
     
     
@@ -1671,7 +1851,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line269">line 269</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line306">line 306</a>
     </li></ul></dd>
     
     
@@ -1699,7 +1879,7 @@
         
             
 <dt>
-    <h4 class="name" id="setAuthService"><span class="type-signature"></span>setAuthService<span class="signature">(authService)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setAuthProvider"><span class="type-signature"></span>setAuthProvider<span class="signature">(authProvider)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1707,7 +1887,7 @@
     
     
     <div class="description">
-        Set the auth service
+        Set the auth provider
     </div>
     
 
@@ -1741,13 +1921,13 @@
 	
         <tr>
             
-                <td class="name"><code>authService</code></td>
+                <td class="name"><code>authProvider</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">AuthService</span>
+<span class="param-type">AuthProvider</span>
 
 
             
@@ -1757,7 +1937,7 @@
             
             
             
-            <td class="description last">the auth service</td>
+            <td class="description last">the auth provider</td>
         </tr>
 	
 	
@@ -1788,7 +1968,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line282">line 282</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line319">line 319</a>
     </li></ul></dd>
     
     
@@ -1816,16 +1996,12 @@
         
             
 <dt>
-    <h4 class="name" id="setLoginID"><span class="type-signature"></span>setLoginID<span class="signature">(loginID)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setPrincipal"><span class="type-signature"></span>setPrincipal<span class="signature">(principal)</span><span class="type-signature"></span></h4>
     
     
 </dt>
 <dd>
     
-    
-    <div class="description">
-        Set the login ID for the session
-    </div>
     
 
     
@@ -1858,13 +2034,13 @@
 	
         <tr>
             
-                <td class="name"><code>loginID</code></td>
+                <td class="name"><code>principal</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -1874,7 +2050,7 @@
             
             
             
-            <td class="description last">the login ID</td>
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -1905,7 +2081,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line256">line 256</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line159">line 159</a>
     </li></ul></dd>
     
     
@@ -1970,7 +2146,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session.js.html">session.js</a>, <a href="session.js.html#line229">line 229</a>
+        <a href="session.js.html">session.js</a>, <a href="session.js.html#line279">line 279</a>
     </li></ul></dd>
     
     
@@ -2043,7 +2219,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 11:19:25 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed Apr 01 2015 16:25:08 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

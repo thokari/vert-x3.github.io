@@ -57,9 +57,9 @@ function windowTitle()
 
  This Vert.x service provides authentication and authorisation functionality for use in your Vert.x applications.
 
- The auth service provides a common interface that can be backed by different auth providers. Vert. ships with a
+ The auth service provides a common interface that can be backed by different auth providers. Vert.x ships with a
  default implementation that uses http://shiro.apache.org/[Apache Shiro] but you can provide your own implementation
- by implementing the <a href='../../../../io/vertx/ext/auth/spi/AuthProvider.html' title='AuthProvider'>AuthProvider</a> interface. The Vert.x Apache Shiro implementation
+ by implementing the io.vertx.ext.auth.AuthProvider interface. The Vert.x Apache Shiro implementation
  currently allows user/role/permission information to be accessed from simple properties files or LDAP servers.
 
  The auth service can either be used directly in your application, but it also integrated with the auth functionality
@@ -118,7 +118,7 @@ function windowTitle()
  To use this, you should use io.vertx.ext.auth.shiro.ShiroAuthService.
 
  This currently supports properties file based user/role/permission information and using LDAP, and you can also pass
- in a pre-existing Shiro `Realm` instance or implement <a href='../../../../io/vertx/ext/auth/shiro/impl/ShiroAuthRealm.html' title='ShiroAuthRealm'>ShiroAuthRealm</a> to implement
+ in a pre-existing Shiro `Realm` instance or implement <a href='../../../../io/vertx/ext/auth/shiro/ShiroAuthRealm.html' title='ShiroAuthRealm'>ShiroAuthRealm</a> to implement
  a different method of auth using Shiro.
 
  == Shiro Auth Service Verticle
@@ -200,7 +200,7 @@ function windowTitle()
 
  == Using non Shiro Auth implementations
 
- If you want to use a different auth provider with the Auth service, you should implement <a href='../../../../io/vertx/ext/auth/spi/AuthProvider.html' title='AuthProvider'>AuthProvider</a>.
+ If you want to use a different auth provider with the Auth service, you should implement io.vertx.ext.auth.AuthProvider.
 
  You can then create a local instance of the AuthService with:
 
@@ -224,12 +224,15 @@ function windowTitle()
 
  === Authentication - login / logout
 
- You use io.vertx.ext.auth.AuthService#login to login a user. The argument to log-in is a io.vertx.core.json.JsonObject
- representing the _credentials_ of the user.
+ You use io.vertx.ext.auth.AuthService#login to login a user. The arguments to log-in are a io.vertx.core.json.JsonObject
+ representing the principal (principal is a fancy name for a unique id, e.g. username representing the user), and
+ another io.vertx.core.json.JsonObject representing the credentials (e.g. password) of the user.
 
- Often the credentials will just be a `username` string field and a `password` string field - and this is what is
- expected by the out of the box Apache Shiro provider, but other providers might use other data for credentials that's
- why we keep it as a general JSON object.
+ Often the principal will just contain a `username` string field - the value containing the username and this is what is
+ expected by the out of the box Apache Shiro provider, but other providers might represent principals in other ways.
+
+ Similarly, the credentials will often just be a `password` string field -  the value containing a password but other
+ providers might use other data for credentials that's why we keep it as a general JSON object.
 
  The result of the login is returned in the result handler. If the login is successful a string login-ID will be returned
  as the result. This is a unique secure UUID that identifies the login session. The login ID should be used if you
@@ -246,7 +249,7 @@ function windowTitle()
  logged out.
 
  The default time it remains valid is 30 minutes. If you want to use a different value of timeout you can specify that
- by calling io.vertx.ext.auth.AuthService#loginWithTimeout(io.vertx.core.json.JsonObject, long, io.vertx.core.Handler).
+ by calling io.vertx.ext.auth.AuthService#loginWithTimeout.
 
  To prevent a login timing out, you can call io.vertx.ext.auth.AuthService#refreshLoginSession specifying
  the login ID. The login will timeout if it remains unrefreshed for greater than the timeout period.
@@ -305,9 +308,9 @@ function windowTitle()
 
  This Vert.x service provides authentication and authorisation functionality for use in your Vert.x applications.
 
- The auth service provides a common interface that can be backed by different auth providers. Vert. ships with a
+ The auth service provides a common interface that can be backed by different auth providers. Vert.x ships with a
  default implementation that uses http://shiro.apache.org/[Apache Shiro] but you can provide your own implementation
- by implementing the <a href='../../../../io/vertx/ext/auth/spi/AuthProvider.html' title='AuthProvider'>AuthProvider</a> interface. The Vert.x Apache Shiro implementation
+ by implementing the io.vertx.ext.auth.AuthProvider interface. The Vert.x Apache Shiro implementation
  currently allows user/role/permission information to be accessed from simple properties files or LDAP servers.
 
  The auth service can either be used directly in your application, but it also integrated with the auth functionality
@@ -366,7 +369,7 @@ function windowTitle()
  To use this, you should use io.vertx.ext.auth.shiro.ShiroAuthService.
 
  This currently supports properties file based user/role/permission information and using LDAP, and you can also pass
- in a pre-existing Shiro `Realm` instance or implement <a href='../../../../io/vertx/ext/auth/shiro/impl/ShiroAuthRealm.html' title='ShiroAuthRealm'>ShiroAuthRealm</a> to implement
+ in a pre-existing Shiro `Realm` instance or implement <a href='../../../../io/vertx/ext/auth/shiro/ShiroAuthRealm.html' title='ShiroAuthRealm'>ShiroAuthRealm</a> to implement
  a different method of auth using Shiro.
 
  == Shiro Auth Service Verticle
@@ -448,7 +451,7 @@ function windowTitle()
 
  == Using non Shiro Auth implementations
 
- If you want to use a different auth provider with the Auth service, you should implement <a href='../../../../io/vertx/ext/auth/spi/AuthProvider.html' title='AuthProvider'>AuthProvider</a>.
+ If you want to use a different auth provider with the Auth service, you should implement io.vertx.ext.auth.AuthProvider.
 
  You can then create a local instance of the AuthService with:
 
@@ -472,12 +475,15 @@ function windowTitle()
 
  === Authentication - login / logout
 
- You use io.vertx.ext.auth.AuthService#login to login a user. The argument to log-in is a io.vertx.core.json.JsonObject
- representing the _credentials_ of the user.
+ You use io.vertx.ext.auth.AuthService#login to login a user. The arguments to log-in are a io.vertx.core.json.JsonObject
+ representing the principal (principal is a fancy name for a unique id, e.g. username representing the user), and
+ another io.vertx.core.json.JsonObject representing the credentials (e.g. password) of the user.
 
- Often the credentials will just be a `username` string field and a `password` string field - and this is what is
- expected by the out of the box Apache Shiro provider, but other providers might use other data for credentials that's
- why we keep it as a general JSON object.
+ Often the principal will just contain a `username` string field - the value containing the username and this is what is
+ expected by the out of the box Apache Shiro provider, but other providers might represent principals in other ways.
+
+ Similarly, the credentials will often just be a `password` string field -  the value containing a password but other
+ providers might use other data for credentials that's why we keep it as a general JSON object.
 
  The result of the login is returned in the result handler. If the login is successful a string login-ID will be returned
  as the result. This is a unique secure UUID that identifies the login session. The login ID should be used if you
@@ -494,7 +500,7 @@ function windowTitle()
  logged out.
 
  The default time it remains valid is 30 minutes. If you want to use a different value of timeout you can specify that
- by calling io.vertx.ext.auth.AuthService#loginWithTimeout(io.vertx.core.json.JsonObject, long, io.vertx.core.Handler).
+ by calling io.vertx.ext.auth.AuthService#loginWithTimeout.
 
  To prevent a login timing out, you can call io.vertx.ext.auth.AuthService#refreshLoginSession specifying
  the login ID. The login will timeout if it remains unrefreshed for greater than the timeout period.
@@ -553,6 +559,33 @@ function windowTitle()
 
 <div class="contentContainer">
 
+
+    <div class="summary">
+        <ul class="blockList">
+            <li class="blockList">
+                <table border="0" cellpadding="3" cellspacing="0" summary="Interface Summary">
+                    <caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
+                    <tbody>
+                    <tr>
+                        <th class="colFirst" scope="col">Interface</th>
+                        <th class="colLast" scope="col">Description</th>
+                    </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="AuthProvider.html" title="class in io/vertx/ext/auth">
+                                    AuthProvider
+                                </a></strong>
+                            </td>
+                            <td>This interface is implemented by auth providers which provide the actual auth functionality -
+ e.g. we have a implementation which uses Apache Shiro.</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </li>
+            </ul>
+        </div>
+    
 
 
 

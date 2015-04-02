@@ -735,7 +735,7 @@ body { -webkit-font-smoothing: subpixel-antialiased; }
 <p>This Vert.x service provides authentication and authorisation functionality for use in your Vert.x applications.</p>
 </div>
 <div class="paragraph">
-<p>The auth service provides a common interface that can be backed by different auth providers. Vert. ships with a
+<p>The auth service provides a common interface that can be backed by different auth providers. Vert.x ships with a
 default implementation that uses <a href="http://shiro.apache.org/">Apache Shiro</a> but you can provide your own implementation
 by implementing the <code><a href="jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code> interface. The Vert.x Apache Shiro implementation
 currently allows user/role/permission information to be accessed from simple properties files or LDAP servers.</p>
@@ -784,7 +784,7 @@ var options = {
   "config" : config
 };
 
-vertx.deployVerticle("io.vertx:shiro-auth-service", options, function (res, res_err) {
+vertx.deployVerticle("service:io.vertx.shiro-auth-service", options, function (res, res_err) {
   if (res_err == null) {
     // Deployed ok
   } else {
@@ -805,7 +805,14 @@ var proxy = AuthService.createEventBusProxy(vertx, "vertx.auth");
 
 // Now do stuff with it:
 
-proxy.login(credentials, function (res, res_err) {
+var principal = {
+  "username" : "tim"
+};
+var credentials = {
+  "password" : "sausages"
+};
+
+proxy.login(principal, credentials, function (res, res_err) {
 
   // etc
 
@@ -829,7 +836,14 @@ authService.start();
 
 // Now do stuff with it:
 
-authService.login(credentials, function (res, res_err) {
+var principal = {
+  "username" : "tim"
+};
+var credentials = {
+  "password" : "sausages"
+};
+
+authService.login(principal, credentials, function (res, res_err) {
 
   // etc
 
@@ -871,7 +885,7 @@ an example of deploying a Shiro auth service verticle:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("service:io.vertx:shiro-auth-service");</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("service:io.vertx.shiro-auth-service");</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -896,7 +910,14 @@ authService.start();
 
 // Now do stuff with it:
 
-authService.login(credentials, function (res, res_err) {
+var principal = {
+  "username" : "tim"
+};
+var credentials = {
+  "password" : "sausages"
+};
+
+authService.login(principal, credentials, function (res, res_err) {
 
   // etc
 
@@ -1025,11 +1046,7 @@ An example is <code>ldap:://myldapserver.mycompany.com:10389</code></p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var AuthService = require("vertx-auth-js/auth_service");
 
-var config = {
-};
-config."your_config_property" = "blah";
-
-var authService = AuthService.create(vertx, myAuthProvider, config);
+var authService = AuthService.create(vertx, myAuthProvider);
 
 authService.start();</code></pre>
 </div>
@@ -1048,7 +1065,7 @@ var options = {
   "config" : config
 };
 
-vertx.deployVerticle("service:io.vertx:auth-service", options);</code></pre>
+vertx.deployVerticle("service:io.vertx.auth-service", options);</code></pre>
 </div>
 </div>
 </div>
@@ -1065,13 +1082,17 @@ vertx.deployVerticle("service:io.vertx:auth-service", options);</code></pre>
 <div class="sect2">
 <h3 id="_authentication_login_logout">Authentication - login / logout</h3>
 <div class="paragraph">
-<p>You use <code><a href="jsdoc/auth_service-AuthService.html#login">login</a></code> to login a user. The argument to log-in is a <code><a href="../../vertx-core/js/jsdoc/json_object-JsonObject.html">JsonObject</a></code>
-representing the <em>credentials</em> of the user.</p>
+<p>You use <code><a href="jsdoc/auth_service-AuthService.html#login">login</a></code> to login a user. The arguments to log-in are a <code><a href="../../vertx-core/js/jsdoc/json_object-JsonObject.html">JsonObject</a></code>
+representing the principal (principal is a fancy name for a unique id, e.g. username representing the user), and
+another <code><a href="../../vertx-core/js/jsdoc/json_object-JsonObject.html">JsonObject</a></code> representing the credentials (e.g. password) of the user.</p>
 </div>
 <div class="paragraph">
-<p>Often the credentials will just be a <code>username</code> string field and a <code>password</code> string field - and this is what is
-expected by the out of the box Apache Shiro provider, but other providers might use other data for credentials that&#8217;s
-why we keep it as a general JSON object.</p>
+<p>Often the principal will just contain a <code>username</code> string field - the value containing the username and this is what is
+expected by the out of the box Apache Shiro provider, but other providers might represent principals in other ways.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, the credentials will often just be a <code>password</code> string field -  the value containing a password but other
+providers might use other data for credentials that&#8217;s why we keep it as a general JSON object.</p>
 </div>
 <div class="paragraph">
 <p>The result of the login is returned in the result handler. If the login is successful a string login-ID will be returned
@@ -1083,12 +1104,14 @@ later want to authorise the user, i.e. check whether they have permissions or ro
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var credentials = {
-  "username" : "tim",
-  "password" : "wibble"
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var principal = {
+  "username" : "tim"
+};
+var credentials = {
+  "password" : "sausages"
 };
 
-authService.login(credentials, function (res, res_err) {
+authService.login(principal, credentials, function (res, res_err) {
 
   if (res_err == null) {
 
@@ -1225,7 +1248,7 @@ is started.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-21 18:21:22 GMT
+Last updated 2015-04-01 19:38:54 BST
 </div>
 </div>
 </body>

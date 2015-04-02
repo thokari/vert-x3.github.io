@@ -23,11 +23,10 @@ io.vertx.ext.apex.templ
 io.vertx.ext.asyncsql
 io.vertx.ext.auth
 io.vertx.ext.auth.shiro
-io.vertx.ext.auth.spi
+io.vertx.ext.dropwizard
+io.vertx.ext.dropwizard.reporters
 io.vertx.ext.jdbc
 io.vertx.ext.jdbc.spi
-io.vertx.ext.metrics
-io.vertx.ext.metrics.reporters
 io.vertx.ext.mongo
 io.vertx.ext.unit
 io.vertx.ext.unit.collect
@@ -53,8 +52,8 @@ io.vertx.rxjava.ext.apex.sstore
 io.vertx.rxjava.ext.apex.templ
 io.vertx.rxjava.ext.auth
 io.vertx.rxjava.ext.auth.shiro
+io.vertx.rxjava.ext.dropwizard
 io.vertx.rxjava.ext.jdbc
-io.vertx.rxjava.ext.metrics
 io.vertx.rxjava.ext.mongo
 io.vertx.rxjava.ext.unit
 io.vertx.rxjava.ext.unit.collect

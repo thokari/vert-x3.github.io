@@ -735,9 +735,9 @@ body { -webkit-font-smoothing: subpixel-antialiased; }
 <p>This Vert.x service provides authentication and authorisation functionality for use in your Vert.x applications.</p>
 </div>
 <div class="paragraph">
-<p>The auth service provides a common interface that can be backed by different auth providers. Vert. ships with a
+<p>The auth service provides a common interface that can be backed by different auth providers. Vert.x ships with a
 default implementation that uses <a href="http://shiro.apache.org/">Apache Shiro</a> but you can provide your own implementation
-by implementing the <code><a href="groovydoc/io/vertx/groovy/ext/auth/spi/AuthProvider.html">AuthProvider</a></code> interface. The Vert.x Apache Shiro implementation
+by implementing the <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code> interface. The Vert.x Apache Shiro implementation
 currently allows user/role/permission information to be accessed from simple properties files or LDAP servers.</p>
 </div>
 <div class="paragraph">
@@ -784,7 +784,7 @@ def options = [
   config:config
 ]
 
-vertx.deployVerticle("io.vertx:shiro-auth-service", options, { res -&gt;
+vertx.deployVerticle("service:io.vertx.shiro-auth-service", options, { res -&gt;
   if (res.succeeded()) {
     // Deployed ok
   } else {
@@ -805,7 +805,14 @@ def proxy = AuthService.createEventBusProxy(vertx, "vertx.auth")
 
 // Now do stuff with it:
 
-proxy.login(credentials, { res -&gt;
+def principal = [
+  username:"tim"
+]
+def credentials = [
+  password:"sausages"
+]
+
+proxy.login(principal, credentials, { res -&gt;
 
   // etc
 
@@ -829,7 +836,14 @@ authService.start()
 
 // Now do stuff with it:
 
-authService.login(credentials, { res -&gt;
+def principal = [
+  username:"tim"
+]
+def credentials = [
+  password:"sausages"
+]
+
+authService.login(principal, credentials, { res -&gt;
 
   // etc
 
@@ -857,7 +871,7 @@ actual auth.</p>
 </div>
 <div class="paragraph">
 <p>This currently supports properties file based user/role/permission information and using LDAP, and you can also pass
-in a pre-existing Shiro <code>Realm</code> instance or implement <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/impl/ShiroAuthRealm.html">ShiroAuthRealm</a></code> to implement
+in a pre-existing Shiro <code>Realm</code> instance or implement <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuthRealm.html">ShiroAuthRealm</a></code> to implement
 a different method of auth using Shiro.</p>
 </div>
 </div>
@@ -871,7 +885,7 @@ an example of deploying a Shiro auth service verticle:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("service:io.vertx:shiro-auth-service")</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("service:io.vertx.shiro-auth-service")</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -896,7 +910,14 @@ authService.start()
 
 // Now do stuff with it:
 
-authService.login(credentials, { res -&gt;
+def principal = [
+  username:"tim"
+]
+def credentials = [
+  password:"sausages"
+]
+
+authService.login(principal, credentials, { res -&gt;
 
   // etc
 
@@ -1016,7 +1037,7 @@ An example is <code>ldap:://myldapserver.mycompany.com:10389</code></p>
 <h2 id="_using_non_shiro_auth_implementations">Using non Shiro Auth implementations</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you want to use a different auth provider with the Auth service, you should implement <code><a href="groovydoc/io/vertx/groovy/ext/auth/spi/AuthProvider.html">AuthProvider</a></code>.</p>
+<p>If you want to use a different auth provider with the Auth service, you should implement <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You can then create a local instance of the AuthService with:</p>
@@ -1025,10 +1046,7 @@ An example is <code>ldap:://myldapserver.mycompany.com:10389</code></p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.auth.AuthService
 
-def config = [:]
-config."your_config_property" = "blah"
-
-def authService = AuthService.create(vertx, myAuthProvider, config)
+def authService = AuthService.create(vertx, myAuthProvider)
 
 authService.start()</code></pre>
 </div>
@@ -1046,7 +1064,7 @@ def options = [
   config:config
 ]
 
-vertx.deployVerticle("service:io.vertx:auth-service", options)</code></pre>
+vertx.deployVerticle("service:io.vertx.auth-service", options)</code></pre>
 </div>
 </div>
 </div>
@@ -1063,13 +1081,17 @@ vertx.deployVerticle("service:io.vertx:auth-service", options)</code></pre>
 <div class="sect2">
 <h3 id="_authentication_login_logout">Authentication - login / logout</h3>
 <div class="paragraph">
-<p>You use <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthService.html#login(io.vertx.core.json.JsonObject,%20io.vertx.core.Handler)">login</a></code> to login a user. The argument to log-in is a <code><a href="../../vertx-core/groovy/groovydoc/io/vertx/groovy/core/json/JsonObject.html">JsonObject</a></code>
-representing the <em>credentials</em> of the user.</p>
+<p>You use <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthService.html#login(io.vertx.core.json.JsonObject,%20io.vertx.core.json.JsonObject,%20io.vertx.core.Handler)">login</a></code> to login a user. The arguments to log-in are a <code><a href="../../vertx-core/groovy/groovydoc/io/vertx/groovy/core/json/JsonObject.html">JsonObject</a></code>
+representing the principal (principal is a fancy name for a unique id, e.g. username representing the user), and
+another <code><a href="../../vertx-core/groovy/groovydoc/io/vertx/groovy/core/json/JsonObject.html">JsonObject</a></code> representing the credentials (e.g. password) of the user.</p>
 </div>
 <div class="paragraph">
-<p>Often the credentials will just be a <code>username</code> string field and a <code>password</code> string field - and this is what is
-expected by the out of the box Apache Shiro provider, but other providers might use other data for credentials that&#8217;s
-why we keep it as a general JSON object.</p>
+<p>Often the principal will just contain a <code>username</code> string field - the value containing the username and this is what is
+expected by the out of the box Apache Shiro provider, but other providers might represent principals in other ways.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, the credentials will often just be a <code>password</code> string field -  the value containing a password but other
+providers might use other data for credentials that&#8217;s why we keep it as a general JSON object.</p>
 </div>
 <div class="paragraph">
 <p>The result of the login is returned in the result handler. If the login is successful a string login-ID will be returned
@@ -1081,12 +1103,14 @@ later want to authorise the user, i.e. check whether they have permissions or ro
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def credentials = [
-  username:"tim",
-  password:"wibble"
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def principal = [
+  username:"tim"
+]
+def credentials = [
+  password:"sausages"
 ]
 
-authService.login(credentials, { res -&gt;
+authService.login(principal, credentials, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -1112,7 +1136,7 @@ logged out.</p>
 </div>
 <div class="paragraph">
 <p>The default time it remains valid is 30 minutes. If you want to use a different value of timeout you can specify that
-by calling <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthService.html#loginWithTimeout(io.vertx.core.json.JsonObject,%20long,%20io.vertx.core.Handler)">loginWithTimeout</a></code>.</p>
+by calling <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthService.html#loginWithTimeout(io.vertx.core.json.JsonObject,%20io.vertx.core.json.JsonObject,%20long,%20io.vertx.core.Handler)">loginWithTimeout</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>To prevent a login timing out, you can call <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthService.html#refreshLoginSession(java.lang.String,%20io.vertx.core.Handler)">refreshLoginSession</a></code> specifying
@@ -1223,7 +1247,7 @@ is started.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-21 18:21:22 GMT
+Last updated 2015-04-01 19:38:52 BST
 </div>
 </div>
 </body>

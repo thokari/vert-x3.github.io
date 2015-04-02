@@ -1166,7 +1166,7 @@ route.handler(routingContext -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Route route = router.route("/some/path/");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Route route = router.route("/some/path/*");
 
 route.handler(routingContext -&gt; {
   // This handler will be called same as previous example
@@ -1791,7 +1791,7 @@ would invoke the  API.</p>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Router mainRouter = Router.router(vertx);
 
 // Handle static resources
-mainRouter.route("/static").handler(myStaticHandler);
+mainRouter.route("/static/*").handler(myStaticHandler);
 
 mainRouter.route(".*\\.templ").handler(myTemplateHandler);</code></pre>
 </div>
@@ -1805,7 +1805,7 @@ mainRouter.route(".*\\.templ").handler(myTemplateHandler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This means the REST API is not accessible via paths like: <code>/productsAPI/products/product1234</code></p>
+<p>This means the REST API is now accessible via paths like: <code>/productsAPI/products/product1234</code></p>
 </div>
 </div>
 </div>
@@ -1842,7 +1842,7 @@ to paths that start with <code>/somepath/</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Route route = router.get("/somepath/");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Route route = router.get("/somepath/*");
 
 route.failureHandler(frc -&gt; {
 
@@ -1887,7 +1887,7 @@ route2.handler(routingContext -&gt; {
 
 // Define a failure handler
 // This will get called for any failures in the above handlers
-Route route3 = router.get("/somepath/");
+Route route3 = router.get("/somepath/*");
 
 route3.failureHandler(failureRoutingContext -&gt; {
 
@@ -2256,10 +2256,13 @@ whether you have rights for some resource).</p>
 <div class="sect2">
 <h3 id="_creating_an_auth_handler">Creating an auth handler</h3>
 <div class="paragraph">
-<p>To create an auth handler you need an instance of <code><a href="../../apidocs/io/vertx/ext/auth/AuthService.html">AuthService</a></code>. Auth service is
+<p>To create an auth handler you need an instance of <code><a href="../../apidocs/io/vertx/ext/auth/AuthProvider.html">AuthProvider</a></code>. Auth service is
 (unsurprisingly) a Vert.x service that is used for authentication and authorisation of users. It uses a simple
 role/permission model and, by default, is backed by Apache Shiro. For full information on the auth service and how
 to use and configure it please consult the auth service documentation.</p>
+</div>
+<div class="paragraph">
+<p>^^ FIXME above is incorrect</p>
 </div>
 <div class="paragraph">
 <p>Like many services in Vert.x they can be instantiated locally, or you can create a proxy to an existing auth service
@@ -2276,19 +2279,10 @@ an auth handler from that, but it&#8217;s the same principle whatever concrete a
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject();
 config.put(PropertiesAuthRealmConstants.PROPERTIES_PROPS_PATH_FIELD,
            "classpath:test-auth.properties");
-AuthService authService = ShiroAuthService.create(vertx, ShiroAuthRealmType.PROPERTIES, config);
 
-AuthHandler basicAuthHandler = BasicAuthHandler.create(authService);</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And here&#8217;s an example of creating an auth service proxy to an existing auth service that is deployed elsewhere:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AuthService authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
+AuthProvider authProvider = ShiroAuthProvider.create(vertx, ShiroAuthRealmType.PROPERTIES, config);
 
-AuthHandler basicAuthHandler = BasicAuthHandler.create(authService);</code></pre>
+AuthHandler basicAuthHandler = BasicAuthHandler.create(authProvider);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2299,8 +2293,7 @@ AuthHandler basicAuthHandler = BasicAuthHandler.create(authService);</code></pre
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">router.route().handler(CookieHandler.create());
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
-AuthService authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
-AuthHandler basicAuthHandler = BasicAuthHandler.create(authService);</code></pre>
+AuthHandler basicAuthHandler = BasicAuthHandler.create(authProvider);</code></pre>
 </div>
 </div>
 </div>
@@ -2316,10 +2309,10 @@ your auth handler is before your application handlers on those paths:</p>
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
 AuthService authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
-AuthHandler basicAuthHandler = BasicAuthHandler.create(authService);
+AuthHandler basicAuthHandler = BasicAuthHandler.create(authProvider);
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/").handler(basicAuthHandler);
+router.route("/private/*").handler(basicAuthHandler);
 
 router.route("/someotherpath").handler(routingContext -&gt; {
 
@@ -2338,9 +2331,10 @@ router.route("/private/somepath").handler(routingContext -&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>If the auth handler has successfully authenticated and authorised the user it will set the login ID on the
-session object, and the session will be marked as logged in. You can query the logged in status and get the
-login ID with <code><a href="../../apidocs/io/vertx/ext/apex/Session.html#isLoggedIn--">isLoggedIn</a></code> and <code><a href="../../apidocs/io/vertx/ext/apex/Session.html#getLoginID--">getLoginID</a></code>.</p>
+<p>If the auth handler has successfully authenticated and authorised the user it will set the principal on the
+session object, and the session will be marked as logged in. You can query th login status with
+ <code><a href="../../apidocs/io/vertx/ext/apex/Session.html#isLoggedIn--">isLoggedIn</a></code> and you can get the principal with
+<code><a href="../../apidocs/io/vertx/ext/apex/Session.html#getPrincipal--">getPrincipal</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you want to cause the user to be logged out you can call <code><a href="../../apidocs/io/vertx/ext/apex/Session.html#logout--">logout</a></code>.</p>
@@ -2366,7 +2360,7 @@ prompt the user to enter their username and password.</p>
 and password encoded in Base64.</p>
 </div>
 <div class="paragraph">
-<p>When the basic auth handler receives this information, it calls the configured <code><a href="../../apidocs/io/vertx/ext/auth/AuthService.html">auth service</a></code>
+<p>When the basic auth handler receives this information, it calls the configured <code><a href="../../apidocs/io/vertx/ext/auth/AuthProvider.html">auth service</a></code>
 with the username and password to authenticate the user. If the authentication is successful the handler attempts
 to authorise the user. If that is successful then the routing of the request is allowed to continue to the application
 handlers, otherwise a <code>403</code> response is returned to signify that access is denied.</p>
@@ -2403,13 +2397,13 @@ To handle the login we provide a prebuilt handler <code><a href="../../apidocs/i
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
 AuthService authService = AuthService.createEventBusProxy(vertx, "acme.authservice");
-AuthHandler redirectAuthHandler = RedirectAuthHandler.create(authService);
+AuthHandler redirectAuthHandler = RedirectAuthHandler.create(authProvider);
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/").handler(redirectAuthHandler);
+router.route("/private/*").handler(redirectAuthHandler);
 
 // Handle the actual login
-router.route("/login").handler(FormLoginHandler.create(authService));
+router.route("/login").handler(FormLoginHandler.create(authProvider));
 
 // Set a static server to serve static resources, e.g. the login page
 router.route().handler(StaticHandler.create());
@@ -2444,13 +2438,13 @@ app:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AuthHandler managerAuthHandler = RedirectAuthHandler.create(authService);
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AuthHandler managerAuthHandler = RedirectAuthHandler.create(authProvider);
 managerAuthHandler.addRole("manager").addRole("admin");
 
 // Roles "manager" and "admin" have access to /private/managers
 router.route("/private/managers").handler(managerAuthHandler);
 
-AuthHandler settingsAuthHandler = RedirectAuthHandler.create(authService);
+AuthHandler settingsAuthHandler = RedirectAuthHandler.create(authProvider);
 settingsAuthHandler.addRole("admin");
 
 // Only "admin" has access to /private/settings
@@ -2486,7 +2480,7 @@ or from the classpath. The default static file directory is <code>webroot</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">router.route("/static/").handler(StaticHandler.create());</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">router.route("/static/*").handler(StaticHandler.create());</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3278,8 +3272,9 @@ router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 JsonObject authConfig = new JsonObject();
 authConfig.put(PropertiesAuthRealmConstants.PROPERTIES_PROPS_PATH_FIELD,
   "classpath:test-auth.properties");
-AuthService authService = ShiroAuthService.create(vertx, ShiroAuthRealmType.PROPERTIES, authConfig);
-AuthHandler basicAuthHandler = BasicAuthHandler.create(authService);
+AuthProvider authProvider = ShiroAuthProvider.create(vertx, ShiroAuthRealmType.PROPERTIES, authConfig);
+
+AuthHandler basicAuthHandler = BasicAuthHandler.create(authProvider);
 
 router.route("/eventbus/").handler(basicAuthHandler);
 
@@ -3293,7 +3288,7 @@ router.route("/eventbus/").handler(sockJSHandler);</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-03-23 11:18:18 GMT
+Last updated 2015-04-01 16:23:56 BST
 </div>
 </div>
 </body>

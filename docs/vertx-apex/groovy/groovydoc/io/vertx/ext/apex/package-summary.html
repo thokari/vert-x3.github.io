@@ -489,7 +489,7 @@ function windowTitle()
  examples.Examples#example24
  ----
 
- This means the REST API is not accessible via paths like: `/productsAPI/products/product1234`
+ This means the REST API is now accessible via paths like: `/productsAPI/products/product1234`
 
  == Default 404 Handling
 
@@ -737,10 +737,12 @@ function windowTitle()
 
  === Creating an auth handler
 
- To create an auth handler you need an instance of io.vertx.ext.auth.AuthService. Auth service is
+ To create an auth handler you need an instance of io.vertx.ext.auth.AuthProvider. Auth service is
  (unsurprisingly) a Vert.x service that is used for authentication and authorisation of users. It uses a simple
  role/permission model and, by default, is backed by Apache Shiro. For full information on the auth service and how
  to use and configure it please consult the auth service documentation.
+
+ ^^ FIXME above is incorrect
 
  Like many services in Vert.x they can be instantiated locally, or you can create a proxy to an existing auth service
  deployed as a verticle somewhere on the network. The latter case is useful if you have an app composed of many verticles
@@ -753,13 +755,6 @@ function windowTitle()
  [source,$lang]
  ----
  examples.Examples#example35
- ----
-
- And here's an example of creating an auth service proxy to an existing auth service that is deployed elsewhere:
-
- [source,$lang]
- ----
- examples.Examples#example36
  ----
 
  You'll also need cookies and sessions enabled for auth handling to work:
@@ -779,9 +774,10 @@ function windowTitle()
  examples.Examples#example38
  ----
 
- If the auth handler has successfully authenticated and authorised the user it will set the login ID on the
- session object, and the session will be marked as logged in. You can query the logged in status and get the
- login ID with io.vertx.ext.apex.Session#isLoggedIn() and io.vertx.ext.apex.Session#getLoginID().
+ If the auth handler has successfully authenticated and authorised the user it will set the principal on the
+ session object, and the session will be marked as logged in. You can query th login status with
+  io.vertx.ext.apex.Session#isLoggedIn and you can get the principal with
+ io.vertx.ext.apex.Session#getPrincipal.
 
  If you want to cause the user to be logged out you can call io.vertx.ext.apex.Session#logout().
 
@@ -800,7 +796,7 @@ function windowTitle()
  The request is made to the resource again, this time with the `Authorization` header set, containing the username
  and password encoded in Base64.
 
- When the basic auth handler receives this information, it calls the configured io.vertx.ext.auth.AuthService
+ When the basic auth handler receives this information, it calls the configured io.vertx.ext.auth.AuthProvider
  with the username and password to authenticate the user. If the authentication is successful the handler attempts
  to authorise the user. If that is successful then the routing of the request is allowed to continue to the application
  handlers, otherwise a `403` response is returned to signify that access is denied.
@@ -1802,7 +1798,7 @@ function windowTitle()
  examples.Examples#example24
  ----
 
- This means the REST API is not accessible via paths like: `/productsAPI/products/product1234`
+ This means the REST API is now accessible via paths like: `/productsAPI/products/product1234`
 
  == Default 404 Handling
 
@@ -2050,10 +2046,12 @@ function windowTitle()
 
  === Creating an auth handler
 
- To create an auth handler you need an instance of io.vertx.ext.auth.AuthService. Auth service is
+ To create an auth handler you need an instance of io.vertx.ext.auth.AuthProvider. Auth service is
  (unsurprisingly) a Vert.x service that is used for authentication and authorisation of users. It uses a simple
  role/permission model and, by default, is backed by Apache Shiro. For full information on the auth service and how
  to use and configure it please consult the auth service documentation.
+
+ ^^ FIXME above is incorrect
 
  Like many services in Vert.x they can be instantiated locally, or you can create a proxy to an existing auth service
  deployed as a verticle somewhere on the network. The latter case is useful if you have an app composed of many verticles
@@ -2066,13 +2064,6 @@ function windowTitle()
  [source,$lang]
  ----
  examples.Examples#example35
- ----
-
- And here's an example of creating an auth service proxy to an existing auth service that is deployed elsewhere:
-
- [source,$lang]
- ----
- examples.Examples#example36
  ----
 
  You'll also need cookies and sessions enabled for auth handling to work:
@@ -2092,9 +2083,10 @@ function windowTitle()
  examples.Examples#example38
  ----
 
- If the auth handler has successfully authenticated and authorised the user it will set the login ID on the
- session object, and the session will be marked as logged in. You can query the logged in status and get the
- login ID with io.vertx.ext.apex.Session#isLoggedIn() and io.vertx.ext.apex.Session#getLoginID().
+ If the auth handler has successfully authenticated and authorised the user it will set the principal on the
+ session object, and the session will be marked as logged in. You can query th login status with
+  io.vertx.ext.apex.Session#isLoggedIn and you can get the principal with
+ io.vertx.ext.apex.Session#getPrincipal.
 
  If you want to cause the user to be logged out you can call io.vertx.ext.apex.Session#logout().
 
@@ -2113,7 +2105,7 @@ function windowTitle()
  The request is made to the resource again, this time with the `Authorization` header set, containing the username
  and password encoded in Base64.
 
- When the basic auth handler receives this information, it calls the configured io.vertx.ext.auth.AuthService
+ When the basic auth handler receives this information, it calls the configured io.vertx.ext.auth.AuthProvider
  with the username and password to authenticate the user. If the authentication is successful the handler attempts
  to authorise the user. If that is successful then the routing of the request is allowed to continue to the application
  handlers, otherwise a `403` response is returned to signify that access is denied.

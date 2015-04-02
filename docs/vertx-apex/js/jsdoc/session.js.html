@@ -44,7 +44,7 @@
 /** @module vertx-apex-js/session */
 var utils = require('vertx-js/util/utils');
 var SessionStore = require('vertx-apex-js/session_store');
-var AuthService = require('vertx-auth-js/auth_service');
+var AuthProvider = require('vertx-auth-js/auth_provider');
 
 var io = Packages.io;
 var JsonObject = io.vertx.core.json.JsonObject;
@@ -75,7 +75,7 @@ var Session = function(j_val) {
   this.id = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_session.id();
+      return j_session["id()"]();
     } else utils.invalidArgs();
   };
 
@@ -90,7 +90,7 @@ var Session = function(j_val) {
   this.put = function(key, obj) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && true) {
-      j_session.put(key, utils.convParamTypeUnknown(obj));
+      j_session["put(java.lang.String,java.lang.Object)"](key, utils.convParamTypeUnknown(obj));
       return that;
     } else utils.invalidArgs();
   };
@@ -105,7 +105,7 @@ var Session = function(j_val) {
   this.get = function(key) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return utils.convReturnTypeUnknown(j_session.get(key));
+      return utils.convReturnTypeUnknown(j_session["get(java.lang.String)"](key));
     } else utils.invalidArgs();
   };
 
@@ -119,7 +119,7 @@ var Session = function(j_val) {
   this.remove = function(key) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return utils.convReturnTypeUnknown(j_session.remove(key));
+      return utils.convReturnTypeUnknown(j_session["remove(java.lang.String)"](key));
     } else utils.invalidArgs();
   };
 
@@ -133,7 +133,7 @@ var Session = function(j_val) {
   this.lastAccessed = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_session.lastAccessed();
+      return j_session["lastAccessed()"]();
     } else utils.invalidArgs();
   };
 
@@ -146,7 +146,7 @@ var Session = function(j_val) {
   this.destroy = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_session.destroy();
+      j_session["destroy()"]();
     } else utils.invalidArgs();
   };
 
@@ -160,22 +160,7 @@ var Session = function(j_val) {
   this.isDestroyed = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_session.isDestroyed();
-    } else utils.invalidArgs();
-  };
-
-  /**
-   @return  the login ID of the logged in user (if any). Must be used in conjunction with a
-   {@link AuthHandler}.
-
-   @public
-
-   @return {string}
-   */
-  this.getLoginID = function() {
-    var __args = arguments;
-    if (__args.length === 0) {
-      return j_session.getLoginID();
+      return j_session["isDestroyed()"]();
     } else utils.invalidArgs();
   };
 
@@ -189,7 +174,32 @@ var Session = function(j_val) {
   this.isLoggedIn = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_session.isLoggedIn();
+      return j_session["isLoggedIn()"]();
+    } else utils.invalidArgs();
+  };
+
+  /**
+
+   @public
+   @param principal {Object} 
+   */
+  this.setPrincipal = function(principal) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object') {
+      j_session["setPrincipal(io.vertx.core.json.JsonObject)"](utils.convParamJsonObject(principal));
+    } else utils.invalidArgs();
+  };
+
+  /**
+
+   @public
+
+   @return {Object}
+   */
+  this.getPrincipal = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return utils.convReturnJson(j_session["getPrincipal()"]());
     } else utils.invalidArgs();
   };
 
@@ -203,7 +213,7 @@ var Session = function(j_val) {
   this.hasRole = function(role, resultHandler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_session.hasRole(role, function(ar) {
+      j_session["hasRole(java.lang.String,io.vertx.core.Handler)"](role, function(ar) {
       if (ar.succeeded()) {
         resultHandler(ar.result(), null);
       } else {
@@ -223,7 +233,47 @@ var Session = function(j_val) {
   this.hasPermission = function(permission, resultHandler) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      j_session.hasPermission(permission, function(ar) {
+      j_session["hasPermission(java.lang.String,io.vertx.core.Handler)"](permission, function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(ar.result(), null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Does the logged in user have the specified roles?  Information is cached for the lifetime of the session
+
+   @public
+   @param roles {Array.&lt;string>} the roles 
+   @param resultHandler {function} will be called with a result true/false 
+   */
+  this.hasRoles = function(roles, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'object' && __args[0] instanceof Array && typeof __args[1] === 'function') {
+      j_session["hasRoles(java.util.Set,io.vertx.core.Handler)"](utils.convParamSetBasicOther(roles), function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(ar.result(), null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Does the logged in user have the specified permissions?  Information is cached for the lifetime of the session
+
+   @public
+   @param permissions {Array.&lt;string>} the permissions 
+   @param resultHandler {function} will be called with a result true/false 
+   */
+  this.hasPermissions = function(permissions, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'object' && __args[0] instanceof Array && typeof __args[1] === 'function') {
+      j_session["hasPermissions(java.util.Set,io.vertx.core.Handler)"](utils.convParamSetBasicOther(permissions), function(ar) {
       if (ar.succeeded()) {
         resultHandler(ar.result(), null);
       } else {
@@ -242,7 +292,7 @@ var Session = function(j_val) {
   this.logout = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_session.logout();
+      j_session["logout()"]();
     } else utils.invalidArgs();
   };
 
@@ -256,7 +306,7 @@ var Session = function(j_val) {
   this.timeout = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return j_session.timeout();
+      return j_session["timeout()"]();
     } else utils.invalidArgs();
   };
 
@@ -270,20 +320,7 @@ var Session = function(j_val) {
   this.sessionStore = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new SessionStore(j_session.sessionStore());
-    } else utils.invalidArgs();
-  };
-
-  /**
-   Set the login ID for the session
-
-   @public
-   @param loginID {string} the login ID 
-   */
-  this.setLoginID = function(loginID) {
-    var __args = arguments;
-    if (__args.length === 1 && typeof __args[0] === 'string') {
-      j_session.setLoginID(loginID);
+      return new SessionStore(j_session["sessionStore()"]());
     } else utils.invalidArgs();
   };
 
@@ -296,34 +333,20 @@ var Session = function(j_val) {
   this.setAccessed = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      j_session.setAccessed();
+      j_session["setAccessed()"]();
     } else utils.invalidArgs();
   };
 
   /**
-   Set the auth service
+   Set the auth provider
 
    @public
-   @param authService {AuthService} the auth service 
+   @param authProvider {AuthProvider} the auth provider 
    */
-  this.setAuthService = function(authService) {
+  this.setAuthProvider = function(authProvider) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
-      j_session.setAuthService(authService._jdel);
-    } else utils.invalidArgs();
-  };
-
-  /**
-   Get the auth service
-
-   @public
-
-   @return {AuthService} the auth service
-   */
-  this.getAuthService = function() {
-    var __args = arguments;
-    if (__args.length === 0) {
-      return new AuthService(j_session.getAuthService());
+      j_session["setAuthProvider(io.vertx.ext.auth.AuthProvider)"](authProvider._jdel);
     } else utils.invalidArgs();
   };
 
@@ -350,7 +373,7 @@ module.exports = Session;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 11:19:23 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed Apr 01 2015 16:25:05 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

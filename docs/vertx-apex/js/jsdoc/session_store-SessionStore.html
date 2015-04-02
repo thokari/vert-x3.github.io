@@ -217,7 +217,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line102">line 102</a>
+        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line115">line 115</a>
     </li></ul></dd>
     
     
@@ -286,7 +286,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line140">line 140</a>
+        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line153">line 153</a>
     </li></ul></dd>
     
     
@@ -307,6 +307,145 @@
     
     
     
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="createSession"><span class="type-signature"></span>createSession<span class="signature">(timeout)</span><span class="type-signature"> &rarr; {Session}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Create a new session
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the session timeout, in ms</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    the session
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Session</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -426,7 +565,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line62">line 62</a>
+        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line76">line 76</a>
     </li></ul></dd>
     
     
@@ -566,7 +705,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line42">line 42</a>
+        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line56">line 56</a>
     </li></ul></dd>
     
     
@@ -594,7 +733,7 @@
         
             
 <dt>
-    <h4 class="name" id="put"><span class="type-signature"></span>put<span class="signature">(session, timeout, resultHandler)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="put"><span class="type-signature"></span>put<span class="signature">(session, resultHandler)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -659,29 +798,6 @@
 	
         <tr>
             
-                <td class="name"><code>timeout</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">max time session will last without being accessed before getting expired</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
                 <td class="name"><code>resultHandler</code></td>
             
             
@@ -729,7 +845,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line83">line 83</a>
+        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line96">line 96</a>
     </li></ul></dd>
     
     
@@ -846,7 +962,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line121">line 121</a>
+        <a href="session_store.js.html">session_store.js</a>, <a href="session_store.js.html#line134">line 134</a>
     </li></ul></dd>
     
     
@@ -893,7 +1009,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Mar 23 2015 11:19:25 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed Apr 01 2015 16:25:08 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

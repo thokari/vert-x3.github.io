@@ -265,7 +265,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line182">line 182</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line184">line 184</a>
     </li></ul></dd>
     
     
@@ -446,7 +446,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line205">line 205</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line207">line 207</a>
     </li></ul></dd>
     
     
@@ -627,7 +627,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line136">line 136</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line138">line 138</a>
     </li></ul></dd>
     
     
@@ -808,7 +808,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line159">line 159</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line161">line 161</a>
     </li></ul></dd>
     
     
@@ -854,7 +854,7 @@
         
             
 <dt>
-    <h4 class="name" id="login"><span class="type-signature"></span>login<span class="signature">(credentials, resultHandler)</span><span class="type-signature"> &rarr; {AuthService}</span></h4>
+    <h4 class="name" id="login"><span class="type-signature"></span>login<span class="signature">(principal, credentials, resultHandler)</span><span class="type-signature"> &rarr; {AuthService}</span></h4>
     
     
 </dt>
@@ -897,6 +897,29 @@
 	
         <tr>
             
+                <td class="name"><code>principal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">represents the unique id (e.g. username) of the user being logged in</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
                 <td class="name"><code>credentials</code></td>
             
             
@@ -913,7 +936,7 @@
             
             
             
-            <td class="description last">the credentials</td>
+            <td class="description last">the credentials - e.g. password</td>
         </tr>
 	
 	
@@ -967,7 +990,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line45">line 45</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line46">line 46</a>
     </li></ul></dd>
     
     
@@ -1013,7 +1036,7 @@
         
             
 <dt>
-    <h4 class="name" id="loginWithTimeout"><span class="type-signature"></span>loginWithTimeout<span class="signature">(credentials, timeout, resultHandler)</span><span class="type-signature"> &rarr; {AuthService}</span></h4>
+    <h4 class="name" id="loginWithTimeout"><span class="type-signature"></span>loginWithTimeout<span class="signature">(principal, credentials, timeout, resultHandler)</span><span class="type-signature"> &rarr; {AuthService}</span></h4>
     
     
 </dt>
@@ -1052,6 +1075,29 @@
 	</thead>
 	
 	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>principal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">represents the unique id (e.g. username) of the user being logged in</td>
+        </tr>
+	
 	
 	
         <tr>
@@ -1149,7 +1195,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line69">line 69</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line71">line 71</a>
     </li></ul></dd>
     
     
@@ -1307,7 +1353,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line91">line 91</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line93">line 93</a>
     </li></ul></dd>
     
     
@@ -1465,7 +1511,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line113">line 113</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line115">line 115</a>
     </li></ul></dd>
     
     
@@ -1600,7 +1646,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line226">line 226</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line228">line 228</a>
     </li></ul></dd>
     
     
@@ -1687,7 +1733,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line240">line 240</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line242">line 242</a>
     </li></ul></dd>
     
     
@@ -1756,7 +1802,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line253">line 253</a>
+        <a href="auth_service.js.html">auth_service.js</a>, <a href="auth_service.js.html#line255">line 255</a>
     </li></ul></dd>
     
     
@@ -1797,13 +1843,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="auth_service.html">vertx-auth-js/auth_service</a></li><li><a href="shiro_auth_service.html">vertx-auth-js/shiro_auth_service</a></li></ul><h3>Classes</h3><ul><li><a href="auth_service-AuthService.html">AuthService</a></li><li><a href="shiro_auth_service-ShiroAuthService.html">ShiroAuthService</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="auth_provider.html">vertx-auth-js/auth_provider</a></li><li><a href="auth_service.html">vertx-auth-js/auth_service</a></li><li><a href="clustered_session_store.html">vertx-auth-js/clustered_session_store</a></li><li><a href="local_session_store.html">vertx-auth-js/local_session_store</a></li><li><a href="session.html">vertx-auth-js/session</a></li><li><a href="session_store.html">vertx-auth-js/session_store</a></li><li><a href="shiro_auth_provider.html">vertx-auth-js/shiro_auth_provider</a></li><li><a href="shiro_auth_service.html">vertx-auth-js/shiro_auth_service</a></li></ul><h3>Classes</h3><ul><li><a href="auth_provider-AuthProvider.html">AuthProvider</a></li><li><a href="auth_service-AuthService.html">AuthService</a></li><li><a href="clustered_session_store-ClusteredSessionStore.html">ClusteredSessionStore</a></li><li><a href="local_session_store-LocalSessionStore.html">LocalSessionStore</a></li><li><a href="session_store-SessionStore.html">SessionStore</a></li><li><a href="session-Session.html">Session</a></li><li><a href="shiro_auth_provider-ShiroAuthProvider.html">ShiroAuthProvider</a></li><li><a href="shiro_auth_service-ShiroAuthService.html">ShiroAuthService</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sat Mar 21 2015 18:23:03 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed Apr 01 2015 19:39:32 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

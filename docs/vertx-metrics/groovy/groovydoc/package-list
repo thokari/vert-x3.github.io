@@ -1,4 +1,0 @@
-io.vertx.ext.metrics
-io.vertx.ext.metrics.impl
-io.vertx.ext.metrics.reporters
-io.vertx.groovy.ext.metrics
