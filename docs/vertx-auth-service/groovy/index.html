@@ -711,6 +711,7 @@ body { -webkit-font-smoothing: subpixel-antialiased; }
 <ul class="sectlevel1">
 <li><a href="#_basic_concepts">Basic concepts</a></li>
 <li><a href="#_setting_up_the_service">Setting up the service</a></li>
+<li><a href="#_todo_these_docs_need_to_be_refactored_to_talk_about_authprovider_and_authservice_as_different_ways_of_using_it">TODO these docs need to be refactored to talk about AuthProvider and AuthService as different ways of using it</a></li>
 <li><a href="#_shiro_auth_service">Shiro Auth Service</a></li>
 <li><a href="#_shiro_auth_service_verticle">Shiro Auth Service Verticle</a>
 <ul class="sectlevel2">
@@ -732,17 +733,24 @@ body { -webkit-font-smoothing: subpixel-antialiased; }
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Vert.x service provides authentication and authorisation functionality for use in your Vert.x applications.</p>
+<p>This Vert.x service provides authentication and authorisation functionality and the concept of a login session
+for use in your Vert.x applications</p>
 </div>
 <div class="paragraph">
-<p>The auth service provides a common interface that can be backed by different auth providers. Vert.x ships with a
+<p>The auth service provides a common interface that can be backed by different auth providers.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x ships with a
 default implementation that uses <a href="http://shiro.apache.org/">Apache Shiro</a> but you can provide your own implementation
-by implementing the <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code> interface. The Vert.x Apache Shiro implementation
-currently allows user/role/permission information to be accessed from simple properties files or LDAP servers.</p>
+by implementing the <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code> interface.</p>
 </div>
 <div class="paragraph">
-<p>The auth service can either be used directly in your application, but it also integrated with the auth functionality
-in Vert.x Apex.</p>
+<p>The <code><a href="groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code> interface can also be used directory in your applications if you just want
+raw authentication and authorisation functionality without the concept of a login session.</p>
+</div>
+<div class="paragraph">
+<p>The Vert.x Apache Shiro implementation
+currently allows user/role/permission information to be accessed from simple properties files or LDAP servers.</p>
 </div>
 </div>
 </div>
@@ -857,6 +865,12 @@ before you use it.</p>
 <div class="paragraph">
 <p>However you do it, once you&#8217;ve got your service you can start using it.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_todo_these_docs_need_to_be_refactored_to_talk_about_authprovider_and_authservice_as_different_ways_of_using_it">TODO these docs need to be refactored to talk about AuthProvider and AuthService as different ways of using it</h2>
+<div class="sectionbody">
+
 </div>
 </div>
 <div class="sect1">
@@ -1247,7 +1261,7 @@ is started.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-01 19:38:52 BST
+Last updated 2015-04-02 10:59:28 BST
 </div>
 </div>
 </body>
