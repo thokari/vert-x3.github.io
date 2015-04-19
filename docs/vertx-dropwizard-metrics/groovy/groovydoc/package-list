@@ -1,3 +1,4 @@
+examples
 io.vertx.ext.dropwizard
 io.vertx.ext.dropwizard.impl
 io.vertx.ext.dropwizard.reporters

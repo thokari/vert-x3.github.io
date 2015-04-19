@@ -1,0 +1,5 @@
+io.vertx.ext.mail
+io.vertx.ext.mail.impl
+io.vertx.ext.mail.impl.sasl
+io.vertx.ext.mail.mailencoder
+io.vertx.groovy.ext.mail
