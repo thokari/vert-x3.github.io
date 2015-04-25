@@ -2608,7 +2608,7 @@ var options = {
 };
 sockJSHandler.bridge(options);
 
-router.route("/eventbus").handler(sockJSHandler.handle);</code></pre>
+router.route("/eventbus/*").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2793,7 +2793,7 @@ var options = {
 
 sockJSHandler.bridge(options);
 
-router.route("/eventbus").handler(sockJSHandler.handle);</code></pre>
+router.route("/eventbus/*").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 </div>
@@ -2880,10 +2880,10 @@ var authProvider = ShiroAuthProvider.create(vertx, 'PROPERTIES', authConfig);
 
 var basicAuthHandler = BasicAuthHandler.create(authProvider);
 
-router.route("/eventbus/").handler(basicAuthHandler.handle);
+router.route("/eventbus/*").handler(basicAuthHandler.handle);
 
 
-router.route("/eventbus/").handler(sockJSHandler.handle);</code></pre>
+router.route("/eventbus/*").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 </div>
@@ -2896,7 +2896,7 @@ router.route("/eventbus/").handler(sockJSHandler.handle);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-04-24 00:23:14 BST
+                Last updated 2015-04-25 00:23:30 BST
               
               
             </div>
