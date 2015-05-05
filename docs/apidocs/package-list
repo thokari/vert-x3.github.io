@@ -52,6 +52,7 @@ io.vertx.rxjava.ext.apex.handler
 io.vertx.rxjava.ext.apex.handler.sockjs
 io.vertx.rxjava.ext.apex.sstore
 io.vertx.rxjava.ext.apex.templ
+io.vertx.rxjava.ext.asyncsql
 io.vertx.rxjava.ext.auth
 io.vertx.rxjava.ext.auth.shiro
 io.vertx.rxjava.ext.dropwizard

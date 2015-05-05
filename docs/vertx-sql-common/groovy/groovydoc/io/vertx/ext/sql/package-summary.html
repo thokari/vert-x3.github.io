@@ -61,7 +61,7 @@ function windowTitle()
 
  == The SQL Connection
 
- A connection to the database is represented by <a href='../../../../io/vertx/ext/sql/SqlConnection.html' title='SqlConnection'>SqlConnection</a>.
+ A connection to the database is represented by <a href='../../../../io/vertx/ext/sql/SQLConnection.html' title='SQLConnection'>SQLConnection</a>.
 
  === Auto-commit
 
@@ -69,7 +69,7 @@ function windowTitle()
  execute in its own transaction.
 
  If you wish to perform multiple operations in a single transaction you should set auto commit to false with
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SqlConnection.setAutoCommit'>SqlConnection.setAutoCommit</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SQLConnection.setAutoCommit'>SQLConnection.setAutoCommit</a>.
 
  When the operation is complete, the handler will be called:
 
@@ -80,7 +80,7 @@ function windowTitle()
 
  === Executing queries
 
- To execute a query use <a href='../../../../io/vertx/ext/sql/SqlConnection.html#query(java.lang.String, io.vertx.core.Handler)' title='SqlConnection.query'>SqlConnection.query</a>
+ To execute a query use <a href='../../../../io/vertx/ext/sql/SQLConnection.html#query(java.lang.String, io.vertx.core.Handler)' title='SQLConnection.query'>SQLConnection.query</a>
 
  The query string is raw SQL that is passed through without changes to the actual database.
 
@@ -118,7 +118,7 @@ function windowTitle()
  === Prepared statement queries
 
  To execute a prepared statement query you can use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#queryWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SqlConnection.queryWithParams'>SqlConnection.queryWithParams</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#queryWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SQLConnection.queryWithParams'>SQLConnection.queryWithParams</a>.
 
  This takes the query, containing the parameter place holders, and a io.vertx.core.json.JsonArray or parameter
  values.
@@ -130,7 +130,7 @@ function windowTitle()
 
  === Executing INSERT, UPDATE or DELETE
 
- To execute an operation which updates the database use <a href='../../../../io/vertx/ext/sql/SqlConnection.html#update(java.lang.String, io.vertx.core.Handler)' title='SqlConnection.update'>SqlConnection.update</a>.
+ To execute an operation which updates the database use <a href='../../../../io/vertx/ext/sql/SQLConnection.html#update(java.lang.String, io.vertx.core.Handler)' title='SQLConnection.update'>SQLConnection.update</a>.
 
  The update string is raw SQL that is passed through without changes to the actual database.
 
@@ -148,7 +148,7 @@ function windowTitle()
  === Prepared statement updates
 
  To execute a prepared statement update you can use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#updateWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SqlConnection.updateWithParams'>SqlConnection.updateWithParams</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#updateWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SQLConnection.updateWithParams'>SQLConnection.updateWithParams</a>.
 
  This takes the update, containing the parameter place holders, and a io.vertx.core.json.JsonArray or parameter
  values.
@@ -161,7 +161,7 @@ function windowTitle()
  === Executing other operations
 
  To execute any other database operation, e.g. a `CREATE TABLE` you can use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#execute(java.lang.String, io.vertx.core.Handler)' title='SqlConnection.execute'>SqlConnection.execute</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#execute(java.lang.String, io.vertx.core.Handler)' title='SQLConnection.execute'>SQLConnection.execute</a>.
 
  The string is passed through without changes to the actual database. The handler is called when the operation
  is complete
@@ -173,11 +173,11 @@ function windowTitle()
 
  === Using transactions
 
- To use transactions first set auto-commit to false with <a href='../../../../io/vertx/ext/sql/SqlConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SqlConnection.setAutoCommit'>SqlConnection.setAutoCommit</a>.
+ To use transactions first set auto-commit to false with <a href='../../../../io/vertx/ext/sql/SQLConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SQLConnection.setAutoCommit'>SQLConnection.setAutoCommit</a>.
 
  You then do your transactional operations and when you want to commit or rollback use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#commit(io.vertx.core.Handler)' title='SqlConnection.commit'>SqlConnection.commit</a> or
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#rollback(io.vertx.core.Handler)' title='SqlConnection.rollback'>SqlConnection.rollback</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#commit(io.vertx.core.Handler)' title='SQLConnection.commit'>SQLConnection.commit</a> or
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#rollback(io.vertx.core.Handler)' title='SQLConnection.rollback'>SQLConnection.rollback</a>.
 
  Once the commit/rollback is complete the handler will be called and the next transaction will be automatically started.
 
@@ -188,7 +188,7 @@ function windowTitle()
 
  === Closing connections
 
- When you've done with the connection you should return it to the pool with <a href='../../../../io/vertx/ext/sql/SqlConnection.html#close(io.vertx.core.Handler)' title='SqlConnection.close'>SqlConnection.close</a>.
+ When you've done with the connection you should return it to the pool with <a href='../../../../io/vertx/ext/sql/SQLConnection.html#close(io.vertx.core.Handler)' title='SQLConnection.close'>SQLConnection.close</a>.
 
  
 @Document(fileName = "index.adoc")
@@ -203,7 +203,7 @@ function windowTitle()
 
  == The SQL Connection
 
- A connection to the database is represented by <a href='../../../../io/vertx/ext/sql/SqlConnection.html' title='SqlConnection'>SqlConnection</a>.
+ A connection to the database is represented by <a href='../../../../io/vertx/ext/sql/SQLConnection.html' title='SQLConnection'>SQLConnection</a>.
 
  === Auto-commit
 
@@ -211,7 +211,7 @@ function windowTitle()
  execute in its own transaction.
 
  If you wish to perform multiple operations in a single transaction you should set auto commit to false with
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SqlConnection.setAutoCommit'>SqlConnection.setAutoCommit</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SQLConnection.setAutoCommit'>SQLConnection.setAutoCommit</a>.
 
  When the operation is complete, the handler will be called:
 
@@ -222,7 +222,7 @@ function windowTitle()
 
  === Executing queries
 
- To execute a query use <a href='../../../../io/vertx/ext/sql/SqlConnection.html#query(java.lang.String, io.vertx.core.Handler)' title='SqlConnection.query'>SqlConnection.query</a>
+ To execute a query use <a href='../../../../io/vertx/ext/sql/SQLConnection.html#query(java.lang.String, io.vertx.core.Handler)' title='SQLConnection.query'>SQLConnection.query</a>
 
  The query string is raw SQL that is passed through without changes to the actual database.
 
@@ -260,7 +260,7 @@ function windowTitle()
  === Prepared statement queries
 
  To execute a prepared statement query you can use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#queryWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SqlConnection.queryWithParams'>SqlConnection.queryWithParams</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#queryWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SQLConnection.queryWithParams'>SQLConnection.queryWithParams</a>.
 
  This takes the query, containing the parameter place holders, and a io.vertx.core.json.JsonArray or parameter
  values.
@@ -272,7 +272,7 @@ function windowTitle()
 
  === Executing INSERT, UPDATE or DELETE
 
- To execute an operation which updates the database use <a href='../../../../io/vertx/ext/sql/SqlConnection.html#update(java.lang.String, io.vertx.core.Handler)' title='SqlConnection.update'>SqlConnection.update</a>.
+ To execute an operation which updates the database use <a href='../../../../io/vertx/ext/sql/SQLConnection.html#update(java.lang.String, io.vertx.core.Handler)' title='SQLConnection.update'>SQLConnection.update</a>.
 
  The update string is raw SQL that is passed through without changes to the actual database.
 
@@ -290,7 +290,7 @@ function windowTitle()
  === Prepared statement updates
 
  To execute a prepared statement update you can use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#updateWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SqlConnection.updateWithParams'>SqlConnection.updateWithParams</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#updateWithParams(java.lang.String, io.vertx.core.json.JsonArray, io.vertx.core.Handler)' title='SQLConnection.updateWithParams'>SQLConnection.updateWithParams</a>.
 
  This takes the update, containing the parameter place holders, and a io.vertx.core.json.JsonArray or parameter
  values.
@@ -303,7 +303,7 @@ function windowTitle()
  === Executing other operations
 
  To execute any other database operation, e.g. a `CREATE TABLE` you can use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#execute(java.lang.String, io.vertx.core.Handler)' title='SqlConnection.execute'>SqlConnection.execute</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#execute(java.lang.String, io.vertx.core.Handler)' title='SQLConnection.execute'>SQLConnection.execute</a>.
 
  The string is passed through without changes to the actual database. The handler is called when the operation
  is complete
@@ -315,11 +315,11 @@ function windowTitle()
 
  === Using transactions
 
- To use transactions first set auto-commit to false with <a href='../../../../io/vertx/ext/sql/SqlConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SqlConnection.setAutoCommit'>SqlConnection.setAutoCommit</a>.
+ To use transactions first set auto-commit to false with <a href='../../../../io/vertx/ext/sql/SQLConnection.html#setAutoCommit(boolean, io.vertx.core.Handler)' title='SQLConnection.setAutoCommit'>SQLConnection.setAutoCommit</a>.
 
  You then do your transactional operations and when you want to commit or rollback use
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#commit(io.vertx.core.Handler)' title='SqlConnection.commit'>SqlConnection.commit</a> or
- <a href='../../../../io/vertx/ext/sql/SqlConnection.html#rollback(io.vertx.core.Handler)' title='SqlConnection.rollback'>SqlConnection.rollback</a>.
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#commit(io.vertx.core.Handler)' title='SQLConnection.commit'>SQLConnection.commit</a> or
+ <a href='../../../../io/vertx/ext/sql/SQLConnection.html#rollback(io.vertx.core.Handler)' title='SQLConnection.rollback'>SQLConnection.rollback</a>.
 
  Once the commit/rollback is complete the handler will be called and the next transaction will be automatically started.
 
@@ -330,7 +330,7 @@ function windowTitle()
 
  === Closing connections
 
- When you've done with the connection you should return it to the pool with <a href='../../../../io/vertx/ext/sql/SqlConnection.html#close(io.vertx.core.Handler)' title='SqlConnection.close'>SqlConnection.close</a>.
+ When you've done with the connection you should return it to the pool with <a href='../../../../io/vertx/ext/sql/SQLConnection.html#close(io.vertx.core.Handler)' title='SQLConnection.close'>SQLConnection.close</a>.
 
  
 @Document(fileName = "index.adoc")
@@ -354,8 +354,8 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="SqlConnection.html" title="class in io/vertx/ext/sql">
-                                    SqlConnection
+                                <strong><a href="SQLConnection.html" title="class in io/vertx/ext/sql">
+                                    SQLConnection
                                 </a></strong>
                             </td>
                             <td>Represents a connection to a SQL database</td>
@@ -410,8 +410,8 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="RuntimeSqlException.html" title="class in io/vertx/ext/sql">
-                                    RuntimeSqlException
+                                <strong><a href="RuntimeSQLException.html" title="class in io/vertx/ext/sql">
+                                    RuntimeSQLException
                                 </a></strong>
                             </td>
                             <td>@author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a></td>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: jdbc_connection.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: jdbc_connection.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+/** @module vertx-jdbc-js/jdbc_connection */
+var utils = require('vertx-js/util/utils');
+
+var io = Packages.io;
+var JsonObject = io.vertx.core.json.JsonObject;
+var JJdbcConnection = io.vertx.ext.jdbc.JdbcConnection;
+
+/**
+ Represents the &lt;code>JdbcConnection&lt;/code> which is obtained from the &lt;code>JdbcService&lt;/code>.
+
+ @class
+*/
+var JdbcConnection = function(j_val) {
+
+  var j_jdbcConnection = j_val;
+  var that = this;
+
+  /**
+   Sets the auto commit flag for this connection. True by default. Set to false if you want
+
+   @public
+   @param autoCommit {boolean} 
+   @param resultHandler {function} 
+   @return {JdbcConnection}
+   */
+  this.setAutoCommit = function(autoCommit, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] ==='boolean' && typeof __args[1] === 'function') {
+      j_jdbcConnection.setAutoCommit(autoCommit, function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(null, null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Executes the given SQL statement
+
+   @public
+   @param sql {string} 
+   @param resultHandler {function} 
+   @return {JdbcConnection}
+   */
+  this.execute = function(sql, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
+      j_jdbcConnection.execute(sql, function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(null, null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Executes the given SQL &lt;code>SELECT&lt;/code> statement which returns the results of the query.
+
+   @public
+   @param sql {string} 
+   @param params {todo} 
+   @param resultHandler {function} 
+   @return {JdbcConnection}
+   */
+  this.query = function(sql, params, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1] instanceof Array && typeof __args[2] === 'function') {
+      j_jdbcConnection.query(sql, utils.convParamJsonArray(params), function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(utils.convReturnJson(ar.result().toJson()), null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Executes the given SQL statement which may be an &lt;code>INSERT&lt;/code>, &lt;code>UPDATE&lt;/code>, or &lt;code>DELETE&lt;/code>
+   statement.
+
+   @public
+   @param sql {string} 
+   @param params {todo} 
+   @param resultHandler {function} 
+   @return {JdbcConnection}
+   */
+  this.update = function(sql, params, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] === 'object' && __args[1] instanceof Array && typeof __args[2] === 'function') {
+      j_jdbcConnection.update(sql, utils.convParamJsonArray(params), function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(utils.convReturnJson(ar.result().toJson()), null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Closes the connection. Important to always close the connection when you are done so it's returned to the pool.
+
+   @public
+   @param handler {function} 
+   */
+  this.close = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_jdbcConnection.close(function(ar) {
+      if (ar.succeeded()) {
+        handler(null, null);
+      } else {
+        handler(null, ar.cause());
+      }
+    });
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Commits all changes made since the previous commit/rollback.
+
+   @public
+   @param handler {function} 
+   @return {JdbcConnection}
+   */
+  this.commit = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_jdbcConnection.commit(function(ar) {
+      if (ar.succeeded()) {
+        handler(null, null);
+      } else {
+        handler(null, ar.cause());
+      }
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Rolls back all changes made since the previous commit/rollback.
+
+   @public
+   @param handler {function} 
+   @return {JdbcConnection}
+   */
+  this.rollback = function(handler) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'function') {
+      j_jdbcConnection.rollback(function(ar) {
+      if (ar.succeeded()) {
+        handler(null, null);
+      } else {
+        handler(null, ar.cause());
+      }
+    });
+      return that;
+    } else utils.invalidArgs();
+  };
+
+  // A reference to the underlying Java delegate
+  // NOTE! This is an internal API and must not be used in user code.
+  // If you rely on this property your code is likely to break if we change it / remove it without warning.
+  this._jdel = j_jdbcConnection;
+};
+
+// We export the Constructor function
+module.exports = JdbcConnection;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="jdbc_client.html">vertx-jdbc-js/jdbc_client</a></li><li><a href="jdbc_connection.html">vertx-jdbc-js/jdbc_connection</a></li></ul><h3>Classes</h3><ul><li><a href="jdbc_client-JDBCClient.html">JDBCClient</a></li><li><a href="jdbc_connection-JdbcConnection.html">JdbcConnection</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Tue May 05 2015 14:16:00 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
