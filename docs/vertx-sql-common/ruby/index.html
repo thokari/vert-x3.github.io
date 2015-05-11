@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Vert.x Common SQL interface &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Vert.x Common SQL interface</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_vert_x_common_sql_interface">Vert.x Common SQL interface</a></li>
+<li><a href="#_the_sql_connection">The SQL Connection</a>
+<ul class="sectlevel2">
+<li><a href="#_auto_commit">Auto-commit</a></li>
+<li><a href="#_executing_queries">Executing queries</a></li>
+<li><a href="#_prepared_statement_queries">Prepared statement queries</a></li>
+<li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
+<li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
+<li><a href="#_executing_other_operations">Executing other operations</a></li>
+<li><a href="#_using_transactions">Using transactions</a></li>
+<li><a href="#_closing_connections">Closing connections</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_vert_x_common_sql_interface">Vert.x Common SQL interface</a></li>
+<li><a href="#_the_sql_connection">The SQL Connection</a>
+<ul class="sectlevel2">
+<li><a href="#_auto_commit">Auto-commit</a></li>
+<li><a href="#_executing_queries">Executing queries</a></li>
+<li><a href="#_prepared_statement_queries">Prepared statement queries</a></li>
+<li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
+<li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
+<li><a href="#_executing_other_operations">Executing other operations</a></li>
+<li><a href="#_using_transactions">Using transactions</a></li>
+<li><a href="#_closing_connections">Closing connections</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+        <div class="sect1">
+<h2 id="_vert_x_common_sql_interface">Vert.x Common SQL interface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The common SQL interface is used to interact with Vert.x SQL services.</p>
+</div>
+<div class="paragraph">
+<p>You obtain a connection to the database via the service interface for the specific SQL service that you are using
+(e.g. JDBC/MySQL/PostgreSQL).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_sql_connection">The SQL Connection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A connection to the database is represented by <code><a href="yardoc/VertxSql/SQLConnection.html">SQLConnection</a></code>.</p>
+</div>
+<div class="sect2">
+<h3 id="_auto_commit">Auto-commit</h3>
+<div class="paragraph">
+<p>When you obtain a connection auto commit is set to <code>true</code>. This means that each operation you perform will effectively
+execute in its own transaction.</p>
+</div>
+<div class="paragraph">
+<p>If you wish to perform multiple operations in a single transaction you should set auto commit to false with
+<code><a href="yardoc/VertxSql/SQLConnection.html#set_auto_commit-instance_method">setAutoCommit</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>When the operation is complete, the handler will be called:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.set_auto_commit(false) { |res,res_err|
+  if (res_err == nil)
+    # OK!
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_executing_queries">Executing queries</h3>
+<div class="paragraph">
+<p>To execute a query use <code><a href="yardoc/VertxSql/SQLConnection.html#query-instance_method">query</a></code></p>
+</div>
+<div class="paragraph">
+<p>The query string is raw SQL that is passed through without changes to the actual database.</p>
+</div>
+<div class="paragraph">
+<p>The handler will be called with the results, represented by <code><a href="../cheatsheet/ResultSet.html">ResultSet</a></code> when the query has
+been run.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.query("SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE") { |res,res_err|
+  if (res_err == nil)
+    # Get the result set
+    resultSet = res
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../cheatsheet/ResultSet.html">ResultSet</a></code> instance represents the results of a query.</p>
+</div>
+<div class="paragraph">
+<p>The list of column names are available with <code><a href="../cheatsheet/ResultSet.html#columnNames">getColumnNames</a></code>, and the actual results
+available with <code><a href="../cheatsheet/ResultSet.html#results">getResults</a></code></p>
+</div>
+<div class="paragraph">
+<p>The results are a list of <code><a href="unavailable">JsonArray</a></code> instances, one for each row of the results.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">columnNames = resultSet['columnNames']
+
+results = resultSet['results']
+
+results.each do |row|
+
+  id = row[0]
+  fName = row[1]
+  lName = row[2]
+  shoeSize = row[3]
+
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also retrieve the rows as a list of Json object instances with <code><a href="../cheatsheet/ResultSet.html#rows">getRows</a></code> -
+this can give you a somewhat simpler API to work with, but please be aware that SQL results can contain duplicate
+column names - if that&#8217;s the case you should use <code><a href="../cheatsheet/ResultSet.html#results">getResults</a></code> instead.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of iterating through the results as Json object instances:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">rows = resultSet['rows']
+
+rows.each do |row|
+
+  id = row["ID"]
+  fName = row["FNAME"]
+  lName = row["LNAME"]
+  shoeSize = row["SHOE_SIZE"]
+
+end</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prepared_statement_queries">Prepared statement queries</h3>
+<div class="paragraph">
+<p>To execute a prepared statement query you can use
+<code><a href="yardoc/VertxSql/SQLConnection.html#query_with_params-instance_method">queryWithParams</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>This takes the query, containing the parameter place holders, and a <code><a href="unavailable">JsonArray</a></code> or parameter
+values.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">query = "SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?"
+params = [
+  "Fox",
+  9
+]
+
+connection.query_with_params(query, params) { |res,res_err|
+
+  if (res_err == nil)
+    # Get the result set
+    resultSet = res
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</h3>
+<div class="paragraph">
+<p>To execute an operation which updates the database use <code><a href="yardoc/VertxSql/SQLConnection.html#update-instance_method">update</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>The update string is raw SQL that is passed through without changes to the actual database.</p>
+</div>
+<div class="paragraph">
+<p>The handler will be called with the results, represented by <code><a href="../cheatsheet/UpdateResult.html">UpdateResult</a></code> when the update has
+been run.</p>
+</div>
+<div class="paragraph">
+<p>The update result holds the number of rows updated with <code><a href="../cheatsheet/UpdateResult.html#updated">getUpdated</a></code>, and
+if the update generated keys, they are available with <code><a href="../cheatsheet/UpdateResult.html#keys">getKeys</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">columnNames = resultSet['columnNames']
+
+results = resultSet['results']
+
+results.each do |row|
+
+  id = row[0]
+  fName = row[1]
+  lName = row[2]
+  shoeSize = row[3]
+
+end</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prepared_statement_updates">Prepared statement updates</h3>
+<div class="paragraph">
+<p>To execute a prepared statement update you can use
+<code><a href="yardoc/VertxSql/SQLConnection.html#update_with_params-instance_method">updateWithParams</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>This takes the update, containing the parameter place holders, and a <code><a href="unavailable">JsonArray</a></code> or parameter
+values.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">update = "UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?"
+params = [
+  "Fox"
+]
+
+connection.update_with_params(update, params) { |res,res_err|
+
+  if (res_err == nil)
+
+    updateResult = res
+
+    puts "No. of rows updated: #{updateResult['updated']}"
+
+  else
+
+    # Failed!
+
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_executing_other_operations">Executing other operations</h3>
+<div class="paragraph">
+<p>To execute any other database operation, e.g. a <code>CREATE TABLE</code> you can use
+<code><a href="yardoc/VertxSql/SQLConnection.html#execute-instance_method">execute</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>The string is passed through without changes to the actual database. The handler is called when the operation
+is complete</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">sql = "CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);"
+
+connection.execute(sql) { |execute,execute_err|
+  if (execute_err == nil)
+    puts "Table created !"
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_transactions">Using transactions</h3>
+<div class="paragraph">
+<p>To use transactions first set auto-commit to false with <code><a href="yardoc/VertxSql/SQLConnection.html#set_auto_commit-instance_method">setAutoCommit</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>You then do your transactional operations and when you want to commit or rollback use
+<code><a href="yardoc/VertxSql/SQLConnection.html#commit-instance_method">commit</a></code> or
+<code><a href="yardoc/VertxSql/SQLConnection.html#rollback-instance_method">rollback</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Once the commit/rollback is complete the handler will be called and the next transaction will be automatically started.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Do stuff with connection - updates etc
+
+# Now commit
+
+connection.commit() { |res,res_err|
+  if (res_err == nil)
+    # Committed OK!
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_closing_connections">Closing connections</h3>
+<div class="paragraph">
+<p>When you&#8217;ve done with the connection you should return it to the pool with <code><a href="yardoc/VertxSql/SQLConnection.html#close-instance_method">close</a></code>.</p>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-05-11 00:24:04 CEST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>

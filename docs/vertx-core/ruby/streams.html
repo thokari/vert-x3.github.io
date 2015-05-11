@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Streams &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Streams</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_streams">Streams</a>
+<ul class="sectlevel2">
+<li><a href="#_readstream">ReadStream</a></li>
+<li><a href="#_writestream">WriteStream</a></li>
+<li><a href="#_pump">Pump</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_streams">Streams</a>
+<ul class="sectlevel2">
+<li><a href="#_readstream">ReadStream</a></li>
+<li><a href="#_writestream">WriteStream</a></li>
+<li><a href="#_pump">Pump</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+        <div class="sect1">
+<h2 id="_streams">Streams</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are several objects in Vert.x that allow items to be read from and written.</p>
+</div>
+<div class="paragraph">
+<p>In previous versions the streams.adoc package was manipulating <code><a href="yardoc/Vertx/Buffer.html">Buffer</a></code>
+objects exclusively. From now, streams are not anymore coupled to buffers and work with any kind of objects.</p>
+</div>
+<div class="paragraph">
+<p>In Vert.x, calls to write item return immediately and writes are internally queued.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s not hard to see that if you write to an object faster than it can actually write the data to
+its underlying resource then the write queue could grow without bound - eventually resulting in
+exhausting available memory.</p>
+</div>
+<div class="paragraph">
+<p>To solve this problem a simple flow control capability is provided by some objects in the Vert.x API.</p>
+</div>
+<div class="paragraph">
+<p>Any flow control aware object that can be written-to implements <code><a href="yardoc/Vertx/ReadStream.html">ReadStream</a></code>,
+and any flow control object that can be read-from is said to implement <code><a href="yardoc/Vertx/WriteStream.html">WriteStream</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> and write the data to a <code>WriteStream</code>.</p>
+</div>
+<div class="paragraph">
+<p>A very simple example would be reading from a <code><a href="yardoc/Vertx/NetSocket.html">NetSocket</a></code> on a server and writing back to the
+same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>, but you can
+do this between any <code>ReadStream</code> and any <code>WriteStream</code>, including HTTP requests and response,
+async files, WebSockets, etc.</p>
+</div>
+<div class="paragraph">
+<p>A naive way to do this would be to directly take the data that&#8217;s been read and immediately write it
+to the <code>NetSocket</code>, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
+  'port' =&gt; 1234,
+  'host' =&gt; "localhost"
+})
+server.connect_handler() { |sock|
+  sock.handler() { |buffer|
+    # Write the data straight back
+    sock.write(buffer)
+  }
+}.listen()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There&#8217;s a problem with the above example: If data is read from the socket faster than it can be
+written back to the socket, it will build up in the write queue of the <code>NetSocket</code>, eventually
+running out of RAM. This might happen, for example if the client at the other end of the socket
+wasn&#8217;t reading very fast, effectively putting back-pressure on the connection.</p>
+</div>
+<div class="paragraph">
+<p>Since <code>NetSocket</code> implements <code>WriteStream</code>, we can check if the <code>WriteStream</code> is full before
+writing to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
+  'port' =&gt; 1234,
+  'host' =&gt; "localhost"
+})
+server.connect_handler() { |sock|
+  sock.handler() { |buffer|
+    if (!sock.write_queue_full?())
+      sock.write(buffer)
+    end
+  }
+
+}.listen()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example won&#8217;t run out of RAM but we&#8217;ll end up losing data if the write queue gets full. What we
+really want to do is pause the <code>NetSocket</code> when the write queue is full. Let&#8217;s do that:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
+  'port' =&gt; 1234,
+  'host' =&gt; "localhost"
+})
+server.connect_handler() { |sock|
+  sock.handler() { |buffer|
+    sock.write(buffer)
+    if (sock.write_queue_full?())
+      sock.pause()
+    end
+  }
+}.listen()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;re almost there, but not quite. The <code>NetSocket</code> now gets paused when the file is full, but we also need to unpause
+it when the write queue has processed its backlog:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
+  'port' =&gt; 1234,
+  'host' =&gt; "localhost"
+})
+server.connect_handler() { |sock|
+  sock.handler() { |buffer|
+    sock.write(buffer)
+    if (sock.write_queue_full?())
+      sock.pause()
+      sock.drain_handler() { |done|
+        sock.resume()
+      }
+    end
+  }
+}.listen()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And there we have it. The <code><a href="yardoc/Vertx/WriteStream.html#drain_handler-instance_method">drainHandler</a></code> event handler will
+get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> which
+allows it to read more data.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s very common to want to do this when writing Vert.x applications, so we provide a helper class
+called <code><a href="yardoc/Vertx/Pump.html">Pump</a></code> which does all this hard work for you. You just feed it the <code>ReadStream</code> and
+the <code>WriteStream</code> and it tell it to start:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/pump'
+server = vertx.create_net_server({
+  'port' =&gt; 1234,
+  'host' =&gt; "localhost"
+})
+server.connect_handler() { |sock|
+  Vertx::Pump.pump(sock, sock).start()
+}.listen()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which does exactly the same thing as the more verbose example.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at the methods on <code>ReadStream</code> and <code>WriteStream</code> in more detail:</p>
+</div>
+<div class="sect2">
+<h3 id="_readstream">ReadStream</h3>
+<div class="paragraph">
+<p><code>ReadStream</code> is implemented by <code><a href="yardoc/Vertx/HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code>,
+<code><a href="yardoc/Vertx/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="yardoc/Vertx/HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
+<code><a href="yardoc/Vertx/HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="yardoc/Vertx/HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
+<code><a href="yardoc/Vertx/MessageConsumer.html">MessageConsumer</a></code>, <code><a href="yardoc/Vertx/NetSocket.html">NetSocket</a></code>, <code><a href="yardoc/Vertx/NetSocketStream.html">NetSocketStream</a></code>,
+<code><a href="yardoc/Vertx/WebSocket.html">WebSocket</a></code>, <code><a href="yardoc/Vertx/WebSocketStream.html">WebSocketStream</a></code>, <code><a href="yardoc/Vertx/TimeoutStream.html">TimeoutStream</a></code>,
+<code><a href="yardoc/Vertx/AsyncFile.html">AsyncFile</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Functions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="yardoc/Vertx/ReadStream.html#handler-instance_method">handler</a></code>:
+set a handler which will receive items from the ReadStream.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/ReadStream.html#pause-instance_method">pause</a></code>:
+pause the handler. When paused no items will be received in the handler.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/ReadStream.html#resume-instance_method">resume</a></code>:
+resume the handler. The handler will be called if any item arrives.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/ReadStream.html#exception_handler-instance_method">exceptionHandler</a></code>:
+Will be called if an exception occurs on the ReadStream.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/ReadStream.html#end_handler-instance_method">endHandler</a></code>:
+Will be called when end of stream is reached. This might be when EOF is reached if the ReadStream represents a file,
+or when end of request is reached if it&#8217;s an HTTP request, or when the connection is closed if it&#8217;s a TCP socket.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_writestream">WriteStream</h3>
+<div class="paragraph">
+<p><code>WriteStream</code> is implemented by <code><a href="yardoc/Vertx/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="yardoc/Vertx/HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="yardoc/Vertx/WebSocket.html">WebSocket</a></code>, <code><a href="yardoc/Vertx/NetSocket.html">NetSocket</a></code>, <code><a href="yardoc/Vertx/AsyncFile.html">AsyncFile</a></code>,
+<code><a href="yardoc/Vertx/PacketWritestream.html">PacketWritestream</a></code> and <code><a href="yardoc/Vertx/MessageProducer.html">MessageProducer</a></code></p>
+</div>
+<div class="paragraph">
+<p>Functions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="yardoc/Vertx/WriteStream.html#write-instance_method">write</a></code>:
+write an object to the WriteStream. This method will never block. Writes are queued internally and asynchronously
+written to the underlying resource.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/WriteStream.html#set_write_queue_max_size-instance_method">setWriteQueueMaxSize</a></code>:
+set the number of object at which the write queue is considered <em>full</em>, and the method <code><a href="yardoc/Vertx/WriteStream.html#write_queue_full-instance_method">writeQueueFull</a></code>
+returns <code>true</code>. Note that, when the write queue is considered full, if write is called the data will still be accepted
+and queued. The actual number depends on the stream implementation, for <code><a href="yardoc/Vertx/Buffer.html">Buffer</a></code> the size
+represents the actual number of bytes written and not the number of buffers.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/WriteStream.html#write_queue_full-instance_method">writeQueueFull</a></code>:
+returns <code>true</code> if the write queue is considered full.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/WriteStream.html#exception_handler-instance_method">exceptionHandler</a></code>:
+Will be called if an exception occurs on the <code>WriteStream</code>.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/WriteStream.html#drain_handler-instance_method">drainHandler</a></code>:
+The handler will be called if the <code>WriteStream</code> is considered no longer full.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pump">Pump</h3>
+<div class="paragraph">
+<p>Instances of Pump have the following methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="yardoc/Vertx/Pump.html#start-instance_method">start</a></code>:
+Start the pump.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/Pump.html#stop-instance_method">stop</a></code>:
+Stops the pump. When the pump starts it is in stopped mode.</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/Pump.html#set_write_queue_max_size-instance_method">setWriteQueueMaxSize</a></code>:
+This has the same meaning as <code><a href="yardoc/Vertx/WriteStream.html#set_write_queue_max_size-instance_method">setWriteQueueMaxSize</a></code> on the <code>WriteStream</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A pump can be started and stopped multiple times.</p>
+</div>
+<div class="paragraph">
+<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.</p>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-05-11 00:24:04 CEST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>

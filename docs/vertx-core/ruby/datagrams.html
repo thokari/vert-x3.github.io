@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Datagram sockets (UDP) &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Datagram sockets (UDP)</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_datagram_sockets_udp">Datagram sockets (UDP)</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_a_datagramsocket">Creating a DatagramSocket</a></li>
+<li><a href="#_sending_datagram_packets">Sending Datagram packets</a></li>
+<li><a href="#_receiving_datagram_packets">Receiving Datagram packets</a></li>
+<li><a href="#_multicast">Multicast</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_datagram_sockets_udp">Datagram sockets (UDP)</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_a_datagramsocket">Creating a DatagramSocket</a></li>
+<li><a href="#_sending_datagram_packets">Sending Datagram packets</a></li>
+<li><a href="#_receiving_datagram_packets">Receiving Datagram packets</a></li>
+<li><a href="#_multicast">Multicast</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+        <div class="sect1">
+<h2 id="_datagram_sockets_udp">Datagram sockets (UDP)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using User Datagram Protocol (UDP) with Vert.x is a piece of cake.</p>
+</div>
+<div class="paragraph">
+<p>UDP is a connection-less transport which basically means you have no persistent connection to a remote peer.</p>
+</div>
+<div class="paragraph">
+<p>Instead you can send and receive packages and the remote address is contained in each of them.</p>
+</div>
+<div class="paragraph">
+<p>Beside this UDP is not as safe as TCP to use, which means there are no guarantees that a send Datagram packet will
+receive it&#8217;s endpoint at all.</p>
+</div>
+<div class="paragraph">
+<p>The only guarantee is that it will either receive complete or not at all.</p>
+</div>
+<div class="paragraph">
+<p>Also you usually can&#8217;t send data which is bigger then the MTU size of your network interface, this is because each
+packet will be send as one packet.</p>
+</div>
+<div class="paragraph">
+<p>But be aware even if the packet size is smaller then the MTU it may still fail.</p>
+</div>
+<div class="paragraph">
+<p>At which size it will fail depends on the Operating System etc. So rule of thumb is to try to send small packets.</p>
+</div>
+<div class="paragraph">
+<p>Because of the nature of UDP it is best fit for Applications where you are allowed to drop packets (like for
+example a monitoring application).</p>
+</div>
+<div class="paragraph">
+<p>The benefits are that it has a lot less overhead compared to TCP, which can be handled by the NetServer
+and NetClient (see above).</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_datagramsocket">Creating a DatagramSocket</h3>
+<div class="paragraph">
+<p>To use UDP you first need t create a <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code>. It does not matter here if you only want to send data or send
+and receive.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The returned <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> will not be bound to a specific port. This is not a
+problem if you only want to send data (like a client), but more on this in the next section.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sending_datagram_packets">Sending Datagram packets</h3>
+<div class="paragraph">
+<p>As mentioned before, User Datagram Protocol (UDP) sends data in packets to remote peers but is not connected to
+them in a persistent fashion.</p>
+</div>
+<div class="paragraph">
+<p>This means each packet can be sent to a different remote peer.</p>
+</div>
+<div class="paragraph">
+<p>Sending packets is as easy as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+socket = vertx.create_datagram_socket({
+})
+buffer = Vertx::Buffer.buffer("content")
+# Send a Buffer
+socket.send(buffer, 1234, "10.0.0.1") { |asyncResult,asyncResult_err|
+  puts "Send succeeded? #{asyncResult_err == nil}"
+}
+# Send a String
+socket.send("A string used as content", 1234, "10.0.0.1") { |asyncResult,asyncResult_err|
+  puts "Send succeeded? #{asyncResult_err == nil}"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_receiving_datagram_packets">Receiving Datagram packets</h3>
+<div class="paragraph">
+<p>If you want to receive packets you need to bind the <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> by calling
+<code>listen(&#8230;&#8203;)}</code> on it.</p>
+</div>
+<div class="paragraph">
+<p>This way you will be able to receive <code><a href="yardoc/Vertx/DatagramPacket.html">DatagramPacket</a>`s that were sent to the address and port on
+which the `<a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> listens.</p>
+</div>
+<div class="paragraph">
+<p>Beside this you also want to set a <code>Handler</code> which will be called for each received <code><a href="yardoc/Vertx/DatagramPacket.html">DatagramPacket</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="yardoc/Vertx/DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="yardoc/Vertx/DatagramPacket.html#sender-instance_method">sender</a></code>: The InetSocketAddress which represent the sender of the packet</p>
+</li>
+<li>
+<p><code><a href="yardoc/Vertx/DatagramPacket.html#data-instance_method">data</a></code>: The Buffer which holds the data which was received.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So to listen on a specific address and port you would do something like shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
+})
+socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+  if (asyncResult_err == nil)
+    socket.handler() { |packet|
+      # Do something with the packet
+    }
+  else
+    puts "Listen failed#{asyncResult_err}"
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Be aware that even if the {code AsyncResult} is successed it only means it might be written on the network
+stack, but gives no guarantee that it ever reached or will reach the remote peer at all.</p>
+</div>
+<div class="paragraph">
+<p>If you need such a guarantee then you want to use TCP with some handshaking logic build on top.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multicast">Multicast</h3>
+<div class="sect3">
+<h4 id="_sending_multicast_packets">Sending Multicast packets</h4>
+<div class="paragraph">
+<p>Multicast allows multiple sockets to receive the same packets. This works by have same join a multicast group
+to which you can send packets.</p>
+</div>
+<div class="paragraph">
+<p>We will look at how you can joint a Multicast Group and so receive packets in the next section.</p>
+</div>
+<div class="paragraph">
+<p>For now let us focus on how to send those. Sending multicast packets is not different to send normal Datagram Packets.</p>
+</div>
+<div class="paragraph">
+<p>The only difference is that you would pass in a multicast group address to the send method.</p>
+</div>
+<div class="paragraph">
+<p>This is show here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+socket = vertx.create_datagram_socket({
+})
+buffer = Vertx::Buffer.buffer("content")
+# Send a Buffer to a multicast address
+socket.send(buffer, 1234, "230.0.0.1") { |asyncResult,asyncResult_err|
+  puts "Send succeeded? #{asyncResult_err == nil}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All sockets that have joined the multicast group 230.0.0.1 will receive the packet.</p>
+</div>
+<div class="sect4">
+<h5 id="_receiving_multicast_packets">Receiving Multicast packets</h5>
+<div class="paragraph">
+<p>If you want to receive packets for specific Multicast group you need to bind the <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> by
+calling <code>listen(&#8230;&#8203;)</code> on it and join the Multicast group.</p>
+</div>
+<div class="paragraph">
+<p>This way you will be able to receive DatagramPackets that were sent to the address and port on which the
+<code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> listens and also to those sent to the Multicast group.</p>
+</div>
+<div class="paragraph">
+<p>Beside this you also want to set a Handler which will be called for each received DatagramPacket.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="yardoc/Vertx/DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sender()</code>: The InetSocketAddress which represent the sender of the packet</p>
+</li>
+<li>
+<p><code>data()</code>: The Buffer which holds the data which was received.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So to listen on a specific address and port and also receive packets for the Multicast group 230.0.0.1 you
+would do something like shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
+})
+socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+  if (asyncResult_err == nil)
+    socket.handler() { |packet|
+      # Do something with the packet
+    }
+
+    # join the multicast group
+    socket.listen_multicast_group("230.0.0.1") { |asyncResult2,asyncResult2_err|
+      puts "Listen succeeded? #{asyncResult2_err == nil}"
+    }
+  else
+    puts "Listen failed#{asyncResult_err}"
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_unlisten_leave_a_multicast_group">Unlisten / leave a Multicast group</h5>
+<div class="paragraph">
+<p>There are sometimes situations where you want to receive packets for a Multicast group for a limited time.</p>
+</div>
+<div class="paragraph">
+<p>In this situations you can first start to listen for them and then later unlisten.</p>
+</div>
+<div class="paragraph">
+<p>This is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
+})
+socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+  if (asyncResult_err == nil)
+    socket.handler() { |packet|
+      # Do something with the packet
+    }
+
+    # join the multicast group
+    socket.listen_multicast_group("230.0.0.1") { |asyncResult2,asyncResult2_err|
+      if (asyncResult2_err == nil)
+        # will now receive packets for group
+
+        # do some work
+
+        socket.unlisten_multicast_group("230.0.0.1") { |asyncResult3,asyncResult3_err|
+          puts "Unlisten succeeded? #{asyncResult3_err == nil}"
+        }
+      else
+        puts "Listen failed#{asyncResult2_err}"
+      end
+    }
+  else
+    puts "Listen failed#{asyncResult_err}"
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_blocking_multicast">Blocking multicast</h5>
+<div class="paragraph">
+<p>Beside unlisten a Multicast address it&#8217;s also possible to just block multicast for a specific sender address.</p>
+</div>
+<div class="paragraph">
+<p>Be aware this only work on some Operating Systems and kernel versions. So please check the Operating System
+documentation if it&#8217;s supported.</p>
+</div>
+<div class="paragraph">
+<p>This an expert feature.</p>
+</div>
+<div class="paragraph">
+<p>To block multicast from a specific address you can call <code>blockMulticastGroup(&#8230;&#8203;)</code> on the DatagramSocket
+like shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
+})
+
+# Some code
+
+# This would block packets which are send from 10.0.0.2
+socket.block_multicast_group("230.0.0.1", "10.0.0.2") { |asyncResult,asyncResult_err|
+  puts "block succeeded? #{asyncResult_err == nil}"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_datagramsocket_properties">DatagramSocket properties</h4>
+<div class="paragraph">
+<p>When creating a <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> there are multiple properties you can set to
+change it&#8217;s behaviour with the <code><a href="../cheatsheet/DatagramSocketOptions.html">DatagramSocketOptions</a></code> object. Those are listed here:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../cheatsheet/DatagramSocketOptions.html#sendBufferSize">sendBufferSize</a></code> Sets the send buffer size in bytes.</p>
+</li>
+<li>
+<p><code><a href="../cheatsheet/DatagramSocketOptions.html#receiveBufferSize">receiveBufferSize</a></code> Sets the TCP receive buffer size
+in bytes.</p>
+</li>
+<li>
+<p><code><a href="../cheatsheet/DatagramSocketOptions.html#reuseAddress">reuseAddress</a></code> If true then addresses in TIME_WAIT
+state can be reused after they have been closed.</p>
+</li>
+<li>
+<p><code><a href="../cheatsheet/DatagramSocketOptions.html#trafficClass">trafficClass</a></code></p>
+</li>
+<li>
+<p><code><a href="../cheatsheet/DatagramSocketOptions.html#broadcast">broadcast</a></code> Sets or clears the SO_BROADCAST socket
+option. When this option is set, Datagram (UDP) packets may be sent to a local interface&#8217;s broadcast address.</p>
+</li>
+<li>
+<p><code><a href="../cheatsheet/DatagramSocketOptions.html#multicastNetworkInterface">multicastNetworkInterface</a></code> Sets or clears
+the IP_MULTICAST_LOOP socket option. When this option is set, multicast packets will also be received on the
+local interface.</p>
+</li>
+<li>
+<p><code><a href="../cheatsheet/DatagramSocketOptions.html#multicastTimeToLive">multicastTimeToLive</a></code> Sets the IP_MULTICAST_TTL socket
+option. TTL stands for "Time to Live," but in this context it specifies the number of IP hops that a packet is
+allowed to go through, specifically for multicast traffic. Each router or gateway that forwards a packet decrements
+the TTL. If the TTL is decremented to 0 by a router, it will not be forwarded.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_datagramsocket_local_address">DatagramSocket Local Address</h4>
+<div class="paragraph">
+<p>You can find out the local address of the socket (i.e. the address of this side of the UDP Socket) by calling
+<code><a href="yardoc/Vertx/DatagramSocket.html#local_address-instance_method">localAddress</a></code>. This will only return an <code>InetSocketAddress</code> if you
+bound the <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> with <code>listen(&#8230;&#8203;)</code> before, otherwise it will return null.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_closing_a_datagramsocket">Closing a DatagramSocket</h4>
+<div class="paragraph">
+<p>You can close a socket by invoking the <code><a href="yardoc/Vertx/DatagramSocket.html#close-instance_method">close</a></code> method. This will close
+the socket and release all resources</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-05-11 00:24:04 CEST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Vert.x Http Service Factory &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Vert.x Http Service Factory</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_http_client_configuration">Http client configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_client_authentication">Client authentication</a></li>
+</ul>
+</li>
+<li><a href="#_public_key_servers">Public key servers</a></li>
+<li><a href="#_validation_policy">Validation policy</a></li>
+<li><a href="#_cache_directory">Cache directory</a></li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_http_client_configuration">Http client configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_client_authentication">Client authentication</a></li>
+</ul>
+</li>
+<li><a href="#_public_key_servers">Public key servers</a></li>
+<li><a href="#_validation_policy">Validation policy</a></li>
+<li><a href="#_cache_directory">Cache directory</a></li>
+</ul>
+        </div>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The http service factory is a Vert.x service factory for deploying services from an http server.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx run https://myserver.net/myverticle.zip::my-service</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Although it looks like an http URL, it is a verticle identifer with a factory bound to the <em>https</em> prefix (<em>http</em>
+also supported).</p>
+</div>
+<div class="paragraph">
+<p>The service identifier is made up of the suffix to form an <em>http</em> URL or the archive that contains the service,
+followed by a double colon <code>::</code> and a service name.</p>
+</div>
+<div class="paragraph">
+<p>The service name is used to find the service descriptor file inside the artifact which is named by the service name with
+a <code>.json</code> extension. This is explained in the <a href="https://github.com/vert-x3/vertx-service-factory">Service Verticle Factory</a>
+documentation.</p>
+</div>
+<div class="paragraph">
+<p>For example, to deploy a service that exists in an hosted at <code><a href="https://myserver.net/myverticle.zip" class="bare">https://myserver.net/myverticle.zip</a></code> called <code>my-service</code>
+you would use the strng <code><a href="https://myserver.net/myverticle.zip::my-service" class="bare">https://myserver.net/myverticle.zip::my-service</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Given this string, the verticle factory will use the Vert.x http client try and download the resource
+<code><a href="https://myserver.net/myverticle.zip" class="bare">https://myserver.net/myverticle.zip</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>It then constructs a classpath including this archive and creates a classloader with that classpath in order
+to load the service using the standard <a href="https://github.com/vert-x3/vertx-service-factory">Service Verticle Factory</a>.</p>
+</div>
+<div class="paragraph">
+<p>The Service Verticle Factory will look for a descriptor file called `my-service.json on the constructed classpath to
+actually load the service.</p>
+</div>
+<div class="paragraph">
+<p>Given a service identifier the service can be deployed programmatically e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx.deployVerticle("https://myserver.net/myverticle.zip::my-service", ...)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or can be deployed on the command line with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx run https://myserver.net/myverticle.zip::my-service</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The service name can be omitted when the service jar <code>META-INF/MANIFEST</code> contains a `Main-Verticle`entry that
+declares the verticle to run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx.deployVerticle("https://myserver.net/myverticle.zip", ...)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the manifest contains:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Main-Verticle: service:my.service</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course it can be deployed on the command line with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx run https://myserver.net/myverticle.zip</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_http_client_configuration">Http client configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Files are downloaded using Vert.x http client, by default the https client is configured with the <code>ssl=true</code>
+and <code>trustAll=true</code>. The default client options can be overriden to use specific configurations with the
+<em>vertx.httpServiceFactory.httpClientOptions</em> system property and the <em>vertx.httpServiceFactory.httpsClientOptions</em>
+system property, these properties are valid for any http resource.</p>
+</div>
+<div class="sect2">
+<h3 id="_client_authentication">Client authentication</h3>
+<div class="paragraph">
+<p>The client supports basic authentication via the <em>vertx.httpServiceFactory.authUsername</em> and
+<em>vertx.httpServiceFactory.authPassword</em> system properties.</p>
+</div>
+<div class="paragraph">
+<p>Authentication is done only for services (i.e basic authentication will not be done for key servers) and only using
+an https connection.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_public_key_servers">Public key servers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Signed artifacts signatures are verifed using a public key, public key are retrieved from a public key server.</p>
+</div>
+<div class="paragraph">
+<p>The public key server uri can be configured with the <em>vertx.httpServiceFactory.keyserverURITemplate</em> system property.
+The URI template is used to create the public key URI this way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>String.format(keyserverURITemplate, signature.getKeyID())</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the property is not set, the default public key server is the <em>SKS OpenPGP Public Key Server</em> server used and
+the uri template used is : <code><a href="http://pool.sks-keyservers.net:11371/pks/lookup?op=get&amp;options=mr&amp;search=0x%016X" class="bare">http://pool.sks-keyservers.net:11371/pks/lookup?op=get&amp;options=mr&amp;search=0x%016X</a></code>
+this server will server public key resources with the <em>application/pgp-keys</em> media type.</p>
+</div>
+<div class="paragraph">
+<p>The Json <a href="https://keybase.io/docs/api/1.0/call/key/fetch">format</a> sent by Keybase.io is also support. Keybase.io
+can be used as a public key server with <code><a href="https://keybase.io/_/api/1.0/key/fetch.json?pgp_key_ids=%016X" class="bare">https://keybase.io/_/api/1.0/key/fetch.json?pgp_key_ids=%016X</a></code> URI template.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_validation_policy">Validation policy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The validation policy governs how downloaded services are validated, the <em>vertx.httpServiceFactory.validationPolicy</em>
+system property configures the behavior of the verticle factory when it attemps to deploy a downloaded service file:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>none</em> : the service file is just deployed as is</p>
+</li>
+<li>
+<p><em>verify</em> : the service file is verified when there is a corresponding <em>.asc</em> signature file, otherwise it is
+not verified. If the signature cannot be verified, the deployment fails.</p>
+</li>
+<li>
+<p><em>mandatory</em>: the service file must have a corresponding <em>.asc</em> signature file and the signature must be verified.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The default validation policy is <strong><em>verify</em></strong>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cache_directory">Cache directory</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cache directory stores the files used by the http service factory after download:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>deployed services</p>
+</li>
+<li>
+<p>service signatures</p>
+</li>
+<li>
+<p>public keys</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The cached files are named after the percent encoded download URL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-rw-r--r--  1 julien  staff   270 May  3 21:44 http%3A%2F%2Flocalhost%3A8080%2Fthe_verticle.zip
+-rw-r--r--  1 julien  staff   473 May  3 21:44 http%3A%2F%2Flocalhost%3A8080%2Fthe_verticle.zip.asc
+-rw-r--r--  1 julien  staff  1768 May  3 21:44 http%3A%2F%2Flocalhost%3A8081%2Fpks%2Flookup%3Fop%3Dget%26options%3Dmr%26search%3D0x9F9358A769793D09</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The default cache directory <em>.vertx</em> can be set to a specific location with the <em>vertx.httpServiceFactory.cacheDir</em>
+system property.</p>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-05-11 00:24:04 CEST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>

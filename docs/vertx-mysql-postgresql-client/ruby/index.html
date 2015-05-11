@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Vert.x MySQL / PostgreSQL client &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Vert.x MySQL / PostgreSQL client</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_creating_a_the_client">Creating a the client</a>
+<ul class="sectlevel2">
+<li><a href="#_using_default_shared_pool">Using default shared pool</a></li>
+<li><a href="#_specifying_a_pool_name">Specifying a pool name</a></li>
+<li><a href="#_creating_a_client_with_a_non_shared_data_source">Creating a client with a non shared data source</a></li>
+</ul>
+</li>
+<li><a href="#_closing_the_client">Closing the client</a></li>
+<li><a href="#_getting_a_connection">Getting a connection</a>
+<ul class="sectlevel2">
+<li><a href="#_note_about_date_and_timestamps">Note about date and timestamps</a></li>
+</ul>
+</li>
+<li><a href="#_configuration">Configuration</a></li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_creating_a_the_client">Creating a the client</a>
+<ul class="sectlevel2">
+<li><a href="#_using_default_shared_pool">Using default shared pool</a></li>
+<li><a href="#_specifying_a_pool_name">Specifying a pool name</a></li>
+<li><a href="#_creating_a_client_with_a_non_shared_data_source">Creating a client with a non shared data source</a></li>
+</ul>
+</li>
+<li><a href="#_closing_the_client">Closing the client</a></li>
+<li><a href="#_getting_a_connection">Getting a connection</a>
+<ul class="sectlevel2">
+<li><a href="#_note_about_date_and_timestamps">Note about date and timestamps</a></li>
+</ul>
+</li>
+<li><a href="#_configuration">Configuration</a></li>
+</ul>
+        </div>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code><a href="yardoc/VertxMysqlPostgresql/AsyncSQLClient.html">MySQL / PostgreSQL Client</a></code> is responsible for providing an
+interface for Vert.x applications that need to interact with a MySQL or PostgreSQL database.</p>
+</div>
+<div class="paragraph">
+<p>It uses Mauricio Linhares <a href="https://github.com/mauricio/postgresql-async">open source driver</a> to interact with the MySQL
+or PostgreSQL databases in a non blocking way</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_a_the_client">Creating a the client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are several ways to create a client. Let&#8217;s go through them all.</p>
+</div>
+<div class="sect2">
+<h3 id="_using_default_shared_pool">Using default shared pool</h3>
+<div class="paragraph">
+<p>In most cases you will want to share a pool between different client instances.</p>
+</div>
+<div class="paragraph">
+<p>E.g. you scale your application by deploying multiple instances of your verticle and you want each verticle instance
+to share the same pool so you don&#8217;t end up with multiple pools</p>
+</div>
+<div class="paragraph">
+<p>You do this as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">require 'vertx-mysql-postgresql/my_sql_client'
+require 'vertx-mysql-postgresql/postgre_sql_client'
+
+# To create a MySQL client:
+
+mySQLClientConfig = {
+  'host' =&gt; "mymysqldb.mycompany"
+}
+mySQLClient = VertxMysqlPostgresql::MySQLClient.create_shared(vertx, mySQLClientConfig)
+
+# To create a PostgreSQL client:
+
+postgreSQLClientConfig = {
+  'host' =&gt; "mypostgresqldb.mycompany"
+}
+postgreSQLClient = VertxMysqlPostgresql::PostgreSQLClient.create_shared(vertx, postgreSQLClientConfig)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first call to <code><a href="yardoc/VertxMysqlPostgresql/MySQLClient.html#create_shared-class_method">MySQLClient.createShared</a></code>
+or <code><a href="yardoc/VertxMysqlPostgresql/PostgreSQLClient.html#create_shared-class_method">PostgreSQLClient.createShared</a></code>
+will actually create the data source, and the specified config will be used.</p>
+</div>
+<div class="paragraph">
+<p>Subsequent calls will return a new client instance that uses the same data source, so the configuration won&#8217;t be used.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_specifying_a_pool_name">Specifying a pool name</h3>
+<div class="paragraph">
+<p>You can create a client specifying a pool name as follows</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">require 'vertx-mysql-postgresql/my_sql_client'
+require 'vertx-mysql-postgresql/postgre_sql_client'
+
+# To create a MySQL client:
+
+mySQLClientConfig = {
+  'host' =&gt; "mymysqldb.mycompany"
+}
+mySQLClient = VertxMysqlPostgresql::MySQLClient.create_shared(vertx, mySQLClientConfig, "MySQLPool1")
+
+# To create a PostgreSQL client:
+
+postgreSQLClientConfig = {
+  'host' =&gt; "mypostgresqldb.mycompany"
+}
+postgreSQLClient = VertxMysqlPostgresql::PostgreSQLClient.create_shared(vertx, postgreSQLClientConfig, "PostgreSQLPool1")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If different clients are created using the same Vert.x instance and specifying the same pool name, they will
+share the same data source.</p>
+</div>
+<div class="paragraph">
+<p>The first call to <code><a href="yardoc/VertxMysqlPostgresql/MySQLClient.html#create_shared-class_method">MySQLClient.createShared</a></code>
+or <code><a href="yardoc/VertxMysqlPostgresql/PostgreSQLClient.html#create_shared-class_method">PostgreSQLClient.createShared</a></code>
+will actually create the data source, and the specified config will be used.</p>
+</div>
+<div class="paragraph">
+<p>Subsequent calls will return a new client instance that uses the same pool, so the configuration won&#8217;t be used.</p>
+</div>
+<div class="paragraph">
+<p>Use this way of creating if you wish different groups of clients to have different pools, e.g. they&#8217;re
+interacting with different databases.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_client_with_a_non_shared_data_source">Creating a client with a non shared data source</h3>
+<div class="paragraph">
+<p>In most cases you will want to share a pool between different client instances.
+However, it&#8217;s possible you want to create a client instance that doesn&#8217;t share its pool with any other client.</p>
+</div>
+<div class="paragraph">
+<p>In that case you can use <code><a href="yardoc/VertxMysqlPostgresql/MySQLClient.html#create_non_shared-class_method">MySQLClient.createNonShared</a></code>
+or <code><a href="yardoc/VertxMysqlPostgresql/PostgreSQLClient.html#create_non_shared-class_method">PostgreSQLClient.createNonShared</a></code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">require 'vertx-mysql-postgresql/my_sql_client'
+require 'vertx-mysql-postgresql/postgre_sql_client'
+
+# To create a MySQL client:
+
+mySQLClientConfig = {
+  'host' =&gt; "mymysqldb.mycompany"
+}
+mySQLClient = VertxMysqlPostgresql::MySQLClient.create_non_shared(vertx, mySQLClientConfig)
+
+# To create a PostgreSQL client:
+
+postgreSQLClientConfig = {
+  'host' =&gt; "mypostgresqldb.mycompany"
+}
+postgreSQLClient = VertxMysqlPostgresql::PostgreSQLClient.create_non_shared(vertx, postgreSQLClientConfig)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is equivalent to calling <code><a href="yardoc/VertxMysqlPostgresql/MySQLClient.html#create_shared-class_method">MySQLClient.createShared</a></code>
+or <code><a href="yardoc/VertxMysqlPostgresql/PostgreSQLClient.html#create_shared-class_method">PostgreSQLClient.createShared</a></code>
+with a unique pool name each time.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_closing_the_client">Closing the client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can hold on to the client for a long time (e.g. the life-time of your verticle), but once you have finished with
+it, you should close it using <code><a href="yardoc/VertxMysqlPostgresql/AsyncSQLClient.html#close-instance_method">close</a></code> or
+<code><a href="yardoc/VertxMysqlPostgresql/AsyncSQLClient.html#close-instance_method">close</a></code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_a_connection">Getting a connection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Use <code><a href="yardoc/VertxMysqlPostgresql/AsyncSQLClient.html#get_connection-instance_method">getConnection</a></code> to get a connection.</p>
+</div>
+<div class="paragraph">
+<p>This will return the connection in the handler when one is ready from the pool.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Now do stuff with it:
+
+client.get_connection() { |res,res_err|
+  if (res_err == nil)
+
+    connection = res
+
+    # Got a connection
+
+  else
+    # Failed to get connection - deal with it
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you&#8217;ve finished with the connection make sure you close it afterwards.</p>
+</div>
+<div class="paragraph">
+<p>The connection is an instance of <code><a href="../../vertx-sql-common/ruby/yardoc/VertxSql/SQLConnection.html">SQLConnection</a></code> which is a common interface used by
+othe SQL clients.</p>
+</div>
+<div class="paragraph">
+<p>You can learn how to use it in the <a href="http://foobar">common sql interface</a> documentation.</p>
+</div>
+<div class="sect2">
+<h3 id="_note_about_date_and_timestamps">Note about date and timestamps</h3>
+<div class="paragraph">
+<p>Whenever you get dates back from the database, this service will implicitly convert them into ISO 8601
+(<code>yyyy-MM-ddTHH:mm:ss.SSS</code>) formatted strings. MySQL usually discards milliseconds, so you will regularly see <code>.000</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration">Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Both the PostgreSql and MySql clients take the same configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{
+  "host" : &lt;your-host&gt;,
+  "port" : &lt;your-port&gt;,
+  "maxPoolSize" : &lt;maximum-number-of-open-connections&gt;,
+  "username" : &lt;your-username&gt;,
+  "password" : &lt;your-password&gt;,
+  "database" : &lt;name-of-your-database&gt;
+}</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>host</code></dt>
+<dd>
+<p>The host of the database. Defaults to <code>localhost</code>.</p>
+</dd>
+<dt class="hdlist1"><code>port</code></dt>
+<dd>
+<p>The port of the database. Defaults to <code>5432</code> for PostgreSQL and <code>3306</code> for MySQL.</p>
+</dd>
+<dt class="hdlist1"><code>maxPoolSize</code></dt>
+<dd>
+<p>The number of connections that may be kept open. Defaults to <code>10</code>.</p>
+</dd>
+<dt class="hdlist1"><code>username</code></dt>
+<dd>
+<p>The username to connect to the database. Defaults to <code>postgres</code> for PostgreSQL and <code>root</code> for MySQL.</p>
+</dd>
+<dt class="hdlist1"><code>password</code></dt>
+<dd>
+<p>The password to connect to the database. Default is not set, i.e. it uses no password.</p>
+</dd>
+<dt class="hdlist1"><code>database</code></dt>
+<dd>
+<p>The name of the database you want to connect to. Defaults to <code>test</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-05-11 00:24:04 CEST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>

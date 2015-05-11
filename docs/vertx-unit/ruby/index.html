@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Vertx unit &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Vertx unit</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_writing_a_test_suite">Writing a test suite</a></li>
+<li><a href="#_asserting">Asserting</a>
+<ul class="sectlevel2">
+<li><a href="#_assertequals">assertEquals</a></li>
+<li><a href="#_assertnotequals">assertNotEquals</a></li>
+<li><a href="#_assertnull">assertNull</a></li>
+<li><a href="#_assertnotnull">assertNotNull</a></li>
+<li><a href="#_assertinrange">assertInRange</a></li>
+<li><a href="#_asserttrue_and_assertfalse">assertTrue and assertFalse</a></li>
+<li><a href="#_failing">Failing</a></li>
+</ul>
+</li>
+<li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
+<li><a href="#_sharing_objects">Sharing objects</a></li>
+<li><a href="#reporting">Running</a>
+<ul class="sectlevel2">
+<li><a href="#_test_suite_completion">Test suite completion</a></li>
+<li><a href="#_time_out">Time out</a></li>
+<li><a href="#event_loop">Event loop</a></li>
+</ul>
+</li>
+<li><a href="#_reporting">Reporting</a>
+<ul class="sectlevel2">
+<li><a href="#_console_reporting">Console reporting</a></li>
+<li><a href="#_file_reporting">File reporting</a></li>
+<li><a href="#_log_reporting">Log reporting</a></li>
+<li><a href="#_event_bus_reporting">Event bus reporting</a></li>
+</ul>
+</li>
+<li><a href="#_junit_integration">Junit integration</a></li>
+<li><a href="#_java_language_integration">Java language integration</a></li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_writing_a_test_suite">Writing a test suite</a></li>
+<li><a href="#_asserting">Asserting</a>
+<ul class="sectlevel2">
+<li><a href="#_assertequals">assertEquals</a></li>
+<li><a href="#_assertnotequals">assertNotEquals</a></li>
+<li><a href="#_assertnull">assertNull</a></li>
+<li><a href="#_assertnotnull">assertNotNull</a></li>
+<li><a href="#_assertinrange">assertInRange</a></li>
+<li><a href="#_asserttrue_and_assertfalse">assertTrue and assertFalse</a></li>
+<li><a href="#_failing">Failing</a></li>
+</ul>
+</li>
+<li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
+<li><a href="#_sharing_objects">Sharing objects</a></li>
+<li><a href="#reporting">Running</a>
+<ul class="sectlevel2">
+<li><a href="#_test_suite_completion">Test suite completion</a></li>
+<li><a href="#_time_out">Time out</a></li>
+<li><a href="#event_loop">Event loop</a></li>
+</ul>
+</li>
+<li><a href="#_reporting">Reporting</a>
+<ul class="sectlevel2">
+<li><a href="#_console_reporting">Console reporting</a></li>
+<li><a href="#_file_reporting">File reporting</a></li>
+<li><a href="#_log_reporting">Log reporting</a></li>
+<li><a href="#_event_bus_reporting">Event bus reporting</a></li>
+</ul>
+</li>
+<li><a href="#_junit_integration">Junit integration</a></li>
+<li><a href="#_java_language_integration">Java language integration</a></li>
+</ul>
+        </div>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Asynchronous polyglot unit testing.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vertx Unit is designed for writing asynchronous unit tests with a polyglot API and running these tests
+in the JVM. Vertx Unit Api borrows from existing test frameworks like <a href="http://junit.org">JUnit</a> or <a href="http://qunitjs.com">QUnit</a>
+and follows the Vert.x practices.</p>
+</div>
+<div class="paragraph">
+<p>As a consequence Vertx Unit is the natural choice for testing Vert.x applications.</p>
+</div>
+<div class="paragraph">
+<p>It can be used in different ways and run anywhere your code runs, it is just a matter of reporting
+the results the right way, this example shows the bare minimum test suite:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/test_suite'
+suite = VertxUnit::TestSuite.create("the_test_suite")
+suite.test("my_test_case") { |context|
+  s = "value"
+  context.assert_equals("value", s)
+}
+suite.run()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The  method will execute the suite and go through all the
+tests of the suite. The suite can fail or pass, this does not matter if the outer world is not aware
+of the test result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/test_suite'
+suite = VertxUnit::TestSuite.create("the_test_suite")
+suite.test("my_test_case") { |context|
+  s = "value"
+  context.assert_equals("value", s)
+}
+suite.run({
+  'reporters' =&gt; [
+    {
+      'to' =&gt; "console"
+    }
+  ]
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When executed, the test suite now reports to the console the steps of the test suite:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Begin test suite the_test_suite
+Begin test my_test
+Passed my_test
+End test suite the_test_suite , run: 1, Failures: 0, Errors: 0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The  option configures the reporters used by the suite runner for reporting the execution
+of the tests, see the <a href="#reporting">Running</a> section for more info.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_writing_a_test_suite">Writing a test suite</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A test suite is a named collection of test case, a test case is a straight callback to execute. The suite can
+have lifecycle callbacks to execute <em>before</em> and/or <em>after</em> the test cases or the test suite that are used for
+initializing or disposing services used by the test suite.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/test_suite'
+suite = VertxUnit::TestSuite.create("the_test_suite")
+suite.test("my_test_case_1") { |context|
+  # Test 1
+}
+suite.test("my_test_case_2") { |context|
+  # Test 2
+}
+suite.test("my_test_case_3") { |context|
+  # Test 3
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The API is fluent and therefore the test cases can be chained:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/test_suite'
+suite = VertxUnit::TestSuite.create("the_test_suite")
+suite.test("my_test_case_1") { |context|
+  # Test 1
+}.test("my_test_case_2") { |context|
+  # Test 2
+}.test("my_test_case_3") { |context|
+  # Test 3
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The test cases declaration order is not guaranteed, so test cases should not rely on the execution of
+another test case to run. Such practice is considered as a bad one.</p>
+</div>
+<div class="paragraph">
+<p>Vertx Unit provides <em>before</em> and <em>after</em> callbacks for doing global setup or cleanup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/test_suite'
+suite = VertxUnit::TestSuite.create("the_test_suite")
+suite.before() { |context|
+  # Test suite setup
+}.test("my_test_case_1") { |context|
+  # Test 1
+}.test("my_test_case_2") { |context|
+  # Test 2
+}.test("my_test_case_3") { |context|
+  # Test 3
+}.after() { |context|
+  # Test suite cleanup
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The declaration order of the method does not matter, the example declares the <em>before</em> callback before
+the test cases and <em>after</em> callback after the test cases but it could be anywhere, as long as it is done before
+running the test suite.</p>
+</div>
+<div class="paragraph">
+<p>The <em>before</em> callback is executed before any tests, when it fails, the test suite execution will stop and the
+failure is reported. The <em>after</em> callback is the last callback executed by the testsuite, unless
+the <em>before</em> callback reporter a failure.</p>
+</div>
+<div class="paragraph">
+<p>Likewise, Vertx Unit provides the <em>beforeEach</em> and <em>afterEach</em> callback that do the same but are executed
+for each test case:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/test_suite'
+suite = VertxUnit::TestSuite.create("the_test_suite")
+suite.before_each() { |context|
+  # Test case setup
+}.test("my_test_case_1") { |context|
+  # Test 1
+}.test("my_test_case_2") { |context|
+  # Test 2
+}.test("my_test_case_3") { |context|
+  # Test 3
+}.after_each() { |context|
+  # Test case cleanup
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <em>beforeEach</em> callback is executed before each test case, when it fails, the test case is not executed and the
+failure is reported. The <em>afterEach</em> callback is the executed just after the test case callback, unless
+the <em>beforeEach</em> callback reported a failure.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asserting">Asserting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vertx Unit provides the <code><a href="yardoc/VertxUnit/TestContext.html">TestContext</a></code> object for doing assertions in test cases. The <em>context</em>
+object provides the usual methods when dealing with assertions.</p>
+</div>
+<div class="sect2">
+<h3 id="_assertequals">assertEquals</h3>
+<div class="paragraph">
+<p>Assert two objects are equals, works for <em>basic</em> types or <em>json</em> types.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  context.assert_equals(10, callbackCount)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is also an overloaded version for providing a message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  context.assert_equals(10, callbackCount, "Should have been 10 instead of #{callbackCount}")
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Usually each assertion provides an overloaded version.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assertnotequals">assertNotEquals</h3>
+<div class="paragraph">
+<p>The counter part of <em>assertEquals</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  context.assert_not_equals(10, callbackCount)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assertnull">assertNull</h3>
+<div class="paragraph">
+<p>Assert an object is null, works for <em>basic</em> types or <em>json</em> types.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  context.assert_null(nil)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assertnotnull">assertNotNull</h3>
+<div class="paragraph">
+<p>The counter part of <em>assertNull</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  context.assert_not_null("not null!")
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assertinrange">assertInRange</h3>
+<div class="paragraph">
+<p>The <code><a href="yardoc/VertxUnit/TestContext.html#assert_in_range-instance_method">assertInRange</a></code> targets real numbers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>suite.test("my_test_case") { |context|
+
+  # Assert that 0.1 is equals to 0.2 +/- 0.5
+
+  context.assert_in_range(0.1, 0.2, 0.5)
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asserttrue_and_assertfalse">assertTrue and assertFalse</h3>
+<div class="paragraph">
+<p>Asserts the value of a boolean expression.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  context.assert_true(var)
+  context.assert_false(value &gt; 10)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_failing">Failing</h3>
+<div class="paragraph">
+<p>Last but not least, <em>test</em> provides a <em>fail</em> method that will throw an assertion error:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  context.fail("That should never happen")
+  # Following statements won't be executed
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asynchronous_testing">Asynchronous testing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The previous examples supposed that test cases were terminated after their respective callbacks, this is the
+default behavior of a test case callback. Often it is desirable to terminate the test after the test case
+callback, for instance:</p>
+</div>
+<div class="listingblock">
+<div class="title">The Async object asynchronously completes the test case</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+  async = context.async()
+  eventBus.consumer("the-address") { |msg|
+    <b class="conum">(2)</b>
+    async.complete()
+  }
+  <b class="conum">(1)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>The callback exits but the test case is not terminated</p>
+</li>
+<li>
+<p>The event callback from the bus terminates the test</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Creating an <code><a href="yardoc/VertxUnit/Async.html">Async</a></code> object with the <code><a href="yardoc/VertxUnit/TestContext.html#async-instance_method">async</a></code> method marks the
+executed test case as non terminated. The test case terminates when the <code><a href="yardoc/VertxUnit/Async.html#complete-instance_method">complete</a></code>
+method is invoked.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+When the <code>complete</code> callback is not invoked, the test case fails after a certain timeout.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Several <code>Async</code> objects can be created during the same test case, all of them must be <em>completed</em> to terminate
+the test.</p>
+</div>
+<div class="listingblock">
+<div class="title">Several Async objects provide coordination</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.test("my_test_case") { |context|
+
+  async1 = context.async()
+  client = vertx.create_http_client()
+  req = client.get(8080, "localhost", "/")
+  req.exception_handler() { |err|
+    context.fail(err.get_message())}
+  req.handler() { |resp|
+    context.assert_equals(200, resp.status_code())
+    async1.complete()
+  }
+  req.end()
+
+  async2 = context.async()
+  vertx.event_bus().consumer("the-address") { |msg|
+    async2.complete()
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Async objects can also be used in <em>before</em> or <em>after</em> callbacks, it can be very convenient in a <em>before</em> callback
+to implement a setup that depends on one or several asynchronous results:</p>
+</div>
+<div class="listingblock">
+<div class="title">Async starts an http server before test cases</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.before() { |context|
+  async = context.async()
+  server = vertx.create_http_server()
+  server.request_handler(&amp;requestHandler)
+  server.listen(8080) { |ar,ar_err|
+    context.assert_true(ar_err == nil)
+    async.complete()
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sharing_objects">Sharing objects</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code><a href="yardoc/VertxUnit/TestContext.html">TestContext</a></code> has <code>get</code>/<code>put</code>/<code>remove</code> operations for sharing state between callbacks.</p>
+</div>
+<div class="paragraph">
+<p>Any object added during the <em>before</em> callback is available in any other callbacks. Each test case will operate on
+a copy of the shared state, so updates will only be visible for a test case.</p>
+</div>
+<div class="listingblock">
+<div class="title">Sharing state between callbacks</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/test_suite'
+VertxUnit::TestSuite.create("my_suite").before() { |context|
+
+  # host is available for all test cases
+  context.put("host", "localhost")
+
+}.before_each() { |context|
+
+  # Generate a random port for each test
+  port = helper.random_port()
+
+  # Get host
+  host = context.get("host")
+
+  # Setup server
+  async = context.async()
+  server = vertx.create_http_server()
+  server.request_handler() { |req|
+    req.response().set_status_code(200).end()
+  }
+  server.listen(port, host) { |ar,ar_err|
+    context.assert_true(ar_err == nil)
+    context.put("port", port)
+    async.complete()
+  }
+
+}.test("my_test") { |context|
+
+  # Get the shared state
+  port = context.get("port")
+  host = context.get("host")
+
+  # Do request
+  client = vertx.create_http_client()
+  req = client.get(port, host, "/resource")
+  async = context.async()
+  req.handler() { |resp|
+    context.assert_equals(200, resp.status_code())
+    async.complete()
+  }
+  req.end()
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+sharing any object is only supported in Java, other languages can share only basic or json types.
+Other objects should be shared using the features of that language.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reporting">Running</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When a test suite is created, it won&#8217;t be executed until the <code><a href="yardoc/VertxUnit/TestSuite.html#run-instance_method">run</a></code> method
+is called.</p>
+</div>
+<div class="listingblock">
+<div class="title">Running a test suite</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.run()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The test suite can also be ran with a specified <code><a href="../../vertx-core/ruby/yardoc/Vertx/Vertx.html">Vertx</a></code> instance:</p>
+</div>
+<div class="listingblock">
+<div class="title">Provides a Vertx instance to run the test suite</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">suite.run(vertx)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When running with a <code>Vertx</code> instance, the test suite is executed using the Vertx event loop, see the <a href="#eventloop">[eventloop]</a>
+section for more details.</p>
+</div>
+<div class="sect2">
+<h3 id="_test_suite_completion">Test suite completion</h3>
+<div class="paragraph">
+<p>No assumptions can be made about when the test suite will be completed, and if some code needs to be executed
+after the test suite, it should either be in the test suite <em>after</em> callback or as callback of the
+<code><a href="yardoc/VertxUnit/TestCompletion.html">TestCompletion</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Test suite execution callback</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">completion = suite.run(vertx)
+
+# Simple completion callback
+completion.handler() { |ar,ar_err|
+  if (ar_err == nil)
+    puts "Test suite passed!"
+  else
+    puts "Test suite failed:"
+    ar_err.print_stack_trace()
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="yardoc/VertxUnit/TestCompletion.html">TestCompletion</a></code> object provides also a <code><a href="yardoc/VertxUnit/TestCompletion.html#resolve-instance_method">resolve</a></code> method that
+takes a <code>Future</code> object, this <code>Future</code> will be notified of the test suite execution:</p>
+</div>
+<div class="listingblock">
+<div class="title">Resolving the start Future with the test suite</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">completion = suite.run()
+
+# When the suite completes, the future is resolved
+completion.resolve(startFuture)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This allow to easily create a <em>test</em> verticle whose deployment is the test suite execution, allowing the
+code that deploys it to be easily aware of the success or failure.</p>
+</div>
+<div class="paragraph">
+<p>The completion object can also be used like a latch to block until the test suite completes. This should
+be used when the thread running the test suite is not the same than the current thread:</p>
+</div>
+<div class="listingblock">
+<div class="title">Blocking until the test suite completes</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">completion = suite.run()
+
+# Wait until the test suite completes
+completion.await()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>await</code> throws an exception when the thread is interrupted or a timeout is fired.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="yardoc/VertxUnit/TestCompletion.html#await_success-instance_method">awaitSuccess</a></code> is a variation that throws an exception when
+the test suite fails.</p>
+</div>
+<div class="listingblock">
+<div class="title">Blocking until the test suite succeeds</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">completion = suite.run()
+
+# Wait until the test suite succeeds otherwise throw an exception
+completion.await_success()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_time_out">Time out</h3>
+<div class="paragraph">
+<p>Each test case of a test suite must execute before a certain timeout is reached. The default timeout is
+of <em>2 minutes</em>, it can be changed using <em>test options</em>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting the test suite timeout</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'timeout' =&gt; 10000
+}
+
+# Run with a 10 seconds time out
+suite.run(options)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="event_loop">Event loop</h3>
+<div class="paragraph">
+<p>Vertx Unit execution is a list of tasks to execute, the execution of each task is driven by the completion
+of the previous task. These tasks should leverage Vert.x event loop when possible but that depends on the
+current execution context (i.e the test suite is executed in a <code>main</code> or embedded in a <code>Verticle</code>) and
+wether or not a <code>Vertx</code> instance is configured.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../cheatsheet/TestOptions.html#useEventLoop">useEventLoop</a></code> configures the usage of the event
+loop:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Event loop usage</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">useEventLoop:null</th>
+<th class="tableblock halign-left valign-top">useEventLoop:true</th>
+<th class="tableblock halign-left valign-top">useEventLoop:false</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Vertx</code> instance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use vertx event loop</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use vertx event loop</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">force no event loop</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in a <code>Verticle</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use current event loop</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use current event loop</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">force no event loop</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in a <em>main</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use no event loop</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">raise an error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use no event loop</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The default <code>useEventLoop</code> value is <code>null</code>, that means that it will uses an event loop when possible and fallback
+to no event loop when no one is available.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reporting">Reporting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Reporting is an important piece of a test suite, Vertx Unit can be configured to run with different kind
+of reporters.</p>
+</div>
+<div class="paragraph">
+<p>By default no reporter is configured, when running a test suite, <em>test options</em> can be provided to
+configure one or several:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using the console reporter and as a junit xml file</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Report to console
+consoleReport = {
+  'to' =&gt; "console"
+}
+
+# Report junit files to the current directory
+junitReport = {
+  'to' =&gt; "file:.",
+  'format' =&gt; "junit"
+}
+
+suite.run({
+  'reporters' =&gt; [
+    consoleReport,
+    junitReport
+  ]
+})</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_console_reporting">Console reporting</h3>
+<div class="paragraph">
+<p>Reports to the JVM <code>System.out</code> and <code>System.err</code>:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">to</dt>
+<dd>
+<p><em>console</em></p>
+</dd>
+<dt class="hdlist1">format</dt>
+<dd>
+<p><em>simple</em> or <em>junit</em></p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_reporting">File reporting</h3>
+<div class="paragraph">
+<p>Reports to a file, a <code>Vertx</code> instance must be provided:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">to</dt>
+<dd>
+<p><em>file</em> <code>:</code> <em>dir name</em></p>
+</dd>
+<dt class="hdlist1">format</dt>
+<dd>
+<p><em>simple</em> or <em>junit</em></p>
+</dd>
+<dt class="hdlist1">example</dt>
+<dd>
+<p><code>file:.</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The file reporter will create files in the configured directory, the files will be named after the
+test suite name executed and the format (i.e <em>simple</em> creates <em>txt</em> files and <em>junit</em> creates <em>xml</em>
+files).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_log_reporting">Log reporting</h3>
+<div class="paragraph">
+<p>Reports to a logger, a <code>Vertx</code> instance must be provided:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">to</dt>
+<dd>
+<p><em>log</em> <code>:</code> <em>logger name</em></p>
+</dd>
+<dt class="hdlist1">example</dt>
+<dd>
+<p><code>log:mylogger</code></p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_event_bus_reporting">Event bus reporting</h3>
+<div class="paragraph">
+<p>Reports events to the event bus, a <code>Vertx</code> instance must be provided:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">to</dt>
+<dd>
+<p><em>bus</em> <code>:</code> <em>event bus address</em></p>
+</dd>
+<dt class="hdlist1">example</dt>
+<dd>
+<p><code>bus:the-address</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>It allow to decouple the execution of the test suite from the reporting.</p>
+</div>
+<div class="paragraph">
+<p>The messages sent over the event bus can be collected by the <code><a href="yardoc/VertxUnit/EventBusCollector.html">EventBusCollector</a></code>
+and achieve custom reporting:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-unit/event_bus_collector'
+collector = VertxUnit::EventBusCollector.create(vertx, {
+  'reporters' =&gt; [
+    {
+      'to' =&gt; "file:report.xml",
+      'format' =&gt; "junit"
+    }
+  ]
+})
+
+collector.register("the-address")</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_junit_integration">Junit integration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Although Vertx Unit is polyglot and not based on JUnit, it is possible to run a Vertx Unit test suite or a test case
+from JUnit, allowing you to integrate your tests with JUnit and your build system or IDE.</p>
+</div>
+<div class="listingblock">
+<div class="title">Run a Java class as a JUnit test suite</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">RunWith(io.vertx.ext.unit.junit.VertxUnitRunner.class)
+public class JUnitTestSuite {
+
+  Test
+  public void testSomething(Context context) {
+    context.assertFalse(false);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="unavailable">VertxUnitRunner</a></code> uses the junit annotations for introspecting the class
+and create a test suite after the class. The methods should declare a <code><a href="yardoc/VertxUnit/TestContext.html">TestContext</a></code>
+argument, if they don&#8217;t it is fine too. However the <code>TestContext</code> is the only way to retrieve the associated
+Vertx instance of perform asynchronous tests.</p>
+</div>
+<div class="paragraph">
+<p>A single test case can also be executed with a <code><a href="yardoc/VertxUnit/TestCase.html">TestCase</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Run a test case in a JUnit test</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">TestCase.
+  create("my_test_case", context -&gt; {
+    context.assertTrue(true);
+  }).
+  awaitSuccess(); <b class="conum">(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Block until the test case is executed</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_java_language_integration">Java language integration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Java language provides classes and it is possible to create test suites directly from Java classes with the
+following mapping rules:</p>
+</div>
+<div class="paragraph">
+<p>The  argument methods are inspected and the public, non static methods
+with <code><a href="yardoc/VertxUnit/TestContext.html">TestContext</a></code> parameter are retained and mapped to a Vertx Unit test suite
+via the method name:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>before</code> : before callback</p>
+</li>
+<li>
+<p><code>after</code> : after callback</p>
+</li>
+<li>
+<p><code>beforeEach</code> : beforeEach callback</p>
+</li>
+<li>
+<p><code>afterEach</code> : afterEach callback</p>
+</li>
+<li>
+<p>when the name starts with <em>test</em> : test case callback named after the method name</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Test suite written using a Java class</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class MyTestSuite {
+
+  public void testSomething(TestContext context) {
+    context.assertFalse(false);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This class can be turned into a Vertx test suite easily:</p>
+</div>
+<div class="listingblock">
+<div class="title">Create a test suite from a Java object</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TestSuite suite = TestSuite.create(new MyTestSuite());</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-05-11 00:24:04 CEST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>

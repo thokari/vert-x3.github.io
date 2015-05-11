@@ -28,7 +28,6 @@ io.vertx.ext.dropwizard.reporters
 io.vertx.ext.jdbc
 io.vertx.ext.jdbc.spi
 io.vertx.ext.mail
-io.vertx.ext.mail.mailencoder
 io.vertx.ext.mongo
 io.vertx.ext.unit
 io.vertx.ext.unit.collect
