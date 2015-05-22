@@ -73,11 +73,19 @@
 <li><a href="#_http_client_configuration">Http client configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_client_authentication">Client authentication</a></li>
+<li><a href="#_proxy_server_configuration">Proxy server configuration</a></li>
 </ul>
 </li>
 <li><a href="#_public_key_servers">Public key servers</a></li>
 <li><a href="#_validation_policy">Validation policy</a></li>
 <li><a href="#_cache_directory">Cache directory</a></li>
+<li><a href="#_examples">Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_bintray">Bintray</a></li>
+<li><a href="#_service_zip">Service zip</a></li>
+<li><a href="#_bintray_hosting">Bintray hosting</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -88,17 +96,31 @@
 <li><a href="#_http_client_configuration">Http client configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_client_authentication">Client authentication</a></li>
+<li><a href="#_proxy_server_configuration">Proxy server configuration</a></li>
 </ul>
 </li>
 <li><a href="#_public_key_servers">Public key servers</a></li>
 <li><a href="#_validation_policy">Validation policy</a></li>
 <li><a href="#_cache_directory">Cache directory</a></li>
+<li><a href="#_examples">Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_bintray">Bintray</a></li>
+<li><a href="#_service_zip">Service zip</a></li>
+<li><a href="#_bintray_hosting">Bintray hosting</a></li>
+</ul>
+</li>
 </ul>
         </div>
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>The http service factory is a Vert.x service factory for deploying services from an http server.</p>
+</div>
+<div class="paragraph">
+<p>It it an alternative
+to the Maven Service Factory for using services hosted on a plain http server, e.g a JavaScript service zipped
+and hosted somewhere. Unlike the Maven Service Factory, the Http Service Factory does not provide any kind of
+classpath dependency resolution.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -197,6 +219,13 @@ system property, these properties are valid for any http resource.</p>
 an https connection.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_proxy_server_configuration">Proxy server configuration</h3>
+<div class="paragraph">
+<p>The http client can be configured to support a proxy server with the <em>vertx.httpServiceFactory.proxyHost</em> and
+<em>vertx.httpServiceFactory.proxyPort</em> system properties.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -286,6 +315,79 @@ system property.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_examples">Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_bintray">Bintray</h3>
+<div class="paragraph">
+<p>Bintray is a distribution platform that can be used for hosting files.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_service_zip">Service zip</h3>
+<div class="listingblock">
+<div class="content">
+<pre>&gt; echo 'console.log("hello world")' &gt; helloworld.js
+&gt; echo '{"main":"helloworld.js"}' &gt; helloworld.json
+&gt; zip helloworld.zip helloworld.json helloworld.js</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bintray_hosting">Bintray hosting</h3>
+<div class="paragraph">
+<p>Assuming you have a Bintray account:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>create a Bintray repository with the <em>generic</em> type, for instance <em>testgenrepo</em></p>
+</li>
+<li>
+<p>in this repository create a package, for instance <em>testpkg</em></p>
+</li>
+<li>
+<p>optionally edit the package and check the <em>GPG sign uploaded files using Bintray&#8217;s public /private key pair.</em></p>
+</li>
+<li>
+<p>in this package create a version, for instance <em>1.0</em></p>
+</li>
+<li>
+<p>now upload the <em>helloworld.zip</em> file</p>
+</li>
+<li>
+<p>publish the files</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The file are now hosted with an URL like : <em><a href="https://bintray.com/artifact/download/vietj/testgenrepo/helloworld.zip" class="bare">https://bintray.com/artifact/download/vietj/testgenrepo/helloworld.zip</a></em></p>
+</div>
+<div class="paragraph">
+<p>If you have configured the GPG signature, you will have also the signature file <em><a href="https://bintray.com/artifact/download/vietj/testgenrepo/helloworld.zip.asc" class="bare">https://bintray.com/artifact/download/vietj/testgenrepo/helloworld.zip.asc</a></em>.
+It will be by default downloaded and validated with <a href="http://pool.sks-keyservers.net:11371/pks/lookup?op=vindex&amp;fingerprint=on&amp;search=0x379CE192D401AB61">Bintray&#8217;s public key</a></p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Of course you can use your own keys for signing the files.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>We can run this service with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx run https://bintray.com/artifact/download/vietj/testgenrepo/helloworld.zip::helloworld
+% Hello World
+Succeeded in deploying verticle</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -293,7 +395,7 @@ system property.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-11 00:24:04 CEST
+                Last updated 2015-05-19 00:22:36 BST
               
               
             </div>

@@ -5484,7 +5484,7 @@ systems.</p>
 client.resolveA("vertx.io", ar -&gt; {
   if (ar.succeeded()) {
     List&lt;String&gt; records = ar.result();
-    for (String record: records) {
+    for (String record : records) {
       System.out.println(record);
     }
   } else {
@@ -5509,7 +5509,7 @@ operation systems.</p>
 client.resolveAAAA("vertx.io", ar -&gt; {
   if (ar.succeeded()) {
     List&lt;String&gt; records = ar.result();
-    for (String record: records) {
+    for (String record : records) {
       System.out.println(record);
     }
   } else {
@@ -5534,7 +5534,7 @@ systems.</p>
 client.resolveCNAME("vertx.io", ar -&gt; {
   if (ar.succeeded()) {
     List&lt;String&gt; records = ar.result();
-    for (String record: records) {
+    for (String record : records) {
       System.out.println(record);
     }
   } else {
@@ -5577,8 +5577,7 @@ means MX records with smaller priority coming first in the List.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MxRecord record = getMxRecord();
-record.priority();
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">record.priority();
 record.name();</code></pre>
 </div>
 </div>
@@ -5661,12 +5660,11 @@ client.resolveSRV("vertx.io", ar -&gt; {
 with smaller priority coming first in the List.</p>
 </div>
 <div class="paragraph">
-<p>The SrvRecord allows you to access all informations contained in the SRV record itself:</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/dns/SrvRecord.html">SrvRecord</a></code> allows you to access all informations contained in the SRV record itself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SrvRecord record = getSrvRecord();
-record.priority();
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">record.priority();
 record.name();
 record.weight();
 record.port();
@@ -6128,7 +6126,7 @@ order to gather metrics. For more information on this, please consult the
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-11 00:24:04 CEST
+                Last updated 2015-05-19 00:22:36 BST
               
               
             </div>

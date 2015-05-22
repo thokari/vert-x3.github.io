@@ -154,6 +154,7 @@
 <ul class="sectlevel2">
 <li><a href="#_securing_the_bridge">Securing the Bridge</a></li>
 <li><a href="#_requiring_authorisation_for_messages">Requiring authorisation for messages</a></li>
+<li><a href="#_handling_event_bus_bridge_events">Handling event bus bridge events</a></li>
 </ul>
 </li>
 </ul>
@@ -247,6 +248,7 @@
 <ul class="sectlevel2">
 <li><a href="#_securing_the_bridge">Securing the Bridge</a></li>
 <li><a href="#_requiring_authorisation_for_messages">Requiring authorisation for messages</a></li>
+<li><a href="#_handling_event_bus_bridge_events">Handling event bus bridge events</a></li>
 </ul>
 </li>
 </ul>
@@ -1787,7 +1789,7 @@ require 'vertx-apex/basic_auth_handler'
 
 config = {
 }
-config[Java::IoVertxExtAuthShiro::PropertiesAuthRealmConstants.PROPERTIES_PROPS_PATH_FIELD] = "classpath:test-auth.properties"
+config[Java::IoVertxExtAuthShiro::PropertiesAuthRealmConstants::PROPERTIES_PROPS_PATH_FIELD] = "classpath:test-auth.properties"
 
 authProvider = VertxAuth::ShiroAuthProvider.create(vertx, :PROPERTIES, config)
 
@@ -2866,7 +2868,7 @@ router.route().handler(&amp;VertxApex::SessionHandler.create(VertxApex::LocalSes
 
 authConfig = {
 }
-authConfig[Java::IoVertxExtAuthShiro::PropertiesAuthRealmConstants.PROPERTIES_PROPS_PATH_FIELD] = "classpath:test-auth.properties"
+authConfig[Java::IoVertxExtAuthShiro::PropertiesAuthRealmConstants::PROPERTIES_PROPS_PATH_FIELD] = "classpath:test-auth.properties"
 authProvider = VertxAuth::ShiroAuthProvider.create(vertx, :PROPERTIES, authConfig)
 
 basicAuthHandler = VertxApex::BasicAuthHandler.create(authProvider)
@@ -2875,6 +2877,79 @@ router.route("/eventbus/*").handler(&amp;basicAuthHandler.method(:handle))
 
 
 router.route("/eventbus/*").handler(&amp;sockJSHandler.method(:handle))</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_handling_event_bus_bridge_events">Handling event bus bridge events</h3>
+<div class="paragraph">
+<p>If you want to be notified when an event occurs on the bridge you can provide a handler when calling
+<code><a href="yardoc/VertxApex/SockJSHandler.html#bridge-instance_method">bridge</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Whenever an event occurs on the bridge it will be passed to the handler. The event is described by an instance of
+<code><a href="yardoc/VertxApex/BridgeEvent.html">BridgeEvent</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>The event can be one of the following types:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">SOCKET_CREATED</dt>
+<dd>
+<p>This event will occur when a new SockJS socket is created.</p>
+</dd>
+<dt class="hdlist1">SOCKET_CLOSED</dt>
+<dd>
+<p>This event will occur when a SockJS socket is closed.</p>
+</dd>
+<dt class="hdlist1">SEND</dt>
+<dd>
+<p>This event will occur when a message is attempted to be sent from the client to the server.</p>
+</dd>
+<dt class="hdlist1">PUBLISH</dt>
+<dd>
+<p>This event will occur when a message is attempted to be published from the client to the server.</p>
+</dd>
+<dt class="hdlist1">RECEIVE</dt>
+<dd>
+<p>This event will occur when a message is attempted to be delivered from the server to the client.
+REGISTER. This event will occur when a client attempts to register a handler.
+UNREGISTER. This event will occur when a client attempts to unregister a handler.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The event enables you to retrieve the type using <code><a href="yardoc/VertxApex/BridgeEvent.html#type-instance_method">type</a></code> and
+inspect the raw message of the event using <code><a href="yardoc/VertxApex/BridgeEvent.html#raw_message-instance_method">rawMessage</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>The raw message is a JSON object with the following structure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{
+  "type": "send"|"publish"|"receive"|"register"|"unregister",
+  "address": the event bus address being sent/published/registered/unregistered
+  "body": the body of the message
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The event is also an instance of <code><a href="../../vertx-core/ruby/yardoc/Vertx/Future.html">Future</a></code>. When you are finished handling the event you can
+complete the future with <code>true</code> to enable further processing.</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want the event to be processed you can complete the future with <code>false</code>. This is a useful feature that
+enables you to do your own filtering on messages passing through the bridge, or perhaps apply some fine grained
+authorisation or metrics.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example where we reject all messages flowing through the bridge if they contain the word "Armadillos".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -2887,7 +2962,7 @@ router.route("/eventbus/*").handler(&amp;sockJSHandler.method(:handle))</code></
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-11 00:24:04 CEST
+                Last updated 2015-05-19 00:22:38 BST
               
               
             </div>

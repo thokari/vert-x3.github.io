@@ -84,6 +84,9 @@
 <li><a href="#blocking_code">Running blocking code</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
+<li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
+<li><a href="#_verticle_deployment_options">Verticle deployment options</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -108,6 +111,12 @@
 <li><a href="#_the_theory">The Theory</a></li>
 <li><a href="#_the_event_bus_api">The Event Bus API</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
+</ul>
+</li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
 </ul>
 </li>
 <li><a href="#_buffers">Buffers</a>
@@ -243,6 +252,9 @@
 <li><a href="#blocking_code">Running blocking code</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
+<li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
+<li><a href="#_verticle_deployment_options">Verticle deployment options</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -267,6 +279,12 @@
 <li><a href="#_the_theory">The Theory</a></li>
 <li><a href="#_the_event_bus_api">The Event Bus API</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
+</ul>
+</li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
 </ul>
 </li>
 <li><a href="#_buffers">Buffers</a>
@@ -882,8 +900,136 @@ can include verticles written in multiple languages.</p>
 <p>An application would typically be composed of many verticle instances running in the same Vert.x instance at the same
 time. The different verticle instances communicate with each other by sending messages on the <a href="#event_bus">event bus</a>.</p>
 </div>
+<div class="sect2">
+<h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/verticles.adoc[]</p>
+<p>Ruby verticles are implemented as simple scripts.</p>
+</div>
+<div class="paragraph">
+<p>Ruby verticles will have the following globals pre-set as a convenience:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>$vertx - A reference to the Vertx object</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Start a timer
+$vertx.set_periodic(1000) { puts 'Timer has fired' }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the verticle is deployed the body of the script will be executed.</p>
+</div>
+<div class="paragraph">
+<p>Any <code>vertx_start</code> function function defined during the body execution will be executed after the
+execution. The <code>vertx_start</code> is executed as any other function and does not expect any argument.</p>
+</div>
+<div class="paragraph">
+<p>Likewise any <code>vertx_stop</code> function function defined during the body execution will be executed after the
+execution. The <code>vertx_stop</code> is executed as any other function and does not expect any argument.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">def vertx_stop future
+  # Cleanup here
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To load a verticle as a Ruby gem, this Ruby gem must deployed</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</h3>
+<div class="paragraph">
+<p>Sometimes you want to do something in your verticle start-up which takes some time and you don&#8217;t want the verticle to
+be considered deployed until that happens. For example you might want to deploy other verticles in the start method.</p>
+</div>
+<div class="paragraph">
+<p>You can&#8217;t block waiting for the other verticles to deploy in your start method as that would break the Golden Rule.</p>
+</div>
+<div class="paragraph">
+<p>So how can you do this?</p>
+</div>
+<div class="paragraph">
+<p>The way to do it is to implement the <strong>asynchronous</strong> start method. This version of the method takes a Future as a parameter.
+When the method returns the verticle will <strong>not</strong> be considered deployed yet. Some time later, after you&#8217;ve done everything
+you need to do (e.g. start other verticles), you can call complete on the Future (or fail) to signal that you&#8217;re done.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">def vertx_start_async start_future
+  # Now deploy some other verticle:
+
+  $vertx.deploy_verticle("other_verticle.rb") do |res|
+    if res.succeeded?
+      start_future.complete
+    else
+      start_future.fail
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly, there is an asynchronous version of the stop method too. You use this if you want to do some verticle
+cleanup that takes some time.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">def vertx_stop_async stop_future
+  obj.do_something_that_takes_time do |res|
+    if res.succeeded?
+      stop_future.complete
+    else
+      stop_future.fail
+    end
+  end
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>INFO: You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method. Vert.x
+will automatically undeploy any child verticles when the parent is undeployed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verticle_deployment_options">Verticle deployment options</h3>
+<div class="paragraph">
+<p>When deploying a Ruby, verticle it is possible to set a specific <em>GEM_PATH</em> variable for this particular
+verticle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">DeploymentOptions options = new DeploymentOptions().
+    setConfig(new JsonObject().put("GEM_PATH", "/path/to/gems"));
+vertx.deployVerticle("my_verticle.rb", options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This can be done also possible in Ruby:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = { :config =&gt; { :GEM_PATH =&gt; '/path/to/gems' } }
+$vertx.deploy_verticle('my_verticle.rb', options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This option can also be specified for the CLI:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx run my_verticle_rb -conf {\"GEM_PATH\":\"/path/to/gems\"}</pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_verticle_types">Verticle Types</h3>
@@ -997,7 +1143,8 @@ Deploying Verticle <strong>instances</strong> is Java only.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">myVerticle = Java::ExamplesCoreExamples::MyVerticle.new()
+vertx.deploy_verticle(myVerticle)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1719,8 +1866,11 @@ consisting of multiple rounds.</p>
 <div class="paragraph">
 <p>In all cases the reply handler will be called with the specific failure.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_message_codecs">Message Codecs</h4>
 <div class="paragraph">
-<p>Unresolved directive in eventbus.adoc - include::override/eventbus.adoc[]</p>
+<p>Message codecs are available exclusively with the Java api.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1775,8 +1925,93 @@ for example the default .</p>
 <p>If you&#8217;re registering event bus handlers from inside verticles, those handlers will be automatically unregistered
 when the verticle is undeployed.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_json">JSON</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/json.adoc[]</p>
+<p>Unlike some other languages, Ruby does not have first class support for <a href="http://json.org/">JSON</a> so we use
+Array and Hash to make handling JSON in your Vert.x applications a bit easier.</p>
+</div>
+<div class="sect2">
+<h3 id="_json_objects">JSON objects</h3>
+<div class="paragraph">
+<p>Ruby hashes represents JSON objects.</p>
+</div>
+<div class="paragraph">
+<p>A JSON object is basically just a map which has string keys and values can be of one of the JSON supported types
+(string, number, boolean).</p>
+</div>
+<div class="paragraph">
+<p>JSON objects also support nil values.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_json_objects">Creating JSON objects</h4>
+<div class="paragraph">
+<p>Empty JSON objects can be created with the default constructor.</p>
+</div>
+<div class="paragraph">
+<p>You can create a JSON object from a string JSON representation as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'json'
+object = JSON.parse('"foo":"bar"')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_the_json_object_to_a_string">Encoding the JSON object to a String</h4>
+<div class="paragraph">
+<p>You use <code>JSON.generate</code> to encode the object to a String form.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'json'
+json = JSON.generate(object)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_arrays">JSON arrays</h3>
+<div class="paragraph">
+<p>Ruby arrays represents JSON arrays.</p>
+</div>
+<div class="paragraph">
+<p>A JSON array is a sequence of values (string, number, boolean).</p>
+</div>
+<div class="paragraph">
+<p>JSON arrays can also contain null values.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_json_arrays">Creating JSON arrays</h4>
+<div class="paragraph">
+<p>Empty JSON arrays can be created with the default constructor.</p>
+</div>
+<div class="paragraph">
+<p>You can create a JSON array from a string JSON representation as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'json'
+object = JSON.parse('[1,2,3]')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_the_json_array_to_a_string">Encoding the JSON array to a String</h4>
+<div class="paragraph">
+<p>You use <code>JSON.generate</code> to encode the array to a String form.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'json'
+json = JSON.generate(array)</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1828,9 +2063,6 @@ buff = Vertx::Buffer.buffer("some string")</code></pre>
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
 buff = Vertx::Buffer.buffer("some string", "UTF-16")</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in buffers.adoc - include::override/buffer_from_bytes.adoc[]</p>
 </div>
 <div class="paragraph">
 <p>Create a buffer with an initial size hint. If you know your buffer will have a certain amount of data written to it
@@ -5412,7 +5644,8 @@ means MX records with smaller priority coming first in the List.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">record.priority()
+record.name()</code></pre>
 </div>
 </div>
 </div>
@@ -5494,11 +5727,17 @@ client.resolve_srv("vertx.io") { |ar,ar_err|
 with smaller priority coming first in the List.</p>
 </div>
 <div class="paragraph">
-<p>The SrvRecord allows you to access all informations contained in the SRV record itself:</p>
+<p>The <code><a href="yardoc/Vertx/SrvRecord.html">SrvRecord</a></code> allows you to access all informations contained in the SRV record itself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">record.priority()
+record.name()
+record.weight()
+record.port()
+record.protocol()
+record.service()
+record.target()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5548,9 +5787,6 @@ client.reverse_lookup("10.0.0.1") { |ar,ar_err|
   end
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in dns.adoc - include::override/dns.adoc[]</p>
 </div>
 </div>
 </div>
@@ -5876,7 +6112,7 @@ order to gather metrics. For more information on this, please consult the
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-11 00:24:04 CEST
+                Last updated 2015-05-19 00:22:36 BST
               
               
             </div>

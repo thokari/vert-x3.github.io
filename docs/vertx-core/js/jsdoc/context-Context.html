@@ -396,7 +396,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="context.js.html">context.js</a>, <a href="context.js.html#line138">line 138</a>
+        <a href="context.js.html">context.js</a>, <a href="context.js.html#line146">line 146</a>
     </li></ul></dd>
     
     
@@ -453,6 +453,14 @@
 <dd>
     
     
+    <div class="description">
+        Is the current context an event loop context?
+   <p>
+   NOTE! when running blocking code using Vertx#executeBlocking from a
+   standard (not worker) verticle, the context will still an event loop context and this 
+   will return true.
+    </div>
+    
 
     
     
@@ -483,7 +491,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="context.js.html">context.js</a>, <a href="context.js.html#line96">line 96</a>
+        <a href="context.js.html">context.js</a>, <a href="context.js.html#line100">line 100</a>
     </li></ul></dd>
     
     
@@ -505,16 +513,12 @@
     
     
     <h5>Returns:</h5>
-    <ul>
-            <li>
+    
+            
 <div class="param-desc">
-    true if this is an event loop context, false otherwise
+    true if false otherwise
 </div>
 
-
-</li>
-        
-            <li>
 
 
 <dl>
@@ -528,8 +532,8 @@
 
 	</dd>
 </dl>
-</li>
-        </ul>
+
+        
     
     
 </dd>
@@ -537,12 +541,16 @@
         
             
 <dt>
-    <h4 class="name" id="isMultiThreaded"><span class="type-signature"></span>isMultiThreaded<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="isMultiThreadedWorkerContext"><span class="type-signature"></span>isMultiThreadedWorkerContext<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
 <dd>
     
+    
+    <div class="description">
+        Is the current context a multi-threaded worker context?
+    </div>
     
 
     
@@ -574,7 +582,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="context.js.html">context.js</a>, <a href="context.js.html#line124">line 124</a>
+        <a href="context.js.html">context.js</a>, <a href="context.js.html#line132">line 132</a>
     </li></ul></dd>
     
     
@@ -596,16 +604,12 @@
     
     
     <h5>Returns:</h5>
-    <ul>
-            <li>
+    
+            
 <div class="param-desc">
-    true if this is a multi-threaded worker context, false otherwise
+    true if the current context is a multi-threaded worker context, false otherwise
 </div>
 
-
-</li>
-        
-            <li>
 
 
 <dl>
@@ -619,8 +623,8 @@
 
 	</dd>
 </dl>
-</li>
-        </ul>
+
+        
     
     
 </dd>
@@ -628,12 +632,20 @@
         
             
 <dt>
-    <h4 class="name" id="isWorker"><span class="type-signature"></span>isWorker<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="isWorkerContext"><span class="type-signature"></span>isWorkerContext<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
 <dd>
     
+    
+    <div class="description">
+        Is the current context a worker context?
+   <p>
+   NOTE! when running blocking code using Vertx#executeBlocking from a
+   standard (not worker) verticle, the context will still an event loop context and this 
+   will return false.
+    </div>
     
 
     
@@ -665,7 +677,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="context.js.html">context.js</a>, <a href="context.js.html#line110">line 110</a>
+        <a href="context.js.html">context.js</a>, <a href="context.js.html#line118">line 118</a>
     </li></ul></dd>
     
     
@@ -687,16 +699,12 @@
     
     
     <h5>Returns:</h5>
-    <ul>
-            <li>
+    
+            
 <div class="param-desc">
-    true if this is an worker context, false otherwise
+    true if the current context is a worker context, false otherwise
 </div>
 
-
-</li>
-        
-            <li>
 
 
 <dl>
@@ -710,8 +718,8 @@
 
 	</dd>
 </dl>
-</li>
-        </ul>
+
+        
     
     
 </dd>
@@ -756,7 +764,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="context.js.html">context.js</a>, <a href="context.js.html#line182">line 182</a>
+        <a href="context.js.html">context.js</a>, <a href="context.js.html#line190">line 190</a>
     </li></ul></dd>
     
     
@@ -1011,7 +1019,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="context.js.html">context.js</a>, <a href="context.js.html#line154">line 154</a>
+        <a href="context.js.html">context.js</a>, <a href="context.js.html#line162">line 162</a>
     </li></ul></dd>
     
     
@@ -1128,7 +1136,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="context.js.html">context.js</a>, <a href="context.js.html#line168">line 168</a>
+        <a href="context.js.html">context.js</a>, <a href="context.js.html#line176">line 176</a>
     </li></ul></dd>
     
     
@@ -1314,7 +1322,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Fri May 08 2015 15:52:00 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon May 18 2015 19:21:07 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

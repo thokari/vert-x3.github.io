@@ -308,7 +308,8 @@ means MX records with smaller priority coming first in the List.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">record.priority()
+record.name()</code></pre>
 </div>
 </div>
 </div>
@@ -390,11 +391,17 @@ client.resolve_srv("vertx.io") { |ar,ar_err|
 with smaller priority coming first in the List.</p>
 </div>
 <div class="paragraph">
-<p>The SrvRecord allows you to access all informations contained in the SRV record itself:</p>
+<p>The <code><a href="yardoc/Vertx/SrvRecord.html">SrvRecord</a></code> allows you to access all informations contained in the SRV record itself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">record.priority()
+record.name()
+record.weight()
+record.port()
+record.protocol()
+record.service()
+record.target()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -445,9 +452,6 @@ client.reverse_lookup("10.0.0.1") { |ar,ar_err|
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in dns.adoc - include::override/dns.adoc[]</p>
-</div>
 </div>
 </div>
 </div>
@@ -458,7 +462,7 @@ client.reverse_lookup("10.0.0.1") { |ar,ar_err|
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-11 00:24:04 CEST
+                Last updated 2015-05-19 00:22:36 BST
               
               
             </div>
