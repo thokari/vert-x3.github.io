@@ -1,0 +1,11 @@
+examples
+io.vertx.ext.auth
+io.vertx.ext.auth.jdbc
+io.vertx.ext.auth.jwt
+io.vertx.ext.auth.jwt.impl
+io.vertx.ext.auth.shiro
+io.vertx.ext.auth.shiro.impl
+io.vertx.groovy.ext.auth
+io.vertx.groovy.ext.auth.jdbc
+io.vertx.groovy.ext.auth.jwt
+io.vertx.groovy.ext.auth.shiro

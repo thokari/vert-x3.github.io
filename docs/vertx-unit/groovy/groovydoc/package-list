@@ -2,6 +2,7 @@ examples
 io.vertx.ext.unit
 io.vertx.ext.unit.collect.impl
 io.vertx.ext.unit.impl
+io.vertx.ext.unit.junit
 io.vertx.ext.unit.report
 io.vertx.ext.unit.report.impl
 io.vertx.groovy.ext.unit

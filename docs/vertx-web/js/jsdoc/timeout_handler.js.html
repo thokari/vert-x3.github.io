@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: timeout_handler.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: timeout_handler.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+/** @module vertx-web-js/timeout_handler */
+var utils = require('vertx-js/util/utils');
+var RoutingContext = require('vertx-web-js/routing_context');
+
+var io = Packages.io;
+var JsonObject = io.vertx.core.json.JsonObject;
+var JTimeoutHandler = io.vertx.ext.web.handler.TimeoutHandler;
+
+/**
+ Handler that will timeout requests if the response has not been written after a certain time.
+ Timeout requests will be ended with an HTTP status code `408`.
+
+ @class
+*/
+var TimeoutHandler = function(j_val) {
+
+  var j_timeoutHandler = j_val;
+  var that = this;
+
+  /**
+
+   @public
+   @param arg0 {RoutingContext} 
+   */
+  this.handle = function(arg0) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
+      j_timeoutHandler["handle(io.vertx.ext.web.RoutingContext)"](arg0._jdel);
+    } else utils.invalidArgs();
+  };
+
+  // A reference to the underlying Java delegate
+  // NOTE! This is an internal API and must not be used in user code.
+  // If you rely on this property your code is likely to break if we change it / remove it without warning.
+  this._jdel = j_timeoutHandler;
+};
+
+/**
+ Create a handler
+
+ @memberof module:vertx-web-js/timeout_handler
+ @param timeout {number} the timeout, in ms 
+ @return {TimeoutHandler} the handler
+ */
+TimeoutHandler.create = function() {
+  var __args = arguments;
+  if (__args.length === 0) {
+    return new TimeoutHandler(JTimeoutHandler["create()"]());
+  }else if (__args.length === 1 && typeof __args[0] ==='number') {
+    return new TimeoutHandler(JTimeoutHandler["create(long)"](__args[0]));
+  } else utils.invalidArgs();
+};
+
+// We export the Constructor function
+module.exports = TimeoutHandler;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="auth_handler.html">vertx-web-js/auth_handler</a></li><li><a href="basic_auth_handler.html">vertx-web-js/basic_auth_handler</a></li><li><a href="body_handler.html">vertx-web-js/body_handler</a></li><li><a href="bridge_event.html">vertx-web-js/bridge_event</a></li><li><a href="clustered_session_store.html">vertx-web-js/clustered_session_store</a></li><li><a href="cookie.html">vertx-web-js/cookie</a></li><li><a href="cookie_handler.html">vertx-web-js/cookie_handler</a></li><li><a href="cors_handler.html">vertx-web-js/cors_handler</a></li><li><a href="error_handler.html">vertx-web-js/error_handler</a></li><li><a href="favicon_handler.html">vertx-web-js/favicon_handler</a></li><li><a href="file_upload.html">vertx-web-js/file_upload</a></li><li><a href="form_login_handler.html">vertx-web-js/form_login_handler</a></li><li><a href="handlebars_template_engine.html">vertx-web-js/handlebars_template_engine</a></li><li><a href="jade_template_engine.html">vertx-web-js/jade_template_engine</a></li><li><a href="local_session_store.html">vertx-web-js/local_session_store</a></li><li><a href="logger_handler.html">vertx-web-js/logger_handler</a></li><li><a href="mvel_template_engine.html">vertx-web-js/mvel_template_engine</a></li><li><a href="redirect_auth_handler.html">vertx-web-js/redirect_auth_handler</a></li><li><a href="response_time_handler.html">vertx-web-js/response_time_handler</a></li><li><a href="route.html">vertx-web-js/route</a></li><li><a href="router.html">vertx-web-js/router</a></li><li><a href="routing_context.html">vertx-web-js/routing_context</a></li><li><a href="session.html">vertx-web-js/session</a></li><li><a href="session_handler.html">vertx-web-js/session_handler</a></li><li><a href="session_store.html">vertx-web-js/session_store</a></li><li><a href="sock_js_handler.html">vertx-web-js/sock_js_handler</a></li><li><a href="sock_js_socket.html">vertx-web-js/sock_js_socket</a></li><li><a href="static_handler.html">vertx-web-js/static_handler</a></li><li><a href="template_engine.html">vertx-web-js/template_engine</a></li><li><a href="template_handler.html">vertx-web-js/template_handler</a></li><li><a href="thymeleaf_template_engine.html">vertx-web-js/thymeleaf_template_engine</a></li><li><a href="timeout_handler.html">vertx-web-js/timeout_handler</a></li><li><a href="user_handler.html">vertx-web-js/user_handler</a></li><li><a href="user_session_handler.html">vertx-web-js/user_session_handler</a></li></ul><h3>Classes</h3><ul><li><a href="auth_handler-AuthHandler.html">AuthHandler</a></li><li><a href="basic_auth_handler-BasicAuthHandler.html">BasicAuthHandler</a></li><li><a href="body_handler-BodyHandler.html">BodyHandler</a></li><li><a href="bridge_event-BridgeEvent.html">BridgeEvent</a></li><li><a href="clustered_session_store-ClusteredSessionStore.html">ClusteredSessionStore</a></li><li><a href="cookie_handler-CookieHandler.html">CookieHandler</a></li><li><a href="cookie-Cookie.html">Cookie</a></li><li><a href="cors_handler-CorsHandler.html">CorsHandler</a></li><li><a href="error_handler-ErrorHandler.html">ErrorHandler</a></li><li><a href="favicon_handler-FaviconHandler.html">FaviconHandler</a></li><li><a href="file_upload-FileUpload.html">FileUpload</a></li><li><a href="form_login_handler-FormLoginHandler.html">FormLoginHandler</a></li><li><a href="handlebars_template_engine-HandlebarsTemplateEngine.html">HandlebarsTemplateEngine</a></li><li><a href="jade_template_engine-JadeTemplateEngine.html">JadeTemplateEngine</a></li><li><a href="local_session_store-LocalSessionStore.html">LocalSessionStore</a></li><li><a href="logger_handler-LoggerHandler.html">LoggerHandler</a></li><li><a href="mvel_template_engine-MVELTemplateEngine.html">MVELTemplateEngine</a></li><li><a href="redirect_auth_handler-RedirectAuthHandler.html">RedirectAuthHandler</a></li><li><a href="response_time_handler-ResponseTimeHandler.html">ResponseTimeHandler</a></li><li><a href="router-Router.html">Router</a></li><li><a href="route-Route.html">Route</a></li><li><a href="routing_context-RoutingContext.html">RoutingContext</a></li><li><a href="session_handler-SessionHandler.html">SessionHandler</a></li><li><a href="session_store-SessionStore.html">SessionStore</a></li><li><a href="session-Session.html">Session</a></li><li><a href="sock_js_handler-SockJSHandler.html">SockJSHandler</a></li><li><a href="sock_js_socket-SockJSSocket.html">SockJSSocket</a></li><li><a href="static_handler-StaticHandler.html">StaticHandler</a></li><li><a href="template_engine-TemplateEngine.html">TemplateEngine</a></li><li><a href="template_handler-TemplateHandler.html">TemplateHandler</a></li><li><a href="thymeleaf_template_engine-ThymeleafTemplateEngine.html">ThymeleafTemplateEngine</a></li><li><a href="timeout_handler-TimeoutHandler.html">TimeoutHandler</a></li><li><a href="user_handler-UserHandler.html">UserHandler</a></li><li><a href="user_session_handler-UserSessionHandler.html">UserSessionHandler</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon May 25 2015 18:27:49 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

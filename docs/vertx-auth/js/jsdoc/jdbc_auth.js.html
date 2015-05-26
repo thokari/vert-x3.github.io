@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: jdbc_auth.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: jdbc_auth.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+/** @module vertx-auth-js/jdbc_auth */
+var utils = require('vertx-js/util/utils');
+var JDBCClient = require('vertx-jdbc-js/jdbc_client');
+var AuthProvider = require('vertx-auth-js/auth_provider');
+
+var io = Packages.io;
+var JsonObject = io.vertx.core.json.JsonObject;
+var JJDBCAuth = io.vertx.ext.auth.jdbc.JDBCAuth;
+
+/**
+
+ @class
+*/
+var JDBCAuth = function(j_val) {
+
+  var j_jDBCAuth = j_val;
+  var that = this;
+  AuthProvider.call(this, j_val);
+
+  /**
+   Set the authentication query to use. Use this if you want to override the default authentication query.
+
+   @public
+   @param authenticationQuery {string} the authentication query 
+   @return {JDBCAuth} a reference to this for fluency
+   */
+  this.setAuthenticationQuery = function(authenticationQuery) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      return new JDBCAuth(j_jDBCAuth["setAuthenticationQuery(java.lang.String)"](authenticationQuery));
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Set the roles query to use. Use this if you want to override the default roles query.
+
+   @public
+   @param rolesQuery {string} the roles query 
+   @return {JDBCAuth} a reference to this for fluency
+   */
+  this.setRolesQuery = function(rolesQuery) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      return new JDBCAuth(j_jDBCAuth["setRolesQuery(java.lang.String)"](rolesQuery));
+    } else utils.invalidArgs();
+  };
+
+  /**
+   Set the permissions query to use. Use this if you want to override the default permissions query.
+
+   @public
+   @param permissionsQuery {string} the permissions query 
+   @return {JDBCAuth} a reference to this for fluency
+   */
+  this.setPermissionsQuery = function(permissionsQuery) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      return new JDBCAuth(j_jDBCAuth["setPermissionsQuery(java.lang.String)"](permissionsQuery));
+    } else utils.invalidArgs();
+  };
+
+  // A reference to the underlying Java delegate
+  // NOTE! This is an internal API and must not be used in user code.
+  // If you rely on this property your code is likely to break if we change it / remove it without warning.
+  this._jdel = j_jDBCAuth;
+};
+
+/**
+ Create a JDBC auth provider implementation
+
+ @memberof module:vertx-auth-js/jdbc_auth
+ @param client {JDBCClient} the JDBC client instance 
+ @return {JDBCAuth} the auth provider
+ */
+JDBCAuth.create = function(client) {
+  var __args = arguments;
+  if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
+    return new JDBCAuth(JJDBCAuth["create(io.vertx.ext.jdbc.JDBCClient)"](client._jdel));
+  } else utils.invalidArgs();
+};
+
+// We export the Constructor function
+module.exports = JDBCAuth;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="auth_provider.html">vertx-auth-js/auth_provider</a></li><li><a href="auth_service.html">vertx-auth-js/auth_service</a></li><li><a href="authenticator.html">vertx-auth-js/authenticator</a></li><li><a href="authoriser.html">vertx-auth-js/authoriser</a></li><li><a href="clusterable_auth_provider.html">vertx-auth-js/clusterable_auth_provider</a></li><li><a href="jdbc_auth.html">vertx-auth-js/jdbc_auth</a></li><li><a href="jwt_auth.html">vertx-auth-js/jwt_auth</a></li><li><a href="shiro_auth.html">vertx-auth-js/shiro_auth</a></li><li><a href="shiro_auth_provider.html">vertx-auth-js/shiro_auth_provider</a></li><li><a href="shiro_auth_service.html">vertx-auth-js/shiro_auth_service</a></li><li><a href="user.html">vertx-auth-js/user</a></li></ul><h3>Classes</h3><ul><li><a href="auth_provider-AuthProvider.html">AuthProvider</a></li><li><a href="auth_service-AuthService.html">AuthService</a></li><li><a href="authenticator-Authenticator.html">Authenticator</a></li><li><a href="authoriser-Authoriser.html">Authoriser</a></li><li><a href="clusterable_auth_provider-ClusterableAuthProvider.html">ClusterableAuthProvider</a></li><li><a href="jdbc_auth-JDBCAuth.html">JDBCAuth</a></li><li><a href="jwt_auth-JWTAuth.html">JWTAuth</a></li><li><a href="shiro_auth_provider-ShiroAuthProvider.html">ShiroAuthProvider</a></li><li><a href="shiro_auth_service-ShiroAuthService.html">ShiroAuthService</a></li><li><a href="shiro_auth-ShiroAuth.html">ShiroAuth</a></li><li><a href="user-User.html">User</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon May 25 2015 17:12:51 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

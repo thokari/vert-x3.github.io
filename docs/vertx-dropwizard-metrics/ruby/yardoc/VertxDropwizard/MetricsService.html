@@ -101,7 +101,7 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
+    The metrics service mainly allows to return a snapshot of measured objects.
 
   </div>
 </div>
@@ -140,7 +140,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Creates a metric service for a given Vertx::Vertx instance.</div></span>
   
 </li>
 
@@ -171,7 +171,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>@param measured the measure object.</div></span>
   
 </li>
 
@@ -218,7 +218,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Creates a metric service for a given Vertx::Vertx instance.
 
   </div>
 </div>
@@ -237,6 +237,9 @@
         <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>the vertx instance</div>
+      
     </li>
   
 </ul>
@@ -250,6 +253,9 @@
         <span class='type'>(<tt><span class='object_link'><a href="" title="VertxDropwizard::MetricsService (class)">::VertxDropwizard::MetricsService</a></span></tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>the metrics service</div>
       
     </li>
   
@@ -274,15 +280,15 @@
       <pre class="lines">
 
 
-19
 20
 21
 22
 23
-24</pre>
+24
+25</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-dropwizard-metrics/src/main/resources/vertx-dropwizard/metrics_service.rb', line 19</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-dropwizard-metrics/src/main/resources/vertx-dropwizard/metrics_service.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='id identifier rubyid_vertx'>vertx</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_vertx'>vertx</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -312,7 +318,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    @param measured the measure object
 
   </div>
 </div>
@@ -345,6 +351,9 @@
       
       
       
+        &mdash;
+        <div class='inline'>the base name of the measured object</div>
+      
     </li>
   
 </ul>
@@ -368,15 +377,15 @@
       <pre class="lines">
 
 
-36
-37
-38
-39
-40
-41</pre>
+41
+42
+43
+44
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-dropwizard-metrics/src/main/resources/vertx-dropwizard/metrics_service.rb', line 36</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-dropwizard-metrics/src/main/resources/vertx-dropwizard/metrics_service.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_base_name'>get_base_name</span><span class='lparen'>(</span><span class='id identifier rubyid_measured'>measured</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_measured'>measured</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -400,7 +409,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Will return the metrics that correspond with this measured object, null if no metrics is available.
+    Will return the metrics that correspond with this measured object, null if no metrics is available.<p/>
+
+ Note: in the case of scaled servers, the JsonObject returns an aggregation of the metrics as the
+ dropwizard backend reports to a single server.
 
   </div>
 </div>
@@ -459,15 +471,15 @@
       <pre class="lines">
 
 
-28
-29
-30
-31
 32
-33</pre>
+33
+34
+35
+36
+37</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-dropwizard-metrics/src/main/resources/vertx-dropwizard/metrics_service.rb', line 28</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-dropwizard-metrics/src/main/resources/vertx-dropwizard/metrics_service.rb', line 32</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_metrics_snapshot'>get_metrics_snapshot</span><span class='lparen'>(</span><span class='id identifier rubyid_o'>o</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -485,7 +497,7 @@
 </div>
 
     <div id="footer">
-  Generated on Thu May  7 22:25:39 2015 by
+  Generated on Tue May 26 00:19:31 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-1.9.3).
 </div>

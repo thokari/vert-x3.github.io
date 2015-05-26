@@ -1,0 +1,15 @@
+examples
+io.vertx.ext.web
+io.vertx.ext.web.handler
+io.vertx.ext.web.handler.impl
+io.vertx.ext.web.handler.sockjs
+io.vertx.ext.web.handler.sockjs.impl
+io.vertx.ext.web.impl
+io.vertx.ext.web.sstore
+io.vertx.ext.web.templ
+io.vertx.ext.web.templ.impl
+io.vertx.groovy.ext.web
+io.vertx.groovy.ext.web.handler
+io.vertx.groovy.ext.web.handler.sockjs
+io.vertx.groovy.ext.web.sstore
+io.vertx.groovy.ext.web.templ
