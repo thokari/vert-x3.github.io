@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>The JWT auth provider &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>The JWT auth provider</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_the_jwt_auth_provider">The JWT auth provider</a>
+<ul class="sectlevel2">
+<li><a href="#_the_jwt_keystore_file">The JWT keystore file</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_the_jwt_auth_provider">The JWT auth provider</a>
+<ul class="sectlevel2">
+<li><a href="#_the_jwt_keystore_file">The JWT keystore file</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+        <div class="sect1">
+<h2 id="_the_jwt_auth_provider">The JWT auth provider</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This component contains an out of the box a JWT implementation.</p>
+</div>
+<div class="paragraph">
+<p>JSON Web Token is a simple way to send information in the clear (usually in a URL) whose contents can be verified to
+be trusted. JWT are well suited for scenarios as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In a Single Sign-On scenario where you want a separate authentication server that can then send user information in
+a trusted way.</p>
+</li>
+<li>
+<p>Stateless API servers, very well suited for sinple page applications.</p>
+</li>
+<li>
+<p>etc&#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Before deciding on using JWT, it&#8217;s important to note that JWT does not encrypt the payload, it only signs it. You
+should not send any secret information using JWT, rather you should send information that is not secret but needs to
+be verified. For instance, sending a signed user id to indicate the user that should be logged in would work great!
+Sending a user&#8217;s password would be very, very bad.</p>
+</div>
+<div class="paragraph">
+<p>Its main advantages are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It allows you to verify token authenticity.</p>
+</li>
+<li>
+<p>It has a json body to contain any variable amount of data you want.</p>
+</li>
+<li>
+<p>It&#8217;s completely stateless.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To create an instance of the provider you use <code><a href="jsdoc/jwt_auth-JWTAuth.html">JWTAuth</a></code>. You specify the configuration
+in a JSON object.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of creating a JWT auth provider:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">var JWTAuth = require("vertx-auth-jwt-js/jwt_auth");
+
+var config = {
+  "keyStoreURI" : "classpath:///keystore.jceks",
+  "keyStoreType" : "jceks",
+  "keyStorePassword" : "secret"
+};
+
+var provider = JWTAuth.create(config);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A typical flow of JWT usage is that in your application you have one end point that issues tokens, this end point
+should be running in SSL mode, there after you verify the request user, say by its username and password you would
+do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">var JWTAuth = require("vertx-auth-jwt-js/jwt_auth");
+
+var config = {
+  "keyStoreURI" : "classpath:///keystore.jceks",
+  "keyStoreType" : "jceks",
+  "keyStorePassword" : "secret"
+};
+
+var provider = JWTAuth.create(config);
+
+// on the verify endpoint once you verify the identity of the user by its username/password
+if ("paulo" == username &amp;&amp; "super_secret" == password) {
+  var token = provider.generateToken({
+    "sub" : "paulo"
+  }, {
+  });
+  // now for any request to protected resources you should pass this string in the HTTP header Authorization as:
+  // Authorization: Bearer &lt;token&gt;
+};</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_jwt_keystore_file">The JWT keystore file</h3>
+<div class="paragraph">
+<p>This auth provider requires a keystore in the classpath or in the filesystem with either a <code>Mac</code>
+or a <code>Signature</code> in order to sign and verify the generated tokens.</p>
+</div>
+<div class="paragraph">
+<p>The implementation will, by default, look for the following aliases, however not all are required to be present. As
+a good practice <code>HS256</code> should be present:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>`HS256`:: HMAC using SHA-256 hash algorithm
+`HS384`:: HMAC using SHA-384 hash algorithm
+`HS512`:: HMAC using SHA-512 hash algorithm
+`RS256`:: RSASSA using SHA-256 hash algorithm
+`RS384`:: RSASSA using SHA-384 hash algorithm
+`RS512`:: RSASSA using SHA-512 hash algorithm
+`ES256`:: ECDSA using P-256 curve and SHA-256 hash algorithm
+`ES384`:: ECDSA using P-384 curve and SHA-384 hash algorithm
+`ES512`:: ECDSA using P-521 curve and SHA-512 hash algorithm</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When no keystore is provided the implementation falls back in unsecure mode and signatures will not be verified, this
+is useful for the cases where the payload if signed and or encrypted by external means.</p>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-05-27 19:14:04 BST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>

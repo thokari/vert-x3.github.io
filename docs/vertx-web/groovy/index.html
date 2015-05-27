@@ -116,7 +116,6 @@
 <li><a href="#_http_basic_authentication">HTTP Basic Authentication</a></li>
 <li><a href="#_redirect_auth_handler">Redirect auth handler</a></li>
 <li><a href="#_configuring_required_roles_and_permissions">Configuring required roles and permissions</a></li>
-<li><a href="#_oauth">OAuth</a></li>
 </ul>
 </li>
 <li><a href="#_serving_static_resources">Serving static resources</a>
@@ -126,6 +125,7 @@
 <li><a href="#_changing_the_web_root">Changing the web root</a></li>
 <li><a href="#_serving_hidden_files">Serving hidden files</a></li>
 <li><a href="#_directory_listing">Directory listing</a></li>
+<li><a href="#_disabling_file_caching_on_disk">Disabling file caching on disk</a></li>
 </ul>
 </li>
 <li><a href="#_cors_handling">CORS handling</a></li>
@@ -210,7 +210,6 @@
 <li><a href="#_http_basic_authentication">HTTP Basic Authentication</a></li>
 <li><a href="#_redirect_auth_handler">Redirect auth handler</a></li>
 <li><a href="#_configuring_required_roles_and_permissions">Configuring required roles and permissions</a></li>
-<li><a href="#_oauth">OAuth</a></li>
 </ul>
 </li>
 <li><a href="#_serving_static_resources">Serving static resources</a>
@@ -220,6 +219,7 @@
 <li><a href="#_changing_the_web_root">Changing the web root</a></li>
 <li><a href="#_serving_hidden_files">Serving hidden files</a></li>
 <li><a href="#_directory_listing">Directory listing</a></li>
+<li><a href="#_disabling_file_caching_on_disk">Disabling file caching on disk</a></li>
 </ul>
 </li>
 <li><a href="#_cors_handling">CORS handling</a></li>
@@ -1776,27 +1776,13 @@ response is complete and the session is stored back in the store.</p>
 <div class="sect2">
 <h3 id="_creating_an_auth_handler">Creating an auth handler</h3>
 <div class="paragraph">
-<p>To create an auth handler you need an instance of <code><a href="../../vertx-auth/groovy/groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code>. Auth provider is
-used for authentication and authorisation of users. It uses a simple role/permission mode. For full information on
-auth provider and how to use and configure it please consult the auth documentation.</p>
+<p>To create an auth handler you need an instance of <code><a href="../../vertx-auth-common/groovy/groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code>. Auth provider is
+used for authentication and authorisation of users. Vert.x provides several auth provider instances out of the box
+in the vertx-auth project. For full information on auth providers and how to use and configure them
+please consult the auth documentation.</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s a simple example of creating a basic auth provider that gets user data from a properties file and creating
-an auth handler from that, but it&#8217;s the same principle whatever concrete auth provider you use.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.auth.shiro.ShiroAuth
-import io.vertx.ext.auth.shiro.ShiroAuthRealmType
-import io.vertx.groovy.ext.web.handler.BasicAuthHandler
-
-def config = [:]
-config.io.vertx.ext.auth.shiro.PropertiesProviderConstants.PROPERTIES_PROPS_PATH_FIELD = "classpath:test-auth.properties"
-
-def authProvider = ShiroAuth.create(vertx, ShiroAuthRealmType.PROPERTIES, config)
-
-def basicAuthHandler = BasicAuthHandler.create(authProvider)</code></pre>
-</div>
+<p>Here&#8217;s a simple example of creating a basic auth handler given an auth provider.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1852,7 +1838,7 @@ router.route("/private/somepath").handler({ routingContext -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>If the auth handler has successfully authenticated and authorised the user it will inject a <code><a href="../../vertx-auth/groovy/groovydoc/io/vertx/groovy/ext/auth/User.html">User</a></code>
+<p>If the auth handler has successfully authenticated and authorised the user it will inject a <code><a href="../../vertx-auth-common/groovy/groovydoc/io/vertx/groovy/ext/auth/User.html">User</a></code>
 object into the <code><a href="groovydoc/io/vertx/groovy/ext/web/RoutingContext.html">RoutingContext</a></code> so it&#8217;s available in your handlers with:
 <code><a href="groovydoc/io/vertx/groovy/ext/web/RoutingContext.html#user()">user</a></code>.</p>
 </div>
@@ -1888,7 +1874,7 @@ prompt the user to enter their username and password.</p>
 and password encoded in Base64.</p>
 </div>
 <div class="paragraph">
-<p>When the basic auth handler receives this information, it calls the configured <code><a href="../../vertx-auth/groovy/groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code>
+<p>When the basic auth handler receives this information, it calls the configured <code><a href="../../vertx-auth-common/groovy/groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code>
 with the username and password to authenticate the user. If the authentication is successful the handler attempts
 to authorise the user. If that is successful then the routing of the request is allowed to continue to the application
 handlers, otherwise a <code>403</code> response is returned to signify that access is denied.</p>
@@ -1988,12 +1974,6 @@ settingsAuthHandler.addRole("admin")
 // Only "admin" has access to /private/settings
 router.route("/private/settings").handler(settingsAuthHandler)</code></pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_oauth">OAuth</h3>
-<div class="paragraph">
-<p>TODO</p>
 </div>
 </div>
 </div>
@@ -2113,6 +2093,22 @@ This can be configured with <code><a href="groovydoc/io/vertx/groovy/ext/web/han
 <div class="paragraph">
 <p>For <code>text/html</code> directory listing, the template used to render the directory listing page can be configured with
 <code><a href="groovydoc/io/vertx/groovy/ext/web/handler/StaticHandler.html#setDirectoryTemplate(java.lang.String)">setDirectoryTemplate</a></code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_disabling_file_caching_on_disk">Disabling file caching on disk</h3>
+<div class="paragraph">
+<p>By default, Vert.x will cache files that are served from the classpath into a file on disk in a sub-directory of a
+directory called <code>.vertx</code> in the current working directory. This is mainly useful when deploying services as
+fatjars in production where serving a file from the classpath every time can be slow.</p>
+</div>
+<div class="paragraph">
+<p>In development this can cause a problem, as if you update your static content while the server is running, the
+cached file will be served not the updated file.</p>
+</div>
+<div class="paragraph">
+<p>To disable file caching you can provide the system property <code>vertx.disableFileCaching</code> with the value <code>true</code>. E.g. you
+could set up a run configuration in your IDE to set this when runnning your main class.</p>
 </div>
 </div>
 </div>
@@ -2851,8 +2847,6 @@ import io.vertx.groovy.ext.web.handler.sockjs.SockJSHandler
 import io.vertx.groovy.ext.web.handler.CookieHandler
 import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.sstore.LocalSessionStore
-import io.vertx.groovy.ext.auth.shiro.ShiroAuth
-import io.vertx.ext.auth.shiro.ShiroAuthRealmType
 import io.vertx.groovy.ext.web.handler.BasicAuthHandler
 
 def router = Router.router(vertx)
@@ -2876,10 +2870,6 @@ sockJSHandler.bridge([
 
 router.route().handler(CookieHandler.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
-
-def authConfig = [:]
-authConfig.io.vertx.ext.auth.shiro.PropertiesProviderConstants.PROPERTIES_PROPS_PATH_FIELD = "classpath:test-auth.properties"
-def authProvider = ShiroAuth.create(vertx, ShiroAuthRealmType.PROPERTIES, authConfig)
 
 def basicAuthHandler = BasicAuthHandler.create(authProvider)
 
@@ -2972,7 +2962,7 @@ authorisation or metrics.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-26 00:22:38 BST
+                Last updated 2015-05-27 19:14:04 BST
               
               
             </div>

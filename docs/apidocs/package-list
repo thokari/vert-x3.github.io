@@ -51,11 +51,13 @@ io.vertx.rxjava.core.shareddata
 io.vertx.rxjava.core.streams
 io.vertx.rxjava.ext.asyncsql
 io.vertx.rxjava.ext.auth
+io.vertx.rxjava.ext.auth.common
 io.vertx.rxjava.ext.auth.jdbc
 io.vertx.rxjava.ext.auth.jwt
 io.vertx.rxjava.ext.auth.shiro
 io.vertx.rxjava.ext.dropwizard
 io.vertx.rxjava.ext.jdbc
+io.vertx.rxjava.ext.mail
 io.vertx.rxjava.ext.mongo
 io.vertx.rxjava.ext.unit
 io.vertx.rxjava.ext.unit.collect
