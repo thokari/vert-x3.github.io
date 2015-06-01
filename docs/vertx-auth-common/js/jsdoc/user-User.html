@@ -49,8 +49,7 @@
     
     
     <div class="description">
-        Represents an authenticate User and contains operations to authorise the user, using a role/permission
- based model.
+        Represents an authenticates User and contains operations to authorise the user.
  <p>
  Please consult the documentation for a detailed explanation.
     </div>
@@ -85,7 +84,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line33">line 33</a>
+        <a href="user.js.html">user.js</a>, <a href="user.js.html#line32">line 32</a>
     </li></ul></dd>
     
     
@@ -139,7 +138,7 @@
     
     
     <div class="description">
-        The User object will cache any roles or permissions that it knows it has to avoid hitting the
+        The User object will cache any authorities that it knows it has to avoid hitting the
    underlying auth provider each time.  Use this method if you want to clear this cache.
     </div>
     
@@ -173,7 +172,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line134">line 134</a>
+        <a href="user.js.html">user.js</a>, <a href="user.js.html#line67">line 67</a>
     </li></ul></dd>
     
     
@@ -223,7 +222,7 @@
         
             
 <dt>
-    <h4 class="name" id="hasPermission"><span class="type-signature"></span>hasPermission<span class="signature">(permission, resultHandler)</span><span class="type-signature"> &rarr; {User}</span></h4>
+    <h4 class="name" id="isAuthorised"><span class="type-signature"></span>isAuthorised<span class="signature">(authority, resultHandler)</span><span class="type-signature"> &rarr; {User}</span></h4>
     
     
 </dt>
@@ -231,7 +230,7 @@
     
     
     <div class="description">
-        Does the user have the specified permission?
+        Is the user authorised to
     </div>
     
 
@@ -265,7 +264,7 @@
 	
         <tr>
             
-                <td class="name"><code>permission</code></td>
+                <td class="name"><code>authority</code></td>
             
             
             <td class="type">
@@ -281,7 +280,7 @@
             
             
             
-            <td class="description last">the permission</td>
+            <td class="description last">the authority - what this really means is determined by the specific implementation. It might represent a permission to access a resource e.g. `printers:printer34` or it might represent authority to a role in a roles based model, e.g. `role:admin`.</td>
         </tr>
 	
 	
@@ -304,7 +303,7 @@
             
             
             
-            <td class="description last">handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have the permission or `false` otherwise.</td>
+            <td class="description last">handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they has the authority or `false` otherwise.</td>
         </tr>
 	
 	
@@ -335,493 +334,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line68">line 68</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    the User to enable fluent use
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">User</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="hasPermissions"><span class="type-signature"></span>hasPermissions<span class="signature">(permissions, resultHandler)</span><span class="type-signature"> &rarr; {User}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Does the user have all the specified permissions?
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>permissions</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">the set of permissions</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>resultHandler</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have all the permissions or `false` otherwise.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line112">line 112</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    the User to enable fluent use
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">User</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="hasRole"><span class="type-signature"></span>hasRole<span class="signature">(role, resultHandler)</span><span class="type-signature"> &rarr; {User}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Does the user have the specified role?
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>role</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">the role</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>resultHandler</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have the role or `false` otherwise.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line46">line 46</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    the User to enable fluent use
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">User</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="hasRoles"><span class="type-signature"></span>hasRoles<span class="signature">(roles, resultHandler)</span><span class="type-signature"> &rarr; {User}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Does the user have all the specified roles?
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>roles</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">the set of roles</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>resultHandler</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have all the roles or `false` otherwise.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line90">line 90</a>
+        <a href="user.js.html">user.js</a>, <a href="user.js.html#line45">line 45</a>
     </li></ul></dd>
     
     
@@ -918,7 +431,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line155">line 155</a>
+        <a href="user.js.html">user.js</a>, <a href="user.js.html#line88">line 88</a>
     </li></ul></dd>
     
     
@@ -942,6 +455,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    JSON representation of the Principal
+</div>
+
 
 
 <dl>
@@ -1054,7 +571,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line169">line 169</a>
+        <a href="user.js.html">user.js</a>, <a href="user.js.html#line102">line 102</a>
     </li></ul></dd>
     
     
@@ -1101,7 +618,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Tue May 26 2015 19:35:35 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun May 31 2015 12:14:50 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

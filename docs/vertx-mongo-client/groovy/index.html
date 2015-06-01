@@ -754,29 +754,32 @@ Dropping a collection will delete all documents within it!
 <div class="sect2">
 <h3 id="_running_other_mongodb_commands">Running other MongoDB commands</h3>
 <div class="paragraph">
-<p>You can run arbitrary MongoDB commands with <code><a href="groovydoc/io/vertx/groovy/ext/mongo/MongoClient.html#runCommand(io.vertx.core.json.JsonObject,%20io.vertx.core.Handler)">runCommand</a></code>.</p>
+<p>You can run arbitrary MongoDB commands with <code><a href="groovydoc/io/vertx/groovy/ext/mongo/MongoClient.html#runCommand(java.lang.String,%20io.vertx.core.json.JsonObject,%20io.vertx.core.Handler)">runCommand</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Commands can be used to run more advanced mongoDB features, such as using MapReduce.
 For more information see the mongo docs for supported <a href="http://docs.mongodb.org/manual/reference/command">Commands</a>.</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example of running a ping command</p>
+<p>Here&#8217;s an example of running an aggregate command. Note that the command name must be specified as a parameter
+and also be contained in the JSON that represents the command. This is because JSON is not ordered but BSON is
+ordered and MongoDB expects the first BSON entry to be the name of the command. In order for us to know which
+of the entries in the JSON is the command name it must be specified as a parameter.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">mongoClient.runCommand([
-  ping:1
-], { res -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def command = [
+  aggregate:"collection_name",
+  pipeline:[
+  ]
+]
 
+mongoClient.runCommand("aggregate", command, { res -&gt;
   if (res.succeeded()) {
-
-    println("Result: ${res.result().toString()}")
-
+    def resArr = res.result()."result"
+    // etc
   } else {
-
     res.cause().printStackTrace()
-
   }
 })</code></pre>
 </div>
@@ -1031,7 +1034,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-27 19:14:04 BST
+                Last updated 2015-06-01 00:22:30 CEST
               
               
             </div>

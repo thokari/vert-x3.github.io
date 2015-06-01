@@ -84,7 +84,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line38">line 38</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line39">line 39</a>
     </li></ul></dd>
     
     
@@ -220,7 +220,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line447">line 447</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line452">line 452</a>
     </li></ul></dd>
     
     
@@ -360,7 +360,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line231">line 231</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line232">line 232</a>
     </li></ul></dd>
     
     
@@ -420,6 +420,8 @@
     <div class="description">
         Add a handler that will be called just before headers are written to the response. This gives you a hook where
    you can write any extra headers before the response has been written when it will be too late.
+   The handler will be passed a future, when you've completed the work you want to do you should complete (or fail)
+   the future. This can be done after the handler has returned.
     </div>
     
 
@@ -500,7 +502,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line418">line 418</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line421">line 421</a>
     </li></ul></dd>
     
     
@@ -587,7 +589,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line262">line 262</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line263">line 263</a>
     </li></ul></dd>
     
     
@@ -679,7 +681,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line277">line 277</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line278">line 278</a>
     </li></ul></dd>
     
     
@@ -771,7 +773,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line177">line 177</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line178">line 178</a>
     </li></ul></dd>
     
     
@@ -917,7 +919,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line104">line 104</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line105">line 105</a>
     </li></ul></dd>
     
     
@@ -982,7 +984,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line475">line 475</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line480">line 480</a>
     </li></ul></dd>
     
     
@@ -1073,7 +1075,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line339">line 339</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line340">line 340</a>
     </li></ul></dd>
     
     
@@ -1217,7 +1219,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line134">line 134</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line135">line 135</a>
     </li></ul></dd>
     
     
@@ -1309,7 +1311,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line403">line 403</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line404">line 404</a>
     </li></ul></dd>
     
     
@@ -1396,7 +1398,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line324">line 324</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line325">line 325</a>
     </li></ul></dd>
     
     
@@ -1488,7 +1490,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line309">line 309</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line310">line 310</a>
     </li></ul></dd>
     
     
@@ -1633,7 +1635,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line292">line 292</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line293">line 293</a>
     </li></ul></dd>
     
     
@@ -1773,7 +1775,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line216">line 216</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line217">line 217</a>
     </li></ul></dd>
     
     
@@ -1860,7 +1862,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line163">line 163</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line164">line 164</a>
     </li></ul></dd>
     
     
@@ -1961,7 +1963,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line88">line 88</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line89">line 89</a>
     </li></ul></dd>
     
     
@@ -2040,7 +2042,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line201">line 201</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line202">line 202</a>
     </li></ul></dd>
     
     
@@ -2202,7 +2204,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line119">line 119</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line120">line 120</a>
     </li></ul></dd>
     
     
@@ -2341,7 +2343,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line461">line 461</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line466">line 466</a>
     </li></ul></dd>
     
     
@@ -2481,7 +2483,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line247">line 247</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line248">line 248</a>
     </li></ul></dd>
     
     
@@ -2620,7 +2622,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line432">line 432</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line437">line 437</a>
     </li></ul></dd>
     
     
@@ -2707,7 +2709,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line50">line 50</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line51">line 51</a>
     </li></ul></dd>
     
     
@@ -2798,7 +2800,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line67">line 67</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line68">line 68</a>
     </li></ul></dd>
     
     
@@ -2895,7 +2897,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line355">line 355</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line356">line 356</a>
     </li></ul></dd>
     
     
@@ -3034,7 +3036,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line527">line 527</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line532">line 532</a>
     </li></ul></dd>
     
     
@@ -3151,7 +3153,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line488">line 488</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line493">line 493</a>
     </li></ul></dd>
     
     
@@ -3268,7 +3270,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line501">line 501</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line506">line 506</a>
     </li></ul></dd>
     
     
@@ -3385,7 +3387,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line514">line 514</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line519">line 519</a>
     </li></ul></dd>
     
     
@@ -3456,7 +3458,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line385">line 385</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line386">line 386</a>
     </li></ul></dd>
     
     
@@ -3547,7 +3549,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line369">line 369</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line370">line 370</a>
     </li></ul></dd>
     
     
@@ -3634,7 +3636,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line148">line 148</a>
+        <a href="routing_context.js.html">routing_context.js</a>, <a href="routing_context.js.html#line149">line 149</a>
     </li></ul></dd>
     
     
@@ -3701,13 +3703,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="auth_handler.html">vertx-web-js/auth_handler</a></li><li><a href="basic_auth_handler.html">vertx-web-js/basic_auth_handler</a></li><li><a href="body_handler.html">vertx-web-js/body_handler</a></li><li><a href="bridge_event.html">vertx-web-js/bridge_event</a></li><li><a href="clustered_session_store.html">vertx-web-js/clustered_session_store</a></li><li><a href="cookie.html">vertx-web-js/cookie</a></li><li><a href="cookie_handler.html">vertx-web-js/cookie_handler</a></li><li><a href="cors_handler.html">vertx-web-js/cors_handler</a></li><li><a href="error_handler.html">vertx-web-js/error_handler</a></li><li><a href="favicon_handler.html">vertx-web-js/favicon_handler</a></li><li><a href="file_upload.html">vertx-web-js/file_upload</a></li><li><a href="form_login_handler.html">vertx-web-js/form_login_handler</a></li><li><a href="handlebars_template_engine.html">vertx-web-js/handlebars_template_engine</a></li><li><a href="jade_template_engine.html">vertx-web-js/jade_template_engine</a></li><li><a href="local_session_store.html">vertx-web-js/local_session_store</a></li><li><a href="logger_handler.html">vertx-web-js/logger_handler</a></li><li><a href="mvel_template_engine.html">vertx-web-js/mvel_template_engine</a></li><li><a href="redirect_auth_handler.html">vertx-web-js/redirect_auth_handler</a></li><li><a href="response_time_handler.html">vertx-web-js/response_time_handler</a></li><li><a href="route.html">vertx-web-js/route</a></li><li><a href="router.html">vertx-web-js/router</a></li><li><a href="routing_context.html">vertx-web-js/routing_context</a></li><li><a href="session.html">vertx-web-js/session</a></li><li><a href="session_handler.html">vertx-web-js/session_handler</a></li><li><a href="session_store.html">vertx-web-js/session_store</a></li><li><a href="sock_js_handler.html">vertx-web-js/sock_js_handler</a></li><li><a href="sock_js_socket.html">vertx-web-js/sock_js_socket</a></li><li><a href="static_handler.html">vertx-web-js/static_handler</a></li><li><a href="template_engine.html">vertx-web-js/template_engine</a></li><li><a href="template_handler.html">vertx-web-js/template_handler</a></li><li><a href="thymeleaf_template_engine.html">vertx-web-js/thymeleaf_template_engine</a></li><li><a href="timeout_handler.html">vertx-web-js/timeout_handler</a></li><li><a href="user_handler.html">vertx-web-js/user_handler</a></li><li><a href="user_session_handler.html">vertx-web-js/user_session_handler</a></li></ul><h3>Classes</h3><ul><li><a href="auth_handler-AuthHandler.html">AuthHandler</a></li><li><a href="basic_auth_handler-BasicAuthHandler.html">BasicAuthHandler</a></li><li><a href="body_handler-BodyHandler.html">BodyHandler</a></li><li><a href="bridge_event-BridgeEvent.html">BridgeEvent</a></li><li><a href="clustered_session_store-ClusteredSessionStore.html">ClusteredSessionStore</a></li><li><a href="cookie_handler-CookieHandler.html">CookieHandler</a></li><li><a href="cookie-Cookie.html">Cookie</a></li><li><a href="cors_handler-CorsHandler.html">CorsHandler</a></li><li><a href="error_handler-ErrorHandler.html">ErrorHandler</a></li><li><a href="favicon_handler-FaviconHandler.html">FaviconHandler</a></li><li><a href="file_upload-FileUpload.html">FileUpload</a></li><li><a href="form_login_handler-FormLoginHandler.html">FormLoginHandler</a></li><li><a href="handlebars_template_engine-HandlebarsTemplateEngine.html">HandlebarsTemplateEngine</a></li><li><a href="jade_template_engine-JadeTemplateEngine.html">JadeTemplateEngine</a></li><li><a href="local_session_store-LocalSessionStore.html">LocalSessionStore</a></li><li><a href="logger_handler-LoggerHandler.html">LoggerHandler</a></li><li><a href="mvel_template_engine-MVELTemplateEngine.html">MVELTemplateEngine</a></li><li><a href="redirect_auth_handler-RedirectAuthHandler.html">RedirectAuthHandler</a></li><li><a href="response_time_handler-ResponseTimeHandler.html">ResponseTimeHandler</a></li><li><a href="router-Router.html">Router</a></li><li><a href="route-Route.html">Route</a></li><li><a href="routing_context-RoutingContext.html">RoutingContext</a></li><li><a href="session_handler-SessionHandler.html">SessionHandler</a></li><li><a href="session_store-SessionStore.html">SessionStore</a></li><li><a href="session-Session.html">Session</a></li><li><a href="sock_js_handler-SockJSHandler.html">SockJSHandler</a></li><li><a href="sock_js_socket-SockJSSocket.html">SockJSSocket</a></li><li><a href="static_handler-StaticHandler.html">StaticHandler</a></li><li><a href="template_engine-TemplateEngine.html">TemplateEngine</a></li><li><a href="template_handler-TemplateHandler.html">TemplateHandler</a></li><li><a href="thymeleaf_template_engine-ThymeleafTemplateEngine.html">ThymeleafTemplateEngine</a></li><li><a href="timeout_handler-TimeoutHandler.html">TimeoutHandler</a></li><li><a href="user_handler-UserHandler.html">UserHandler</a></li><li><a href="user_session_handler-UserSessionHandler.html">UserSessionHandler</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="auth_handler.html">vertx-web-js/auth_handler</a></li><li><a href="basic_auth_handler.html">vertx-web-js/basic_auth_handler</a></li><li><a href="body_handler.html">vertx-web-js/body_handler</a></li><li><a href="bridge_event.html">vertx-web-js/bridge_event</a></li><li><a href="clustered_session_store.html">vertx-web-js/clustered_session_store</a></li><li><a href="cookie.html">vertx-web-js/cookie</a></li><li><a href="cookie_handler.html">vertx-web-js/cookie_handler</a></li><li><a href="cors_handler.html">vertx-web-js/cors_handler</a></li><li><a href="error_handler.html">vertx-web-js/error_handler</a></li><li><a href="favicon_handler.html">vertx-web-js/favicon_handler</a></li><li><a href="file_upload.html">vertx-web-js/file_upload</a></li><li><a href="form_login_handler.html">vertx-web-js/form_login_handler</a></li><li><a href="handlebars_template_engine.html">vertx-web-js/handlebars_template_engine</a></li><li><a href="jade_template_engine.html">vertx-web-js/jade_template_engine</a></li><li><a href="jwt_auth_handler.html">vertx-web-js/jwt_auth_handler</a></li><li><a href="local_session_store.html">vertx-web-js/local_session_store</a></li><li><a href="logger_handler.html">vertx-web-js/logger_handler</a></li><li><a href="mvel_template_engine.html">vertx-web-js/mvel_template_engine</a></li><li><a href="redirect_auth_handler.html">vertx-web-js/redirect_auth_handler</a></li><li><a href="response_time_handler.html">vertx-web-js/response_time_handler</a></li><li><a href="route.html">vertx-web-js/route</a></li><li><a href="router.html">vertx-web-js/router</a></li><li><a href="routing_context.html">vertx-web-js/routing_context</a></li><li><a href="session.html">vertx-web-js/session</a></li><li><a href="session_handler.html">vertx-web-js/session_handler</a></li><li><a href="session_store.html">vertx-web-js/session_store</a></li><li><a href="sock_js_handler.html">vertx-web-js/sock_js_handler</a></li><li><a href="sock_js_socket.html">vertx-web-js/sock_js_socket</a></li><li><a href="static_handler.html">vertx-web-js/static_handler</a></li><li><a href="template_engine.html">vertx-web-js/template_engine</a></li><li><a href="template_handler.html">vertx-web-js/template_handler</a></li><li><a href="thymeleaf_template_engine.html">vertx-web-js/thymeleaf_template_engine</a></li><li><a href="timeout_handler.html">vertx-web-js/timeout_handler</a></li><li><a href="user_handler.html">vertx-web-js/user_handler</a></li><li><a href="user_session_handler.html">vertx-web-js/user_session_handler</a></li></ul><h3>Classes</h3><ul><li><a href="auth_handler-AuthHandler.html">AuthHandler</a></li><li><a href="basic_auth_handler-BasicAuthHandler.html">BasicAuthHandler</a></li><li><a href="body_handler-BodyHandler.html">BodyHandler</a></li><li><a href="bridge_event-BridgeEvent.html">BridgeEvent</a></li><li><a href="clustered_session_store-ClusteredSessionStore.html">ClusteredSessionStore</a></li><li><a href="cookie_handler-CookieHandler.html">CookieHandler</a></li><li><a href="cookie-Cookie.html">Cookie</a></li><li><a href="cors_handler-CorsHandler.html">CorsHandler</a></li><li><a href="error_handler-ErrorHandler.html">ErrorHandler</a></li><li><a href="favicon_handler-FaviconHandler.html">FaviconHandler</a></li><li><a href="file_upload-FileUpload.html">FileUpload</a></li><li><a href="form_login_handler-FormLoginHandler.html">FormLoginHandler</a></li><li><a href="handlebars_template_engine-HandlebarsTemplateEngine.html">HandlebarsTemplateEngine</a></li><li><a href="jade_template_engine-JadeTemplateEngine.html">JadeTemplateEngine</a></li><li><a href="jwt_auth_handler-JWTAuthHandler.html">JWTAuthHandler</a></li><li><a href="local_session_store-LocalSessionStore.html">LocalSessionStore</a></li><li><a href="logger_handler-LoggerHandler.html">LoggerHandler</a></li><li><a href="mvel_template_engine-MVELTemplateEngine.html">MVELTemplateEngine</a></li><li><a href="redirect_auth_handler-RedirectAuthHandler.html">RedirectAuthHandler</a></li><li><a href="response_time_handler-ResponseTimeHandler.html">ResponseTimeHandler</a></li><li><a href="router-Router.html">Router</a></li><li><a href="route-Route.html">Route</a></li><li><a href="routing_context-RoutingContext.html">RoutingContext</a></li><li><a href="session_handler-SessionHandler.html">SessionHandler</a></li><li><a href="session_store-SessionStore.html">SessionStore</a></li><li><a href="session-Session.html">Session</a></li><li><a href="sock_js_handler-SockJSHandler.html">SockJSHandler</a></li><li><a href="sock_js_socket-SockJSSocket.html">SockJSSocket</a></li><li><a href="static_handler-StaticHandler.html">StaticHandler</a></li><li><a href="template_engine-TemplateEngine.html">TemplateEngine</a></li><li><a href="template_handler-TemplateHandler.html">TemplateHandler</a></li><li><a href="thymeleaf_template_engine-ThymeleafTemplateEngine.html">ThymeleafTemplateEngine</a></li><li><a href="timeout_handler-TimeoutHandler.html">TimeoutHandler</a></li><li><a href="user_handler-UserHandler.html">UserHandler</a></li><li><a href="user_session_handler-UserSessionHandler.html">UserSessionHandler</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed May 27 2015 19:12:31 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun May 31 2015 12:15:15 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

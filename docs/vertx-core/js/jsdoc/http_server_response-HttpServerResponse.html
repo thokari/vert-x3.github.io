@@ -84,7 +84,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line33">line 33</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line34">line 34</a>
     </li></ul></dd>
     
     
@@ -221,7 +221,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line412">line 412</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line417">line 417</a>
     </li></ul></dd>
     
     
@@ -312,7 +312,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line352">line 352</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line353">line 353</a>
     </li></ul></dd>
     
     
@@ -430,7 +430,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line292">line 292</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line293">line 293</a>
     </li></ul></dd>
     
     
@@ -565,7 +565,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line111">line 111</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line112">line 112</a>
     </li></ul></dd>
     
     
@@ -723,7 +723,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line307">line 307</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line308">line 308</a>
     </li></ul></dd>
     
     
@@ -788,7 +788,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line366">line 366</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line367">line 367</a>
     </li></ul></dd>
     
     
@@ -927,7 +927,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line59">line 59</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line60">line 60</a>
     </li></ul></dd>
     
     
@@ -1010,7 +1010,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line126">line 126</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line127">line 127</a>
     </li></ul></dd>
     
     
@@ -1101,7 +1101,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line157">line 157</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line158">line 158</a>
     </li></ul></dd>
     
     
@@ -1193,7 +1193,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line225">line 225</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line226">line 226</a>
     </li></ul></dd>
     
     
@@ -1257,6 +1257,8 @@
     <div class="description">
         Provide a handler that will be called just before the headers are written to the wire.<p>
    This provides a hook allowing you to add any more headers or do any more operations before this occurs.
+   The handler will be passed a future, when you've completed the work you want to do you should complete (or fail)
+   the future. This can be done after the handler has returned.
     </div>
     
 
@@ -1337,7 +1339,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line395">line 395</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line398">line 398</a>
     </li></ul></dd>
     
     
@@ -1424,7 +1426,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line380">line 380</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line381">line 381</a>
     </li></ul></dd>
     
     
@@ -1515,7 +1517,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line211">line 211</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line212">line 212</a>
     </li></ul></dd>
     
     
@@ -1681,7 +1683,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line243">line 243</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line244">line 244</a>
     </li></ul></dd>
     
     
@@ -1843,7 +1845,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line276">line 276</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line277">line 277</a>
     </li></ul></dd>
     
     
@@ -2006,7 +2008,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line329">line 329</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line330">line 330</a>
     </li></ul></dd>
     
     
@@ -2155,7 +2157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line196">line 196</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line197">line 197</a>
     </li></ul></dd>
     
     
@@ -2295,7 +2297,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line141">line 141</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line142">line 142</a>
     </li></ul></dd>
     
     
@@ -2434,7 +2436,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line171">line 171</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line172">line 172</a>
     </li></ul></dd>
     
     
@@ -2569,7 +2571,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line97">line 97</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line98">line 98</a>
     </li></ul></dd>
     
     
@@ -2652,7 +2654,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line258">line 258</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line259">line 259</a>
     </li></ul></dd>
     
     
@@ -2818,7 +2820,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line77">line 77</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line78">line 78</a>
     </li></ul></dd>
     
     
@@ -2909,7 +2911,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line46">line 46</a>
+        <a href="http_server_response.js.html">http_server_response.js</a>, <a href="http_server_response.js.html#line47">line 47</a>
     </li></ul></dd>
     
     
@@ -2978,7 +2980,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed May 27 2015 10:57:45 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun May 31 2015 12:15:30 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

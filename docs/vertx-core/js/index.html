@@ -827,7 +827,7 @@ skip hand-in-hand with baby lambs across sunny green meadows.</p>
 </div>
 <div class="paragraph">
 <p>Fact is, many, if not most libraries, especially in the JVM ecosystem have synchronous APIs and many of the methods are
-likely to block. A good example is the JDBC API - it&#8217;s inherently asynchronous, and no matter how hard it tries, Vert.x
+likely to block. A good example is the JDBC API - it&#8217;s inherently synchronous, and no matter how hard it tries, Vert.x
 cannot sprinkle magic pixie dust on it to make it asynchronous.</p>
 </div>
 <div class="paragraph">
@@ -3843,7 +3843,7 @@ compressions and send it back to the client.</p>
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
   "keepAlive" : false
 };
-var client = vertx.createHttpClient();</code></pre>
+var client = vertx.createHttpClient(options);</code></pre>
 </div>
 </div>
 </div>
@@ -3957,7 +3957,8 @@ one of the general purpose request methods such as <code><a href="jsdoc/http_cli
 which can be used to write to the request body or write headers.</p>
 </div>
 <div class="paragraph">
-<p>Here are some examples of writing a POST request with a body:</p>
+<p>Here are some examples of writing a POST request with a body:
+m</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6028,7 +6029,7 @@ order to gather metrics. For more information on this, please consult the
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-27 19:14:04 BST
+                Last updated 2015-06-01 00:22:28 CEST
               
               
             </div>

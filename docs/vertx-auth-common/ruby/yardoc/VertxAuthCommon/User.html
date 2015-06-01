@@ -101,8 +101,7 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    Represents an authenticate User and contains operations to authorise the user, using a role/permission
- based model.
+    Represents an authenticates User and contains operations to authorise the user.
  <p>
  Please consult the documentation for a detailed explanation.
 
@@ -143,7 +142,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>The User object will cache any roles or permissions that it knows it has to avoid hitting the  underlying auth provider each time.</div></span>
+    <span class="summary_desc"><div class='inline'>The User object will cache any authorities that it knows it has to avoid hitting the  underlying auth provider each time.</div></span>
   
 </li>
 
@@ -151,7 +150,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#has_permission-instance_method" title="#has_permission (instance method)">- (self) <strong>has_permission</strong>(permission = nil) { ... }</a>
+      <a href="#is_authorised-instance_method" title="#is_authorised (instance method)">- (self) <strong>is_authorised</strong>(authority = nil) { ... }</a>
     
 
     
@@ -165,73 +164,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Does the user have the specified permission?.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#has_permissions-instance_method" title="#has_permissions (instance method)">- (self) <strong>has_permissions</strong>(permissions = nil) { ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Does the user have all the specified permissions?.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#has_role-instance_method" title="#has_role (instance method)">- (self) <strong>has_role</strong>(role = nil) { ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Does the user have the specified role?.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#has_roles-instance_method" title="#has_roles (instance method)">- (self) <strong>has_roles</strong>(roles = nil) { ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Does the user have all the specified roles?.</div></span>
+    <span class="summary_desc"><div class='inline'>Is the user authorised to.</div></span>
   
 </li>
 
@@ -300,7 +233,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    The User object will cache any roles or permissions that it knows it has to avoid hitting the
+    The User object will cache any authorities that it knows it has to avoid hitting the
  underlying auth provider each time.  Use this method if you want to clear this cache.
 
   </div>
@@ -340,16 +273,16 @@
       <pre class="lines">
 
 
-67
-68
-69
-70
-71
-72
-73</pre>
+33
+34
+35
+36
+37
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 67</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clear_cache'>clear_cache</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -364,9 +297,9 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="has_permission-instance_method">
+  <h3 class="signature " id="is_authorised-instance_method">
   
-    - (<tt>self</tt>) <strong>has_permission</strong>(permission = nil) { ... }
+    - (<tt>self</tt>) <strong>is_authorised</strong>(authority = nil) { ... }
   
 
   
@@ -374,7 +307,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Does the user have the specified permission?
+    Is the user authorised to
 
   </div>
 </div>
@@ -384,7 +317,7 @@
   
     <li>
       
-        <span class='name'>permission</span>
+        <span class='name'>authority</span>
       
       
         <span class='type'>(<tt>String</tt>)</span>
@@ -394,7 +327,7 @@
       
       
         &mdash;
-        <div class='inline'>the permission</div>
+        <div class='inline'>the authority - what this really means is determined by the specific implementation. It might represent a permission to access a resource e.g. `printers:printer34` or it might represent authority to a role in a roles based model, e.g. `role:admin`.</div>
       
     </li>
   
@@ -411,7 +344,7 @@
       
       
         
-        <div class='inline'>handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have the permission or `false` otherwise.</div>
+        <div class='inline'>handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they has the authority or `false` otherwise.</div>
       
     </li>
   
@@ -449,350 +382,23 @@
       <pre class="lines">
 
 
-35
-36
-37
-38
-39
-40
-41</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 35</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_has_permission'>has_permission</span><span class='lparen'>(</span><span class='id identifier rubyid_permission'>permission</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_permission'>permission</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:hasPermission</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_permission'>permission</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
-    <span class='kw'>return</span> <span class='kw'>self</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling has_permission(permission)</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="has_permissions-instance_method">
-  
-    - (<tt>self</tt>) <strong>has_permissions</strong>(permissions = nil) { ... }
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    Does the user have all the specified permissions?
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>permissions</span>
-      
-      
-        <span class='type'>(<tt>Set&lt;String&gt;</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>the set of permissions</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        
-        <div class='inline'>handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have all the permissions or `false` otherwise.</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Raises:</p>
-<ul class="raise">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>ArgumentError</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-57
-58
-59
-60
-61
-62
-63</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 57</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_has_permissions'>has_permissions</span><span class='lparen'>(</span><span class='id identifier rubyid_permissions'>permissions</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_permissions'>permissions</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Set</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:hasPermissions</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>JavaUtil</span><span class='op'>::</span><span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>JavaUtil</span><span class='op'>::</span><span class='const'>LinkedHashSet</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_permissions'>permissions</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_element'>element</span><span class='op'>|</span> <span class='id identifier rubyid_element'>element</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
-    <span class='kw'>return</span> <span class='kw'>self</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling has_permissions(permissions)</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="has_role-instance_method">
-  
-    - (<tt>self</tt>) <strong>has_role</strong>(role = nil) { ... }
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    Does the user have the specified role?
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>role</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>the role</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        
-        <div class='inline'>handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have the role or `false` otherwise.</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Raises:</p>
-<ul class="raise">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>ArgumentError</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
+23
 24
 25
 26
 27
 28
-29
-30</pre>
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 24</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 23</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_has_role'>has_role</span><span class='lparen'>(</span><span class='id identifier rubyid_role'>role</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_role'>role</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:hasRole</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_role'>role</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_is_authorised'>is_authorised</span><span class='lparen'>(</span><span class='id identifier rubyid_authority'>authority</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_authority'>authority</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:isAuthorised</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_authority'>authority</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='kw'>self</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling has_role(role)</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="has_roles-instance_method">
-  
-    - (<tt>self</tt>) <strong>has_roles</strong>(roles = nil) { ... }
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    Does the user have all the specified roles?
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>roles</span>
-      
-      
-        <span class='type'>(<tt>Set&lt;String&gt;</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>the set of roles</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        
-        <div class='inline'>handler that will be called with an io.vertx.core.AsyncResult containing the value `true` if the they have all the roles or `false` otherwise.</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Raises:</p>
-<ul class="raise">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>ArgumentError</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-46
-47
-48
-49
-50
-51
-52</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 46</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_has_roles'>has_roles</span><span class='lparen'>(</span><span class='id identifier rubyid_roles'>roles</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_roles'>roles</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Set</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:hasRoles</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>JavaUtil</span><span class='op'>::</span><span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>JavaUtil</span><span class='op'>::</span><span class='const'>LinkedHashSet</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_roles'>roles</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_element'>element</span><span class='op'>|</span> <span class='id identifier rubyid_element'>element</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
-    <span class='kw'>return</span> <span class='kw'>self</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling has_roles(roles)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling is_authorised(authority)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -832,6 +438,9 @@
       
       
       
+        &mdash;
+        <div class='inline'>JSON representation of the Principal</div>
+      
     </li>
   
 </ul>
@@ -855,15 +464,15 @@
       <pre class="lines">
 
 
-82
-83
-84
-85
-86
-87</pre>
+48
+49
+50
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 82</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 48</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_principal'>principal</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -934,15 +543,15 @@
       <pre class="lines">
 
 
-92
-93
-94
-95
-96
-97</pre>
+58
+59
+60
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 92</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-auth/vertx-auth-common/src/main/resources/vertx-auth-common/user.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_auth_provider'>set_auth_provider</span><span class='lparen'>(</span><span class='id identifier rubyid_authProvider'>authProvider</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_authProvider'>authProvider</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -960,7 +569,7 @@
 </div>
 
     <div id="footer">
-  Generated on Tue May 26 19:36:45 2015 by
+  Generated on Sun May 31 12:16:58 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-1.9.3).
 </div>

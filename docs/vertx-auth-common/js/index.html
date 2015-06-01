@@ -74,7 +74,7 @@
 <li><a href="#_authentication">Authentication</a></li>
 <li><a href="#_authorisation">Authorisation</a>
 <ul class="sectlevel2">
-<li><a href="#_caching_roles_and_permissions">Caching roles and permissions</a></li>
+<li><a href="#_caching_authorities">Caching authorities</a></li>
 <li><a href="#_the_user_principal">The User Principal</a></li>
 </ul>
 </li>
@@ -90,7 +90,7 @@
 <li><a href="#_authentication">Authentication</a></li>
 <li><a href="#_authorisation">Authorisation</a>
 <ul class="sectlevel2">
-<li><a href="#_caching_roles_and_permissions">Caching roles and permissions</a></li>
+<li><a href="#_caching_authorities">Caching authorities</a></li>
 <li><a href="#_the_user_principal">The User Principal</a></li>
 </ul>
 </li>
@@ -104,14 +104,6 @@
 applications and can be backed by different providers.</p>
 </div>
 <div class="paragraph">
-<p>It also provides an implementation that uses <a href="http://shiro.apache.org/">Apache Shiro</a> out-of-the-box but you can provide
-your own implementation by implementing the <code><a href="jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code> interface.</p>
-</div>
-<div class="paragraph">
-<p>The Vert.x Apache Shiro implementation
-currently allows user/role/permission information to be accessed from simple properties files or LDAP servers.</p>
-</div>
-<div class="paragraph">
 <p>Vert.x auth is also used by vertx-web to handle its authentication and authorisation.</p>
 </div>
 </div>
@@ -120,20 +112,23 @@ currently allows user/role/permission information to be accessed from simple pro
 <h2 id="_basic_concepts">Basic concepts</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>Authentication</em> (aka <em>log in</em>) means verifying the identity of a user.</p>
+<p><em>Authentication</em> means verifying the identity of a user.</p>
 </div>
 <div class="paragraph">
-<p><em>Authorisation</em> means verifying a user is allowed to access some resource.</p>
+<p><em>Authorisation</em> means verifying a user has an authority.</p>
 </div>
 <div class="paragraph">
-<p>The service uses a familiar user/role/permission model that you will probably know already:</p>
+<p>What the authority means is determined by the particular implementation and we don&#8217;t mandate any particular model,
+e.g. a permissions/roles model, to keep things very flexible.</p>
 </div>
 <div class="paragraph">
-<p>Users can have zero or more roles, e.g. "manager", "developer".</p>
+<p>For some implementations an authority might represent a permission, for example the authority to access all printers,
+or a specific printer. Other implementations must support roles too, and will often represent this by prefixing
+the authority with something like <code>role:</code>, e.g. <code>role:admin</code>. Another implementation might have a completely
+different model of representing authorities.</p>
 </div>
 <div class="paragraph">
-<p>Roles can have zero or more permissions, e.g. a manager might have permission "approve expenses", "conduct_reviews",
-and a developer might have a permission "commit_code".</p>
+<p>To find out what a particular auth provider expects, consult the documentation for that auth provider..</p>
 </div>
 </div>
 </div>
@@ -195,10 +190,7 @@ authProvider.authenticate(authInfo, function (res, res_err) {
 <p>Once you have an <code><a href="jsdoc/user-User.html">User</a></code> instance you can call methods on it to authorise it.</p>
 </div>
 <div class="paragraph">
-<p>To check if a user has a specific role you use <code><a href="jsdoc/user-User.html#hasRole">hasRole</a></code>,
-to check if a user has all the specified roles you use <code><a href="jsdoc/user-User.html#hasRoles">hasRoles</a></code>,
-to check if a user has a specific permission you use <code><a href="jsdoc/user-User.html#hasPermission">hasPermission</a></code>,
-to check if a user has all the specified permissions you use <code><a href="jsdoc/user-User.html#hasPermissions">hasPermissions</a></code>.</p>
+<p>to check if a user has a specific authority you use <code><a href="jsdoc/user-User.html#isAuthorised">isAuthorised</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The results of all the above are provided asynchronously in the handler.</p>
@@ -208,15 +200,15 @@ to check if a user has all the specified permissions you use <code><a href="jsdo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.hasPermission("admin", function (res, res_err) {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("printers:printer1234", function (res, res_err) {
   if (res_err == null) {
 
-    var hasPermission = res;
+    var hasAuthority = res;
 
-    if (hasPermission) {
-      console.log("User has the permision");
+    if (hasAuthority) {
+      console.log("User has the authority");
     } else {
-      console.log("User does not have the permision");
+      console.log("User does not have the authority");
     };
 
   } else {
@@ -225,11 +217,18 @@ to check if a user has all the specified permissions you use <code><a href="jsdo
 });</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_caching_roles_and_permissions">Caching roles and permissions</h3>
 <div class="paragraph">
-<p>The user object will cache any roles and permissions so subsequently calls to check if it has the same roles or
-permissions will result in the underlying provider being called.</p>
+<p>And another example of authorising in a roles based model which uses <code>role:</code> as a prefix.</p>
+</div>
+<div class="paragraph">
+<p>Please note, as discussed above how the authority string is interpreted is completely determined by the underlying
+implementation and Vert.x makes no assumptions here.</p>
+</div>
+<div class="sect2">
+<h3 id="_caching_authorities">Caching authorities</h3>
+<div class="paragraph">
+<p>The user object will cache any authorities so subsequently calls to check if it has the same authorities will result
+in the underlying provider being called.</p>
 </div>
 <div class="paragraph">
 <p>In order to clear the internal cache you can use <code><a href="jsdoc/user-User.html#clearCache">clearCache</a></code>.</p>
@@ -268,7 +267,7 @@ to make your user implementation. This contains the caching logic so you don&#82
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-27 19:14:04 BST
+                Last updated 2015-06-01 00:22:30 CEST
               
               
             </div>

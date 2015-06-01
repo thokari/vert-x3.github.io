@@ -70,7 +70,9 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
-<li><a href="#_the_apache_shiro_auth_provider_implementation">The Apache Shiro Auth provider implementation</a>
+<li><a href="#_the_apache_shiro_auth_provider_implementation">The Apache Shiro Auth provider implementation</a></li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a>
 <ul class="sectlevel2">
 <li><a href="#_the_shiro_properties_auth_provider">The Shiro properties auth provider</a></li>
 <li><a href="#_the_shiro_ldap_auth_provider">The Shiro LDAP auth provider</a></li>
@@ -84,7 +86,9 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
-<li><a href="#_the_apache_shiro_auth_provider_implementation">The Apache Shiro Auth provider implementation</a>
+<li><a href="#_the_apache_shiro_auth_provider_implementation">The Apache Shiro Auth provider implementation</a></li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a>
 <ul class="sectlevel2">
 <li><a href="#_the_shiro_properties_auth_provider">The Shiro properties auth provider</a></li>
 <li><a href="#_the_shiro_ldap_auth_provider">The Shiro LDAP auth provider</a></li>
@@ -97,10 +101,11 @@
 <h2 id="_the_apache_shiro_auth_provider_implementation">The Apache Shiro Auth provider implementation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This component contains an out of the box implementation that uses <a href="http://shiro.apache.org/">Apache Shiro</a>.</p>
+<p>This is an auth provider implementation that uses <a href="http://shiro.apache.org/">Apache Shiro</a>.</p>
 </div>
 <div class="paragraph">
-<p>We provide out of the box support for properties and LDAP based auth using Shiro.</p>
+<p>We provide out of the box support for properties and LDAP based auth using Shiro, and you can also plugin in any
+other Shiro Realm which expects username and password for credentials.</p>
 </div>
 <div class="paragraph">
 <p>To create an instance of the provider you use <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html">ShiroAuth</a></code>. You specify the type of
@@ -108,7 +113,7 @@ Shiro auth provider that you want with <code>ShiroAuthRealmType</code>, and you 
 configuration in a JSON object.</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example of creating a Shiro auth provider:</p>
+<p>Here&#8217;s an example of creating a Shiro auth provider by specifying the type:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -122,10 +127,82 @@ def config = [
 def provider = ShiroAuth.create(vertx, ShiroAuthRealmType.PROPERTIES, config)</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication">Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When authenticating using this implementation, it assumes <code>username</code> and <code>password</code> fields are present in the
+authentication info:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def authInfo = [
+  username:"tim",
+  password:"sausages"
+]
+
+authProvider.authenticate(authInfo, { res -&gt;
+  if (res.succeeded()) {
+    def user = res.result()
+  } else {
+    // Failed!
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authorisation_permission_role_model">Authorisation - Permission-Role Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Although Vert.x auth itself does not mandate any specific model of permissions (they are just opaque strings), this
+implementation uses a familiar user/role/permission model, where a user can have zero or more roles and a role
+can have zero or more permissions.</p>
+</div>
+<div class="paragraph">
+<p>If validating if a user has a particular permission simply pass the permission into.
+<code><a href="../../vertx-auth-common/groovy/groovydoc/io/vertx/groovy/ext/auth/User.html#isAuthorised(java.lang.String,%20io.vertx.core.Handler)">isAuthorised</a></code> as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("newsletter:edit:13", { res -&gt;
+  if (res.succeeded()) {
+    def hasPermission = res.result()
+  } else {
+    // Failed to
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If validating that a user has a particular <em>role</em> then you should prefix the argument with the role prefix.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("role:manager", { res -&gt;
+  if (res.succeeded()) {
+    def hasRole = res.result()
+  } else {
+    // Failed to
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The default role prefix is <code>role:</code>. You can change this with <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html#setRolePrefix(java.lang.String)">setRolePrefix</a></code>.</p>
+</div>
 <div class="sect2">
 <h3 id="_the_shiro_properties_auth_provider">The Shiro properties auth provider</h3>
 <div class="paragraph">
 <p>This auth provider implementation uses Apache Shiro to get user/role/permission information from a properties file.</p>
+</div>
+<div class="paragraph">
+<p>Note that roles are not available directly on the API due to the fact that vertx-auth tries to be as portable as
+possible. However one can run assertions on role by using the prefix <code>role:</code> or by specifying the prefered prefix
+with <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html#setRolePrefix(java.lang.String)">setRolePrefix</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The implementation will, by default, look for a file called <code>vertx-users.properties</code> on the classpath.</p>
@@ -182,7 +259,7 @@ role.developer=do_actual_work</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>When describing roles a wildcard <code>*</code> can be used to indicate that the role has all permissions</p>
+<p>When describing roles a wildcard <code>*</code> can be used to indicate that the role has all permissions.</p>
 </div>
 </div>
 <div class="sect2">
@@ -261,7 +338,7 @@ def provider = ShiroAuth.create(vertx, realm)</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-27 19:14:04 BST
+                Last updated 2015-06-01 00:22:30 CEST
               
               
             </div>

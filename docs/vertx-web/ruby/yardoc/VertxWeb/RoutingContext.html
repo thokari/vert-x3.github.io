@@ -94,7 +94,7 @@
   
   
     <dt class="r2 last">Defined in:</dt>
-    <dd class="r2 last">/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb</dd>
+    <dd class="r2 last">/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb</dd>
   
 </dl>
 <div class="clear"></div>
@@ -919,15 +919,15 @@
       <pre class="lines">
 
 
-298
-299
-300
 301
 302
-303</pre>
+303
+304
+305
+306</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 298</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 301</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_body_end_handler'>add_body_end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1011,16 +1011,16 @@
       <pre class="lines">
 
 
-161
 162
 163
 164
 165
 166
-167</pre>
+167
+168</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 161</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 162</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_cookie'>add_cookie</span><span class='lparen'>(</span><span class='id identifier rubyid_cookie'>cookie</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_cookie'>cookie</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1047,6 +1047,8 @@
   <div class="discussion">
     Add a handler that will be called just before headers are written to the response. This gives you a hook where
  you can write any extra headers before the response has been written when it will be too late.
+ The handler will be passed a future, when you've completed the work you want to do you should complete (or fail)
+ the future. This can be done after the handler has returned.
 
   </div>
 </div>
@@ -1104,19 +1106,19 @@
       <pre class="lines">
 
 
-279
-280
-281
 282
 283
-284</pre>
+284
+285
+286
+287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 279</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 282</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_headers_end_handler'>add_headers_end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:addHeadersEndHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='kw'>yield</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:addHeadersEndHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Future</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling add_headers_end_handler()</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
@@ -1176,15 +1178,15 @@
       <pre class="lines">
 
 
-181
 182
 183
 184
 185
-186</pre>
+186
+187</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 181</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 182</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cookie_count'>cookie_count</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1248,15 +1250,15 @@
       <pre class="lines">
 
 
-190
 191
 192
 193
 194
-195</pre>
+195
+196</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 190</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 191</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cookies'>cookies</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1319,15 +1321,15 @@
       <pre class="lines">
 
 
-123
 124
 125
 126
 127
-128</pre>
+128
+129</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 123</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 124</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_current_route'>current_route</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1400,15 +1402,15 @@
       <pre class="lines">
 
 
-78
 79
 80
 81
 82
-83</pre>
+83
+84</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 78</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='id identifier rubyid_statusCode'>statusCode</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_statusCode'>statusCode</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1471,15 +1473,15 @@
       <pre class="lines">
 
 
-315
-316
-317
 318
 319
-320</pre>
+320
+321
+322
+323</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 315</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 318</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_failed?'>failed?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1543,15 +1545,15 @@
       <pre class="lines">
 
 
-229
 230
 231
 232
 233
-234</pre>
+234
+235</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 229</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 230</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_file_uploads'>file_uploads</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1637,15 +1639,15 @@
       <pre class="lines">
 
 
-98
 99
 100
 101
 102
-103</pre>
+103
+104</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 98</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1712,15 +1714,15 @@
       <pre class="lines">
 
 
-269
 270
 271
 272
 273
-274</pre>
+274
+275</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 269</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 270</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_acceptable_content_type'>get_acceptable_content_type</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1784,15 +1786,15 @@
       <pre class="lines">
 
 
-220
 221
 222
 223
 224
-225</pre>
+225
+226</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 220</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 221</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_body'>get_body</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1856,15 +1858,15 @@
       <pre class="lines">
 
 
-211
 212
 213
 214
 215
-216</pre>
+216
+217</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 211</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 212</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_body_as_json'>get_body_as_json</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1951,17 +1953,17 @@
       <pre class="lines">
 
 
-200
 201
 202
 203
 204
 205
 206
-207</pre>
+207
+208</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 200</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 201</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_body_as_string'>get_body_as_string</span><span class='lparen'>(</span><span class='id identifier rubyid_encoding'>encoding</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2050,15 +2052,15 @@
       <pre class="lines">
 
 
-151
 152
 153
 154
 155
-156</pre>
+156
+157</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 151</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 152</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_cookie'>get_cookie</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2122,15 +2124,15 @@
       <pre class="lines">
 
 
-115
 116
 117
 118
 119
-120</pre>
+120
+121</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 115</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mount_point'>mount_point</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2185,15 +2187,15 @@
       <pre class="lines">
 
 
-66
 67
 68
 69
 70
-71</pre>
+71
+72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 66</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 67</span>
 
 <span class='kw'>def</span> <span class='kw'>next</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2269,15 +2271,15 @@
       <pre class="lines">
 
 
-141
 142
 143
 144
 145
-146</pre>
+146
+147</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 141</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 142</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_normalised_path'>normalised_path</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2376,16 +2378,16 @@
       <pre class="lines">
 
 
-88
 89
 90
 91
 92
 93
-94</pre>
+94
+95</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 88</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 89</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put'>put</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_obj'>obj</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>  <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Array</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>NilClass</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Float</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2472,15 +2474,15 @@
       <pre class="lines">
 
 
-307
-308
-309
 310
 311
-312</pre>
+312
+313
+314
+315</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 307</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 310</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_body_end_handler?'>remove_body_end_handler?</span><span class='lparen'>(</span><span class='id identifier rubyid_handlerID'>handlerID</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_handlerID'>handlerID</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2567,15 +2569,15 @@
       <pre class="lines">
 
 
-172
 173
 174
 175
 176
-177</pre>
+177
+178</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 172</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 173</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_cookie'>remove_cookie</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2661,15 +2663,15 @@
       <pre class="lines">
 
 
-288
-289
-290
 291
 292
-293</pre>
+293
+294
+295
+296</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 288</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 291</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_headers_end_handler?'>remove_headers_end_handler?</span><span class='lparen'>(</span><span class='id identifier rubyid_handlerID'>handlerID</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_handlerID'>handlerID</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2732,7 +2734,6 @@
       <pre class="lines">
 
 
-39
 40
 41
 42
@@ -2740,10 +2741,11 @@
 44
 45
 46
-47</pre>
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 39</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_request'>request</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2809,7 +2811,6 @@
       <pre class="lines">
 
 
-50
 51
 52
 53
@@ -2817,10 +2818,11 @@
 55
 56
 57
-58</pre>
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 50</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_response'>response</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2891,15 +2893,15 @@
       <pre class="lines">
 
 
-239
 240
 241
 242
 243
-244</pre>
+244
+245</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 239</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 240</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_session'>session</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2969,15 +2971,15 @@
       <pre class="lines">
 
 
-351
-352
-353
 354
 355
-356</pre>
+356
+357
+358
+359</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 351</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 354</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_acceptable_content_type'>set_acceptable_content_type</span><span class='lparen'>(</span><span class='id identifier rubyid_contentType'>contentType</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_contentType'>contentType</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3047,15 +3049,15 @@
       <pre class="lines">
 
 
-324
-325
-326
 327
 328
-329</pre>
+329
+330
+331
+332</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 324</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 327</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_body'>set_body</span><span class='lparen'>(</span><span class='id identifier rubyid_body'>body</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_body'>body</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3125,15 +3127,15 @@
       <pre class="lines">
 
 
-333
-334
-335
 336
 337
-338</pre>
+338
+339
+340
+341</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 333</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 336</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_session'>set_session</span><span class='lparen'>(</span><span class='id identifier rubyid_session'>session</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_session'>session</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3203,15 +3205,15 @@
       <pre class="lines">
 
 
-342
-343
-344
 345
 346
-347</pre>
+347
+348
+349
+350</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 342</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 345</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_user'>set_user</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3279,7 +3281,6 @@
       <pre class="lines">
 
 
-257
 258
 259
 260
@@ -3287,10 +3288,11 @@
 262
 263
 264
-265</pre>
+265
+266</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 257</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 258</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status_code'>status_code</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3359,15 +3361,15 @@
       <pre class="lines">
 
 
-247
 248
 249
 250
 251
-252</pre>
+252
+253</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 247</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 248</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_user'>user</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3430,15 +3432,15 @@
       <pre class="lines">
 
 
-106
 107
 108
 109
 110
-111</pre>
+111
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/home/tim/projects/vert-x3/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 106</span>
+      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-web/src/main/resources/vertx-web/routing_context.rb', line 107</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_vertx'>vertx</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3456,7 +3458,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed May 27 19:13:26 2015 by
+  Generated on Sun May 31 12:17:56 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-1.9.3).
 </div>

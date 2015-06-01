@@ -71,6 +71,8 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
 <li><a href="#_jdbc_auth_provider_implementation">JDBC Auth Provider implementation</a></li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a></li>
 </ul>
         </div>
       </div>
@@ -79,6 +81,8 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
 <li><a href="#_jdbc_auth_provider_implementation">JDBC Auth Provider implementation</a></li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a></li>
 </ul>
         </div>
         <div class="sect1">
@@ -139,6 +143,73 @@ never to store your passwords as plain text.
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_authentication">Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When authenticating using this implementation, it assumes <code>username</code> and <code>password</code> fields are present in the
+authentication info:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">authInfo = {
+  'username' =&gt; "tim",
+  'password' =&gt; "sausages"
+}
+
+authProvider.authenticate(authInfo) { |res,res_err|
+  if (res_err == nil)
+    user = res
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authorisation_permission_role_model">Authorisation - Permission-Role Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Although Vert.x auth itself does not mandate any specific model of permissions (they are just opaque strings), this
+implementation assumes a familiar user/role/permission model, where a user can have zero or more roles and a role
+can have zero or more permissions.</p>
+</div>
+<div class="paragraph">
+<p>If validating if a user has a particular permission simply pass the permission into.
+<code><a href="../../vertx-auth-common/ruby/yardoc/VertxAuthCommon/User.html#is_authorised-instance_method">isAuthorised</a></code> as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.is_authorised("commit_code") { |res,res_err|
+  if (res_err == nil)
+    hasPermission = res
+  else
+    # Failed to
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If validating that a user has a particular <em>role</em> then you should prefix the argument with the role prefix.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.is_authorised("role:manager") { |res,res_err|
+  if (res_err == nil)
+    hasRole = res
+  else
+    # Failed to
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The default role prefix is <code>role:</code>. You can change this with <code><a href="yardoc/VertxAuthJdbc/JDBCAuth.html#set_role_prefix-instance_method">setRolePrefix</a></code>.</p>
+</div>
+</div>
+</div>
 
         
 
@@ -146,7 +217,7 @@ never to store your passwords as plain text.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-05-27 19:14:04 BST
+                Last updated 2015-06-01 00:22:30 CEST
               
               
             </div>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Vert.x Mail client (SMTP client implementation) &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Vert.x Mail client (SMTP client implementation)</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_creating_a_client">Creating a client</a></li>
+<li><a href="#_sending_mails">Sending mails</a></li>
+<li><a href="#_mail_client_data_objects">Mail-client data objects</a>
+<ul class="sectlevel2">
+<li><a href="#_mailmessage_properties">MailMessage properties</a></li>
+<li><a href="#_mailattachment_properties">MailAttachment properties</a></li>
+<li><a href="#_mailconfig_options">MailConfig options</a></li>
+<li><a href="#_mailresult_object">MailResult object</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_creating_a_client">Creating a client</a></li>
+<li><a href="#_sending_mails">Sending mails</a></li>
+<li><a href="#_mail_client_data_objects">Mail-client data objects</a>
+<ul class="sectlevel2">
+<li><a href="#_mailmessage_properties">MailMessage properties</a></li>
+<li><a href="#_mailattachment_properties">MailAttachment properties</a></li>
+<li><a href="#_mailconfig_options">MailConfig options</a></li>
+<li><a href="#_mailresult_object">MailResult object</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x client for sending SMTP emails via a local mail server (e.g.</p>
+</div>
+<div class="paragraph">
+<p>postfix),
+by external mail server (e.g. googlemail or aol).</p>
+</div>
+<div class="paragraph">
+<p>The client supports a few additional auth methods like DIGEST-MD5 and has full
+support for TLS and SSL and is completely asynchronous. The client supports
+connection pooling to keep connections open for an specific time to be reused.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_a_client">Creating a client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can send mails by creating a client that opens SMTP connections from the local jvm.</p>
+</div>
+<div class="paragraph">
+<p>The client uses a configuration object, the default config is created as empty
+object and will connect to localhost port 25, which should be ok in a standard
+Linux environment where you have Postfix or similar mail server running on
+the local machine. For all possible properties of the config object, see below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailConfig config = new MailConfig();
+MailClient mailClient = MailClient.create(vertx, config);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A more elaborate example using a mailserver that requires login via TLS</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailConfig config = new MailConfig();
+config.setHostname("mail.example.com");
+config.setPort(587);
+config.setStarttls(StartTLSOptions.REQUIRED);
+config.setUsername("user");
+config.setPassword("password");
+MailClient mailClient = MailClient.create(vertx, config);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sending_mails">Sending mails</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once the client object is created, you can use it to send mails. Since the
+sending of the mails works asynchronous in vert.x, the result handler will be
+called when the mail operation finishes. You can start many mail send operations
+in parallel, the connection pool will limit the number of concurrent operations
+so that new operations will wait in queue if no slots are available.</p>
+</div>
+<div class="paragraph">
+<p>A mail message is constructed as JSON. The MailMessage object has
+properties from, to, cc, bcc, subject, text, html etc. Depending on which values are set, the
+format of the generated MIME message will vary. The recipient address properties
+can either be a single address or a list of addresses.</p>
+</div>
+<div class="paragraph">
+<p>The MIME encoder supports us-ascii (7bit) headers/messages and utf8 (usually
+quoted-printable) headers/messages</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailMessage message = new MailMessage();
+message.setFrom("user@example.com (Example User)");
+message.setTo("recipient@example.org");
+message.setCc("Another User &lt;another@example.net&gt;");
+message.setText("this is the plain message text");
+message.setHtml("this is html text &lt;a href=\"\"&gt;vertx.io&lt;/a&gt;");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Attachments can be created by the MailAttachment object using data stored in a Buffer,
+this supports base64 attachments.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailAttachment attachment = new MailAttachment();
+attachment.setContentType("text/plain");
+attachment.setData(Buffer.buffer("attachment file"));
+
+message.setAttachment(attachment);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When sending the mail, you can provide a AsyncResult&lt;MailResult&gt; handler that will be called when
+the send operation is finished or it failed.</p>
+</div>
+<div class="paragraph">
+<p>A mail is sent as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">mailClient.sendMail(message, result -&gt; {
+  if (result.succeeded()) {
+    System.out.println(result.result());
+  } else {
+    result.cause().printStackTrace();
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mail_client_data_objects">Mail-client data objects</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_mailmessage_properties">MailMessage properties</h3>
+<div class="paragraph">
+<p>Email fields are Strings using the common formats for email with or without real
+name</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>username@example.com</code></p>
+</li>
+<li>
+<p><code>username@example.com (Firstname Lastname)</code></p>
+</li>
+<li>
+<p><code>Firstname Lastname &lt;<a href="mailto:username@example.com">username@example.com</a>&gt;</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The MailMessage object has the following properties</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>from</code> String representing the From address and the MAIL FROM field</p>
+</li>
+<li>
+<p><code>to</code> String or list of String representing the To addresses and the RCPT TO fields</p>
+</li>
+<li>
+<p><code>cc</code> same as to</p>
+</li>
+<li>
+<p><code>bcc</code> same as to</p>
+</li>
+<li>
+<p><code>bounceAddress</code> String representing the error address (MAIL FROM), if not set from is used</p>
+</li>
+<li>
+<p><code>text</code> String representing the text/plain part of the mail</p>
+</li>
+<li>
+<p><code>html</code> String representing the text/html part of the mail</p>
+</li>
+<li>
+<p><code>attachment</code> MailAttachment or list of MailAttachment attachments of the message</p>
+</li>
+<li>
+<p><code>headers</code> MultiMap representing headers to be added in addition to the headers necessary for the MIME Message</p>
+</li>
+<li>
+<p><code>fixedHeaders</code> boolean if true, only the headers provided as headers property will be set in the generated message</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>the last two properties allow manipulating the generate messages with custom headers, e.g. providing
+a message-id chosen by the calling program or setting different headers than would be generated by default. Unless you know
+what you are doing, this may generate invalid messages.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mailattachment_properties">MailAttachment properties</h3>
+<div class="paragraph">
+<p>The MailAttachment object has the following properties</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code> Buffer containing the binary data of the attachment</p>
+</li>
+<li>
+<p><code>contentType</code> String of the Content-Type of the attachment (e.g. text/plain or text/plain; charset="UTF8", default is application/octet-stream)</p>
+</li>
+<li>
+<p><code>description</code> String describing the attachment (this is put in the description header of the attachment), optional</p>
+</li>
+<li>
+<p><code>disposition</code> String describing the disposition of the attachment (this is either "inline" or "attachment", default is attachment)</p>
+</li>
+<li>
+<p><code>name</code> String filename of the attachment (this is put into the disposition and in the contentType headers of the attachment), optional</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mailconfig_options">MailConfig options</h3>
+<div class="paragraph">
+<p>The configuration has the following properties</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>hostname</code> the hostname of the smtp server to connect to (default is localhost)</p>
+</li>
+<li>
+<p><code>port</code> the port of the smtp server to connect to (default is 25)</p>
+</li>
+<li>
+<p><code>startTLS</code> StartTLSOptions either DISABLED, OPTIONAL or REQUIRED, default is OPTIONAL</p>
+</li>
+<li>
+<p><code>login</code> LoginOption either DISABLED, NONE or REQUIRED, default is NONE</p>
+</li>
+<li>
+<p><code>username</code> String of the username to be used for login</p>
+</li>
+<li>
+<p><code>password</code> String of the password to be used for login</p>
+</li>
+<li>
+<p><code>ssl</code> boolean whether to use ssl on connect to the mail server (default is false), set this to use a port 465 ssl connection</p>
+</li>
+<li>
+<p><code>ehloHostname</code> String to used in EHLO and for creating the message-id, if not set, the own hostname will be used, which may not be a good choice if it doesn&#8217;t contain a FQDN or is localhost</p>
+</li>
+<li>
+<p><code>authMethods</code> String space separated list of allowed auth methods, this can be used to disallow some auth methods or define one required auth method</p>
+</li>
+<li>
+<p><code>keepAlive</code> boolean if connection pooling is enabled (default is true)</p>
+</li>
+<li>
+<p><code>idleTimeout</code> int timeout in seconds that a connection is kept open after a mail has been sent (default is 300)</p>
+</li>
+<li>
+<p><code>maxPoolSize</code> int max number of open connections kept in the pool or to be opened at one time (regardless if pooling is enabled or not), default is 10</p>
+</li>
+<li>
+<p><code>trustAll</code> boolean whether to accept all certs from the server (default is false)</p>
+</li>
+<li>
+<p><code>netClientOptions</code> NetClientOptions object to be used when connecting to the server port, this allows for example to set a custom keystore to use a self-defined certificate or a "custom" CA</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mailresult_object">MailResult object</h3>
+<div class="paragraph">
+<p>The MailResult object has the following members</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>messageID</code> the Message-ID of the generated mail</p>
+</li>
+<li>
+<p><code>recipients</code> the list of recipients the mail was sent to</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-06-01 00:22:28 CEST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>
