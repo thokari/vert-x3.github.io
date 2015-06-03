@@ -165,8 +165,7 @@ server.connectHandler(function (sock) {
   sock.handler(function (buffer) {
     if (!sock.writeQueueFull()) {
       sock.write(buffer);
-    };
-  });
+    }});
 
 }).listen();</code></pre>
 </div>
@@ -186,8 +185,7 @@ server.connectHandler(function (sock) {
     sock.write(buffer);
     if (sock.writeQueueFull()) {
       sock.pause();
-    };
-  });
+    }});
 }).listen();</code></pre>
 </div>
 </div>
@@ -209,8 +207,7 @@ server.connectHandler(function (sock) {
       sock.drainHandler(function (done) {
         sock.resume();
       });
-    };
-  });
+    }});
 }).listen();</code></pre>
 </div>
 </div>
@@ -357,7 +354,7 @@ This has the same meaning as <code><a href="jsdoc/write_stream-WriteStream.html#
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-02 00:22:42 CEST
+                Last updated 2015-06-03 00:22:58 CEST
               
               
             </div>

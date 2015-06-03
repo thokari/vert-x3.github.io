@@ -1242,8 +1242,7 @@ and <code><a href="jsdoc/vertx-Vertx.html#unregisterVerticleFactory">unregisterV
     console.log("Deployment id is: " + res);
   } else {
     console.log("Deployment failed!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1268,8 +1267,7 @@ and <code><a href="jsdoc/vertx-Vertx.html#unregisterVerticleFactory">unregisterV
     console.log("Undeployed ok");
   } else {
     console.log("Undeploy failed!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -1719,8 +1717,7 @@ on the MessageConsumer object.</p>
     console.log("The handler registration has reached all nodes");
   } else {
     console.log("Registration failed!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -1740,8 +1737,7 @@ be notified when this is complete use <code><a href="jsdoc/message_consumer-Mess
     console.log("The handler un-registration has reached all nodes");
   } else {
     console.log("Un-registration failed!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -1837,8 +1833,7 @@ consumer.handler(function (message) {
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", function (ar, ar_err) {
   if (ar_err == null) {
     console.log("Received reply: " + ar.body());
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1908,13 +1903,12 @@ Vertx.clusteredVertx(options, function (res, res_err) {
     console.log("We now have a clustered event bus: " + eventBus);
   } else {
     console.log("Failed: " + res_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You should also make sure you have a <code>ClusterManager</code> implementation on your classpath,
-for example the default .</p>
+for example the default <code>HazelcastClusterManager</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2006,16 +2000,16 @@ var buff = Buffer.buffer(10000);</code></pre>
 <div class="paragraph">
 <p>There are two ways to write to a buffer: appending, and random access.
 In either case buffers will always expand automatically to encompass the bytes. It&#8217;s not possible to get
-an  with a buffer.</p>
+an <code>IndexOutOfBoundsException</code> with a buffer.</p>
 </div>
 <div class="sect3">
 <h4 id="_appending_to_a_buffer">Appending to a Buffer</h4>
 <div class="paragraph">
-<p>To append to a buffer, you use the  methods.
+<p>To append to a buffer, you use the <code>appendXXX</code> methods.
 Append methods exist for appending various different types.</p>
 </div>
 <div class="paragraph">
-<p>The return value of the  methods is the buffer itself, so these can be chained:</p>
+<p>The return value of the <code>appendXXX</code> methods is the buffer itself, so these can be chained:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2031,7 +2025,7 @@ socket.write(buff);</code></pre>
 <div class="sect3">
 <h4 id="_random_access_buffer_writes">Random access buffer writes</h4>
 <div class="paragraph">
-<p>You can also write into the buffer at a specific index, by using the  methods.
+<p>You can also write into the buffer at a specific index, by using the <code>setXXX</code> methods.
 Set methods exist for various different data types. All the set methods take an index as the first argument - this
 represents the position in the buffer where to start writing the data.</p>
 </div>
@@ -2052,7 +2046,7 @@ buff.setString(0, "hello");</code></pre>
 <div class="sect2">
 <h3 id="_reading_from_a_buffer">Reading from a Buffer</h3>
 <div class="paragraph">
-<p>Data is read from a buffer using the  methods. Get methods exist for various datatypes.
+<p>Data is read from a buffer using the <code>getXXX</code> methods. Get methods exist for various datatypes.
 The first argument to these methods is an index in the buffer from where to get the data.</p>
 </div>
 <div class="listingblock">
@@ -2061,7 +2055,7 @@ The first argument to these methods is an index in the buffer from where to get 
 var buff = Buffer.buffer();
 for (var i = 0; i &lt; buff.length(); 4) {
   console.log("int value at " + i + " is " + buff.getInt(i));
-};</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -2169,8 +2163,7 @@ server.listen(1234, "localhost", function (res, res_err) {
     console.log("Server is now listening!");
   } else {
     console.log("Failed to bind!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -2190,8 +2183,7 @@ server.listen(0, "localhost", function (res, res_err) {
     console.log("Server is now listening on actual port: " + server.actualPort());
   } else {
     console.log("Failed to bind!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -2359,8 +2351,7 @@ If you want to be notified when the actual close has completed then you can pass
     console.log("Server is now closed");
   } else {
     console.log("close failed");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -2399,7 +2390,7 @@ for (var i = 0; i &lt; 10; i++) {
     });
   });
   server.listen(1234, "localhost");
-};</code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2490,8 +2481,7 @@ client.connect(4321, "localhost", function (res, res_err) {
     var socket = res;
   } else {
     console.log("Failed to connect: " + res_err.getMessage());
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -3141,8 +3131,7 @@ server.listen(8080, "myhost.com", function (res, res_err) {
     console.log("Server is now listening!");
   } else {
     console.log("Failed to bind!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -3726,8 +3715,7 @@ files, but may be slower for small files.</p>
     file = "index.html";
   } else if (!request.path().contains("..")) {
     file = request.path();
-  };
-  request.response().sendFile("web/" + file);
+  }request.response().sendFile("web/" + file);
 }).listen(8080);</code></pre>
 </div>
 </div>
@@ -3787,8 +3775,7 @@ vertx.createHttpServer().requestHandler(function (request) {
       response.end()});
   } else {
     response.setStatusCode(400).end();
-  };
-}).listen(8080);</code></pre>
+  }}).listen(8080);</code></pre>
 </div>
 </div>
 </div>
@@ -4135,8 +4122,7 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 // Write some chunks
 for (var i = 0; i &lt; 10; i++) {
   request.write("this-is-chunk-" + i);
-};
-
+}
 request.end();</code></pre>
 </div>
 </div>
@@ -4544,8 +4530,7 @@ on the server instance.</p>
     websocket.reject();
   } else {
     // Do something
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -4566,8 +4551,7 @@ call <code><a href="jsdoc/http_server_request-HttpServerRequest.html#upgrade">up
   } else {
     // Reject
     request.response().setStatusCode(400).end();
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -4781,8 +4765,7 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
     var map = res;
   } else {
     // Something went wrong!
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -4800,8 +4783,7 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
     // Successfully put the value
   } else {
     // Something went wrong!
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -4821,8 +4803,7 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
     var val = resGet;
   } else {
     // Something went wrong!
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -4874,8 +4855,7 @@ another caller can obtain it.</p>
 
   } else {
     // Something went wrong
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4891,8 +4871,7 @@ with a failure:</p>
 
   } else {
     // Failed to get lock
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -4914,8 +4893,7 @@ with a failure:</p>
     var counter = res;
   } else {
     // Something went wrong!
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4956,12 +4934,11 @@ fs.copy("foo.txt", "bar.txt", function (res, res_err) {
     // Copied ok!
   } else {
     // Something went wrong
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The blocking versions are named  and return the results or throw exceptions directly.</p>
+<p>The blocking versions are named <code>xxxBlocking</code> and return the results or throw exceptions directly.</p>
 </div>
 <div class="paragraph">
 <p>In many cases, depending on the operating system and file system,some of the potentially blocking operations
@@ -5002,8 +4979,7 @@ fileSystem.open("myfile.txt", options, function (res, res_err) {
     var file = res;
   } else {
     // Something went wrong!
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5135,8 +5111,7 @@ socket.listen(1234, "0.0.0.0", function (asyncResult, asyncResult_err) {
     });
   } else {
     console.log("Listen failed" + asyncResult_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5228,8 +5203,7 @@ socket.listen(1234, "0.0.0.0", function (asyncResult, asyncResult_err) {
     });
   } else {
     console.log("Listen failed" + asyncResult_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5266,12 +5240,10 @@ socket.listen(1234, "0.0.0.0", function (asyncResult, asyncResult_err) {
         });
       } else {
         console.log("Listen failed" + asyncResult2_err);
-      };
-    });
+      }});
   } else {
     console.log("Listen failed" + asyncResult_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5404,8 +5376,7 @@ client.lookup("vertx.io", function (ar, ar_err) {
     console.log(ar);
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5426,8 +5397,7 @@ client.lookup4("vertx.io", function (ar, ar_err) {
     console.log(ar);
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5448,8 +5418,7 @@ client.lookup6("vertx.io", function (ar, ar_err) {
     console.log(ar);
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5473,8 +5442,7 @@ client.resolveA("vertx.io", function (ar, ar_err) {
     });
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5498,8 +5466,7 @@ client.resolveAAAA("vertx.io", function (ar, ar_err) {
     });
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5523,8 +5490,7 @@ client.resolveCNAME("vertx.io", function (ar, ar_err) {
     });
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5548,8 +5514,7 @@ client.resolveMX("vertx.io", function (ar, ar_err) {
     });
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5585,8 +5550,7 @@ client.resolveTXT("vertx.io", function (ar, ar_err) {
     });
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5610,8 +5574,7 @@ client.resolveNS("vertx.io", function (ar, ar_err) {
     });
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5635,8 +5598,7 @@ client.resolveSRV("vertx.io", function (ar, ar_err) {
     });
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5678,8 +5640,7 @@ client.resolvePTR("1.0.0.10.in-addr.arpa", function (ar, ar_err) {
     console.log(record);
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5701,8 +5662,7 @@ client.reverseLookup("10.0.0.1", function (ar, ar_err) {
     console.log(record);
   } else {
     console.log("Failed to resolve entry" + ar_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -5780,8 +5740,7 @@ server.connectHandler(function (sock) {
   sock.handler(function (buffer) {
     if (!sock.writeQueueFull()) {
       sock.write(buffer);
-    };
-  });
+    }});
 
 }).listen();</code></pre>
 </div>
@@ -5801,8 +5760,7 @@ server.connectHandler(function (sock) {
     sock.write(buffer);
     if (sock.writeQueueFull()) {
       sock.pause();
-    };
-  });
+    }});
 }).listen();</code></pre>
 </div>
 </div>
@@ -5824,8 +5782,7 @@ server.connectHandler(function (sock) {
       sock.drainHandler(function (done) {
         sock.resume();
       });
-    };
-  });
+    }});
 }).listen();</code></pre>
 </div>
 </div>
@@ -6029,7 +5986,7 @@ order to gather metrics. For more information on this, please consult the
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-02 00:22:42 CEST
+                Last updated 2015-06-03 00:22:58 CEST
               
               
             </div>

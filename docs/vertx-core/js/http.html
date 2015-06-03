@@ -197,8 +197,7 @@ server.listen(8080, "myhost.com", function (res, res_err) {
     console.log("Server is now listening!");
   } else {
     console.log("Failed to bind!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -782,8 +781,7 @@ files, but may be slower for small files.</p>
     file = "index.html";
   } else if (!request.path().contains("..")) {
     file = request.path();
-  };
-  request.response().sendFile("web/" + file);
+  }request.response().sendFile("web/" + file);
 }).listen(8080);</code></pre>
 </div>
 </div>
@@ -843,8 +841,7 @@ vertx.createHttpServer().requestHandler(function (request) {
       response.end()});
   } else {
     response.setStatusCode(400).end();
-  };
-}).listen(8080);</code></pre>
+  }}).listen(8080);</code></pre>
 </div>
 </div>
 </div>
@@ -1191,8 +1188,7 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 // Write some chunks
 for (var i = 0; i &lt; 10; i++) {
   request.write("this-is-chunk-" + i);
-};
-
+}
 request.end();</code></pre>
 </div>
 </div>
@@ -1600,8 +1596,7 @@ on the server instance.</p>
     websocket.reject();
   } else {
     // Do something
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -1622,8 +1617,7 @@ call <code><a href="jsdoc/http_server_request-HttpServerRequest.html#upgrade">up
   } else {
     // Reject
     request.response().setStatusCode(400).end();
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -1763,7 +1757,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-02 00:22:42 CEST
+                Last updated 2015-06-03 00:22:58 CEST
               
               
             </div>

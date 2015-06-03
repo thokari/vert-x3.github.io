@@ -1999,7 +1999,7 @@ router.route("/login").handler() { |ctx|
 </div>
 <div class="paragraph">
 <p>Now that your client has a token all it is required is that for <strong>all</strong> consequent request the HTTP header
-<code>Authorization</code> is filled with: <code>Bearer token</code> e.g.:</p>
+<code>Authorization</code> is filled with: <code>Bearer &lt;token&gt;</code> e.g.:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2419,11 +2419,11 @@ including the request, response, session or context data.</p>
 <div class="listingblock">
 <div class="content">
 <pre>[snip]
-p th:text="${context.get('foo')}"/p
-p th:text="${context.get('bar')}"/p
-p th:text="${context.normalisedPath()}"/p
-p th:text="${context.request().params().get('param1')}"/p
-p th:text="${context.request().params().get('param2')}"/p
+&amp;lt;p th:text="${context.get('foo')}"&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p th:text="${context.get('bar')}"&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p th:text="${context.normalisedPath()}"&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p th:text="${context.request().params().get('param1')}"&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p th:text="${context.request().params().get('param2')}"&amp;gt;&amp;lt;/p&amp;gt;
 [snip]</pre>
 </div>
 </div>
@@ -3083,7 +3083,7 @@ also add headers to the message, here&#8217;s an example:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-02 00:22:44 CEST
+                Last updated 2015-06-03 00:23:00 CEST
               
               
             </div>

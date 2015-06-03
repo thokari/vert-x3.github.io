@@ -296,8 +296,7 @@ on the MessageConsumer object.</p>
     console.log("The handler registration has reached all nodes");
   } else {
     console.log("Registration failed!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -317,8 +316,7 @@ be notified when this is complete use <code><a href="jsdoc/message_consumer-Mess
     console.log("The handler un-registration has reached all nodes");
   } else {
     console.log("Un-registration failed!");
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 </div>
@@ -414,8 +412,7 @@ consumer.handler(function (message) {
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", function (ar, ar_err) {
   if (ar_err == null) {
     console.log("Received reply: " + ar.body());
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -485,13 +482,12 @@ Vertx.clusteredVertx(options, function (res, res_err) {
     console.log("We now have a clustered event bus: " + eventBus);
   } else {
     console.log("Failed: " + res_err);
-  };
-});</code></pre>
+  }});</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You should also make sure you have a <code>ClusterManager</code> implementation on your classpath,
-for example the default .</p>
+for example the default <code>HazelcastClusterManager</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -522,7 +518,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-02 00:22:42 CEST
+                Last updated 2015-06-03 00:22:58 CEST
               
               
             </div>

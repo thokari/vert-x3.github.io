@@ -169,16 +169,16 @@ def buff = Buffer.buffer(10000)</code></pre>
 <div class="paragraph">
 <p>There are two ways to write to a buffer: appending, and random access.
 In either case buffers will always expand automatically to encompass the bytes. It&#8217;s not possible to get
-an  with a buffer.</p>
+an <code>IndexOutOfBoundsException</code> with a buffer.</p>
 </div>
 <div class="sect3">
 <h4 id="_appending_to_a_buffer">Appending to a Buffer</h4>
 <div class="paragraph">
-<p>To append to a buffer, you use the  methods.
+<p>To append to a buffer, you use the <code>appendXXX</code> methods.
 Append methods exist for appending various different types.</p>
 </div>
 <div class="paragraph">
-<p>The return value of the  methods is the buffer itself, so these can be chained:</p>
+<p>The return value of the <code>appendXXX</code> methods is the buffer itself, so these can be chained:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -194,7 +194,7 @@ socket.write(buff)</code></pre>
 <div class="sect3">
 <h4 id="_random_access_buffer_writes">Random access buffer writes</h4>
 <div class="paragraph">
-<p>You can also write into the buffer at a specific index, by using the  methods.
+<p>You can also write into the buffer at a specific index, by using the <code>setXXX</code> methods.
 Set methods exist for various different data types. All the set methods take an index as the first argument - this
 represents the position in the buffer where to start writing the data.</p>
 </div>
@@ -215,7 +215,7 @@ buff.setString(0, "hello")</code></pre>
 <div class="sect2">
 <h3 id="_reading_from_a_buffer">Reading from a Buffer</h3>
 <div class="paragraph">
-<p>Data is read from a buffer using the  methods. Get methods exist for various datatypes.
+<p>Data is read from a buffer using the <code>getXXX</code> methods. Get methods exist for various datatypes.
 The first argument to these methods is an index in the buffer from where to get the data.</p>
 </div>
 <div class="listingblock">
@@ -263,7 +263,7 @@ Use <code><a href="groovydoc/io/vertx/groovy/core/buffer/Buffer.html#slice()">sl
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-02 00:22:42 CEST
+                Last updated 2015-06-03 00:22:58 CEST
               
               
             </div>
