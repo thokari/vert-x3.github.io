@@ -515,7 +515,8 @@ the test.</p>
   client = vertx.create_http_client()
   req = client.get(8080, "localhost", "/")
   req.exception_handler() { |err|
-    context.fail(err.get_message())}
+    context.fail(err.get_message())
+  }
   req.handler() { |resp|
     context.assert_equals(200, resp.status_code())
     async1.complete()
@@ -1097,29 +1098,133 @@ via the method name:</p>
 <div class="sect2">
 <h3 id="_java_specific_assertions">Java specific assertions</h3>
 <div class="paragraph">
-<p>In Java, the <code><a href="yardoc/VertxUnit/TestContext.html">TestContext</a></code> provides useful extra methods that provides powerful constructs</p>
+<p>In Java, the <code><a href="yardoc/VertxUnit/TestContext.html">TestContext</a></code> provides useful extra methods that provides powerful constructs:</p>
 </div>
 <div class="paragraph">
 <p>The <code><a href="yardoc/VertxUnit/TestContext.html#async_assert_success-instance_method">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
 instance that acts like <code><a href="yardoc/VertxUnit/Async.html">Async</a></code>, resolving the <code>Async</code> on success and failing the test
 on failure with the failure cause.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar -&gt; {
+  if (ar.succeeded()) {
+    async.complete();
+  } else {
+    context.fail(ar.cause());
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertSuccess());</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The <code><a href="yardoc/VertxUnit/TestContext.html#async_assert_success-instance_method">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
 instance that acts like <code><a href="yardoc/VertxUnit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;T&gt;</code> on success
-and failing the test on failure with the failure cause. The async is completed when the <code>Handler</code> exits,
-unless new asyncs were created during the invocation.</p>
+and failing the test on failure with the failure cause.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AtomicBoolean started = new AtomicBoolean();
+Async async = context.async();
+vertx.deployVerticle(new AbstractVerticle() {
+  public void start() throws Exception {
+    started.set(true);
+  }
+}, ar -&gt; {
+  if (ar.succeeded()) {
+    context.assertTrue(started.get());
+    async.complete();
+  } else {
+    context.fail(ar.cause());
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertSuccess(id -&gt; {
+  context.assertTrue(started.get());
+}));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The async is completed when the <code>Handler</code> exits, unless new asyncs were created during the invocation, which
+can be handy to <em>chain</em> asynchronous behaviors:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar1 -&gt; {
+  if (ar1.succeeded()) {
+    vertx.deployVerticle("my.otherverticle" ,ar2 -&gt; {
+      if (ar2.succeeded()) {
+        async.complete();
+      } else {
+        context.fail(ar2.cause());
+      }
+    });
+  } else {
+    context.fail(ar1.cause());
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertSuccess( id -&gt;
+    vertx.deployVerticle("my_otherverticle", context.asyncAssertSuccess())
+));</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The <code><a href="yardoc/VertxUnit/TestContext.html#async_assert_failure-instance_method">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
 instance that acts like <code><a href="yardoc/VertxUnit/Async.html">Async</a></code>, resolving the <code>Async</code> on failure and failing the test
 on success.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar -&gt; {
+  if (ar.succeeded()) {
+    context.fail();
+  } else {
+    async.complete();
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertFailure());</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The <code><a href="yardoc/VertxUnit/TestContext.html#async_assert_failure-instance_method">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
 instance that acts like <code><a href="yardoc/VertxUnit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;Throwalbe&gt;</code> on failure
-and failing the test on success. The async is completed when the `Handler exits, unless new asyncs were created
-during the invocation.</p>
+and failing the test on success.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar -&gt; {
+  if (ar.succeeded()) {
+    context.fail();
+  } else {
+    context.assertTrue(ar.cause() instanceof IllegalArgumentException);
+    async.complete();
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertFailure(cause -&gt; {
+  context.assertTrue(cause instanceof IllegalArgumentException);
+}));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The async is completed when the <code>Handler</code> exits, unless new asyncs were created during the invocation.</p>
 </div>
 </div>
 </div>
@@ -1131,7 +1236,7 @@ during the invocation.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:22:58 CEST
+                Last updated 2015-06-04 09:54:44 CEST
               
               
             </div>

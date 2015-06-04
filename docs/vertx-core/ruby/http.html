@@ -840,7 +840,8 @@ vertx.create_http_server().request_handler() { |request|
     response.set_chunked(true)
     Vertx::Pump.pump(request, response).start()
     request.end_handler() { |v|
-      response.end()}
+      response.end()
+    }
   else
     response.set_status_code(400).end()
   end
@@ -1265,7 +1266,8 @@ you can pump to it from any <code><a href="yardoc/Vertx/ReadStream.html">ReadStr
 request.set_chunked(true)
 pump = Vertx::Pump.pump(file, request)
 file.end_handler() { |v|
-  request.end()}
+  request.end()
+}
 pump.start()</code></pre>
 </div>
 </div>
@@ -1765,7 +1767,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:22:58 CEST
+                Last updated 2015-06-04 09:54:42 CEST
               
               
             </div>

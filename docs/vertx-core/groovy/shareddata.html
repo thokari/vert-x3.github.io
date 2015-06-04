@@ -265,7 +265,8 @@ another caller can obtain it.</p>
     // 5 seconds later we release the lock so someone else can get it
 
     vertx.setTimer(5000, { tid -&gt;
-      lock.release()})
+      lock.release()
+    })
 
   } else {
     // Something went wrong
@@ -330,7 +331,7 @@ it using the various methods.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:22:58 CEST
+                Last updated 2015-06-04 09:54:44 CEST
               
               
             </div>

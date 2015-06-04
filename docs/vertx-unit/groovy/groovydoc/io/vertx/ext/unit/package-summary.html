@@ -576,25 +576,53 @@ function windowTitle()
 
  === Java specific assertions
 
- In Java, the io.vertx.ext.unit.TestContext provides useful extra methods that provides powerful constructs
+ In Java, the io.vertx.ext.unit.TestContext provides useful extra methods that provides powerful constructs:
 
  The io.vertx.ext.unit.TestContext#asyncAssertSuccess() method returns an {<DL><DT><B>literal:</B></DT><DD>Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, resolving the `Async` on success and failing the test
  on failure with the failure cause.
 
+ [source,java]
+ ----
+ examples.Examples#asyncAssertSuccess_01
+ ----
+
  The io.vertx.ext.unit.TestContext#asyncAssertSuccess(io.vertx.core.Handler) method returns an {@literal Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, invoking the delegating {@literal Handler<T>} on success
- and failing the test on failure with the failure cause. The async is completed when the `Handler` exits,
- unless new asyncs were created during the invocation.
+ and failing the test on failure with the failure cause.
+
+ [source,java]
+ ----
+ examples.Examples#asyncAssertSuccess_02
+ ----
+
+ The async is completed when the `Handler` exits, unless new asyncs were created during the invocation, which
+ can be handy to _chain_ asynchronous behaviors:
+
+ [source,java]
+ ----
+ examples.Examples#asyncAssertSuccess_03
+ ----
 
  The io.vertx.ext.unit.TestContext#asyncAssertFailure() method returns an {@literal Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, resolving the `Async` on failure and failing the test
  on success.
 
+ [source,java]
+ ----
+ examples.Examples#asyncAssertFailure_01(io.vertx.core.Vertx, io.vertx.ext.unit.TestContext)
+ ----
+
  The io.vertx.ext.unit.TestContext#asyncAssertFailure(io.vertx.core.Handler) method returns an {@literal Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, invoking the delegating {@literal Handler<Throwalbe>} on failure
- and failing the test on success. The async is completed when the `Handler exits, unless new asyncs were created
- during the invocation.</DD></DL>
+ and failing the test on success.
+
+ [source,java]
+ ----
+ examples.Examples#asyncAssertFailure_02(io.vertx.core.Vertx, io.vertx.ext.unit.TestContext)
+ ----
+
+ The async is completed when the `Handler` exits, unless new asyncs were created during the invocation.</DD></DL>
  
 @GenModule(name = "vertx-unit")
 @Document(fileName = "index.adoc")
@@ -1122,25 +1150,53 @@ function windowTitle()
 
  === Java specific assertions
 
- In Java, the io.vertx.ext.unit.TestContext provides useful extra methods that provides powerful constructs
+ In Java, the io.vertx.ext.unit.TestContext provides useful extra methods that provides powerful constructs:
 
  The io.vertx.ext.unit.TestContext#asyncAssertSuccess() method returns an {<DL><DT><B>literal:</B></DT><DD>Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, resolving the `Async` on success and failing the test
  on failure with the failure cause.
 
+ [source,java]
+ ----
+ examples.Examples#asyncAssertSuccess_01
+ ----
+
  The io.vertx.ext.unit.TestContext#asyncAssertSuccess(io.vertx.core.Handler) method returns an {@literal Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, invoking the delegating {@literal Handler<T>} on success
- and failing the test on failure with the failure cause. The async is completed when the `Handler` exits,
- unless new asyncs were created during the invocation.
+ and failing the test on failure with the failure cause.
+
+ [source,java]
+ ----
+ examples.Examples#asyncAssertSuccess_02
+ ----
+
+ The async is completed when the `Handler` exits, unless new asyncs were created during the invocation, which
+ can be handy to _chain_ asynchronous behaviors:
+
+ [source,java]
+ ----
+ examples.Examples#asyncAssertSuccess_03
+ ----
 
  The io.vertx.ext.unit.TestContext#asyncAssertFailure() method returns an {@literal Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, resolving the `Async` on failure and failing the test
  on success.
 
+ [source,java]
+ ----
+ examples.Examples#asyncAssertFailure_01(io.vertx.core.Vertx, io.vertx.ext.unit.TestContext)
+ ----
+
  The io.vertx.ext.unit.TestContext#asyncAssertFailure(io.vertx.core.Handler) method returns an {@literal Handler<AsyncResult<T>>}
  instance that acts like io.vertx.ext.unit.Async, invoking the delegating {@literal Handler<Throwalbe>} on failure
- and failing the test on success. The async is completed when the `Handler exits, unless new asyncs were created
- during the invocation.</DD></DL>
+ and failing the test on success.
+
+ [source,java]
+ ----
+ examples.Examples#asyncAssertFailure_02(io.vertx.core.Vertx, io.vertx.ext.unit.TestContext)
+ ----
+
+ The async is completed when the `Handler` exits, unless new asyncs were created during the invocation.</DD></DL>
  
 @GenModule(name = "vertx-unit")
 @Document(fileName = "index.adoc")

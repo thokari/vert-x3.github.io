@@ -276,6 +276,7 @@ mongoClient.save("books", document, function (res, res_err) {
   } else {
     res_err.printStackTrace();
   }
+
 });</code></pre>
 </div>
 </div>
@@ -300,6 +301,7 @@ mongoClient.save("books", document, function (res, res_err) {
   } else {
     res_err.printStackTrace();
   }
+
 });</code></pre>
 </div>
 </div>
@@ -330,6 +332,7 @@ mongoClient.insert("books", document, function (res, res_err) {
   } else {
     res_err.printStackTrace();
   }
+
 });</code></pre>
 </div>
 </div>
@@ -355,6 +358,7 @@ mongoClient.insert("books", document, function (res, res_err) {
 
     // Will fail if the book with that id already exists.
   }
+
 });</code></pre>
 </div>
 </div>
@@ -399,6 +403,7 @@ mongoClient.update("books", query, update, function (res, res_err) {
 
     res_err.printStackTrace();
   }
+
 });</code></pre>
 </div>
 </div>
@@ -453,6 +458,7 @@ mongoClient.updateWithOptions("books", query, update, options, function (res, re
 
     res_err.printStackTrace();
   }
+
 });</code></pre>
 </div>
 </div>
@@ -491,6 +497,7 @@ mongoClient.replace("books", query, replace, function (res, res_err) {
     res_err.printStackTrace();
 
   }
+
 });</code></pre>
 </div>
 </div>
@@ -527,6 +534,7 @@ mongoClient.find("books", query, function (res, res_err) {
     res_err.printStackTrace();
 
   }
+
 });</code></pre>
 </div>
 </div>
@@ -555,6 +563,7 @@ mongoClient.find("books", query, function (res, res_err) {
     res_err.printStackTrace();
 
   }
+
 });</code></pre>
 </div>
 </div>
@@ -625,7 +634,8 @@ mongoClient.remove("books", query, function (res, res_err) {
 
     res_err.printStackTrace();
 
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -662,7 +672,8 @@ mongoClient.count("books", query, function (res, res_err) {
 
     res_err.printStackTrace();
 
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -686,7 +697,8 @@ mongoClient.count("books", query, function (res, res_err) {
 
     res_err.printStackTrace();
 
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -704,7 +716,8 @@ mongoClient.count("books", query, function (res, res_err) {
 
     res_err.printStackTrace();
 
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -734,7 +747,8 @@ Dropping a collection will delete all documents within it!
 
     res_err.printStackTrace();
 
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -767,7 +781,8 @@ mongoClient.runCommand("aggregate", command, function (res, res_err) {
     // etc
   } else {
     res_err.printStackTrace();
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -1020,7 +1035,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:22:58 CEST
+                Last updated 2015-06-04 09:54:44 CEST
               
               
             </div>

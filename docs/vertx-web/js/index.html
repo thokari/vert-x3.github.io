@@ -534,7 +534,8 @@ You can do this some time later, if you want:</p>
 
   // Call the next matching route after a 5 second delay
   routingContext.vertx().setTimer(5000, function (tid) {
-    routingContext.next()});
+    routingContext.next();
+  });
 });
 
 var route2 = router.route("/some/path/").handler(function (routingContext) {
@@ -544,7 +545,8 @@ var route2 = router.route("/some/path/").handler(function (routingContext) {
 
   // Call the next matching route after a 5 second delay
   routingContext.vertx().setTimer(5000, function (tid) {
-    routingContext.next()});
+    routingContext.next();
+  });
 });
 
 var route3 = router.route("/some/path/").handler(function (routingContext) {
@@ -1993,7 +1995,8 @@ router.route("/login").handler(function (ctx) {
     }));
   } else {
     ctx.fail(401);
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3082,7 +3085,7 @@ also add headers to the message, here&#8217;s an example:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:23:00 CEST
+                Last updated 2015-06-04 09:54:44 CEST
               
               
             </div>

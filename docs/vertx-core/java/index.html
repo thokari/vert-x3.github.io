@@ -1263,16 +1263,23 @@ vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options);</code><
 </div>
 </div>
 <div class="paragraph">
-<p>This configuration is then available via the <code><a href="../../apidocs/io/vertx/core/Context.html">Context</a></code> object.</p>
+<p>This configuration is then available via the <code><a href="../../apidocs/io/vertx/core/Context.html">Context</a></code> object or directly using the
+<code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html#config--">config</a></code> method. The configuration is returned as a JSON object so you can
+retrieve data as follows:</p>
 </div>
-<div class="paragraph">
-<p>TODO</p>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">System.out.println("Configuration: " + config().getString("name"));</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
 <div class="paragraph">
-<p>TODO</p>
+<p>Environment variables and system properties are accessible from a verticle by following the Java way. To retrieve
+system properties, use <code><a href="../../apidocs/java/lang/System.html#getProperty-java.lang.String-">System.getProperty</a></code>
+(or <code><a href="../../apidocs/java/lang/System.html#getProperty-java.lang.String-java.lang.String-">System.getProperty</a></code>). You can also retrieve the
+environment variables using <code><a href="../../apidocs/java/lang/System.html#getenv-java.lang.String-">System.getenv</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -6127,7 +6134,7 @@ order to gather metrics. For more information on this, please consult the
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:22:58 CEST
+                Last updated 2015-06-04 09:54:42 CEST
               
               
             </div>

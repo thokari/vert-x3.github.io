@@ -1161,16 +1161,23 @@ vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options)</code></
 </div>
 </div>
 <div class="paragraph">
-<p>This configuration is then available via the <code><a href="groovydoc/io/vertx/groovy/core/Context.html">Context</a></code> object.</p>
+<p>This configuration is then available via the <code><a href="groovydoc/io/vertx/groovy/core/Context.html">Context</a></code> object or directly using the
+<code>config</code> method. The configuration is returned as a JSON object so you can
+retrieve data as follows:</p>
 </div>
-<div class="paragraph">
-<p>TODO</p>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
 <div class="paragraph">
-<p>TODO</p>
+<p>Environment variables and system properties are accessible from a verticle by following the Java way. To retrieve
+system properties, use <code>System.getProperty</code>
+(or <code>System.getProperty</code>). You can also retrieve the
+environment variables using <code>System.getenv</code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3642,7 +3649,8 @@ vertx.createHttpServer().requestHandler({ request -&gt;
     response.setChunked(true)
     Pump.pump(request, response).start()
     request.endHandler({ v -&gt;
-      response.end()})
+      response.end()
+    })
   } else {
     response.setStatusCode(400).end()
   }
@@ -4066,7 +4074,8 @@ you can pump to it from any <code><a href="groovydoc/io/vertx/groovy/core/stream
 request.setChunked(true)
 def pump = Pump.pump(file, request)
 file.endHandler({ v -&gt;
-  request.end()})
+  request.end()
+})
 pump.start()</code></pre>
 </div>
 </div>
@@ -4729,7 +4738,8 @@ another caller can obtain it.</p>
     // 5 seconds later we release the lock so someone else can get it
 
     vertx.setTimer(5000, { tid -&gt;
-      lock.release()})
+      lock.release()
+    })
 
   } else {
     // Something went wrong
@@ -5883,7 +5893,7 @@ order to gather metrics. For more information on this, please consult the
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:22:58 CEST
+                Last updated 2015-06-04 09:54:44 CEST
               
               
             </div>

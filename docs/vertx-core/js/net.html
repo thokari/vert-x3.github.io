@@ -207,7 +207,8 @@ server.listen(1234, "localhost", function (res, res_err) {
     console.log("Server is now listening!");
   } else {
     console.log("Failed to bind!");
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -227,7 +228,8 @@ server.listen(0, "localhost", function (res, res_err) {
     console.log("Server is now listening on actual port: " + server.actualPort());
   } else {
     console.log("Failed to bind!");
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -395,7 +397,8 @@ If you want to be notified when the actual close has completed then you can pass
     console.log("Server is now closed");
   } else {
     console.log("close failed");
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -525,7 +528,8 @@ client.connect(4321, "localhost", function (res, res_err) {
     var socket = res;
   } else {
     console.log("Failed to connect: " + res_err.getMessage());
-  }});</code></pre>
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -1106,7 +1110,7 @@ var client = vertx.createNetClient(options);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-03 00:22:58 CEST
+                Last updated 2015-06-04 09:54:44 CEST
               
               
             </div>
