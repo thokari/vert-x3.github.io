@@ -90,6 +90,7 @@
 <li><a href="#_counting_documents">Counting documents</a></li>
 <li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
 <li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
+<li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
 </ul>
 </li>
 <li><a href="#_configuring_the_client">Configuring the client</a></li>
@@ -120,6 +121,7 @@
 <li><a href="#_counting_documents">Counting documents</a></li>
 <li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
 <li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
+<li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
 </ul>
 </li>
 <li><a href="#_configuring_the_client">Configuring the client</a></li>
@@ -786,6 +788,49 @@ mongoClient.runCommand("aggregate", command, function (res, res_err) {
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_mongodb_extended_json_support">MongoDB Extended JSON support</h3>
+<div class="paragraph">
+<p>For now, only date type is supported (cf <a href="http://docs.mongodb.org/manual/reference/mongodb-extended-json" class="bare">http://docs.mongodb.org/manual/reference/mongodb-extended-json</a> )</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of inserting a document with a date field</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var document = {
+  "title" : "The Hobbit",
+  "publicationDate" : {
+    "$date" : "1937-09-21T00:00:00+00:00"
+  }
+};
+
+mongoService.save("publishedBooks", document, function (res, res_err) {
+
+  if (res_err == null) {
+
+    var id = res;
+
+    mongoService.findOne("publishedBooks", {
+      "_id" : id
+    }, null, function (res2, res2_err) {
+      if (res2_err == null) {
+
+        console.log("To retrieve ISO-8601 date : " + res2."publicationDate"."$date");
+
+      } else {
+        res2_err.printStackTrace();
+      }
+    });
+
+  } else {
+    res_err.printStackTrace();
+  }
+
+});</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1035,7 +1080,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-04 09:54:44 CEST
+                Last updated 2015-06-05 07:23:48 CEST
               
               
             </div>

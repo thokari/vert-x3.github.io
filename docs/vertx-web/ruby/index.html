@@ -851,6 +851,11 @@ matching route (if any) will be called. And so on.</p>
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">route1 = router.route("/some/path/").handler() { |routingContext|
 
   response = routingContext.response()
+  # enable chunked responses because we will be adding data as
+  # we execute over other handlers. This is only required once and
+  # only if several handlers do output.
+  response.set_chunked(true)
+
   response.write("route1\n")
 
   # Now call the next matching route
@@ -918,6 +923,11 @@ want to ensure a route is evaluated before route number <code>0</code>.</p>
 route2 = router.route("/some/path/").handler() { |routingContext|
 
   response = routingContext.response()
+  # enable chunked responses because we will be adding data as
+  # we execute over other handlers. This is only required once and
+  # only if several handlers do output.
+  response.set_chunked(true)
+
   response.write("route2\n")
 
   # Now call the next matching route
@@ -3085,7 +3095,7 @@ also add headers to the message, here&#8217;s an example:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-04 09:54:44 CEST
+                Last updated 2015-06-05 07:23:48 CEST
               
               
             </div>
