@@ -224,6 +224,7 @@
 <li><a href="#_parse_tools">Parse tools</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
+<li><a href="#_osgi">OSGi</a></li>
 <li><a href="#_clustering">Clustering</a>
 <ul class="sectlevel2">
 <li><a href="#_trouble_shooting_clustering">Trouble-shooting clustering</a></li>
@@ -392,6 +393,7 @@
 <li><a href="#_parse_tools">Parse tools</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
+<li><a href="#_osgi">OSGi</a></li>
 <li><a href="#_clustering">Clustering</a>
 <ul class="sectlevel2">
 <li><a href="#_trouble_shooting_clustering">Trouble-shooting clustering</a></li>
@@ -6087,6 +6089,67 @@ order to gather metrics. For more information on this, please consult the
 </div>
 </div>
 <div class="sect1">
+<h2 id="_osgi">OSGi</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x Core is packaged as an OSGi bundle, so can be used in any OSGi R4.2+ environment such as Apache Felix
+or Eclipse Equinox. The bundle exports <code>io.vertx.core*</code>.</p>
+</div>
+<div class="paragraph">
+<p>However, the bundle has some dependencies on Jackson and Netty. To get the vert.x core bundle resolved deploy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Jackson Annotation [2.5.0,3)</p>
+</li>
+<li>
+<p>Jackson Core [2.5.0,3)</p>
+</li>
+<li>
+<p>Jackson Databind [2.5.0,3)</p>
+</li>
+<li>
+<p>Netty Buffer [4.0.27,5)</p>
+</li>
+<li>
+<p>Netty Codec [4.0.27,5)</p>
+</li>
+<li>
+<p>Netty Codec/Socks [4.0.27,5)</p>
+</li>
+<li>
+<p>Netty Codec/Common [4.0.27,5)</p>
+</li>
+<li>
+<p>Netty Codec/Handler [4.0.27,5)</p>
+</li>
+<li>
+<p>Netty Codec/Transport [4.0.27,5)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is a working deployment on Apache Felix 4.6.1:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>  14|Active     |    1|Jackson-annotations (2.5.3)
+  15|Active     |    1|Jackson-core (2.5.3)
+  16|Active     |    1|jackson-databind (2.5.3)
+  17|Active     |    1|Netty/Buffer (4.0.27.Final)
+  18|Active     |    1|Netty/Codec (4.0.27.Final)
+  19|Active     |    1|Netty/Codec/HTTP (4.0.27.Final)
+  20|Active     |    1|Netty/Codec/Socks (4.0.27.Final)
+  21|Active     |    1|Netty/Common (4.0.27.Final)
+  22|Active     |    1|Netty/Handler (4.0.27.Final)
+  23|Active     |    1|Netty/Transport (4.0.27.Final)
+  25|Active     |    1|Vert.x Core (3.0.0.SNAPSHOT)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_clustering">Clustering</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -6123,7 +6186,7 @@ order to gather metrics. For more information on this, please consult the
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-05 00:25:38 BST
+                Last updated 2015-06-06 16:39:14 BST
               
               
             </div>

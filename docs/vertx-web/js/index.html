@@ -73,6 +73,7 @@
 <li><a href="#_re_cap_on_vert_x_core_http_servers">Re-cap on Vert.x core HTTP servers</a></li>
 <li><a href="#_basic_vert_x_web_concepts">Basic Vert.x-Web concepts</a></li>
 <li><a href="#_handling_requests_and_calling_the_next_handler">Handling requests and calling the next handler</a></li>
+<li><a href="#_using_blocking_handlers">Using blocking handlers</a></li>
 <li><a href="#_routing_by_exact_path">Routing by exact path</a></li>
 <li><a href="#_routing_by_paths_that_begin_with_something">Routing by paths that begin with something</a></li>
 <li><a href="#_capturing_path_parameters">Capturing path parameters</a></li>
@@ -168,6 +169,7 @@
 <li><a href="#_re_cap_on_vert_x_core_http_servers">Re-cap on Vert.x core HTTP servers</a></li>
 <li><a href="#_basic_vert_x_web_concepts">Basic Vert.x-Web concepts</a></li>
 <li><a href="#_handling_requests_and_calling_the_next_handler">Handling requests and calling the next handler</a></li>
+<li><a href="#_using_blocking_handlers">Using blocking handlers</a></li>
 <li><a href="#_routing_by_exact_path">Routing by exact path</a></li>
 <li><a href="#_routing_by_paths_that_begin_with_something">Routing by paths that begin with something</a></li>
 <li><a href="#_capturing_path_parameters">Capturing path parameters</a></li>
@@ -530,6 +532,11 @@ You can do this some time later, if you want:</p>
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var route1 = router.route("/some/path/").handler(function (routingContext) {
 
   var response = routingContext.response();
+  // enable chunked responses because we will be adding data as
+  // we execute over other handlers. This is only required once and
+  // only if several handlers do output.
+  response.setChunked(true);
+
   response.write("route1\n");
 
   // Call the next matching route after a 5 second delay
@@ -565,6 +572,39 @@ then 5 seconds later <code>route3</code> is written to the response and the resp
 </div>
 <div class="paragraph">
 <p>Note, all this happens without any thread blocking.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_blocking_handlers">Using blocking handlers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes, you might have to do something in a handler that might block the event loop for some time, e.g. call
+a legacy blocking API or do some intensive calculation.</p>
+</div>
+<div class="paragraph">
+<p>You can&#8217;t do that in a normal handler, so we provide the ability to set blocking handlers on a route.</p>
+</div>
+<div class="paragraph">
+<p>A blocking handler looks just like a normal handler but it&#8217;s called by Vert.x using a thread from the worker pool
+not using an event loop.</p>
+</div>
+<div class="paragraph">
+<p>You set a blocking handler on a route with <code><a href="jsdoc/route-Route.html#blockingHandler">blockingHandler</a></code>.
+Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">router.route().blockingHandler(function (routingContext) {
+
+  // Do something that might take some time synchronously
+  service.doSomethingThatBlocks();
+
+  // Now call the next handler
+  routingContext.next();
+
+});</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3095,7 +3135,7 @@ also add headers to the message, here&#8217;s an example:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-05 00:25:40 BST
+                Last updated 2015-06-06 16:39:14 BST
               
               
             </div>

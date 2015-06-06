@@ -510,7 +510,7 @@ upload that arrives on the server.</p>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.requestHandler(request -&gt; {
   request.setExpectMultipart(true);
   request.uploadHandler(upload -&gt; {
-    System.out.println("Got a file upload " +  upload.name());
+    System.out.println("Got a file upload " + upload.name());
   });
 });</code></pre>
 </div>
@@ -1517,8 +1517,58 @@ responses have returned and there are no outstanding pending requests to write.<
 <div class="sect2">
 <h3 id="_server_sharing">Server sharing</h3>
 <div class="paragraph">
-<p>TODO
-round robin requests etc</p>
+<p>When several HTTP servers listen on the same port, vert.x orchestrates the request handling using a
+round-robin strategy.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take a verticle creating a HTTP server such as:</p>
+</div>
+<div class="listingblock">
+<div class="title">io.vertx.examples.http.sharing.HttpServerVerticle</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  request.response().end("Hello from server " + this);
+}).listen(8080);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This service is listening on the port 8080. So, when this verticle is instantiated multiple times as with:
+<code>vertx run io.vertx.examples.http.sharing.HttpServerVerticle -instances 2</code>, what&#8217;s happening ? If both
+verticles would bind to the same port, you would receive a socket exception. Fortunately, vert.x is handling
+this case for you. When you deploy another server on the same host and port as an existing server it doesn&#8217;t
+actually try and create a new server listening on the same host/port. It binds only once to the socket. When
+receiving a request it calls the server handlers following a round robin strategy.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s now imagine a client such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.setPeriodic(100, (l) -&gt; {
+  vertx.createHttpClient().getNow(8080, "localhost", "/", resp -&gt; {
+    resp.bodyHandler(body -&gt; {
+      System.out.println(body.toString("ISO-8859-1"));
+    });
+  });
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vert.x delegates the requests to one of the server sequentially:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
+Hello from i.v.e.h.s.HttpServerVerticle@2
+Hello from i.v.e.h.s.HttpServerVerticle@1
+Hello from i.v.e.h.s.HttpServerVerticle@2
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Consequently the servers can scale over available cores while each Vert.x verticle instance remains strictly
+single threaded, and you don&#8217;t have to do any special tricks like writing load-balancers in order to scale your
+server on your multi-core machine.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1730,7 +1780,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-05 00:25:38 BST
+                Last updated 2015-06-06 16:39:14 BST
               
               
             </div>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hazelcast Cluster Manager &amp;middot; Vert.x</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Vert.x is a tool-kit for building reactive applications on the JVM." name="description">
+  <link href="/stylesheets/docs.css" media="screen" rel="stylesheet">
+  <link href="/javascripts/styles/rainbow.min.css" media="screen" rel="stylesheet">
+  <!-- IE 6-8 support of HTML 5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script>
+  <![endif]-->
+  <link href="/assets/favicons/vertx-favicon-5.ico" rel="shortcut icon">
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,700,400italic" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="http://www.reactivemanifesto.org/" id="reactive-manifesto-banner">
+  <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+    src="http://d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+</a>
+
+<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+<header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#vertx-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><img alt="Brand" src="/assets/logo-sm.png"></a>
+    </div>
+    <nav class="collapse navbar-collapse" id="vertx-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li class=""><a href="vertx-home.html">HOME</a></li>-->
+        <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+  <div class="page-header" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Hazelcast Cluster Manager</h1>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div id="content">
+  <div class="container docs-content">
+    <div class="row">
+      <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
+        <div id="sidebar" data-spy="affix">
+          <ul class="sectlevel1">
+<li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
+<li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
+<li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
+<ul class="sectlevel2">
+<li><a href="#_multicast_not_enabled_on_the_machine">Multicast not enabled on the machine.</a></li>
+<li><a href="#_using_wrong_network_interface">Using wrong network interface</a></li>
+<li><a href="#_using_a_vpn">Using a VPN</a></li>
+<li><a href="#_when_multicast_is_not_available">When multicast is not available</a></li>
+<li><a href="#_enabling_logging">Enabling logging</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-pull-3 col-md-9">
+        <div class="toc hidden-md hidden-lg">
+          <h2>Table of Contents</h2>
+          <ul class="sectlevel1">
+<li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
+<li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
+<li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
+<ul class="sectlevel2">
+<li><a href="#_multicast_not_enabled_on_the_machine">Multicast not enabled on the machine.</a></li>
+<li><a href="#_using_wrong_network_interface">Using wrong network interface</a></li>
+<li><a href="#_using_a_vpn">Using a VPN</a></li>
+<li><a href="#_when_multicast_is_not_available">When multicast is not available</a></li>
+<li><a href="#_enabling_logging">Enabling logging</a></li>
+</ul>
+</li>
+</ul>
+        </div>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is a cluster manager implementation for Vert.x that uses <a href="http://hazelcast.com">Hazelcast</a>.</p>
+</div>
+<div class="paragraph">
+<p>It is the default cluster manager used in the Vert.x distribution, but it can be replaced with another implementation as Vert.x
+cluster managers are pluggable.</p>
+</div>
+<div class="paragraph">
+<p>In Vert.x a cluster manager is used for various functions including:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Discovery and group membership of Vert.x nodes in a cluster</p>
+</li>
+<li>
+<p>Maintaining cluster wide topic subscriber lists (so we know which nodes are interested in which event bus addresses)</p>
+</li>
+<li>
+<p>Distributed Map support</p>
+</li>
+<li>
+<p>Distributed Locks</p>
+</li>
+<li>
+<p>Distributed Counters</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Cluster managers <strong>do not</strong> handle the event bus inter-node transport, this is done directly by Vert.x with TCP connections.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_this_cluster_manager">Using this cluster manager</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using Vert.x from the command line, the jar corresponding to this cluster manager (it will be named <code>vertx-hazelcast-${version}</code>.jar`
+should be in the <code>lib</code> directory of the Vert.x installation.</p>
+</div>
+<div class="paragraph">
+<p>If you want clustering with this cluster manager in your Vert.x Maven or Gradle project then just add a dependency to
+the artifact: <code>io.vertx:vertx-hazelcast:${version}</code> in your project.</p>
+</div>
+<div class="paragraph">
+<p>If the jar is on your classpath as above then Vert.x will automatically detect this and use it as the cluster manager.
+Please make sure you don&#8217;t have any other cluster managers on your classpath or Vert.x might
+choose the wrong one.</p>
+</div>
+<div class="paragraph">
+<p>You can also specify the cluster manager programmatically if you are embedding Vert.x by specifying it on the options
+when you are creating your Vert.x instance, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new HazelcastClusterManager();
+
+VertxOptions options = new VertxOptions().setClusterManager(mgr);
+
+Vertx.clusteredVertx(options, res -&gt; {
+  if (res.succeeded()) {
+    Vertx vertx = res.result();
+  } else {
+    // failed!
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuring_this_cluster_manager">Configuring this cluster manager</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Usually the cluster manager is configured by a file
+<a href="https://github.com/vert-x3/vertx-hazelcast/blob/master/src/main/resources/default-cluster.xml"><code>default-cluster.xml</code></a>
+which is packaged inside the jar.</p>
+</div>
+<div class="paragraph">
+<p>If you want to override this configuration you can provide a file called <code>cluster.xml</code> on your classpath and this
+will be used instead.</p>
+</div>
+<div class="paragraph">
+<p>The xml file is a Hazelcast configuration file and is described in detail in the documentation on the Hazelcast
+web-site.</p>
+</div>
+<div class="paragraph">
+<p>You can also specify configuration programmatically if embedding:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Config hazelcastConfig = new Config();
+
+// Now set some stuff on the config (omitted)
+
+ClusterManager mgr = new HazelcastClusterManager(hazelcastConfig);
+
+VertxOptions options = new VertxOptions().setClusterManager(mgr);
+
+Vertx.clusteredVertx(options, res -&gt; {
+  if (res.succeeded()) {
+    Vertx vertx = res.result();
+  } else {
+    // failed!
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Hazelcast supports several different transports including multicast and TCP. The default configuration uses
+multicast so you must have multicast enabled on your network for this to work.</p>
+</div>
+<div class="paragraph">
+<p>For full documentation on how to configure the transport differently or use a different transport please consult the
+Hazelcast documentation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_trouble_shooting_clustering">Trouble shooting clustering</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If the default multicast configuration is not working here are some common causes:</p>
+</div>
+<div class="sect2">
+<h3 id="_multicast_not_enabled_on_the_machine">Multicast not enabled on the machine.</h3>
+<div class="paragraph">
+<p>It is quite common in particular on OSX machines for multicast to be disabled by default. Please google for
+information on how to enable this.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_wrong_network_interface">Using wrong network interface</h3>
+<div class="paragraph">
+<p>If you have more than one network interface on your machine (and this can also be the case if you are running
+VPN software on your machine), then Hazelcast may be using the wrong one.</p>
+</div>
+<div class="paragraph">
+<p>To tell Hazelcast to use a specific interface you can provide the IP address of the interface in the <code>interfaces</code>
+element of the configuration. Make sure you set the <code>enabled</code> attribute to <code>true</code>. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;interfaces enabled="true"&gt;
+  &lt;interface&gt;192.168.1.20&lt;/interface&gt;
+&lt;/interfaces&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When running Vert.x is in clustered mode, you should also make sure that Vert.x knows about the correct interface.
+When running at the command line this is done by specifying the <code>cluster-host</code> option:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>vertx run myverticle.js -cluster -cluster-host your-ip-address</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>your-ip-address</code> is the same IP address you specified in the Hazelcast configuration.</p>
+</div>
+<div class="paragraph">
+<p>If using Vert.x programmatically you can specify this using <code><a href="../../apidocs/io/vertx/core/VertxOptions.html#setClusterHost-java.lang.String-">setClusterHost</a></code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_a_vpn">Using a VPN</h3>
+<div class="paragraph">
+<p>This is a variation of the above case. VPN software often works by creating a virtual network interface which often
+doesn&#8217;t support multicast. If you have a VPN running and you do not specify the correct interface to use in both the
+hazelcast configuration and to Vert.x then the VPN interface may be chosen instead of the correct interface.</p>
+</div>
+<div class="paragraph">
+<p>So, if you have a VPN running you may have to configure both the Hazelcast and Vert.x to use the correct interface as
+described in the previous section.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_when_multicast_is_not_available">When multicast is not available</h3>
+<div class="paragraph">
+<p>In some cases you may not be able to use multicast as it might not be available in your environment. In that case
+you should configure another transport, e.g. TCP  to use TCP sockets, or AWS when running on Amazon EC2.</p>
+</div>
+<div class="paragraph">
+<p>For more information on available Hazelcast transports and how to configure them please consult the Hazelcast
+documentation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enabling_logging">Enabling logging</h3>
+<div class="paragraph">
+<p>When trouble-shooting clustering issues with Hazelcast it&#8217;s often useful to get some logging output from Hazelcast
+to see if it&#8217;s forming a cluster properly. You can do this (when using the default JUL logging) by adding a file
+called <code>vertx-default-jul-logging.properties</code> on your classpath. This is a standard java.util.loging (JUL)
+configuration file. Inside it set:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>com.hazelcast.level=INFO</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and also</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>java.util.logging.ConsoleHandler.level=INFO
+java.util.logging.FileHandler.level=INFO</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        
+          <div id="footer">
+            <div id="footer-text">
+              
+                Last updated 2015-06-06 16:39:14 BST
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Vert.x</h2>
+        <ul class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://bintray.com/vertx/downloads/distribution/view">Download</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
+          <li class=""><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        <h2>Community</h2>
+        <ul class="list-unstyled">
+          <li><a href="/community/">Help &amp; Contributors</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx">User Group</a></li>
+          <li><a href="https://groups.google.com/forum/?fromgroups#!forum/vertx-dev">Developer Group</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-lg-offset-2 col-md-6 copyright">
+        <p>Vert.x is 100% open source. Licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
+        Design by <a href="http://www.michel-kraemer.com">Michel Kr&auml;mer</a>. <a href="http://www.entypo.com">Entypo pictograms</a> by Daniel Bruce.</p>
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-2 col-md-5">
+            <img class="logo eclipse-logo" src="/assets/eclipse_logo_colour_small.png" width="204" height="48">
+          </div>
+          <div class="col-xs-12 col-md-offset-2 col-lg-offset-0 col-md-5">
+            <img class="logo cloudbees-logo" src="/assets/Button-Built-on-CB-1.png" width="184" height="48">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script src="/javascripts/docs.js"></script>
+
+
+</body>
+</html>
