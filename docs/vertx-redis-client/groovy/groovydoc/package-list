@@ -1,0 +1,5 @@
+examples
+io.vertx.groovy.redis
+io.vertx.redis
+io.vertx.redis.impl
+io.vertx.redis.op
