@@ -526,7 +526,7 @@ mongoClient.find("books", query, { res -&gt;
 
     res.result().each { json -&gt;
 
-      println(json.toString())
+      println(groovy.json.JsonOutput.toJson(json))
 
     }
 
@@ -555,7 +555,7 @@ mongoClient.find("books", query, { res -&gt;
 
     res.result().each { json -&gt;
 
-      println(json.toString())
+      println(groovy.json.JsonOutput.toJson(json))
 
     }
 
@@ -1079,7 +1079,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-06 16:39:14 BST
+                Last updated 2015-06-07 00:25:50 BST
               
               
             </div>

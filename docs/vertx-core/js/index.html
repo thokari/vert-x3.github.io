@@ -219,13 +219,30 @@
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
-<li><a href="#_clustering">Clustering</a>
+<li><a href="#_the_vertx_command_line">The 'vertx' command line</a>
 <ul class="sectlevel2">
-<li><a href="#_trouble_shooting_clustering">Trouble-shooting clustering</a></li>
+<li><a href="#_run_verticles">Run verticles</a></li>
+<li><a href="#_executing_verticles_packaged_as_a_fat_jar">Executing verticles packaged as a fat jar</a></li>
+<li><a href="#_displaying_version_of_vert_x">Displaying version of Vert.x</a></li>
+<li><a href="#_using_the_redeploy_argument">Using the redeploy argument</a></li>
+</ul>
+</li>
+<li><a href="#_cluster_managers">Cluster Managers</a></li>
+<li><a href="#_logging">Logging</a>
+<ul class="sectlevel2">
+<li><a href="#_configuring_jul_logging">Configuring JUL logging</a></li>
+<li><a href="#_using_another_logging_framework">Using another logging framework</a></li>
+<li><a href="#_logging_from_your_application">Logging from your application</a></li>
 <li><a href="#_high_availability_2">High Availability</a></li>
 </ul>
 </li>
-<li><a href="#_security_notes">Security notes</a></li>
+<li><a href="#_security_notes">Security notes</a>
+<ul class="sectlevel2">
+<li><a href="#_web_applications">Web applications</a></li>
+<li><a href="#_clustered_event_bus_traffic">Clustered event bus traffic</a></li>
+<li><a href="#_standard_security_best_practices">Standard security best practices</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -382,13 +399,30 @@
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
-<li><a href="#_clustering">Clustering</a>
+<li><a href="#_the_vertx_command_line">The 'vertx' command line</a>
 <ul class="sectlevel2">
-<li><a href="#_trouble_shooting_clustering">Trouble-shooting clustering</a></li>
+<li><a href="#_run_verticles">Run verticles</a></li>
+<li><a href="#_executing_verticles_packaged_as_a_fat_jar">Executing verticles packaged as a fat jar</a></li>
+<li><a href="#_displaying_version_of_vert_x">Displaying version of Vert.x</a></li>
+<li><a href="#_using_the_redeploy_argument">Using the redeploy argument</a></li>
+</ul>
+</li>
+<li><a href="#_cluster_managers">Cluster Managers</a></li>
+<li><a href="#_logging">Logging</a>
+<ul class="sectlevel2">
+<li><a href="#_configuring_jul_logging">Configuring JUL logging</a></li>
+<li><a href="#_using_another_logging_framework">Using another logging framework</a></li>
+<li><a href="#_logging_from_your_application">Logging from your application</a></li>
 <li><a href="#_high_availability_2">High Availability</a></li>
 </ul>
 </li>
-<li><a href="#_security_notes">Security notes</a></li>
+<li><a href="#_security_notes">Security notes</a>
+<ul class="sectlevel2">
+<li><a href="#_web_applications">Web applications</a></li>
+<li><a href="#_clustered_event_bus_traffic">Clustered event bus traffic</a></li>
+<li><a href="#_standard_security_best_practices">Standard security best practices</a></li>
+</ul>
+</li>
 </ul>
         </div>
         <div id="preamble">
@@ -1396,6 +1430,18 @@ core library and hacking from there.</p>
 <div class="paragraph">
 <p>To do this you need to download and install a Vert.x distribution, and add the <code>bin</code> directory of the installation
 to your <code>PATH</code> environment variable. Also make sure you have a Java 8 JDK on your <code>PATH</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The JDK is required to support on the fly compilation of Java code.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>You can now run verticles by using the <code>vertx run</code> command. Here are some examples:</p>
@@ -4501,8 +4547,58 @@ responses have returned and there are no outstanding pending requests to write.<
 <div class="sect2">
 <h3 id="_server_sharing">Server sharing</h3>
 <div class="paragraph">
-<p>TODO
-round robin requests etc</p>
+<p>When several HTTP servers listen on the same port, vert.x orchestrates the request handling using a
+round-robin strategy.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take a verticle creating a HTTP server such as:</p>
+</div>
+<div class="listingblock">
+<div class="title">io.vertx.examples.http.sharing.HttpServerVerticle</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.createHttpServer().requestHandler(function (request) {
+  request.response().end("Hello from server " + this);
+}).listen(8080);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This service is listening on the port 8080. So, when this verticle is instantiated multiple times as with:
+<code>vertx run io.vertx.examples.http.sharing.HttpServerVerticle -instances 2</code>, what&#8217;s happening ? If both
+verticles would bind to the same port, you would receive a socket exception. Fortunately, vert.x is handling
+this case for you. When you deploy another server on the same host and port as an existing server it doesn&#8217;t
+actually try and create a new server listening on the same host/port. It binds only once to the socket. When
+receiving a request it calls the server handlers following a round robin strategy.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s now imagine a client such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.setPeriodic(100, function (l) {
+  vertx.createHttpClient().getNow(8080, "localhost", "/", function (resp) {
+    resp.bodyHandler(function (body) {
+      console.log(body.toString("ISO-8859-1"));
+    });
+  });
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vert.x delegates the requests to one of the server sequentially:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
+Hello from i.v.e.h.s.HttpServerVerticle@2
+Hello from i.v.e.h.s.HttpServerVerticle@1
+Hello from i.v.e.h.s.HttpServerVerticle@2
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Consequently the servers can scale over available cores while each Vert.x verticle instance remains strictly
+single threaded, and you don&#8217;t have to do any special tricks like writing load-balancers in order to scale your
+server on your multi-core machine.</p>
 </div>
 </div>
 <div class="sect2">
@@ -5989,7 +6085,17 @@ This has the same meaning as <code><a href="jsdoc/write_stream-WriteStream.html#
 <h2 id="_thread_safety">Thread safety</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Notes on thread safety of Vert.x objects</p>
+<p>Most Vert.x objects are safe to access from different threads. <em>However</em> performance is optimised when they are
+accessed from the same context they were created from.</p>
+</div>
+<div class="paragraph">
+<p>For example if you have deployed a verticle which creates a <code><a href="jsdoc/net_server-NetServer.html">NetServer</a></code> which provides
+<code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> instances in it&#8217;s handler, then it&#8217;s best to always access that socket instance
+from the event loop of the verticle.</p>
+</div>
+<div class="paragraph">
+<p>If you stick to the standard Vert.x verticle deployment model and avoid sharing objects between verticles then this
+should be the case without you having to think about it.</p>
 </div>
 </div>
 </div>
@@ -6066,11 +6172,391 @@ or Eclipse Equinox. The bundle exports <code>io.vertx.core*</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_clustering">Clustering</h2>
+<h2 id="_the_vertx_command_line">The 'vertx' command line</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The <code>vertx</code> command is used to interact with Vert.x from the command line. It&#8217;s main use is to run Vert.x verticles.
+To do this you need to download and install a Vert.x distribution, and add the <code>bin</code> directory of the installation
+to your <code>PATH</code> environment variable. Also make sure you have a Java 8 JDK on your <code>PATH</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The JDK is required to support on the fly compilation of Java code.
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
-<h3 id="_trouble_shooting_clustering">Trouble-shooting clustering</h3>
+<h3 id="_run_verticles">Run verticles</h3>
+<div class="paragraph">
+<p>You can run raw Vert.x verticles directly from the command line using <code>vertx run</code>. Here is a couple of examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run my-verticle.js                                 (1)
+vertx run my-verticle.groovy                             (2)
+vertx run my-verticle.rb                                 (3)
 
+vertx run io.vertx.example.MyVerticle                    (4)
+vertx run io.vertx.example.MVerticle -cp my-verticle.jar (5)
+
+vertx run MyVerticle.java                                (6)</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Deploys a JavaScript verticle</p>
+</li>
+<li>
+<p>Deploys a Groovy verticle</p>
+</li>
+<li>
+<p>Deploys a Ruby verticle</p>
+</li>
+<li>
+<p>Deploys an already compiled Java verticle. Classpath root is the current directory</p>
+</li>
+<li>
+<p>Deploys a verticle packaged in a Jar, the jar need to be in the classpath</p>
+</li>
+<li>
+<p>Compiles the Java source and deploys it</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>As you can see in the case of Java, the name can either be the fully qualified class name of the verticle, or
+you can specify the Java Source file directly and Vert.x compiles it for you.</p>
+</div>
+<div class="paragraph">
+<p>You can also prefix the verticle with the name of the language implementation to use. For example if the verticle is
+a compiled Groovy class, you prefix it with <code>groovy:</code> so that Vert.x knows it&#8217;s a Groovy class not a Java class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run groovy:io.vertx.example.MyGroovyVerticle</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>vertx run</code> command can take a few optional parameters, they are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>-conf &lt;config_file&gt;</code> - Provides some configuration to the verticle. <code>config_file</code> is the name of a text file
+containing a JSON object that represents the configuration for the verticle. This is optional.</p>
+</li>
+<li>
+<p><code>-cp &lt;path&gt;</code> - The path on which to search for the verticle and any other resources used by the verticle. This
+defaults to <code>.</code> (current directory). If your verticle references other scripts, classes or other resources
+(e.g. jar files) then make sure these are on this path. The path can contain multiple path entries separated by
+<code>:</code> (colon) or <code>;</code> (semi-colon) depending on the operating system. Each path entry can be an absolute or relative
+path to a directory containing scripts, or absolute or relative filenames for jar or zip files. An example path
+might be <code>-cp classes:lib/otherscripts:jars/myjar.jar:jars/otherjar.jar</code>. Always use the path to reference any
+resources that your verticle requires. Do <strong>not</strong> put them on the system classpath as this can cause isolation
+issues between deployed verticles.</p>
+</li>
+<li>
+<p><code>-instances &lt;instances&gt;</code>  - The number of instances of the verticle to instantiate. Each verticle instance is
+strictly single threaded so to scale your application across available cores you might want to deploy more than
+one instance. If omitted a single instance will be deployed.</p>
+</li>
+<li>
+<p><code>-worker</code> - This option determines whether the verticle is a worker verticle or not.</p>
+</li>
+<li>
+<p><code>-cluster</code> -  This option determines whether the Vert.x instance will attempt to form a cluster with other Vert.x
+instances on the network. Clustering Vert.x instances allows Vert.x to form a distributed event bus with
+other nodes. Default is <code>false</code> (not clustered).</p>
+</li>
+<li>
+<p><code>-cluster-port</code> - If the cluster option has also been specified then this determines which port will be used for
+cluster communication with other Vert.x instances. Default is <code>0</code> - which means '<em>choose a free random port</em>'. You
+don&#8217;t usually need to specify this parameter unless you really need to bind to a specific port.</p>
+</li>
+<li>
+<p><code>-cluster-host</code> - If the cluster option has also been specified then this determines which host address will be
+used for cluster communication with other Vert.x instances. By default it will try and pick one from the available
+interfaces. If you have more than one interface and you want to use a specific one, specify it here.</p>
+</li>
+<li>
+<p><code>-ha</code> - if specified the verticle will be deployed as  high availability (HA) deployment. See related section
+for more details</p>
+</li>
+<li>
+<p><code>-quorum</code> - used in conjunction with <code>-ha</code>. It specifies the minimum number of nodes in the cluster for any <em>HA
+deploymentIDs</em> to be active. Defaults to 0.</p>
+</li>
+<li>
+<p><code>-hagroup</code> - used in conjunction with <code>-ha</code>. It specifies the HA group this node will join. There can be
+multiple HA groups in a cluster. Nodes will only failover to other nodes in the same group. The default value is `
+__DEFAULT__`</p>
+</li>
+<li>
+<p><code>-redeploy</code> - Enables automatic redeployment of the verticle</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here are some more examples:</p>
+</div>
+<div class="paragraph">
+<p>Run a JavaScript verticle server.js with default settings</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run server.js</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run 10 instances of a pre-compiled Java verticle specifying classpath</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run com.acme.MyVerticle -cp "classes:lib/myjar.jar" -instances 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run 10 instances of a Java verticle by source <em>file</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run MyVerticle.java -instances 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run 20 instances of a ruby worker verticle</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run order_worker.rb -instances 20 -worker</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run two JavaScript verticles on the same machine and let them cluster together with each other and any other servers
+on the network</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run handler.js -cluster
+vertx run sender.js -cluster</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run a Ruby verticle passing it some config</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run my_verticle.rb -conf my_verticle.conf</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>my_verticle.conf</code> might contain something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-json" data-lang="json">{
+ "name": "foo",
+ "num_widgets": 46
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The config will be available inside the verticle via the core API.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_executing_verticles_packaged_as_a_fat_jar">Executing verticles packaged as a fat jar</h3>
+<div class="paragraph">
+<p>A <em>fat jar</em> is an executable jar embedding its dependencies. This means you don&#8217;t have to have Vert.x pre-installed
+on the machine on which you execute the jar. A verticle packaged as a <em>fat jar</em> can just be launched using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java -jar my-verticle-fat.jar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <em>fat jar</em> must have a <em>manifest</em> with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Main-Class</code> set to <code>io.vertx.core.Starter</code></p>
+</li>
+<li>
+<p><code>Main-Verticle</code> specifying the main verticle (fully qualified name)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can also provide the usual command line arguments that you would pass to <code>vertx run</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java -jar my-verticle-fat.jar -cluster -conf myconf.json
+java -jar my-verticle-fat.jar -cluster -conf myconf.json -cp path/to/dir/conf/cluster_xml</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<em>fat jar</em> can be built using Gradle build or the Maven plugin. Check the vertx examples for instructions.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_displaying_version_of_vert_x">Displaying version of Vert.x</h3>
+<div class="paragraph">
+<p>To display the vert.x version, just launch:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx -version</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_the_redeploy_argument">Using the redeploy argument</h3>
+<div class="paragraph">
+<p>When a verticle is launched with <code>vertx run &#8230;&#8203;. -redeploy</code>, vertx redeploys the verticle every time the verticle
+files change. This mode makes the development much more fun and efficient as you don&#8217;t have to restart the
+application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run server.js -redeploy
+vertx run Server.java -redeploy</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using Java source file, vert.x recompiles the class on the fly and redeploys the verticle.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cluster_managers">Cluster Managers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Vert.x a cluster manager is used for various functions including:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Discovery and group membership of Vert.x nodes in a cluster</p>
+</li>
+<li>
+<p>Maintaining cluster wide topic subscriber lists (so we know which nodes are interested in which event bus addresses)</p>
+</li>
+<li>
+<p>Distributed Map support</p>
+</li>
+<li>
+<p>Distributed Locks</p>
+</li>
+<li>
+<p>Distributed Counters</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Cluster managers <em>do not</em> handle the event bus inter-node transport, this is done directly by Vert.x with TCP connections.</p>
+</div>
+<div class="paragraph">
+<p>The default cluster manager used in the Vert.x distributions is one that uses <a href="http://hazelcast.com">Hazelcast</a> but this
+can be easily replaced by a different implementation as Vert.x cluster managers are pluggable.</p>
+</div>
+<div class="paragraph">
+<p>A cluster manager must implement the interface <code>ClusterManager</code>. Vert.x locates
+cluster managers at run-time by using the Java <code>ServiceLoader</code> functionality to locate instances of
+<code>ClusterManager</code> on the classpath.</p>
+</div>
+<div class="paragraph">
+<p>If you are using Vert.x at the command line and you want to use clustering you should make sure the <code>lib</code> directory
+of the Vert.x installation contains your cluster manager jar.</p>
+</div>
+<div class="paragraph">
+<p>If you are using Vert.x from a Maven or Gradle project just add the cluster manager jar as a dependency of your project.</p>
+</div>
+<div class="paragraph">
+<p>You can also specify cluster managers programmatically if embedding Vert.x using
+<code><a href="../cheatsheet/VertxOptions.html#clusterManager">clusterManager</a></code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logging">Logging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x logs using it&#8217;s in-built logging API. The default implementation uses the JDK (JUL) logging so no extra
+logging dependencies are needed.</p>
+</div>
+<div class="sect2">
+<h3 id="_configuring_jul_logging">Configuring JUL logging</h3>
+<div class="paragraph">
+<p>A JUL logging configuration file can be specified in the normal JUL way by providing a system property called:
+<code>java.util.logging.config.file</code> with the value being your configuration file. For more information on this and
+the structure of a JUL config file please consult the JUL logging documentation.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x also provides a slightly more convenient way to specify a configuration file without having to set a system
+property. Just provide a JUL config file with the name <code>default-jul-logging.properties</code> on your classpath (e.g.
+inside your fatjar) and Vert.x will use that to configure JUL.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_another_logging_framework">Using another logging framework</h3>
+<div class="paragraph">
+<p>If you don&#8217;t want Vert.x to use JUL for it&#8217;s own logging you can configure it to use another logging framework, e.g.
+Log4J or SLF4J.</p>
+</div>
+<div class="paragraph">
+<p>To do this you should set a system property called <code>vertx.logger-delegate-factory-class-name</code> with the name of a Java
+class which implements the interface <code>LoggerFactory</code>. We provide pre-built implementations for
+Log4J and SLF4J with the class names <code>io.vertx.core.logging.Log4jLogDelegateFactory</code> and <code>io.vertx.core.logging.SLF4JLogDelegateFactory</code>
+respectively. If you want to use these implementations you should also make sure the relevant Log4J or SLF4J jars
+are on your classpath.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_from_your_application">Logging from your application</h3>
+<div class="paragraph">
+<p>Vert.x itself is just a library and you can use whatever logging library you prefer to log from your own application,
+using that logging library&#8217;s API.</p>
+</div>
+<div class="paragraph">
+<p>However, if you prefer you can use the Vert.x logging facility as described above to provide logging for your
+application too.</p>
+</div>
+<div class="paragraph">
+<p>To do that you use <code>LoggerFactory</code> to get an instance of <code>Logger</code>
+which you then use for logging, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Note -these classes are Java only
+
+// You would normally maintain one static instance of Logger per Java class:
+
+var logger = Java.type("io.vertx.core.logging.LoggerFactory").getLogger(className);
+
+logger.info("something happened");
+logger.error("oops!", exception);</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_high_availability_2">High Availability</h3>
@@ -6082,16 +6568,48 @@ or Eclipse Equinox. The bundle exports <code>io.vertx.core*</code>.</p>
 <h2 id="_security_notes">Security notes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Warn about file uploads and serving files from arbitrary locations</p>
+<p>Vert.x is a toolkit, not an opinionated framework where we force you to do things in a certain way. This gives you
+great power as a developer but with that comes great responsibility.</p>
 </div>
 <div class="paragraph">
-<p>Vert.x is a tool kit</p>
+<p>As with any toolkit, it&#8217;s possible to write insecure applications, so you should always be careful when developing
+your application especially if it&#8217;s exposed to the public (e.g. over the internet).</p>
+</div>
+<div class="sect2">
+<h3 id="_web_applications">Web applications</h3>
+<div class="paragraph">
+<p>If writing a web application it&#8217;s highly recommended that you use Vert.x-Web instead of Vert.x core directly for
+serving resources and handling file uploads.</p>
 </div>
 <div class="paragraph">
-<p>Run in a security sandbox</p>
+<p>Vert.x-Web normalises the path in requests to prevent malicious clients from crafting URLs to access resources
+outside of the web root.</p>
 </div>
 <div class="paragraph">
-<p>Use Apex</p>
+<p>Similarly for file uploads Vert.x-Web provides functionality for uploading to a known place on disk and does not rely
+on the filename provided by the client in the upload which could be crafted to upload to a different place on disk.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x core itself does not provide such checks so it would be up to you as a developer to implement them yourself.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_clustered_event_bus_traffic">Clustered event bus traffic</h3>
+<div class="paragraph">
+<p>When clustering the event bus between different Vert.x nodes on a network, the traffic is sent un-encrypted across the
+wire, so do not use this if you have confidential data to send and your Vert.x nodes are not on a trusted network.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_standard_security_best_practices">Standard security best practices</h3>
+<div class="paragraph">
+<p>Any service can have potentially vulnerabilities whether it&#8217;s written using Vert.x or any other toolkit so always
+follow security best practice, especially if your service is public facing.</p>
+</div>
+<div class="paragraph">
+<p>For example you should always run them in a DMZ and with an user account that has limited rights in order to limit
+the extent of damage in case the service was compromised.</p>
+</div>
 </div>
 </div>
 </div>
@@ -6102,7 +6620,7 @@ or Eclipse Equinox. The bundle exports <code>io.vertx.core*</code>.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-06 16:39:14 BST
+                Last updated 2015-06-07 00:25:48 BST
               
               
             </div>
