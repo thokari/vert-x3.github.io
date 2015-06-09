@@ -222,7 +222,7 @@ can be retrieved by providing the fully qualified name &lt;fqn&gt; <code>baseNam
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def metrics = metricsService.getMetricsSnapshot(vertx)
-metrics."vertx.eventbus.handlers"</code></pre>
+metrics.vertx.eventbus.handlers</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -232,7 +232,7 @@ metrics."vertx.eventbus.handlers"</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def eventBus = vertx.eventBus()
 def metrics = metricsService.getMetricsSnapshot(eventBus)
-metrics."handlers"</code></pre>
+metrics.handlers</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -546,8 +546,8 @@ a specific address match or a regex match:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
-import io.vertx.ext.dropwizard.MatchType
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.ext.dropwizard.MatchType
+import io.vertx.groovy.core.Vertx
 def vertx = Vertx.vertx([
   metricsOptions:[
     enabled:true,
@@ -638,8 +638,8 @@ if you use regex match, a wrong regex can potentially match a lot of handlers.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
-import io.vertx.ext.dropwizard.MatchType
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.ext.dropwizard.MatchType
+import io.vertx.groovy.core.Vertx
 def vertx = Vertx.vertx([
   metricsOptions:[
     enabled:true,
@@ -858,7 +858,7 @@ MetricRegistry registry = SharedMetricRegistries.getOrCreate("the_name");
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-07 11:53:06 BST
+                Last updated 2015-06-09 00:26:18 BST
               
               
             </div>

@@ -96,16 +96,14 @@
 <p>The Vert.x <code><a href="jsdoc/file_system-FileSystem.html">FileSystem</a></code> object provides many operations for manipulating the file system.</p>
 </div>
 <div class="paragraph">
-<p>There is one file system object per Vert.x instance, and you obtain it with <code><a href="jsdoc/vertx-Vertx.html#fileSystem">fileSystem</a></code>.</p>
+<p>There is one file system object per Vert.x instance, and you obtain it with  <code><a href="jsdoc/vertx-Vertx.html#fileSystem">fileSystem</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>A blocking and a non blocking version of each operation is provided.</p>
+<p>A blocking and a non blocking version of each operation is provided. The non blocking versions take a handler
+which is called when the operation completes or an error occurs.</p>
 </div>
 <div class="paragraph">
-<p>The non blocking versions take a handler which is called when the operation completes or an error occurs.</p>
-</div>
-<div class="paragraph">
-<p>Here&#8217;s an example of asynchronously copying a file:</p>
+<p>Here&#8217;s an example of an asynchronous copy of a file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -122,12 +120,10 @@ fs.copy("foo.txt", "bar.txt", function (res, res_err) {
 </div>
 </div>
 <div class="paragraph">
-<p>The blocking versions are named <code>xxxBlocking</code> and return the results or throw exceptions directly.</p>
-</div>
-<div class="paragraph">
-<p>In many cases, depending on the operating system and file system,some of the potentially blocking operations
-can return quickly, which is why we provide them, but it&#8217;s highly recommended that you test how long they take to
-return in your particular application before using them from an event loop, so as not to break the Golden Rule.</p>
+<p>The blocking versions are named <code>xxxBlocking</code> and return the results or throw exceptions directly. In many
+cases, depending on the operating system and file system, some of the potentially blocking operations can return
+quickly, which is why we provide them, but it&#8217;s highly recommended that you test how long they take to return in your
+particular application before using them from an event loop, so as not to break the Golden Rule.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s the copy using the blocking API:</p>
@@ -141,15 +137,21 @@ fs.copyBlocking("foo.txt", "bar.txt");</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Many operations exist to copy, move, truncate, chmod and many other file operations.</p>
+<p>Many operations exist to copy, move, truncate, chmod and many other file operations. We won&#8217;t list them all here,
+please consult the <code><a href="jsdoc/file_system-FileSystem.html">API docs</a></code> for the full list.</p>
 </div>
 <div class="paragraph">
-<p>We won&#8217;t list them all here, please consult the <code><a href="jsdoc/file_system-FileSystem.html">API docs</a></code> for the full list.</p>
+<p>Let&#8217;s see a couple of examples using asynchronous methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_asynchronous_files">Asynchronous files</h3>
 <div class="paragraph">
-<p>Vert.x provides an asynchronous file abstraction that allows you to manipulate a file on the file system</p>
+<p>Vert.x provides an asynchronous file abstraction that allows you to manipulate a file on the file system.</p>
 </div>
 <div class="paragraph">
 <p>You open an <code><a href="jsdoc/async_file-AsyncFile.html">AsyncFile</a></code> as follows:</p>
@@ -168,7 +170,134 @@ fileSystem.open("myfile.txt", options, function (res, res_err) {
 </div>
 </div>
 <div class="paragraph">
-<p>TODO</p>
+<p><code>AsyncFile</code> implements <code>ReadStream</code> and <code>WriteStream</code> so you can <em>pump</em>
+files to and from other stream objects such as net sockets, http requests and responses, and WebSockets.</p>
+</div>
+<div class="paragraph">
+<p>They also allow you to read and write directly to them.</p>
+</div>
+<div class="sect3">
+<h4 id="_random_access_writes">Random access writes</h4>
+<div class="paragraph">
+<p>To use an <code>AsyncFile</code> for random access writing you use the
+<code><a href="jsdoc/async_file-AsyncFile.html#write">write</a></code> method.</p>
+</div>
+<div class="paragraph">
+<p>The parameters to the method are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>buffer</code>: the buffer to write.</p>
+</li>
+<li>
+<p><code>position</code>: an integer position in the file where to write the buffer. If the position is greater or equal to the size
+of the file, the file will be enlarged to accommodate the offset.</p>
+</li>
+<li>
+<p><code>handler</code>: the result handler</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is an example of random access writes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_random_access_reads">Random access reads</h4>
+<div class="paragraph">
+<p>To use an <code>AsyncFile</code> for random access reads you use the
+<code><a href="jsdoc/async_file-AsyncFile.html#read">read</a></code>
+method.</p>
+</div>
+<div class="paragraph">
+<p>The parameters to the method are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>buffer</code>: the buffer into which the data will be read.</p>
+</li>
+<li>
+<p><code>offset</code>: an integer offset into the buffer where the read data will be placed.</p>
+</li>
+<li>
+<p><code>position</code>: the position in the file where to read data from.</p>
+</li>
+<li>
+<p><code>length</code>: the number of bytes of data to read</p>
+</li>
+<li>
+<p><code>handler</code>: the result handler</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of random access reads:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_opening_options">Opening Options</h4>
+<div class="paragraph">
+<p>When opening an <code>AsyncFile</code>, you pass an <code><a href="../cheatsheet/OpenOptions.html">OpenOptions</a></code> instance.
+These options describe the behavior of the file access. For instance, you can configure the file permissions with the
+<code><a href="../cheatsheet/OpenOptions.html#read">read</a></code>, <code><a href="../cheatsheet/OpenOptions.html#write">write</a></code>
+and <code><a href="../cheatsheet/OpenOptions.html#perms">perms</a></code> methods.</p>
+</div>
+<div class="paragraph">
+<p>You can also configure the behavior if the open file already exists with
+<code><a href="../cheatsheet/OpenOptions.html#createNew">createNew</a></code> and
+<code><a href="../cheatsheet/OpenOptions.html#truncateExisting">truncateExisting</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>You can also mark the file to be deleted on
+close or when the JVM is shutdown with <code><a href="../cheatsheet/OpenOptions.html#deleteOnClose">deleteOnClose</a></code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_flushing_data_to_underlying_storage">Flushing data to underlying storage.</h4>
+<div class="paragraph">
+<p>In the <code>OpenOptions</code>, you can enable/disable the automatic synchronisation of the content on every write using
+<code><a href="../cheatsheet/OpenOptions.html#DSync">DSync</a></code>. In that case, you can manually flush any writes from the OS
+cache by calling the <code><a href="jsdoc/async_file-AsyncFile.html#flush">flush</a></code> method.</p>
+</div>
+<div class="paragraph">
+<p>This method can also be called with an handler which will be called when the flush is complete.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_asyncfile_as_readstream_and_writestream">Using AsyncFile as ReadStream and WriteStream</h4>
+<div class="paragraph">
+<p><code>AsyncFile</code> implements <code>ReadStream</code> and <code>WriteStream</code>. You can then
+use them with a <em>pump</em> to pump data to and from other read and write streams. For example, this would
+copy the content to another <code>AsyncFile</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use the <em>pump</em> to write file content into HTTP responses, or more generally in any
+<code>WriteStream</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_closing_an_asyncfile">Closing an AsyncFile</h4>
+<div class="paragraph">
+<p>To close an <code>AsyncFile</code> call the <code><a href="jsdoc/async_file-AsyncFile.html#close">close</a></code> method. Closing is asynchronous and
+if you want to be notified when the close has been completed you can specify a handler function as an argument.</p>
+</div>
 </div>
 </div>
 </div>
@@ -180,7 +309,7 @@ fileSystem.open("myfile.txt", options, function (res, res_err) {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-07 11:53:06 BST
+                Last updated 2015-06-09 00:26:18 BST
               
               
             </div>

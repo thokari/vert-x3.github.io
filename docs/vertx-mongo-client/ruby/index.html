@@ -783,7 +783,7 @@ of the entries in the JSON is the command name it must be specified as a paramet
 
 mongoClient.run_command("aggregate", command) { |res,res_err|
   if (res_err == nil)
-    resArr = res["result"]
+    resArr = res['result']
     # etc
   else
     res_err.print_stack_trace()
@@ -820,7 +820,7 @@ mongoService.save("publishedBooks", document) { |res,res_err|
     }, nil) { |res2,res2_err|
       if (res2_err == nil)
 
-        puts "To retrieve ISO-8601 date : #{res2["publicationDate"]["$date"]}"
+        puts "To retrieve ISO-8601 date : #{res2['publicationDate']['$date']}"
 
       else
         res2_err.print_stack_trace()
@@ -1084,7 +1084,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-07 11:53:06 BST
+                Last updated 2015-06-09 00:26:18 BST
               
               
             </div>

@@ -779,7 +779,7 @@ of the entries in the JSON is the command name it must be specified as a paramet
 
 mongoClient.runCommand("aggregate", command, function (res, res_err) {
   if (res_err == null) {
-    var resArr = res."result";
+    var resArr = res.result;
     // etc
   } else {
     res_err.printStackTrace();
@@ -816,7 +816,7 @@ mongoService.save("publishedBooks", document, function (res, res_err) {
     }, null, function (res2, res2_err) {
       if (res2_err == null) {
 
-        console.log("To retrieve ISO-8601 date : " + res2."publicationDate"."$date");
+        console.log("To retrieve ISO-8601 date : " + res2.publicationDate.$date);
 
       } else {
         res2_err.printStackTrace();
@@ -1080,7 +1080,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-07 11:53:06 BST
+                Last updated 2015-06-09 00:26:18 BST
               
               
             </div>

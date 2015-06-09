@@ -120,7 +120,7 @@ var Vertx = function(j_val) {
   this.getOrCreateContext = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new Context(j_vertx["getOrCreateContext()"]());
+      return utils.convReturnVertxGen(j_vertx["getOrCreateContext()"](), Context);
     } else utils.invalidArgs();
   };
 
@@ -134,9 +134,9 @@ var Vertx = function(j_val) {
   this.createNetServer = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new NetServer(j_vertx["createNetServer()"]());
+      return utils.convReturnVertxGen(j_vertx["createNetServer()"](), NetServer);
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new NetServer(j_vertx["createNetServer(io.vertx.core.net.NetServerOptions)"](__args[0] != null ? new NetServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return utils.convReturnVertxGen(j_vertx["createNetServer(io.vertx.core.net.NetServerOptions)"](__args[0] != null ? new NetServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null), NetServer);
     } else utils.invalidArgs();
   };
 
@@ -150,9 +150,9 @@ var Vertx = function(j_val) {
   this.createNetClient = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new NetClient(j_vertx["createNetClient()"]());
+      return utils.convReturnVertxGen(j_vertx["createNetClient()"](), NetClient);
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new NetClient(j_vertx["createNetClient(io.vertx.core.net.NetClientOptions)"](__args[0] != null ? new NetClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return utils.convReturnVertxGen(j_vertx["createNetClient(io.vertx.core.net.NetClientOptions)"](__args[0] != null ? new NetClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null), NetClient);
     } else utils.invalidArgs();
   };
 
@@ -166,9 +166,9 @@ var Vertx = function(j_val) {
   this.createHttpServer = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new HttpServer(j_vertx["createHttpServer()"]());
+      return utils.convReturnVertxGen(j_vertx["createHttpServer()"](), HttpServer);
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new HttpServer(j_vertx["createHttpServer(io.vertx.core.http.HttpServerOptions)"](__args[0] != null ? new HttpServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return utils.convReturnVertxGen(j_vertx["createHttpServer(io.vertx.core.http.HttpServerOptions)"](__args[0] != null ? new HttpServerOptions(new JsonObject(JSON.stringify(__args[0]))) : null), HttpServer);
     } else utils.invalidArgs();
   };
 
@@ -182,9 +182,9 @@ var Vertx = function(j_val) {
   this.createHttpClient = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new HttpClient(j_vertx["createHttpClient()"]());
+      return utils.convReturnVertxGen(j_vertx["createHttpClient()"](), HttpClient);
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new HttpClient(j_vertx["createHttpClient(io.vertx.core.http.HttpClientOptions)"](__args[0] != null ? new HttpClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return utils.convReturnVertxGen(j_vertx["createHttpClient(io.vertx.core.http.HttpClientOptions)"](__args[0] != null ? new HttpClientOptions(new JsonObject(JSON.stringify(__args[0]))) : null), HttpClient);
     } else utils.invalidArgs();
   };
 
@@ -198,9 +198,9 @@ var Vertx = function(j_val) {
   this.createDatagramSocket = function() {
     var __args = arguments;
     if (__args.length === 0) {
-      return new DatagramSocket(j_vertx["createDatagramSocket()"]());
+      return utils.convReturnVertxGen(j_vertx["createDatagramSocket()"](), DatagramSocket);
     }  else if (__args.length === 1 && typeof __args[0] === 'object') {
-      return new DatagramSocket(j_vertx["createDatagramSocket(io.vertx.core.datagram.DatagramSocketOptions)"](__args[0] != null ? new DatagramSocketOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+      return utils.convReturnVertxGen(j_vertx["createDatagramSocket(io.vertx.core.datagram.DatagramSocketOptions)"](__args[0] != null ? new DatagramSocketOptions(new JsonObject(JSON.stringify(__args[0]))) : null), DatagramSocket);
     } else utils.invalidArgs();
   };
 
@@ -215,7 +215,7 @@ var Vertx = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedfileSystem == null) {
-        that.cachedfileSystem = new FileSystem(j_vertx["fileSystem()"]());
+        that.cachedfileSystem = utils.convReturnVertxGen(j_vertx["fileSystem()"](), FileSystem);
       }
       return that.cachedfileSystem;
     } else utils.invalidArgs();
@@ -232,7 +232,7 @@ var Vertx = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedeventBus == null) {
-        that.cachedeventBus = new EventBus(j_vertx["eventBus()"]());
+        that.cachedeventBus = utils.convReturnVertxGen(j_vertx["eventBus()"](), EventBus);
       }
       return that.cachedeventBus;
     } else utils.invalidArgs();
@@ -249,7 +249,7 @@ var Vertx = function(j_val) {
   this.createDnsClient = function(port, host) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] ==='number' && typeof __args[1] === 'string') {
-      return new DnsClient(j_vertx["createDnsClient(int,java.lang.String)"](port, host));
+      return utils.convReturnVertxGen(j_vertx["createDnsClient(int,java.lang.String)"](port, host), DnsClient);
     } else utils.invalidArgs();
   };
 
@@ -264,7 +264,7 @@ var Vertx = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       if (that.cachedsharedData == null) {
-        that.cachedsharedData = new SharedData(j_vertx["sharedData()"]());
+        that.cachedsharedData = utils.convReturnVertxGen(j_vertx["sharedData()"](), SharedData);
       }
       return that.cachedsharedData;
     } else utils.invalidArgs();
@@ -299,7 +299,7 @@ var Vertx = function(j_val) {
   this.timerStream = function(delay) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      return new TimeoutStream(j_vertx["timerStream(long)"](delay));
+      return utils.convReturnVertxGen(j_vertx["timerStream(long)"](delay), TimeoutStream);
     } else utils.invalidArgs();
   };
 
@@ -332,7 +332,7 @@ var Vertx = function(j_val) {
   this.periodicStream = function(delay) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] ==='number') {
-      return new TimeoutStream(j_vertx["periodicStream(long)"](delay));
+      return utils.convReturnVertxGen(j_vertx["periodicStream(long)"](delay), TimeoutStream);
     } else utils.invalidArgs();
   };
 
@@ -489,7 +489,7 @@ var Vertx = function(j_val) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'function' && typeof __args[1] === 'function') {
       j_vertx["executeBlocking(io.vertx.core.Handler,io.vertx.core.Handler)"](function(jVal) {
-      blockingCodeHandler(new Future(jVal));
+      blockingCodeHandler(utils.convReturnVertxGen(jVal, Future));
     }, function(ar) {
       if (ar.succeeded()) {
         resultHandler(utils.convReturnTypeUnknown(ar.result()), null);
@@ -516,9 +516,9 @@ var Vertx = function(j_val) {
 Vertx.vertx = function() {
   var __args = arguments;
   if (__args.length === 0) {
-    return new Vertx(JVertx["vertx()"]());
+    return utils.convReturnVertxGen(JVertx["vertx()"](), Vertx);
   }else if (__args.length === 1 && typeof __args[0] === 'object') {
-    return new Vertx(JVertx["vertx(io.vertx.core.VertxOptions)"](__args[0] != null ? new VertxOptions(new JsonObject(JSON.stringify(__args[0]))) : null));
+    return utils.convReturnVertxGen(JVertx["vertx(io.vertx.core.VertxOptions)"](__args[0] != null ? new VertxOptions(new JsonObject(JSON.stringify(__args[0]))) : null), Vertx);
   } else utils.invalidArgs();
 };
 
@@ -536,7 +536,7 @@ Vertx.clusteredVertx = function(options, resultHandler) {
   if (__args.length === 2 && typeof __args[0] === 'object' && typeof __args[1] === 'function') {
     JVertx["clusteredVertx(io.vertx.core.VertxOptions,io.vertx.core.Handler)"](options != null ? new VertxOptions(new JsonObject(JSON.stringify(options))) : null, function(ar) {
     if (ar.succeeded()) {
-      resultHandler(new Vertx(ar.result()), null);
+      resultHandler(utils.convReturnVertxGen(ar.result(), Vertx), null);
     } else {
       resultHandler(null, ar.cause());
     }
@@ -554,7 +554,7 @@ Vertx.clusteredVertx = function(options, resultHandler) {
 Vertx.currentContext = function() {
   var __args = arguments;
   if (__args.length === 0) {
-    return new Context(JVertx["currentContext()"]());
+    return utils.convReturnVertxGen(JVertx["currentContext()"](), Context);
   } else utils.invalidArgs();
 };
 
@@ -575,7 +575,7 @@ module.exports = Vertx;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Jun 07 2015 00:39:40 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Jun 08 2015 15:58:57 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

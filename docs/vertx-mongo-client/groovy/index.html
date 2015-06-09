@@ -778,7 +778,7 @@ of the entries in the JSON is the command name it must be specified as a paramet
 
 mongoClient.runCommand("aggregate", command, { res -&gt;
   if (res.succeeded()) {
-    def resArr = res.result()."result"
+    def resArr = res.result().result
     // etc
   } else {
     res.cause().printStackTrace()
@@ -815,7 +815,7 @@ mongoService.save("publishedBooks", document, { res -&gt;
     ], null, { res2 -&gt;
       if (res2.succeeded()) {
 
-        println("To retrieve ISO-8601 date : ${res2.result()."publicationDate"."$date"}")
+        println("To retrieve ISO-8601 date : ${res2.result().publicationDate.$date}")
 
       } else {
         res2.cause().printStackTrace()
@@ -1079,7 +1079,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-07 11:53:06 BST
+                Last updated 2015-06-09 00:26:18 BST
               
               
             </div>

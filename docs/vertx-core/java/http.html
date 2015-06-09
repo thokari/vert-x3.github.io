@@ -1067,7 +1067,7 @@ request.end(buffer);</code></pre>
 out to the wire.</p>
 </div>
 <div class="paragraph">
-<p>The actual write is asychronous and might not occur until some time after the call has returned.</p>
+<p>The actual write is asynchronous and might not occur until some time after the call has returned.</p>
 </div>
 <div class="paragraph">
 <p>Non-chunked HTTP requests with a request body require a <code>Content-Length</code> header to be provided.</p>
@@ -1186,8 +1186,8 @@ request.end();</code></pre>
 <div class="sect3">
 <h4 id="_handling_exceptions">Handling exceptions</h4>
 <div class="paragraph">
-<p>You can handle exceptions corresponding to a request by setting an exception handler on the <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code>
-instance:</p>
+<p>You can handle exceptions corresponding to a request by setting an exception handler on the
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1201,10 +1201,35 @@ request.exceptionHandler(e -&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>TODO - what about exceptions in the getNow methods where no exception handler can be provided??</p>
+<p>This does not handle non <em>2xx</em> response that need to be handled in the
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
 </div>
-<div class="paragraph">
-<p>Maybe need a catch all exception handler??</p>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientRequest request = client.post("some-uri", response -&gt; {
+  if (response.statusCode() == 200) {
+    System.out.println("Everything fine");
+    return;
+  }
+  if (response.statusCode() == 500) {
+    System.out.println("Unexpected behavior on the server side");
+    return;
+  }
+});
+request.end();</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<code>XXXNow</code> methods cannot receive an exception handler.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1780,7 +1805,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-07 11:53:06 BST
+                Last updated 2015-06-09 00:26:18 BST
               
               
             </div>

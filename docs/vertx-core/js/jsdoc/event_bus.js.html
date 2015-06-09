@@ -108,7 +108,7 @@ var EventBus = function(j_val) {
     }  else if (__args.length === 3 && typeof __args[0] === 'string' && true && typeof __args[2] === 'function') {
       j_eventBus["send(java.lang.String,java.lang.Object,io.vertx.core.Handler)"](__args[0], utils.convParamTypeUnknown(__args[1]), function(ar) {
       if (ar.succeeded()) {
-        __args[2](new Message(ar.result()), null);
+        __args[2](utils.convReturnVertxGen(ar.result(), Message), null);
       } else {
         __args[2](null, ar.cause());
       }
@@ -120,7 +120,7 @@ var EventBus = function(j_val) {
     }  else if (__args.length === 4 && typeof __args[0] === 'string' && true && typeof __args[2] === 'object' && typeof __args[3] === 'function') {
       j_eventBus["send(java.lang.String,java.lang.Object,io.vertx.core.eventbus.DeliveryOptions,io.vertx.core.Handler)"](__args[0], utils.convParamTypeUnknown(__args[1]), __args[2] != null ? new DeliveryOptions(new JsonObject(JSON.stringify(__args[2]))) : null, function(ar) {
       if (ar.succeeded()) {
-        __args[3](new Message(ar.result()), null);
+        __args[3](utils.convReturnVertxGen(ar.result(), Message), null);
       } else {
         __args[3](null, ar.cause());
       }
@@ -160,11 +160,11 @@ var EventBus = function(j_val) {
   this.consumer = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new MessageConsumer(j_eventBus["consumer(java.lang.String)"](__args[0]));
+      return utils.convReturnVertxGen(j_eventBus["consumer(java.lang.String)"](__args[0]), MessageConsumer);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new MessageConsumer(j_eventBus["consumer(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
-      __args[1](new Message(jVal));
-    }));
+      return utils.convReturnVertxGen(j_eventBus["consumer(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
+      __args[1](utils.convReturnVertxGen(jVal, Message));
+    }), MessageConsumer);
     } else utils.invalidArgs();
   };
 
@@ -179,11 +179,11 @@ var EventBus = function(j_val) {
   this.localConsumer = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new MessageConsumer(j_eventBus["localConsumer(java.lang.String)"](__args[0]));
+      return utils.convReturnVertxGen(j_eventBus["localConsumer(java.lang.String)"](__args[0]), MessageConsumer);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
-      return new MessageConsumer(j_eventBus["localConsumer(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
-      __args[1](new Message(jVal));
-    }));
+      return utils.convReturnVertxGen(j_eventBus["localConsumer(java.lang.String,io.vertx.core.Handler)"](__args[0], function(jVal) {
+      __args[1](utils.convReturnVertxGen(jVal, Message));
+    }), MessageConsumer);
     } else utils.invalidArgs();
   };
 
@@ -199,9 +199,9 @@ var EventBus = function(j_val) {
   this.sender = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new MessageProducer(j_eventBus["sender(java.lang.String)"](__args[0]));
+      return utils.convReturnVertxGen(j_eventBus["sender(java.lang.String)"](__args[0]), MessageProducer);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'object') {
-      return new MessageProducer(j_eventBus["sender(java.lang.String,io.vertx.core.eventbus.DeliveryOptions)"](__args[0], __args[1] != null ? new DeliveryOptions(new JsonObject(JSON.stringify(__args[1]))) : null));
+      return utils.convReturnVertxGen(j_eventBus["sender(java.lang.String,io.vertx.core.eventbus.DeliveryOptions)"](__args[0], __args[1] != null ? new DeliveryOptions(new JsonObject(JSON.stringify(__args[1]))) : null), MessageProducer);
     } else utils.invalidArgs();
   };
 
@@ -217,9 +217,9 @@ var EventBus = function(j_val) {
   this.publisher = function() {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
-      return new MessageProducer(j_eventBus["publisher(java.lang.String)"](__args[0]));
+      return utils.convReturnVertxGen(j_eventBus["publisher(java.lang.String)"](__args[0]), MessageProducer);
     }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'object') {
-      return new MessageProducer(j_eventBus["publisher(java.lang.String,io.vertx.core.eventbus.DeliveryOptions)"](__args[0], __args[1] != null ? new DeliveryOptions(new JsonObject(JSON.stringify(__args[1]))) : null));
+      return utils.convReturnVertxGen(j_eventBus["publisher(java.lang.String,io.vertx.core.eventbus.DeliveryOptions)"](__args[0], __args[1] != null ? new DeliveryOptions(new JsonObject(JSON.stringify(__args[1]))) : null), MessageProducer);
     } else utils.invalidArgs();
   };
 
@@ -265,7 +265,7 @@ module.exports = EventBus;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Sun Jun 07 2015 00:39:40 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Mon Jun 08 2015 15:58:57 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>
