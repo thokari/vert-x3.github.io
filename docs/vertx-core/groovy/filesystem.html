@@ -153,7 +153,47 @@ please consult the <code><a href="groovydoc/io/vertx/groovy/core/file/FileSystem
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.buffer.Buffer
+def vertx = Vertx.vertx()
+
+// Read a file
+vertx.fileSystem().readFile("target/classes/readme.txt", { result -&gt;
+  if (result.succeeded()) {
+    println(result.result())
+  } else {
+    System.err.println("Oh oh ...${result.cause()}")
+  }
+})
+
+// Copy a file
+vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", { result -&gt;
+  if (result.succeeded()) {
+    println("File copied")
+  } else {
+    System.err.println("Oh oh ...${result.cause()}")
+  }
+})
+
+// Write a file
+vertx.fileSystem().writeFile("target/classes/hello.txt", Buffer.buffer("Hello"), { result -&gt;
+  if (result.succeeded()) {
+    println("File written")
+  } else {
+    System.err.println("Oh oh ...${result.cause()}")
+  }
+})
+
+// Check existence and delete
+vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
+  if (result.succeeded() &amp;&amp; result.result()) {
+    vertx.fileSystem().delete("target/classes/junk.txt", { r -&gt;
+      println("File deleted")
+    })
+  } else {
+    System.err.println("Oh oh ... - cannot delete the file: ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -211,7 +251,27 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.buffer.Buffer
+def vertx = Vertx.vertx()
+vertx.fileSystem().open("target/classes/hello.txt", [:], { result -&gt;
+  if (result.succeeded()) {
+    def file = result.result()
+    def buff = Buffer.buffer("foo")
+    for (def i = 0;i &lt; 5;i++) {
+      file.write(buff, buff.length() * i, { ar -&gt;
+        if (ar.succeeded()) {
+          println("Written ok!")
+          // etc
+        } else {
+          System.err.println("Failed to write: ${ar.cause()}")
+        }
+      })
+    }
+  } else {
+    System.err.println("Cannot open file ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 </div>
@@ -249,7 +309,26 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.buffer.Buffer
+def vertx = Vertx.vertx()
+vertx.fileSystem().open("target/classes/les_miserables.txt", [:], { result -&gt;
+  if (result.succeeded()) {
+    def file = result.result()
+    def buff = Buffer.buffer(1000)
+    for (def i = 0;i &lt; 10;i++) {
+      file.read(buff, i * 100, i * 100, 100, { ar -&gt;
+        if (ar.succeeded()) {
+          println("Read ok!")
+        } else {
+          System.err.println("Failed to write: ${ar.cause()}")
+        }
+      })
+    }
+  } else {
+    System.err.println("Cannot open file ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 </div>
@@ -291,7 +370,22 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.streams.Pump
+def vertx = Vertx.vertx()
+def output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", [:])
+
+vertx.fileSystem().open("target/classes/les_miserables.txt", [:], { result -&gt;
+  if (result.succeeded()) {
+    def file = result.result()
+    Pump.pump(file, output).start()
+    file.endHandler({ r -&gt;
+      println("Copy done")
+    })
+  } else {
+    System.err.println("Cannot open file ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -316,7 +410,7 @@ if you want to be notified when the close has been completed you can specify a h
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:18 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

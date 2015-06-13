@@ -153,7 +153,47 @@ please consult the <code><a href="jsdoc/file_system-FileSystem.html">API docs</a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var Buffer = require("vertx-js/buffer");
+var vertx = Vertx.vertx();
+
+// Read a file
+vertx.fileSystem().readFile("target/classes/readme.txt", function (result, result_err) {
+  if (result_err == null) {
+    console.log(result);
+  } else {
+    console.error("Oh oh ..." + result_err);
+  }
+});
+
+// Copy a file
+vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", function (result, result_err) {
+  if (result_err == null) {
+    console.log("File copied");
+  } else {
+    console.error("Oh oh ..." + result_err);
+  }
+});
+
+// Write a file
+vertx.fileSystem().writeFile("target/classes/hello.txt", Buffer.buffer("Hello"), function (result, result_err) {
+  if (result_err == null) {
+    console.log("File written");
+  } else {
+    console.error("Oh oh ..." + result_err);
+  }
+});
+
+// Check existence and delete
+vertx.fileSystem().exists("target/classes/junk.txt", function (result, result_err) {
+  if (result_err == null &amp;&amp; result) {
+    vertx.fileSystem().delete("target/classes/junk.txt", function (r, r_err) {
+      console.log("File deleted");
+    });
+  } else {
+    console.error("Oh oh ... - cannot delete the file: " + result_err);
+  }
+});</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -212,7 +252,28 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var Buffer = require("vertx-js/buffer");
+var vertx = Vertx.vertx();
+vertx.fileSystem().open("target/classes/hello.txt", {
+}, function (result, result_err) {
+  if (result_err == null) {
+    var file = result;
+    var buff = Buffer.buffer("foo");
+    for (var i = 0; i &lt; 5; i++) {
+      file.write(buff, buff.length() * i, function (ar, ar_err) {
+        if (ar_err == null) {
+          console.log("Written ok!");
+          // etc
+        } else {
+          console.error("Failed to write: " + ar_err);
+        }
+      });
+    }
+  } else {
+    console.error("Cannot open file " + result_err);
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -250,7 +311,27 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var Buffer = require("vertx-js/buffer");
+var vertx = Vertx.vertx();
+vertx.fileSystem().open("target/classes/les_miserables.txt", {
+}, function (result, result_err) {
+  if (result_err == null) {
+    var file = result;
+    var buff = Buffer.buffer(1000);
+    for (var i = 0; i &lt; 10; i++) {
+      file.read(buff, i * 100, i * 100, 100, function (ar, ar_err) {
+        if (ar_err == null) {
+          console.log("Read ok!");
+        } else {
+          console.error("Failed to write: " + ar_err);
+        }
+      });
+    }
+  } else {
+    console.error("Cannot open file " + result_err);
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -292,7 +373,24 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var Pump = require("vertx-js/pump");
+var vertx = Vertx.vertx();
+var output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", {
+});
+
+vertx.fileSystem().open("target/classes/les_miserables.txt", {
+}, function (result, result_err) {
+  if (result_err == null) {
+    var file = result;
+    Pump.pump(file, output).start();
+    file.endHandler(function (r) {
+      console.log("Copy done");
+    });
+  } else {
+    console.error("Cannot open file " + result_err);
+  }
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -317,7 +415,7 @@ if you want to be notified when the close has been completed you can specify a h
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:18 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

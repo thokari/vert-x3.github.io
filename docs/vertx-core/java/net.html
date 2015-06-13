@@ -1055,6 +1055,28 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_configuring_the_cipher_suite">Configuring the Cipher suite</h4>
+<div class="paragraph">
+<p>By default, the TLS configuration will uses the Cipher suite of the JVM running Vert.x. This Cipher suite can be
+configured with a suite of enabled ciphers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
+    setSsl(true).
+    setKeyStoreOptions(keyStoreOptions).
+    addEnabledCipherSuite("ECDHE-RSA-AES128-GCM-SHA256").
+    addEnabledCipherSuite("ECDHE-ECDSA-AES128-GCM-SHA256").
+    addEnabledCipherSuite("ECDHE-RSA-AES256-GCM-SHA384").
+    addEnabledCipherSuite("CDHE-ECDSA-AES256-GCM-SHA384");
+NetServer server = vertx.createNetServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cipher suite can be specified on the <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1065,7 +1087,7 @@ NetClient client = vertx.createNetClient(options);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:18 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

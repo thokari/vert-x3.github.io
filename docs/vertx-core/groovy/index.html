@@ -893,7 +893,7 @@ blocking APIs safely within a Vert.x application.</p>
 from doing any other useful work. So how can you do this?</p>
 </div>
 <div class="paragraph">
-<p>It&#8217;s done by calling <code><a href="groovydoc/io/vertx/groovy/core/Vertx.html#executeBlocking(io.vertx.core.Handler,%20io.vertx.core.Handler)">executeBlocking</a></code> specifying both the blocking code to execute and a
+<p>It&#8217;s done by calling <code><a href="groovydoc/io/vertx/groovy/core/Vertx.html#executeBlocking(io.vertx.core.Handler,%20boolean,%20io.vertx.core.Handler)">executeBlocking</a></code> specifying both the blocking code to execute and a
 result handler to be called back asynchronous when the blocking code has been executed.</p>
 </div>
 <div class="listingblock">
@@ -910,7 +910,19 @@ vertx.executeBlocking({ future -&gt;
 </div>
 </div>
 <div class="paragraph">
+<p>By default, if executeBlocking is called several times from the same context (e.g. the same verticle instance) then
+the different executeBlocking are executed <em>serially</em> (i.e. one after another).</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t care about ordering you can call <code><a href="groovydoc/io/vertx/groovy/core/Vertx.html#executeBlocking(io.vertx.core.Handler,%20boolean,%20io.vertx.core.Handler)">executeBlocking</a></code>
+specifying <code>false</code> as the argument to <code>ordered</code>. In this case any executeBlocking may be executed in parallel
+on the worker pool.</p>
+</div>
+<div class="paragraph">
 <p>An alternative way to run blocking code is to use a <a href="#worker_verticles">worker verticle</a></p>
+</div>
+<div class="paragraph">
+<p>A worker verticle is always executed with a thread from the worker pool.</p>
 </div>
 </div>
 </div>
@@ -1270,7 +1282,11 @@ other things.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
+  isolationGroup:"mygroup"
+]
+options.extraClasspath = ["lib/jars/some-library.jar"]
+vertx.deployVerticle("com.mycompany.MyIsolatedVerticle", options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3075,6 +3091,31 @@ def options = [
 ]
 def client = vertx.createNetClient(options)</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_cipher_suite">Configuring the Cipher suite</h4>
+<div class="paragraph">
+<p>By default, the TLS configuration will uses the Cipher suite of the JVM running Vert.x. This Cipher suite can be
+configured with a suite of enabled ciphers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
+  ssl:true,
+  keyStoreOptions:keyStoreOptions,
+  enabledCipherSuites:[
+    "ECDHE-RSA-AES128-GCM-SHA256",
+    "ECDHE-ECDSA-AES128-GCM-SHA256",
+    "ECDHE-RSA-AES256-GCM-SHA384",
+    "CDHE-ECDSA-AES256-GCM-SHA384"
+  ]
+]
+def server = vertx.createNetServer(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cipher suite can be specified on the <code><a href="../cheatsheet/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../cheatsheet/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
 </div>
@@ -5079,7 +5120,47 @@ please consult the <code><a href="groovydoc/io/vertx/groovy/core/file/FileSystem
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.buffer.Buffer
+def vertx = Vertx.vertx()
+
+// Read a file
+vertx.fileSystem().readFile("target/classes/readme.txt", { result -&gt;
+  if (result.succeeded()) {
+    println(result.result())
+  } else {
+    System.err.println("Oh oh ...${result.cause()}")
+  }
+})
+
+// Copy a file
+vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", { result -&gt;
+  if (result.succeeded()) {
+    println("File copied")
+  } else {
+    System.err.println("Oh oh ...${result.cause()}")
+  }
+})
+
+// Write a file
+vertx.fileSystem().writeFile("target/classes/hello.txt", Buffer.buffer("Hello"), { result -&gt;
+  if (result.succeeded()) {
+    println("File written")
+  } else {
+    System.err.println("Oh oh ...${result.cause()}")
+  }
+})
+
+// Check existence and delete
+vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
+  if (result.succeeded() &amp;&amp; result.result()) {
+    vertx.fileSystem().delete("target/classes/junk.txt", { r -&gt;
+      println("File deleted")
+    })
+  } else {
+    System.err.println("Oh oh ... - cannot delete the file: ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -5137,7 +5218,27 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.buffer.Buffer
+def vertx = Vertx.vertx()
+vertx.fileSystem().open("target/classes/hello.txt", [:], { result -&gt;
+  if (result.succeeded()) {
+    def file = result.result()
+    def buff = Buffer.buffer("foo")
+    for (def i = 0;i &lt; 5;i++) {
+      file.write(buff, buff.length() * i, { ar -&gt;
+        if (ar.succeeded()) {
+          println("Written ok!")
+          // etc
+        } else {
+          System.err.println("Failed to write: ${ar.cause()}")
+        }
+      })
+    }
+  } else {
+    System.err.println("Cannot open file ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 </div>
@@ -5175,7 +5276,26 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.buffer.Buffer
+def vertx = Vertx.vertx()
+vertx.fileSystem().open("target/classes/les_miserables.txt", [:], { result -&gt;
+  if (result.succeeded()) {
+    def file = result.result()
+    def buff = Buffer.buffer(1000)
+    for (def i = 0;i &lt; 10;i++) {
+      file.read(buff, i * 100, i * 100, 100, { ar -&gt;
+        if (ar.succeeded()) {
+          println("Read ok!")
+        } else {
+          System.err.println("Failed to write: ${ar.cause()}")
+        }
+      })
+    }
+  } else {
+    System.err.println("Cannot open file ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 </div>
@@ -5217,7 +5337,22 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+import io.vertx.groovy.core.streams.Pump
+def vertx = Vertx.vertx()
+def output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", [:])
+
+vertx.fileSystem().open("target/classes/les_miserables.txt", [:], { result -&gt;
+  if (result.succeeded()) {
+    def file = result.result()
+    Pump.pump(file, output).start()
+    file.endHandler({ r -&gt;
+      println("Copy done")
+    })
+  } else {
+    System.err.println("Cannot open file ${result.cause()}")
+  }
+})</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6946,7 +7081,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:18 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

@@ -245,7 +245,26 @@ it cannot be used for running other commands than the command to leave that mode
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-redis/redis_client'
+
+# register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel
+vertx.event_bus().consumer("redis.sub.channel1") { |received|
+  # do whatever you need to do with your message
+  value = received.body()['value']
+  # the value is a JSON doc with the following properties
+  # channel - The channel to which this message was sent
+  # pattern - Pattern is present if you use psubscribe command and is the pattern that matched this message channel
+  # message - The message payload
+}
+
+redis = VertxRedis::RedisClient.create(vertx, {
+})
+
+redis.subscribe(["channel1"]) { |res,res_err|
+  if (res_err == nil)
+    # so something...
+  end
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -381,7 +400,7 @@ at the top level object.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:20 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

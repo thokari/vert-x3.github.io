@@ -1685,8 +1685,8 @@ requests from the same browser to different servers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var ClusteredSessionStore = require("vertx-web-js/clustered_session_store");
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ClusteredSessionStore = require("vertx-web-js/clustered_session_store");
+var Vertx = require("vertx-js/vertx");
 
 // a clustered Vert.x
 Vertx.clusteredVertx({
@@ -1845,8 +1845,8 @@ please consult the auth documentation.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CookieHandler = require("vertx-web-js/cookie_handler");
-var SessionHandler = require("vertx-web-js/session_handler");
 var LocalSessionStore = require("vertx-web-js/local_session_store");
+var SessionHandler = require("vertx-web-js/session_handler");
 var BasicAuthHandler = require("vertx-web-js/basic_auth_handler");
 
 router.route().handler(CookieHandler.create().handle);
@@ -1865,8 +1865,8 @@ your auth handler is before your application handlers on those paths:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CookieHandler = require("vertx-web-js/cookie_handler");
-var SessionHandler = require("vertx-web-js/session_handler");
 var LocalSessionStore = require("vertx-web-js/local_session_store");
+var SessionHandler = require("vertx-web-js/session_handler");
 var UserSessionHandler = require("vertx-web-js/user_session_handler");
 var BasicAuthHandler = require("vertx-web-js/basic_auth_handler");
 
@@ -1909,7 +1909,8 @@ routes before the auth handler.</p>
 <p>Once you have your user object you can also programmatically use the methods on it to authorise the user.</p>
 </div>
 <div class="paragraph">
-<p>If you want to cause the user to be logged out you can set the user to null on the routing context.</p>
+<p>If you want to cause the user to be logged out you can call <code><a href="jsdoc/routing_context-RoutingContext.html#clearUser">clearUser</a></code>
+on the routing context.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1966,8 +1967,8 @@ To handle the login we provide a prebuilt handler <code><a href="jsdoc/form_logi
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CookieHandler = require("vertx-web-js/cookie_handler");
-var SessionHandler = require("vertx-web-js/session_handler");
 var LocalSessionStore = require("vertx-web-js/local_session_store");
+var SessionHandler = require("vertx-web-js/session_handler");
 var UserSessionHandler = require("vertx-web-js/user_session_handler");
 var RedirectAuthHandler = require("vertx-web-js/redirect_auth_handler");
 var FormLoginHandler = require("vertx-web-js/form_login_handler");
@@ -2114,8 +2115,8 @@ authProvider.generateToken({
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var handler = function (rc) {
-  var theSubject = rc.user().principal()."sub";
-  var someKey = rc.user().principal()."someKey";
+  var theSubject = rc.user().principal().sub;
+  var someKey = rc.user().principal().someKey;
 };</code></pre>
 </div>
 </div>
@@ -3017,8 +3018,8 @@ var options = {
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Router = require("vertx-web-js/router");
 var SockJSHandler = require("vertx-web-js/sock_js_handler");
 var CookieHandler = require("vertx-web-js/cookie_handler");
-var SessionHandler = require("vertx-web-js/session_handler");
 var LocalSessionStore = require("vertx-web-js/local_session_store");
+var SessionHandler = require("vertx-web-js/session_handler");
 var BasicAuthHandler = require("vertx-web-js/basic_auth_handler");
 
 var router = Router.router(vertx);
@@ -3121,7 +3122,36 @@ authorisation or metrics.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Router = require("vertx-web-js/router");
+var SockJSHandler = require("vertx-web-js/sock_js_handler");
+var BridgeEvent = require("vertx-web-js/bridge_event");
+
+var router = Router.router(vertx);
+
+// Let through any messages sent to 'demo.orderMgr' from the client
+var inboundPermitted = {
+  "address" : "demo.someService"
+};
+
+var sockJSHandler = SockJSHandler.create(vertx);
+var options = {
+  "inboundPermitteds" : [
+    inboundPermitted
+  ]
+};
+
+sockJSHandler.bridge(options, function (be) {
+  if (be.type() === BridgeEvent.Type.PUBLISH || be.type() === BridgeEvent.Type.RECEIVE) {
+    if (be.rawMessage().body == "armadillos") {
+      // Reject it
+      be.complete(false);
+      return
+    }
+  }
+  be.complete(true);
+});
+
+router.route("/eventbus").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3130,7 +3160,37 @@ also add headers to the message, here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Router = require("vertx-web-js/router");
+var SockJSHandler = require("vertx-web-js/sock_js_handler");
+var BridgeEvent = require("vertx-web-js/bridge_event");
+
+var router = Router.router(vertx);
+
+// Let through any messages sent to 'demo.orderService' from the client
+var inboundPermitted = {
+  "address" : "demo.orderService"
+};
+
+var sockJSHandler = SockJSHandler.create(vertx);
+var options = {
+  "inboundPermitteds" : [
+    inboundPermitted
+  ]
+};
+
+sockJSHandler.bridge(options, function (be) {
+  if (be.type() === BridgeEvent.Type.PUBLISH || be.type() === BridgeEvent.Type.SEND) {
+    // Add some headers
+    var headers = {
+      "header1" : "val",
+      "header2" : "val2"
+    };
+    be.rawMessage().headers = headers;
+  }
+  be.complete(true);
+});
+
+router.route("/eventbus").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 </div>
@@ -3143,7 +3203,7 @@ also add headers to the message, here&#8217;s an example:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:20 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

@@ -1856,7 +1856,8 @@ routes before the auth handler.</p>
 <p>Once you have your user object you can also programmatically use the methods on it to authorise the user.</p>
 </div>
 <div class="paragraph">
-<p>If you want to cause the user to be logged out you can set the user to null on the routing context.</p>
+<p>If you want to cause the user to be logged out you can call <code><a href="../../apidocs/io/vertx/ext/web/RoutingContext.html#clearUser--">clearUser</a></code>
+on the routing context.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3029,7 +3030,7 @@ router.route("/eventbus").handler(sockJSHandler);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:20 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

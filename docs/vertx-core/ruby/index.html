@@ -923,7 +923,19 @@ vertx.execute_blocking(lambda { |future|
 </div>
 </div>
 <div class="paragraph">
+<p>By default, if executeBlocking is called several times from the same context (e.g. the same verticle instance) then
+the different executeBlocking are executed <em>serially</em> (i.e. one after another).</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t care about ordering you can call <code><a href="yardoc/Vertx/Vertx.html#execute_blocking-instance_method">executeBlocking</a></code>
+specifying <code>false</code> as the argument to <code>ordered</code>. In this case any executeBlocking may be executed in parallel
+on the worker pool.</p>
+</div>
+<div class="paragraph">
 <p>An alternative way to run blocking code is to use a <a href="#worker_verticles">worker verticle</a></p>
+</div>
+<div class="paragraph">
+<p>A worker verticle is always executed with a thread from the worker pool.</p>
 </div>
 </div>
 </div>
@@ -1408,7 +1420,11 @@ other things.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'isolationGroup' =&gt; "mygroup"
+}
+options['extraClasspath'] = ["lib/jars/some-library.jar"]
+vertx.deploy_verticle("com.mycompany.MyIsolatedVerticle", options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3299,6 +3315,31 @@ options = {
 }
 client = vertx.create_net_client(options)</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_cipher_suite">Configuring the Cipher suite</h4>
+<div class="paragraph">
+<p>By default, the TLS configuration will uses the Cipher suite of the JVM running Vert.x. This Cipher suite can be
+configured with a suite of enabled ciphers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'ssl' =&gt; true,
+  'keyStoreOptions' =&gt; keyStoreOptions,
+  'enabledCipherSuites' =&gt; [
+    "ECDHE-RSA-AES128-GCM-SHA256",
+    "ECDHE-ECDSA-AES128-GCM-SHA256",
+    "ECDHE-RSA-AES256-GCM-SHA384",
+    "CDHE-ECDSA-AES256-GCM-SHA384"
+  ]
+}
+server = vertx.create_net_server(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cipher suite can be specified on the <code><a href="../cheatsheet/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../cheatsheet/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
 </div>
@@ -5303,7 +5344,47 @@ please consult the <code><a href="yardoc/Vertx/FileSystem.html">API docs</a></co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/vertx'
+require 'vertx/buffer'
+vertx = Vertx::Vertx.vertx()
+
+# Read a file
+vertx.file_system().read_file("target/classes/readme.txt") { |result,result_err|
+  if (result_err == nil)
+    puts result
+  else
+    STDERR.puts "Oh oh ...#{result_err}"
+  end
+}
+
+# Copy a file
+vertx.file_system().copy("target/classes/readme.txt", "target/classes/readme2.txt") { |result,result_err|
+  if (result_err == nil)
+    puts "File copied"
+  else
+    STDERR.puts "Oh oh ...#{result_err}"
+  end
+}
+
+# Write a file
+vertx.file_system().write_file("target/classes/hello.txt", Vertx::Buffer.buffer("Hello")) { |result,result_err|
+  if (result_err == nil)
+    puts "File written"
+  else
+    STDERR.puts "Oh oh ...#{result_err}"
+  end
+}
+
+# Check existence and delete
+vertx.file_system().exists("target/classes/junk.txt") { |result,result_err|
+  if (result_err == nil &amp;&amp; result)
+    vertx.file_system().delete("target/classes/junk.txt") { |r,r_err|
+      puts "File deleted"
+    }
+  else
+    STDERR.puts "Oh oh ... - cannot delete the file: #{result_err}"
+  end
+}</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -5362,7 +5443,30 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/vertx'
+require 'vertx/buffer'
+vertx = Vertx::Vertx.vertx()
+vertx.file_system().open("target/classes/hello.txt", {
+}) { |result,result_err|
+  if (result_err == nil)
+    file = result
+    buff = Vertx::Buffer.buffer("foo")
+    i = 0
+    while (i &lt; 5)
+      file.write(buff, buff.length() * i) { |ar,ar_err|
+        if (ar_err == nil)
+          puts "Written ok!"
+          # etc
+        else
+          STDERR.puts "Failed to write: #{ar_err}"
+        end
+      }
+      i+=1
+    end
+  else
+    STDERR.puts "Cannot open file #{result_err}"
+  end
+}</code></pre>
 </div>
 </div>
 </div>
@@ -5400,7 +5504,29 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/vertx'
+require 'vertx/buffer'
+vertx = Vertx::Vertx.vertx()
+vertx.file_system().open("target/classes/les_miserables.txt", {
+}) { |result,result_err|
+  if (result_err == nil)
+    file = result
+    buff = Vertx::Buffer.buffer(1000)
+    i = 0
+    while (i &lt; 10)
+      file.read(buff, i * 100, i * 100, 100) { |ar,ar_err|
+        if (ar_err == nil)
+          puts "Read ok!"
+        else
+          STDERR.puts "Failed to write: #{ar_err}"
+        end
+      }
+      i+=1
+    end
+  else
+    STDERR.puts "Cannot open file #{result_err}"
+  end
+}</code></pre>
 </div>
 </div>
 </div>
@@ -5442,7 +5568,24 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/vertx'
+require 'vertx/pump'
+vertx = Vertx::Vertx.vertx()
+output = vertx.file_system().open_blocking("target/classes/plagiary.txt", {
+})
+
+vertx.file_system().open("target/classes/les_miserables.txt", {
+}) { |result,result_err|
+  if (result_err == nil)
+    file = result
+    Vertx::Pump.pump(file, output).start()
+    file.end_handler() { |r|
+      puts "Copy done"
+    }
+  else
+    STDERR.puts "Cannot open file #{result_err}"
+  end
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7175,7 +7318,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:18 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>

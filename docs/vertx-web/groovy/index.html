@@ -1695,8 +1695,8 @@ requests from the same browser to different servers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
-import io.vertx.groovy.ext.web.sstore.ClusteredSessionStore
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.sstore.ClusteredSessionStore
+import io.vertx.groovy.core.Vertx
 
 // a clustered Vert.x
 Vertx.clusteredVertx([
@@ -1855,8 +1855,8 @@ please consult the auth documentation.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.handler.CookieHandler
-import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.sstore.LocalSessionStore
+import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.handler.BasicAuthHandler
 
 router.route().handler(CookieHandler.create())
@@ -1875,8 +1875,8 @@ your auth handler is before your application handlers on those paths:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.handler.CookieHandler
-import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.sstore.LocalSessionStore
+import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.handler.UserSessionHandler
 import io.vertx.groovy.ext.web.handler.BasicAuthHandler
 
@@ -1919,7 +1919,8 @@ routes before the auth handler.</p>
 <p>Once you have your user object you can also programmatically use the methods on it to authorise the user.</p>
 </div>
 <div class="paragraph">
-<p>If you want to cause the user to be logged out you can set the user to null on the routing context.</p>
+<p>If you want to cause the user to be logged out you can call <code><a href="groovydoc/io/vertx/groovy/ext/web/RoutingContext.html#clearUser()">clearUser</a></code>
+on the routing context.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1976,8 +1977,8 @@ To handle the login we provide a prebuilt handler <code><a href="groovydoc/io/ve
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.handler.CookieHandler
-import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.sstore.LocalSessionStore
+import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.handler.UserSessionHandler
 import io.vertx.groovy.ext.web.handler.RedirectAuthHandler
 import io.vertx.groovy.ext.web.handler.FormLoginHandler
@@ -2122,8 +2123,8 @@ authProvider.generateToken([
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def handler = { rc -&gt;
-  def theSubject = rc.user().principal()."sub"
-  def someKey = rc.user().principal()."someKey"
+  def theSubject = rc.user().principal().sub
+  def someKey = rc.user().principal().someKey
 }</code></pre>
 </div>
 </div>
@@ -2312,8 +2313,8 @@ allowing resources to be requested from one domain and served from another.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.handler.CorsHandler
-import io.vertx.core.http.HttpMethod
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.HttpMethod
+import io.vertx.groovy.ext.web.handler.CorsHandler
 
 // Will only accept GET requests from origin "vertx.io"
 router.route().handler(CorsHandler.create("vertx\\.io").allowedMethod(HttpMethod.GET))
@@ -3025,8 +3026,8 @@ def options = [
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.Router
 import io.vertx.groovy.ext.web.handler.sockjs.SockJSHandler
 import io.vertx.groovy.ext.web.handler.CookieHandler
-import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.sstore.LocalSessionStore
+import io.vertx.groovy.ext.web.handler.SessionHandler
 import io.vertx.groovy.ext.web.handler.BasicAuthHandler
 
 def router = Router.router(vertx)
@@ -3129,7 +3130,36 @@ authorisation or metrics.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.Router
+import io.vertx.groovy.ext.web.handler.sockjs.SockJSHandler
+import io.vertx.groovy.ext.web.handler.sockjs.BridgeEvent
+
+def router = Router.router(vertx)
+
+// Let through any messages sent to 'demo.orderMgr' from the client
+def inboundPermitted = [
+  address:"demo.someService"
+]
+
+def sockJSHandler = SockJSHandler.create(vertx)
+def options = [
+  inboundPermitteds:[
+    inboundPermitted
+  ]
+]
+
+sockJSHandler.bridge(options, { be -&gt;
+  if (be.type() == BridgeEvent.Type.PUBLISH || be.type() == BridgeEvent.Type.RECEIVE) {
+    if (be.rawMessage().body == "armadillos") {
+      // Reject it
+      be.complete(false)
+      return
+    }
+  }
+  be.complete(true)
+})
+
+router.route("/eventbus").handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3138,7 +3168,37 @@ also add headers to the message, here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.Router
+import io.vertx.groovy.ext.web.handler.sockjs.SockJSHandler
+import io.vertx.groovy.ext.web.handler.sockjs.BridgeEvent
+
+def router = Router.router(vertx)
+
+// Let through any messages sent to 'demo.orderService' from the client
+def inboundPermitted = [
+  address:"demo.orderService"
+]
+
+def sockJSHandler = SockJSHandler.create(vertx)
+def options = [
+  inboundPermitteds:[
+    inboundPermitted
+  ]
+]
+
+sockJSHandler.bridge(options, { be -&gt;
+  if (be.type() == BridgeEvent.Type.PUBLISH || be.type() == BridgeEvent.Type.SEND) {
+    // Add some headers
+    def headers = [
+      header1:"val",
+      header2:"val2"
+    ]
+    be.rawMessage().headers = headers
+  }
+  be.complete(true)
+})
+
+router.route("/eventbus").handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3151,7 +3211,7 @@ also add headers to the message, here&#8217;s an example:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-09 00:26:20 BST
+                Last updated 2015-06-13 00:25:18 BST
               
               
             </div>
