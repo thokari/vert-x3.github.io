@@ -229,7 +229,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -421,7 +421,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -1332,8 +1332,11 @@ vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options);</code><
 </div>
 <div class="paragraph">
 <p>This configuration is then available via the <code><a href="../../apidocs/io/vertx/core/Context.html">Context</a></code> object or directly using the
-<code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html#config--">config</a></code> method. The configuration is returned as a JSON object so you can
-retrieve data as follows:</p>
+<code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html#config--">config</a></code> method.</p>
+</div>
+<div class="paragraph">
+<p>The configuration is returned as a JSON object so you
+can retrieve data as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1344,10 +1347,13 @@ retrieve data as follows:</p>
 <div class="sect2">
 <h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
 <div class="paragraph">
-<p>Environment variables and system properties are accessible from a verticle by following the Java way. To retrieve
-system properties, use <code><a href="../../apidocs/java/lang/System.html#getProperty-java.lang.String-">System.getProperty</a></code>
-(or <code><a href="../../apidocs/java/lang/System.html#getProperty-java.lang.String-java.lang.String-">System.getProperty</a></code>). You can also retrieve the
-environment variables using <code><a href="../../apidocs/java/lang/System.html#getenv-java.lang.String-">System.getenv</a></code>.</p>
+<p>Environment variables and system properties are accessible using the Java API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">System.getProperty("prop");
+System.getenv("HOME");</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1900,7 +1906,10 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 <div class="sect3">
 <h4 id="_setting_headers_on_messages">Setting headers on messages</h4>
 <div class="paragraph">
-<p>Messages sent over the event bus can also contain headers. This can be specified by providing a
+<p>Messages sent over the event bus can also contain headers.</p>
+</div>
+<div class="paragraph">
+<p>This can be specified by providing a
 <code><a href="../../apidocs/io/vertx/core/eventbus/DeliveryOptions.html">DeliveryOptions</a></code> when sending or publishing:</p>
 </div>
 <div class="listingblock">
@@ -2077,7 +2086,7 @@ for example the default <code>HazelcastClusterManager</code>.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>vertx run MyVerticle -cluster</pre>
+<pre>vertx run my-verticle.js -cluster</pre>
 </div>
 </div>
 </div>
@@ -6543,10 +6552,64 @@ This has the same meaning as <code><a href="../../apidocs/io/vertx/core/streams/
 </div>
 </div>
 <div class="sect1">
-<h2 id="_parse_tools">Parse tools</h2>
+<h2 id="_record_parser">Record Parser</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>TODO</p>
+<p>The record parser allows you to easily parse protocols which are delimited by a sequence of bytes, or fixed
+size records.</p>
+</div>
+<div class="paragraph">
+<p>It transforms an sequence of input buffer to a sequence of buffer structured as configured (either
+fixed size or separated records).</p>
+</div>
+<div class="paragraph">
+<p>For example, if you have a simple ASCII text protocol delimited by '\n' and the input is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO\nHOW ARE Y
+buffer2:OU?\nI AM
+buffer3: DOING OK
+buffer4:\n</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The record parser would produce</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO
+buffer2:HOW ARE YOU?
+buffer3:I AM DOING OK</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see the associated code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">final RecordParser parser = RecordParser.newDelimited("\n", h -&gt; {
+  System.out.println(h.toString());
+});
+
+parser.handle(Buffer.buffer("HELLO\nHOW ARE Y"));
+parser.handle(Buffer.buffer("OU?\nI AM"));
+parser.handle(Buffer.buffer("DOING OK"));
+parser.handle(Buffer.buffer("\n"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also produce fixed sized chunks as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">RecordParser.newFixed(4, h -&gt; {
+  System.out.println(h.toString());
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="../../apidocs/io/vertx/core/parsetools/RecordParser.html">RecordParser</a></code> class.</p>
 </div>
 </div>
 </div>
@@ -7300,7 +7363,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

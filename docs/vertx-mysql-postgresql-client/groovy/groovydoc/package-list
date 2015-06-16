@@ -1,4 +1,1 @@
-examples
-io.vertx.ext.asyncsql
-io.vertx.ext.asyncsql.impl
 io.vertx.groovy.ext.asyncsql

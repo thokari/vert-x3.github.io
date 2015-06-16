@@ -118,7 +118,7 @@ which is called when the operation completes or an error occurs.</p>
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">fs = vertx.file_system()
 
 # Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt") { |res,res_err|
+fs.copy("foo.txt", "bar.txt") { |res_err,res|
   if (res_err == nil)
     # Copied ok!
   else
@@ -158,7 +158,7 @@ require 'vertx/buffer'
 vertx = Vertx::Vertx.vertx()
 
 # Read a file
-vertx.file_system().read_file("target/classes/readme.txt") { |result,result_err|
+vertx.file_system().read_file("target/classes/readme.txt") { |result_err,result|
   if (result_err == nil)
     puts result
   else
@@ -167,7 +167,7 @@ vertx.file_system().read_file("target/classes/readme.txt") { |result,result_err|
 }
 
 # Copy a file
-vertx.file_system().copy("target/classes/readme.txt", "target/classes/readme2.txt") { |result,result_err|
+vertx.file_system().copy("target/classes/readme.txt", "target/classes/readme2.txt") { |result_err,result|
   if (result_err == nil)
     puts "File copied"
   else
@@ -176,7 +176,7 @@ vertx.file_system().copy("target/classes/readme.txt", "target/classes/readme2.tx
 }
 
 # Write a file
-vertx.file_system().write_file("target/classes/hello.txt", Vertx::Buffer.buffer("Hello")) { |result,result_err|
+vertx.file_system().write_file("target/classes/hello.txt", Vertx::Buffer.buffer("Hello")) { |result_err,result|
   if (result_err == nil)
     puts "File written"
   else
@@ -185,9 +185,9 @@ vertx.file_system().write_file("target/classes/hello.txt", Vertx::Buffer.buffer(
 }
 
 # Check existence and delete
-vertx.file_system().exists("target/classes/junk.txt") { |result,result_err|
+vertx.file_system().exists("target/classes/junk.txt") { |result_err,result|
   if (result_err == nil &amp;&amp; result)
-    vertx.file_system().delete("target/classes/junk.txt") { |r,r_err|
+    vertx.file_system().delete("target/classes/junk.txt") { |r_err,r|
       puts "File deleted"
     }
   else
@@ -208,7 +208,7 @@ vertx.file_system().exists("target/classes/junk.txt") { |result,result_err|
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
 }
-fileSystem.open("myfile.txt", options) { |res,res_err|
+fileSystem.open("myfile.txt", options) { |res_err,res|
   if (res_err == nil)
     file = res
   else
@@ -256,13 +256,13 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 require 'vertx/buffer'
 vertx = Vertx::Vertx.vertx()
 vertx.file_system().open("target/classes/hello.txt", {
-}) { |result,result_err|
+}) { |result_err,result|
   if (result_err == nil)
     file = result
     buff = Vertx::Buffer.buffer("foo")
     i = 0
     while (i &lt; 5)
-      file.write(buff, buff.length() * i) { |ar,ar_err|
+      file.write(buff, buff.length() * i) { |ar_err,ar|
         if (ar_err == nil)
           puts "Written ok!"
           # etc
@@ -317,13 +317,13 @@ method.</p>
 require 'vertx/buffer'
 vertx = Vertx::Vertx.vertx()
 vertx.file_system().open("target/classes/les_miserables.txt", {
-}) { |result,result_err|
+}) { |result_err,result|
   if (result_err == nil)
     file = result
     buff = Vertx::Buffer.buffer(1000)
     i = 0
     while (i &lt; 10)
-      file.read(buff, i * 100, i * 100, 100) { |ar,ar_err|
+      file.read(buff, i * 100, i * 100, 100) { |ar_err,ar|
         if (ar_err == nil)
           puts "Read ok!"
         else
@@ -384,7 +384,7 @@ output = vertx.file_system().open_blocking("target/classes/plagiary.txt", {
 })
 
 vertx.file_system().open("target/classes/les_miserables.txt", {
-}) { |result,result_err|
+}) { |result_err,result|
   if (result_err == nil)
     file = result
     Vertx::Pump.pump(file, output).start()
@@ -419,7 +419,7 @@ if you want to be notified when the close has been completed you can specify a h
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

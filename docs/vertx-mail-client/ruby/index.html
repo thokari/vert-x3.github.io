@@ -216,7 +216,7 @@ the send operation is finished or it failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mailClient.send_mail(message) { |result,result_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mailClient.send_mail(message) { |result_err,result|
   if (result_err == nil)
     puts result
   else
@@ -394,7 +394,7 @@ what you are doing, this may generate invalid messages.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

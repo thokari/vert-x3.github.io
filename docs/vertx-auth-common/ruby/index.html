@@ -176,7 +176,7 @@ user and contains operations which allow the user to be authorised.</p>
   'password' =&gt; "mypassword"
 }
 
-authProvider.authenticate(authInfo) { |res,res_err|
+authProvider.authenticate(authInfo) { |res_err,res|
   if (res_err == nil)
 
     user = res
@@ -208,7 +208,7 @@ authProvider.authenticate(authInfo) { |res,res_err|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.is_authorised("printers:printer1234") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.is_authorised("printers:printer1234") { |res_err,res|
   if (res_err == nil)
 
     hasAuthority = res
@@ -275,7 +275,7 @@ to make your user implementation. This contains the caching logic so you don&#82
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

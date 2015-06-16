@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Parse tools &amp;middot; Vert.x</title>
+  <title>Record Parser &amp;middot; Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -62,7 +62,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h1>Parse tools</h1>
+          <h1>Record Parser</h1>
           
         </div>
       </div>
@@ -78,7 +78,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 </ul>
         </div>
       </div>
@@ -86,14 +86,68 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 </ul>
         </div>
         <div class="sect1">
-<h2 id="_parse_tools">Parse tools</h2>
+<h2 id="_record_parser">Record Parser</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>TODO</p>
+<p>The record parser allows you to easily parse protocols which are delimited by a sequence of bytes, or fixed
+size records.</p>
+</div>
+<div class="paragraph">
+<p>It transforms an sequence of input buffer to a sequence of buffer structured as configured (either
+fixed size or separated records).</p>
+</div>
+<div class="paragraph">
+<p>For example, if you have a simple ASCII text protocol delimited by '\n' and the input is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO\nHOW ARE Y
+buffer2:OU?\nI AM
+buffer3: DOING OK
+buffer4:\n</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The record parser would produce</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO
+buffer2:HOW ARE YOU?
+buffer3:I AM DOING OK</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see the associated code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">final RecordParser parser = RecordParser.newDelimited("\n", h -&gt; {
+  System.out.println(h.toString());
+});
+
+parser.handle(Buffer.buffer("HELLO\nHOW ARE Y"));
+parser.handle(Buffer.buffer("OU?\nI AM"));
+parser.handle(Buffer.buffer("DOING OK"));
+parser.handle(Buffer.buffer("\n"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also produce fixed sized chunks as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">RecordParser.newFixed(4, h -&gt; {
+  System.out.println(h.toString());
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="../../apidocs/io/vertx/core/parsetools/RecordParser.html">RecordParser</a></code> class.</p>
 </div>
 </div>
 </div>
@@ -104,7 +158,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

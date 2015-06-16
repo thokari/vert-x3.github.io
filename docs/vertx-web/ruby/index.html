@@ -614,6 +614,12 @@ Here&#8217;s an example:</p>
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>By default, any blocking handlers executed on the same context (e.g. the same verticle instance) are <em>ordered</em> - this
+means the next one won&#8217;t be executed until the previous one has completed. If you don&#8217;t care about orderering and
+don&#8217;t mind your blocking handlers executing in parallel you can set the blocking handler specifying <code>ordered</code> as
+false using <code><a href="yardoc/VertxWeb/Route.html#blocking_handler-instance_method">blockingHandler</a></code>.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1691,7 +1697,7 @@ require 'vertx/vertx'
 # a clustered Vert.x
 Vertx::Vertx.clustered_vertx({
   'clustered' =&gt; true
-}) { |res,res_err|
+}) { |res_err,res|
 
   vertx = res
 
@@ -2038,12 +2044,14 @@ require 'vertx-auth-jwt/jwt_auth'
 router = VertxWeb::Router.router(vertx)
 
 authConfig = {
-  'keyStoreType' =&gt; "jceks",
-  'keyStoreURI' =&gt; "classpath:///keystore.jceks",
-  'keyStorePassword' =&gt; "secret"
+  'keyStore' =&gt; {
+    'type' =&gt; "jceks",
+    'path' =&gt; "keystore.jceks",
+    'password' =&gt; "secret"
+  }
 }
 
-authProvider = VertxAuthJwt::JWTAuth.create(authConfig)
+authProvider = VertxAuthJwt::JWTAuth.create(vertx, authConfig)
 
 router.route("/login").handler() { |ctx|
   # this is an example, authentication should be done with another provider...
@@ -2071,12 +2079,14 @@ require 'vertx-web/jwt_auth_handler'
 router = VertxWeb::Router.router(vertx)
 
 authConfig = {
-  'keyStoreType' =&gt; "jceks",
-  'keyStoreURI' =&gt; "classpath:///keystore.jceks",
-  'keyStorePassword' =&gt; "secret"
+  'keyStore' =&gt; {
+    'type' =&gt; "jceks",
+    'path' =&gt; "keystore.jceks",
+    'password' =&gt; "secret"
+  }
 }
 
-authProvider = VertxAuthJwt::JWTAuth.create(authConfig)
+authProvider = VertxAuthJwt::JWTAuth.create(vertx, authConfig)
 
 router.route("/protected/*").handler(&amp;VertxWeb::JWTAuthHandler.create(authProvider).method(:handle))
 
@@ -2095,12 +2105,14 @@ token, during the creation of the token just add data to the JsonObject paramete
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-jwt/jwt_auth'
 
 authConfig = {
-  'keyStoreType' =&gt; "jceks",
-  'keyStoreURI' =&gt; "classpath:///keystore.jceks",
-  'keyStorePassword' =&gt; "secret"
+  'keyStore' =&gt; {
+    'type' =&gt; "jceks",
+    'path' =&gt; "keystore.jceks",
+    'password' =&gt; "secret"
+  }
 }
 
-authProvider = VertxAuthJwt::JWTAuth.create(authConfig)
+authProvider = VertxAuthJwt::JWTAuth.create(vertx, authConfig)
 
 authProvider.generate_token({
   'sub' =&gt; "paulo",
@@ -3203,7 +3215,7 @@ router.route("/eventbus").handler(&amp;sockJSHandler.method(:handle))</code></pr
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

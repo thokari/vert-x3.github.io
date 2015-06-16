@@ -154,12 +154,12 @@ in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject()
-    .put("keyStoreURI", "classpath:///keystore.jceks")
-    .put("keyStoreType", "jceks")
-    .put("keyStorePassword", "secret");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject().put("keyStore", new JsonObject()
+    .put("path", "keystore.jceks")
+    .put("type", "jceks")
+    .put("password", "secret"));
 
-AuthProvider provider = JWTAuth.create(config);</code></pre>
+AuthProvider provider = JWTAuth.create(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -169,12 +169,12 @@ do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject()
-        .put("keyStoreURI", "classpath:///keystore.jceks")
-        .put("keyStoreType", "jceks")
-        .put("keyStorePassword", "secret");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject().put("keyStore", new JsonObject()
+    .put("path", "keystore.jceks")
+    .put("type", "jceks")
+    .put("password", "secret"));
 
-JWTAuth provider = JWTAuth.create(config);
+JWTAuth provider = JWTAuth.create(vertx, config);
 
 // on the verify endpoint once you verify the identity of the user by its username/password
 if ("paulo".equals(username) &amp;&amp; "super_secret".equals(password)) {
@@ -245,7 +245,7 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

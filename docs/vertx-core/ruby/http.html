@@ -200,7 +200,7 @@ For example:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_http_server()
-server.listen(8080, "myhost.com") { |res,res_err|
+server.listen(8080, "myhost.com") { |res_err,res|
   if (res_err == nil)
     puts "Server is now listening!"
   else
@@ -1850,7 +1850,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

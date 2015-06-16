@@ -1,6 +1,1 @@
-io.vertx.ext.jdbc
-io.vertx.ext.jdbc.impl
-io.vertx.ext.jdbc.impl.actions
-io.vertx.ext.jdbc.spi
-io.vertx.ext.jdbc.spi.impl
 io.vertx.groovy.ext.jdbc

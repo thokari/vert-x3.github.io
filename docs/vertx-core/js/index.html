@@ -93,7 +93,8 @@
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
-<li><a href="#console">The console</a></li>
+<li><a href="#_the_console">The console</a></li>
+<li><a href="#_defining_a_start_method">Defining a start method</a></li>
 <li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
@@ -223,7 +224,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -279,7 +280,8 @@
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
-<li><a href="#console">The console</a></li>
+<li><a href="#_the_console">The console</a></li>
+<li><a href="#_defining_a_start_method">Defining a start method</a></li>
 <li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
@@ -409,7 +411,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -981,7 +983,7 @@ time. The different verticle instances communicate with each other by sending me
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>// Start a timer
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">// the vertx and console objects can be used directly as:
 vertx.setPeriodic(1000, function() {
   console.log('Timer has fired');
 });
@@ -989,58 +991,58 @@ vertx.setPeriodic(1000, function() {
 // Optional - called when verticle is undeployed
 exports.vertxStop = function() {
   console.log('stop called');
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>When the verticle is deployed the body of the script will be executed.</p>
 </div>
 <div class="paragraph">
-<p>Optionally a</p>
+<p>Optionally a <code>vertxStop</code> callback can be defined to be notified when the verticle is undeployed. Notice that such
+a registration is made using <code>exports.vertxStop = function() { &#8230;&#8203;  }</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="console">The console</h3>
+<h3 id="_the_console">The console</h3>
 <div class="paragraph">
-<p>Blah, blah</p>
-</div>
-<div class="paragraph">
-<p>JAVASCRIPT MOFO!</p>
-</div>
-<div class="paragraph">
-<p>Verticle classes must implement the <code>Verticle</code> interface.</p>
-</div>
-<div class="paragraph">
-<p>They can implement it directly if you like but usually it&#8217;s easier to extend the abstract class <code>AbstractVerticle</code>.</p>
-</div>
-<div class="paragraph">
-<p>Here&#8217;s an example verticle:</p>
+<p>In addition to the <code>vertx</code> object, JavaScript verticles have access to a <code>console</code> object that let them print
+messages. The messages are printed on Java <code>System.out</code> and <code>System.err</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>public class MyVerticle extends AbstractVerticle {
-
-  // Called when verticle is deployed
-  public void start() {
-  }
-
-  // Optional - called when verticle is undeployed
-  public void stop() {
-  }
-
-}</pre>
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">console.log("hello"); // Print on System.out
+console.warn("warning, something wrong is happening"); // Print on System.err
+console.error("something terrible happened"); // Print on System.err</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_defining_a_start_method">Defining a start method</h3>
+<div class="paragraph">
+<p>By default, when your verticle is deployed, vert.x execute the body of the javascript file. However, you can
+define a start method as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">exports.vertxStart = function() {
+ console.log("This is my verticle and it is starting...");
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Normally you would override the start method like in the example above.</p>
+<p>As for <code>vertStop</code> seen above, the method is defined on the <code>exports</code> object.</p>
 </div>
-<div class="paragraph">
-<p>When Vert.x deploys the verticle it will call the start method, and when the method has completed the verticle will
-be considered started.</p>
-</div>
-<div class="paragraph">
-<p>You can also optionally override the stop method. This will be called by Vert.x when the verticle is undeployed and when
-the method has completed the verticle will be considered stopped.</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Even with a <code>vertxStart</code> method defined, vert.x executes the body of the file.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1056,58 +1058,47 @@ be considered deployed until that happens. For example you might want to deploy 
 <p>So how can you do this?</p>
 </div>
 <div class="paragraph">
-<p>The way to do it is to implement the <strong>asynchronous</strong> start method. This version of the method takes a Future as a parameter.
-When the method returns the verticle will <strong>not</strong> be considered deployed yet. Some time later, after you&#8217;ve done everything
-you need to do (e.g. start other verticles), you can call complete on the Future (or fail) to signal that you&#8217;re done.</p>
+<p>The way to do it is to implement the <strong>asynchronous</strong> start method. This version of the method takes a <code>Future</code> object
+as a parameter. When the method returns the verticle will <strong>not</strong> be considered deployed yet. Some time later, after
+you&#8217;ve done everything you need to do (e.g. start other verticles), you can call complete on the Future (or fail) to
+signal that you&#8217;re done.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>public class MyVerticle extends AbstractVerticle {
-
-  public void start(Future&lt;Void&gt; startFuture) {
-    // Now deploy some other verticle:
-
-    vertx.deployVerticle("com.foo.OtherVerticle", res -&gt; {
-      if (res.succeeded()) {
-        startFuture.complete();
-      } else {
-        startFuture.fail();
-      }
-    });
-  }
-}</pre>
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">exports.vertxStartAsync = function(startFuture) {
+ vertx.deployVerticle("verticle.js", function(res, err) {
+   if (err) {
+     startFuture.fail();
+   } else {
+     startFuture.complete();
+   }
+ });
+};</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Similarly, there is an asynchronous version of the stop method too. You use this if you want to do some verticle
+<p>Similarly, there is an asynchronous version of the <code>stop</code> method too. You use this if you want to do some verticle
 cleanup that takes some time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>public class MyVerticle extends AbstractVerticle {
-
-  public void start() {
-    // Do something
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">exports.vertxStopAsync = function(stopFuture) {
+ obj.doSomethingThatTakesTimes(function(r, err) {
+   if (err) {
+     stopFuture.fail();
+  } else {
+     stopFuture.complete();
   }
-
-  public void stop(Future&lt;Void&gt; startFuture) {
-    obj.doSomethingThatTakesTime(res -&gt; {
-      if (res.succeeded()) {
-        startFuture.complete();
-      } else {
-        startFuture.fail();
-      }
-    });
-  }
-}</pre>
+ });
+};</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>INFO: You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method. Vert.x
-will automatically undeploy any child verticles when the parent is undeployed.</p>
+<p>INFO: You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method.
+Vert.x will automatically undeploy any child verticles when the parent is undeployed.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1368,34 +1359,55 @@ and multiple cores on your machine, so you want to deploy multiple instances to 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var config = {
-  "name" : "tim",
-  "directory" : "/blah"
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var config = {
+ "name" : "tim",
+ "directory" : "/blah"
 };
 var options = {
-  "config" : config
+ "config" : config
 };
-vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options);</code></pre>
+vertx.deployVerticle("MyOrderProcessorVerticle.js", options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This configuration is then available via the <code><a href="jsdoc/context-Context.html">Context</a></code> object or directly using the
-<code>config</code> method. The configuration is returned as a JSON object so you can
-retrieve data as follows:</p>
+<p>This configuration is then available via the <code><a href="../../vertx-core/js/jsdoc/context-Context.html">Context</a></code> object.</p>
+</div>
+<div class="paragraph">
+<p>The configuration is returned as a
+JavaScript object so you can retrieve data as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">// The context object can be retrieve either using:
+console.log("Configuration: " + Vertx.currentContext().config().name);
+// or:
+console.log("Configuration: " + vertx.getOrCreateContext().config().name);</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The access to the <code>context</code> object is made either using <code><a href="../../vertx-core/js/jsdoc/vertx-Vertx.html#currentContext">Vertx.currentContext</a></code> or using
+<code><a href="../../vertx-core/js/jsdoc/vertx-Vertx.html#getOrCreateContext">getOrCreateContext</a></code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
 <div class="paragraph">
-<p>Environment variables and system properties are accessible from a verticle by following the Java way. To retrieve
-system properties, use <code>System.getProperty</code>
-(or <code>System.getProperty</code>). You can also retrieve the
-environment variables using <code>System.getenv</code>.</p>
+<p>Environment variables and system properties are accessible from a verticle using the Java API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">console.log(java.lang.System.getProperty("foo"));
+console.log(java.lang.System.getenv("HOME"));</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1951,12 +1963,30 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 <div class="sect3">
 <h4 id="_setting_headers_on_messages">Setting headers on messages</h4>
 <div class="paragraph">
-<p>Messages sent over the event bus can also contain headers. This can be specified by providing a
-<code><a href="../cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code> when sending or publishing:</p>
+<p>Messages sent over the event bus can also contain headers.</p>
+</div>
+<div class="paragraph">
+<p>This can be specified by providing a <code>headers</code> object
+inside the <code><a href="../../vertx-core/cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code> object when sending or publishing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var options = {
+ headers: {
+   "some-header" : "some-value"
+ }
+}
+vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On the other side, the consumer can retrieve the message header as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">vertx.eventBus().consumer("news.uk.sport", function(e) {
+ console.log(e.headers().get("some-header"));
+});</code></pre>
 </div>
 </div>
 </div>
@@ -2053,7 +2083,7 @@ consisting of multiple rounds.</p>
 <div class="sect3">
 <h4 id="_message_codecs">Message Codecs</h4>
 <div class="paragraph">
-<p>Message codecs are available exclusively with the Java api.</p>
+<p>Message codecs are available exclusively with the Java API.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2097,7 +2127,7 @@ for example the default <code>HazelcastClusterManager</code>.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>vertx run MyVerticle -cluster</pre>
+<pre>vertx run my-verticle.js -cluster</pre>
 </div>
 </div>
 </div>
@@ -6469,10 +6499,67 @@ This has the same meaning as <code><a href="jsdoc/write_stream-WriteStream.html#
 </div>
 </div>
 <div class="sect1">
-<h2 id="_parse_tools">Parse tools</h2>
+<h2 id="_record_parser">Record Parser</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>TODO</p>
+<p>The record parser allows you to easily parse protocols which are delimited by a sequence of bytes, or fixed
+size records.</p>
+</div>
+<div class="paragraph">
+<p>It transforms an sequence of input buffer to a sequence of buffer structured as configured (either
+fixed size or separated records).</p>
+</div>
+<div class="paragraph">
+<p>For example, if you have a simple ASCII text protocol delimited by '\n' and the input is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO\nHOW ARE Y
+buffer2:OU?\nI AM
+buffer3: DOING OK
+buffer4:\n</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The record parser would produce</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO
+buffer2:HOW ARE YOU?
+buffer3:I AM DOING OK</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see the associated code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var RecordParser = require("vertx-js/record_parser");
+var Buffer = require("vertx-js/buffer");
+var parser = RecordParser.newDelimited("\n", function (h) {
+  console.log(h.toString());
+});
+
+parser.handle(Buffer.buffer("HELLO\nHOW ARE Y"));
+parser.handle(Buffer.buffer("OU?\nI AM"));
+parser.handle(Buffer.buffer("DOING OK"));
+parser.handle(Buffer.buffer("\n"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also produce fixed sized chunks as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var RecordParser = require("vertx-js/record_parser");
+RecordParser.newFixed(4, function (h) {
+  console.log(h.toString());
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="jsdoc/record_parser-RecordParser.html">RecordParser</a></code> class.</p>
 </div>
 </div>
 </div>
@@ -7230,7 +7317,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

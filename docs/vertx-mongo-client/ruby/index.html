@@ -276,7 +276,7 @@ document = {
   'title' =&gt; "The Hobbit"
 }
 
-mongoClient.save("books", document) { |res,res_err|
+mongoClient.save("books", document) { |res_err,res|
 
   if (res_err == nil)
 
@@ -302,7 +302,7 @@ document = {
   '_id' =&gt; "123244"
 }
 
-mongoClient.save("books", document) { |res,res_err|
+mongoClient.save("books", document) { |res_err,res|
 
   if (res_err == nil)
 
@@ -332,7 +332,7 @@ document = {
   'title' =&gt; "The Hobbit"
 }
 
-mongoClient.insert("books", document) { |res,res_err|
+mongoClient.insert("books", document) { |res_err,res|
 
   if (res_err == nil)
 
@@ -358,7 +358,7 @@ document = {
   '_id' =&gt; "123244"
 }
 
-mongoClient.insert("books", document) { |res,res_err|
+mongoClient.insert("books", document) { |res_err,res|
 
   if (res_err == nil)
 
@@ -403,7 +403,7 @@ update = {
   }
 }
 
-mongoClient.update("books", query, update) { |res,res_err|
+mongoClient.update("books", query, update) { |res_err,res|
 
   if (res_err == nil)
 
@@ -458,7 +458,7 @@ options = {
   'multi' =&gt; true
 }
 
-mongoClient.update_with_options("books", query, update, options) { |res,res_err|
+mongoClient.update_with_options("books", query, update, options) { |res_err,res|
 
   if (res_err == nil)
 
@@ -496,7 +496,7 @@ replace = {
   'author' =&gt; "J. R. R. Tolkien"
 }
 
-mongoClient.replace("books", query, replace) { |res,res_err|
+mongoClient.replace("books", query, replace) { |res_err,res|
 
   if (res_err == nil)
 
@@ -531,7 +531,7 @@ mongoClient.replace("books", query, replace) { |res,res_err|
 query = {
 }
 
-mongoClient.find("books", query) { |res,res_err|
+mongoClient.find("books", query) { |res_err,res|
 
   if (res_err == nil)
 
@@ -562,7 +562,7 @@ query = {
   'author' =&gt; "J. R. R. Tolkien"
 }
 
-mongoClient.find("books", query) { |res,res_err|
+mongoClient.find("books", query) { |res_err,res|
 
   if (res_err == nil)
 
@@ -638,7 +638,7 @@ and pass in the an instance of <code><a href="../cheatsheet/FindOptions.html">Fi
   'author' =&gt; "J. R. R. Tolkien"
 }
 
-mongoClient.remove("books", query) { |res,res_err|
+mongoClient.remove("books", query) { |res_err,res|
 
   if (res_err == nil)
 
@@ -676,7 +676,7 @@ mongoClient.remove("books", query) { |res,res_err|
   'author' =&gt; "J. R. R. Tolkien"
 }
 
-mongoClient.count("books", query) { |res,res_err|
+mongoClient.count("books", query) { |res_err,res|
 
   if (res_err == nil)
 
@@ -701,7 +701,7 @@ mongoClient.count("books", query) { |res,res_err|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.get_collections() { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.get_collections() { |res_err,res|
 
   if (res_err == nil)
 
@@ -720,7 +720,7 @@ mongoClient.count("books", query) { |res,res_err|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.create_collection("mynewcollectionr") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.create_collection("mynewcollectionr") { |res_err,res|
 
   if (res_err == nil)
 
@@ -751,7 +751,7 @@ Dropping a collection will delete all documents within it!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.drop_collection("mynewcollectionr") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.drop_collection("mynewcollectionr") { |res_err,res|
 
   if (res_err == nil)
 
@@ -789,7 +789,7 @@ of the entries in the JSON is the command name it must be specified as a paramet
   ]
 }
 
-mongoClient.run_command("aggregate", command) { |res,res_err|
+mongoClient.run_command("aggregate", command) { |res_err,res|
   if (res_err == nil)
     resArr = res['result']
     # etc
@@ -817,7 +817,7 @@ mongoClient.run_command("aggregate", command) { |res,res_err|
   }
 }
 
-mongoService.save("publishedBooks", document) { |res,res_err|
+mongoService.save("publishedBooks", document) { |res_err,res|
 
   if (res_err == nil)
 
@@ -825,7 +825,7 @@ mongoService.save("publishedBooks", document) { |res,res_err|
 
     mongoService.find_one("publishedBooks", {
       '_id' =&gt; id
-    }, nil) { |res2,res2_err|
+    }, nil) { |res2_err,res2|
       if (res2_err == nil)
 
         puts "To retrieve ISO-8601 date : #{res2['publicationDate']['$date']}"
@@ -1092,7 +1092,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

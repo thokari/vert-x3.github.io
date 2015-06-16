@@ -179,7 +179,7 @@ application.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd = vertx.shared_data()
 
-sd.get_cluster_wide_map("mymap") { |res,res_err|
+sd.get_cluster_wide_map("mymap") { |res_err,res|
   if (res_err == nil)
     map = res
   else
@@ -198,7 +198,7 @@ sd.get_cluster_wide_map("mymap") { |res,res_err|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.put("foo", "bar") { |resPut,resPut_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.put("foo", "bar") { |resPut_err,resPut|
   if (resPut_err == nil)
     # Successfully put the value
   else
@@ -218,7 +218,7 @@ sd.get_cluster_wide_map("mymap") { |res,res_err|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.get("foo") { |resGet,resGet_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.get("foo") { |resGet_err,resGet|
   if (resGet_err == nil)
     # Successfully got the value
     val = resGet
@@ -265,7 +265,7 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock("mylock") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock("mylock") { |res_err,res|
   if (res_err == nil)
     # Got the lock!
     lock = res
@@ -288,7 +288,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock_with_timeout("mylock", 10000) { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock_with_timeout("mylock", 10000) { |res_err,res|
   if (res_err == nil)
     # Got the lock!
     lock = res
@@ -313,7 +313,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_counter("mycounter") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_counter("mycounter") { |res_err,res|
   if (res_err == nil)
     counter = res
   else
@@ -339,7 +339,7 @@ it using the various methods.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

@@ -176,11 +176,11 @@ socket = vertx.create_datagram_socket({
 })
 buffer = Vertx::Buffer.buffer("content")
 # Send a Buffer
-socket.send(buffer, 1234, "10.0.0.1") { |asyncResult,asyncResult_err|
+socket.send(buffer, 1234, "10.0.0.1") { |asyncResult_err,asyncResult|
   puts "Send succeeded? #{asyncResult_err == nil}"
 }
 # Send a String
-socket.send("A string used as content", 1234, "10.0.0.1") { |asyncResult,asyncResult_err|
+socket.send("A string used as content", 1234, "10.0.0.1") { |asyncResult_err,asyncResult|
   puts "Send succeeded? #{asyncResult_err == nil}"
 }</code></pre>
 </div>
@@ -219,7 +219,7 @@ which the `<a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> 
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
 })
-socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+socket.listen(1234, "0.0.0.0") { |asyncResult_err,asyncResult|
   if (asyncResult_err == nil)
     socket.handler() { |packet|
       # Do something with the packet
@@ -265,7 +265,7 @@ socket = vertx.create_datagram_socket({
 })
 buffer = Vertx::Buffer.buffer("content")
 # Send a Buffer to a multicast address
-socket.send(buffer, 1234, "230.0.0.1") { |asyncResult,asyncResult_err|
+socket.send(buffer, 1234, "230.0.0.1") { |asyncResult_err,asyncResult|
   puts "Send succeeded? #{asyncResult_err == nil}"
 }</code></pre>
 </div>
@@ -307,14 +307,14 @@ would do something like shown here:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
 })
-socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+socket.listen(1234, "0.0.0.0") { |asyncResult_err,asyncResult|
   if (asyncResult_err == nil)
     socket.handler() { |packet|
       # Do something with the packet
     }
 
     # join the multicast group
-    socket.listen_multicast_group("230.0.0.1") { |asyncResult2,asyncResult2_err|
+    socket.listen_multicast_group("230.0.0.1") { |asyncResult2_err,asyncResult2|
       puts "Listen succeeded? #{asyncResult2_err == nil}"
     }
   else
@@ -339,20 +339,20 @@ socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
 })
-socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+socket.listen(1234, "0.0.0.0") { |asyncResult_err,asyncResult|
   if (asyncResult_err == nil)
     socket.handler() { |packet|
       # Do something with the packet
     }
 
     # join the multicast group
-    socket.listen_multicast_group("230.0.0.1") { |asyncResult2,asyncResult2_err|
+    socket.listen_multicast_group("230.0.0.1") { |asyncResult2_err,asyncResult2|
       if (asyncResult2_err == nil)
         # will now receive packets for group
 
         # do some work
 
-        socket.unlisten_multicast_group("230.0.0.1") { |asyncResult3,asyncResult3_err|
+        socket.unlisten_multicast_group("230.0.0.1") { |asyncResult3_err,asyncResult3|
           puts "Unlisten succeeded? #{asyncResult3_err == nil}"
         }
       else
@@ -390,7 +390,7 @@ like shown here:</p>
 # Some code
 
 # This would block packets which are send from 10.0.0.2
-socket.block_multicast_group("230.0.0.1", "10.0.0.2") { |asyncResult,asyncResult_err|
+socket.block_multicast_group("230.0.0.1", "10.0.0.2") { |asyncResult_err,asyncResult|
   puts "block succeeded? #{asyncResult_err == nil}"
 }</code></pre>
 </div>
@@ -462,7 +462,7 @@ the socket and release all resources</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

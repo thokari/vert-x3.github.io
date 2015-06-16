@@ -229,7 +229,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -421,7 +421,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -917,7 +917,7 @@ vertx.execute_blocking(lambda { |future|
   # Call some blocking API that takes a significant amount of time to return
   result = @someAPI.blocking_method("hello")
   future.complete(result)
-}) { |res,res_err|
+}) { |res_err,res|
   puts "The result is: #{res}"
 }</code></pre>
 </div>
@@ -1296,7 +1296,7 @@ and <code><a href="yardoc/Vertx/Vertx.html#unregister_verticle_factory-instance_
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">vertx.deploy_verticle("com.mycompany.MyOrderProcessorVerticle") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">vertx.deploy_verticle("com.mycompany.MyOrderProcessorVerticle") { |res_err,res|
   if (res_err == nil)
     puts "Deployment id is: #{res}"
   else
@@ -1322,7 +1322,7 @@ and <code><a href="yardoc/Vertx/Vertx.html#unregister_verticle_factory-instance_
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">vertx.undeploy(deploymentID) { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">vertx.undeploy(deploymentID) { |res_err,res|
   if (res_err == nil)
     puts "Undeployed ok"
   else
@@ -1359,33 +1359,38 @@ and multiple cores on your machine, so you want to deploy multiple instances to 
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">config = {
-  'name' =&gt; "tim",
-  'directory' =&gt; "/blah"
+ 'name' =&gt; "tim",
+ 'directory' =&gt; "/blah"
 }
 options = {
-  'config' =&gt; config
+ 'config' =&gt; config
 }
-vertx.deploy_verticle("com.mycompany.MyOrderProcessorVerticle", options)</code></pre>
+vertx.deploy_verticle("MyOrderProcessorVerticle.rb", options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This configuration is then available via the <code><a href="yardoc/Vertx/Context.html">Context</a></code> object or directly using the
-<code><a href="unavailable#config-instance_method">config</a></code> method. The configuration is returned as a JSON object so you can
-retrieve data as follows:</p>
+<p>This configuration is then available via the <code><a href="../../vertx-core/ruby/yardoc/Vertx/Context.html">Context</a></code> object.</p>
+</div>
+<div class="paragraph">
+<p>The configuration is returned as a
+<em>Hash</em> object so you can retrieve data as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">puts $vertx.get_or_create_context().config()["name"]</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
 <div class="paragraph">
-<p>Environment variables and system properties are accessible from a verticle by following the Java way. To retrieve
-system properties, use <code><a href="unavailable#get_property-class_method">System.getProperty</a></code>
-(or <code><a href="unavailable#get_property-class_method">System.getProperty</a></code>). You can also retrieve the
-environment variables using <code><a href="unavailable#getenv-class_method">System.getenv</a></code>.</p>
+<p>Environment variables and system properties are accessible from a verticle using the Java API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">puts Java::JavaLang::System.getProperty("foo")
+puts Java::JavaLang::System.getenv("HOME")</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1877,7 +1882,7 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consumer.completion_handler() { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consumer.completion_handler() { |res_err,res|
   if (res_err == nil)
     puts "The handler registration has reached all nodes"
   else
@@ -1898,7 +1903,7 @@ be notified when this is complete use <code><a href="yardoc/Vertx/MessageConsume
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consumer.unregister() { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consumer.unregister() { |res_err,res|
   if (res_err == nil)
     puts "The handler un-registration has reached all nodes"
   else
@@ -1941,12 +1946,31 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 <div class="sect3">
 <h4 id="_setting_headers_on_messages">Setting headers on messages</h4>
 <div class="paragraph">
-<p>Messages sent over the event bus can also contain headers. This can be specified by providing a
-<code><a href="../cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code> when sending or publishing:</p>
+<p>Messages sent over the event bus can also contain headers.</p>
+</div>
+<div class="paragraph">
+<p>This can be specified by providing a <code>headers</code> object
+inside the <code><a href="../../vertx-core/cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code> object when sending or publishing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+ headers: {
+   'some-header' =&gt; 'some-value'
+ }
+}
+vertx.event_bus().send("news.uk.sport", "Yay! Someone kicked a ball", options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On the other side, the consumer can retrieve the message header as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">eb = $vertx.event_bus()
+eb.consumer("news.uk.sport") { |message|
+ puts message.headers().get("some-header")
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1997,7 +2021,7 @@ consumer.handler() { |message|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass") { |ar,ar_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass") { |ar_err,ar|
   if (ar_err == nil)
     puts "Received reply: #{ar.body()}"
   end
@@ -2064,7 +2088,7 @@ instance as clustered;</p>
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/vertx'
 options = {
 }
-Vertx::Vertx.clustered_vertx(options) { |res,res_err|
+Vertx::Vertx.clustered_vertx(options) { |res_err,res|
   if (res_err == nil)
     vertx = res
     eventBus = vertx.event_bus()
@@ -2087,7 +2111,7 @@ for example the default <code>HazelcastClusterManager</code>.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>vertx run MyVerticle -cluster</pre>
+<pre>vertx run my-verticle.js -cluster</pre>
 </div>
 </div>
 </div>
@@ -2417,7 +2441,7 @@ For example:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server()
-server.listen(1234, "localhost") { |res,res_err|
+server.listen(1234, "localhost") { |res_err,res|
   if (res_err == nil)
     puts "Server is now listening!"
   else
@@ -2438,7 +2462,7 @@ server.listen(1234, "localhost") { |res,res_err|
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server()
-server.listen(0, "localhost") { |res,res_err|
+server.listen(0, "localhost") { |res_err,res|
   if (res_err == nil)
     puts "Server is now listening on actual port: #{server.actual_port()}"
   else
@@ -2607,7 +2631,7 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server.close() { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server.close() { |res_err,res|
   if (res_err == nil)
     puts "Server is now closed"
   else
@@ -2739,7 +2763,7 @@ specifying the port and host of the server and a handler that will be called wit
   'connectTimeout' =&gt; 10000
 }
 client = vertx.create_net_client(options)
-client.connect(4321, "localhost") { |res,res_err|
+client.connect(4321, "localhost") { |res_err,res|
   if (res_err == nil)
     puts "Connected!"
     socket = res
@@ -3416,7 +3440,7 @@ For example:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_http_server()
-server.listen(8080, "myhost.com") { |res,res_err|
+server.listen(8080, "myhost.com") { |res_err,res|
   if (res_err == nil)
     puts "Server is now listening!"
   else
@@ -5135,7 +5159,7 @@ application.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd = vertx.shared_data()
 
-sd.get_cluster_wide_map("mymap") { |res,res_err|
+sd.get_cluster_wide_map("mymap") { |res_err,res|
   if (res_err == nil)
     map = res
   else
@@ -5154,7 +5178,7 @@ sd.get_cluster_wide_map("mymap") { |res,res_err|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.put("foo", "bar") { |resPut,resPut_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.put("foo", "bar") { |resPut_err,resPut|
   if (resPut_err == nil)
     # Successfully put the value
   else
@@ -5174,7 +5198,7 @@ sd.get_cluster_wide_map("mymap") { |res,res_err|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.get("foo") { |resGet,resGet_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.get("foo") { |resGet_err,resGet|
   if (resGet_err == nil)
     # Successfully got the value
     val = resGet
@@ -5221,7 +5245,7 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock("mylock") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock("mylock") { |res_err,res|
   if (res_err == nil)
     # Got the lock!
     lock = res
@@ -5244,7 +5268,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock_with_timeout("mylock", 10000) { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock_with_timeout("mylock", 10000) { |res_err,res|
   if (res_err == nil)
     # Got the lock!
     lock = res
@@ -5269,7 +5293,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_counter("mycounter") { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_counter("mycounter") { |res_err,res|
   if (res_err == nil)
     counter = res
   else
@@ -5309,7 +5333,7 @@ which is called when the operation completes or an error occurs.</p>
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">fs = vertx.file_system()
 
 # Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt") { |res,res_err|
+fs.copy("foo.txt", "bar.txt") { |res_err,res|
   if (res_err == nil)
     # Copied ok!
   else
@@ -5349,7 +5373,7 @@ require 'vertx/buffer'
 vertx = Vertx::Vertx.vertx()
 
 # Read a file
-vertx.file_system().read_file("target/classes/readme.txt") { |result,result_err|
+vertx.file_system().read_file("target/classes/readme.txt") { |result_err,result|
   if (result_err == nil)
     puts result
   else
@@ -5358,7 +5382,7 @@ vertx.file_system().read_file("target/classes/readme.txt") { |result,result_err|
 }
 
 # Copy a file
-vertx.file_system().copy("target/classes/readme.txt", "target/classes/readme2.txt") { |result,result_err|
+vertx.file_system().copy("target/classes/readme.txt", "target/classes/readme2.txt") { |result_err,result|
   if (result_err == nil)
     puts "File copied"
   else
@@ -5367,7 +5391,7 @@ vertx.file_system().copy("target/classes/readme.txt", "target/classes/readme2.tx
 }
 
 # Write a file
-vertx.file_system().write_file("target/classes/hello.txt", Vertx::Buffer.buffer("Hello")) { |result,result_err|
+vertx.file_system().write_file("target/classes/hello.txt", Vertx::Buffer.buffer("Hello")) { |result_err,result|
   if (result_err == nil)
     puts "File written"
   else
@@ -5376,9 +5400,9 @@ vertx.file_system().write_file("target/classes/hello.txt", Vertx::Buffer.buffer(
 }
 
 # Check existence and delete
-vertx.file_system().exists("target/classes/junk.txt") { |result,result_err|
+vertx.file_system().exists("target/classes/junk.txt") { |result_err,result|
   if (result_err == nil &amp;&amp; result)
-    vertx.file_system().delete("target/classes/junk.txt") { |r,r_err|
+    vertx.file_system().delete("target/classes/junk.txt") { |r_err,r|
       puts "File deleted"
     }
   else
@@ -5399,7 +5423,7 @@ vertx.file_system().exists("target/classes/junk.txt") { |result,result_err|
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
 }
-fileSystem.open("myfile.txt", options) { |res,res_err|
+fileSystem.open("myfile.txt", options) { |res_err,res|
   if (res_err == nil)
     file = res
   else
@@ -5447,13 +5471,13 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 require 'vertx/buffer'
 vertx = Vertx::Vertx.vertx()
 vertx.file_system().open("target/classes/hello.txt", {
-}) { |result,result_err|
+}) { |result_err,result|
   if (result_err == nil)
     file = result
     buff = Vertx::Buffer.buffer("foo")
     i = 0
     while (i &lt; 5)
-      file.write(buff, buff.length() * i) { |ar,ar_err|
+      file.write(buff, buff.length() * i) { |ar_err,ar|
         if (ar_err == nil)
           puts "Written ok!"
           # etc
@@ -5508,13 +5532,13 @@ method.</p>
 require 'vertx/buffer'
 vertx = Vertx::Vertx.vertx()
 vertx.file_system().open("target/classes/les_miserables.txt", {
-}) { |result,result_err|
+}) { |result_err,result|
   if (result_err == nil)
     file = result
     buff = Vertx::Buffer.buffer(1000)
     i = 0
     while (i &lt; 10)
-      file.read(buff, i * 100, i * 100, 100) { |ar,ar_err|
+      file.read(buff, i * 100, i * 100, 100) { |ar_err,ar|
         if (ar_err == nil)
           puts "Read ok!"
         else
@@ -5575,7 +5599,7 @@ output = vertx.file_system().open_blocking("target/classes/plagiary.txt", {
 })
 
 vertx.file_system().open("target/classes/les_miserables.txt", {
-}) { |result,result_err|
+}) { |result_err,result|
   if (result_err == nil)
     file = result
     Vertx::Pump.pump(file, output).start()
@@ -5676,11 +5700,11 @@ socket = vertx.create_datagram_socket({
 })
 buffer = Vertx::Buffer.buffer("content")
 # Send a Buffer
-socket.send(buffer, 1234, "10.0.0.1") { |asyncResult,asyncResult_err|
+socket.send(buffer, 1234, "10.0.0.1") { |asyncResult_err,asyncResult|
   puts "Send succeeded? #{asyncResult_err == nil}"
 }
 # Send a String
-socket.send("A string used as content", 1234, "10.0.0.1") { |asyncResult,asyncResult_err|
+socket.send("A string used as content", 1234, "10.0.0.1") { |asyncResult_err,asyncResult|
   puts "Send succeeded? #{asyncResult_err == nil}"
 }</code></pre>
 </div>
@@ -5719,7 +5743,7 @@ which the `<a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> 
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
 })
-socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+socket.listen(1234, "0.0.0.0") { |asyncResult_err,asyncResult|
   if (asyncResult_err == nil)
     socket.handler() { |packet|
       # Do something with the packet
@@ -5765,7 +5789,7 @@ socket = vertx.create_datagram_socket({
 })
 buffer = Vertx::Buffer.buffer("content")
 # Send a Buffer to a multicast address
-socket.send(buffer, 1234, "230.0.0.1") { |asyncResult,asyncResult_err|
+socket.send(buffer, 1234, "230.0.0.1") { |asyncResult_err,asyncResult|
   puts "Send succeeded? #{asyncResult_err == nil}"
 }</code></pre>
 </div>
@@ -5807,14 +5831,14 @@ would do something like shown here:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
 })
-socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+socket.listen(1234, "0.0.0.0") { |asyncResult_err,asyncResult|
   if (asyncResult_err == nil)
     socket.handler() { |packet|
       # Do something with the packet
     }
 
     # join the multicast group
-    socket.listen_multicast_group("230.0.0.1") { |asyncResult2,asyncResult2_err|
+    socket.listen_multicast_group("230.0.0.1") { |asyncResult2_err,asyncResult2|
       puts "Listen succeeded? #{asyncResult2_err == nil}"
     }
   else
@@ -5839,20 +5863,20 @@ socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">socket = vertx.create_datagram_socket({
 })
-socket.listen(1234, "0.0.0.0") { |asyncResult,asyncResult_err|
+socket.listen(1234, "0.0.0.0") { |asyncResult_err,asyncResult|
   if (asyncResult_err == nil)
     socket.handler() { |packet|
       # Do something with the packet
     }
 
     # join the multicast group
-    socket.listen_multicast_group("230.0.0.1") { |asyncResult2,asyncResult2_err|
+    socket.listen_multicast_group("230.0.0.1") { |asyncResult2_err,asyncResult2|
       if (asyncResult2_err == nil)
         # will now receive packets for group
 
         # do some work
 
-        socket.unlisten_multicast_group("230.0.0.1") { |asyncResult3,asyncResult3_err|
+        socket.unlisten_multicast_group("230.0.0.1") { |asyncResult3_err,asyncResult3|
           puts "Unlisten succeeded? #{asyncResult3_err == nil}"
         }
       else
@@ -5890,7 +5914,7 @@ like shown here:</p>
 # Some code
 
 # This would block packets which are send from 10.0.0.2
-socket.block_multicast_group("230.0.0.1", "10.0.0.2") { |asyncResult,asyncResult_err|
+socket.block_multicast_group("230.0.0.1", "10.0.0.2") { |asyncResult_err,asyncResult|
   puts "block succeeded? #{asyncResult_err == nil}"
 }</code></pre>
 </div>
@@ -5990,7 +6014,7 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.lookup("vertx.io") { |ar,ar_err|
+client.lookup("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     puts ar
   else
@@ -6012,7 +6036,7 @@ the same way as you may be used from when using "nslookup" on your operation sys
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.lookup4("vertx.io") { |ar,ar_err|
+client.lookup4("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     puts ar
   else
@@ -6034,7 +6058,7 @@ same way as you may be used from when using "nslookup" on your operation system.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.lookup6("vertx.io") { |ar,ar_err|
+client.lookup6("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     puts ar
   else
@@ -6056,7 +6080,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_a("vertx.io") { |ar,ar_err|
+client.resolve_a("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -6081,7 +6105,7 @@ operation systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_aaaa("vertx.io") { |ar,ar_err|
+client.resolve_aaaa("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -6106,7 +6130,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_cname("vertx.io") { |ar,ar_err|
+client.resolve_cname("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -6131,7 +6155,7 @@ emails for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_mx("vertx.io") { |ar,ar_err|
+client.resolve_mx("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -6168,7 +6192,7 @@ record.name()</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_txt("vertx.io") { |ar,ar_err|
+client.resolve_txt("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -6193,7 +6217,7 @@ for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_ns("vertx.io") { |ar,ar_err|
+client.resolve_ns("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -6218,7 +6242,7 @@ hostname of services. Some protocols need this extra informations.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_srv("vertx.io") { |ar,ar_err|
+client.resolve_srv("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -6263,7 +6287,7 @@ record.target()</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_ptr("1.0.0.10.in-addr.arpa") { |ar,ar_err|
+client.resolve_ptr("1.0.0.10.in-addr.arpa") { |ar_err,ar|
   if (ar_err == nil)
     record = ar
     puts record
@@ -6286,7 +6310,7 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.reverse_lookup("10.0.0.1") { |ar,ar_err|
+client.reverse_lookup("10.0.0.1") { |ar_err,ar|
   if (ar_err == nil)
     record = ar
     puts record
@@ -6557,10 +6581,67 @@ This has the same meaning as <code><a href="yardoc/Vertx/WriteStream.html#set_wr
 </div>
 </div>
 <div class="sect1">
-<h2 id="_parse_tools">Parse tools</h2>
+<h2 id="_record_parser">Record Parser</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>TODO</p>
+<p>The record parser allows you to easily parse protocols which are delimited by a sequence of bytes, or fixed
+size records.</p>
+</div>
+<div class="paragraph">
+<p>It transforms an sequence of input buffer to a sequence of buffer structured as configured (either
+fixed size or separated records).</p>
+</div>
+<div class="paragraph">
+<p>For example, if you have a simple ASCII text protocol delimited by '\n' and the input is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO\nHOW ARE Y
+buffer2:OU?\nI AM
+buffer3: DOING OK
+buffer4:\n</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The record parser would produce</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO
+buffer2:HOW ARE YOU?
+buffer3:I AM DOING OK</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see the associated code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/record_parser'
+require 'vertx/buffer'
+parser = Vertx::RecordParser.new_delimited("\n") { |h|
+  puts h.to_string()
+}
+
+parser.handle(Vertx::Buffer.buffer("HELLO\nHOW ARE Y"))
+parser.handle(Vertx::Buffer.buffer("OU?\nI AM"))
+parser.handle(Vertx::Buffer.buffer("DOING OK"))
+parser.handle(Vertx::Buffer.buffer("\n"))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also produce fixed sized chunks as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/record_parser'
+Vertx::RecordParser.new_fixed(4) { |h|
+  puts h.to_string()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="yardoc/Vertx/RecordParser.html">RecordParser</a></code> class.</p>
 </div>
 </div>
 </div>
@@ -7318,7 +7399,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

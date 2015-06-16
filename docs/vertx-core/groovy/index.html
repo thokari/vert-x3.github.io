@@ -93,6 +93,8 @@
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -119,7 +121,12 @@
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
-<li><a href="#_json">JSON</a></li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
+</ul>
+</li>
 <li><a href="#_buffers">Buffers</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_buffers">Creating buffers</a></li>
@@ -213,6 +220,7 @@
 <li><a href="#_resolvesrv">resolveSRV</a></li>
 <li><a href="#_resolveptr">resolvePTR</a></li>
 <li><a href="#_reverselookup">reverseLookup</a></li>
+<li><a href="#_error_handling">Error handling</a></li>
 </ul>
 </li>
 <li><a href="#streams">Streams</a>
@@ -222,7 +230,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -278,6 +286,8 @@
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -304,7 +314,12 @@
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
-<li><a href="#_json">JSON</a></li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
+</ul>
+</li>
 <li><a href="#_buffers">Buffers</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_buffers">Creating buffers</a></li>
@@ -398,6 +413,7 @@
 <li><a href="#_resolvesrv">resolveSRV</a></li>
 <li><a href="#_resolveptr">resolvePTR</a></li>
 <li><a href="#_reverselookup">reverseLookup</a></li>
+<li><a href="#_error_handling">Error handling</a></li>
 </ul>
 </li>
 <li><a href="#streams">Streams</a>
@@ -407,7 +423,7 @@
 <li><a href="#_pump">Pump</a></li>
 </ul>
 </li>
-<li><a href="#_parse_tools">Parse tools</a></li>
+<li><a href="#_record_parser">Record Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -959,7 +975,196 @@ time. The different verticle instances communicate with each other by sending me
 <div class="sect2">
 <h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>Todo verticles for Groovy.</p>
+<p>There is two alternatives to create verticles in Groovy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a plain Groovy script</p>
+</li>
+<li>
+<p>a Groovy class extending the <code>GroovyVerticle</code> class.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, the next snippet is a valid Groovy verticle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println "Hello from vertx"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On deployment, by default, Vert.x executes the script. Optionally, your script can provide the <code>startVertx</code> and
+<code>stopVertx</code> methods. Theses methods are called respectively when the verticle starts and stops:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void vertxStart() {
+ println "starting"
+}
+
+void vertxStop() {
+ println "stopping"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can extend the <code>GroovyVerticle</code> class and implement the <code>start</code> and
+<code>stop</code> methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.lang.groovy.GroovyVerticle;
+
+public class HelloWorldHttpVerticle extends GroovyVerticle {
+
+ public void start() {
+  println("Starting")
+ }
+
+ public void stop() {
+   println("Stopping")
+ }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As in Java, vert.x creates a new instance of the class automatically.  When Vert.x deploys the verticle it will call
+the <code>start</code> method, and when the method has completed the verticle will be considered started.</p>
+</div>
+<div class="paragraph">
+<p>You can also optionally override the <code>stop</code> method. This will be called by Vert.x when the verticle is undeployed
+and when the method has completed the verticle will be considered stopped.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</h3>
+<div class="paragraph">
+<p>Regardless the way you use to implement your verticle, you access the vert.x instance using the <code>vertx</code> variable /
+field.</p>
+</div>
+<div class="listingblock">
+<div class="title">Access to the vert.x instance in a Groovy script</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("another_verticle.rb")</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Access to the vert.x instance in a Groovy class</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.lang.groovy.GroovyVerticle;
+
+public class HelloWorldHttpVerticle extends GroovyVerticle {
+
+   public void start() {
+     vertx.deployVerticle("another_verticle.js")
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</h3>
+<div class="paragraph">
+<p>Sometimes you want to do something in your verticle start-up which takes some time and you don&#8217;t want the verticle to
+be considered deployed until that happens. For example you might want to deploy other verticles in the start method.</p>
+</div>
+<div class="paragraph">
+<p>You can&#8217;t block waiting for the other verticles to deploy in your start method as that would break the <a href="#golden_rule">Golden Rule</a>.</p>
+</div>
+<div class="paragraph">
+<p>So how can you do this?</p>
+</div>
+<div class="paragraph">
+<p>The way to do it is to implement the <strong>asynchronous</strong> start method. This version of the method takes a Future as a parameter.When the method returns the verticle will <strong>not</strong> be considered deployed.</p>
+</div>
+<div class="paragraph">
+<p>Some time later, after you&#8217;ve done everything you need to do (e.g. start other verticles), you can call complete
+on the Future (or fail) to signal that you&#8217;re done. Similarly, there is an asynchronous version of the stop method too.
+You use this if you want to do some verticle cleanup that takes some time.</p>
+</div>
+<div class="paragraph">
+<p>When your verticle is implemented as a script, asynchronous start and stop are implemented as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Future
+
+void vertxStart(Future&lt;Void&gt; future) {
+ println "starting"
+ vertx.deployVerticle("v.rb", { res -&gt;
+   if (res.succeeded()) {
+     future.complete()
+   } else {
+     future.fail()
+   }
+ })
+}
+
+void vertxStop(Future&lt;Void&gt; future) {
+ println "stopping"
+ future.complete()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If your verticle extends <code>GroovyVerticle</code>, you override the
+<code>start</code> and
+<code>stop</code> methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.Future
+import io.vertx.lang.groovy.GroovyVerticle
+
+public class HelloWorldHttpVerticle extends GroovyVerticle {
+ public void start(Future&lt;Void&gt; future) {
+   println "starting"
+   vertx.deployVerticle("v.rb",
+   { res -&gt;
+     if (res.succeeded()) {
+       future.complete()
+     } else {
+       future.fail()
+     }
+   })
+  }
+
+ public void stop(Future&lt;Void&gt; future) {
+  println("stopping")
+  future.complete()
+ }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Notice that depending your implementation choice, the <code>Future</code> class is different. Groovy verticle
+implemented as script are using <code>io.vertx.groovy.core.Future</code>, while classes are using
+<code>io.vertx.core.Future</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method.
+Vert.x will automatically undeploy any child verticles when the parent is undeployed.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1216,38 +1421,50 @@ and multiple cores on your machine, so you want to deploy multiple instances to 
 <div class="sect2">
 <h3 id="_passing_configuration_to_a_verticle">Passing configuration to a verticle</h3>
 <div class="paragraph">
-<p>Configuration in the form of JSON can be passed to a verticle at deployment time:</p>
+<p>Configuration in the form of Map can be passed to a verticle at deployment time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = [
-  name:"tim",
-  directory:"/blah"
+ name:"tim",
+ directory:"/blah"
 ]
-def options = [
-  config:config
-]
-vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options)</code></pre>
+def options = [ "config" : config ];
+vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This configuration is then available via the <code><a href="groovydoc/io/vertx/groovy/core/Context.html">Context</a></code> object or directly using the
-<code>config</code> method. The configuration is returned as a JSON object so you can
-retrieve data as follows:</p>
+<p>This configuration is then available via the <code><a href="../../vertx-core/groovy/groovydoc/io/vertx/groovy/core/Context.html">Context</a></code>, The configuration is returned as a Map
+object so you can retrieve data as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println vertx.getOrCreateContext().config()["name"]</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The configuration can also be a <code>JsonObject</code> object.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
 <div class="paragraph">
-<p>Environment variables and system properties are accessible from a verticle by following the Java way. To retrieve
-system properties, use <code>System.getProperty</code>
-(or <code>System.getProperty</code>). You can also retrieve the
-environment variables using <code>System.getenv</code>.</p>
+<p>Environment variables and system properties are accessible using the Java API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println System.getProperty("foo")
+println System.getenv("HOME")</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1803,12 +2020,30 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 <div class="sect3">
 <h4 id="_setting_headers_on_messages">Setting headers on messages</h4>
 <div class="paragraph">
-<p>Messages sent over the event bus can also contain headers. This can be specified by providing a
-<code><a href="../cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code> when sending or publishing:</p>
+<p>Messages sent over the event bus can also contain <em>headers</em>.</p>
+</div>
+<div class="paragraph">
+<p>This can be specified by setting options when sending or
+publishing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
+  headers: [
+   "some-header" : "some-value"
+  ]
+]
+vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On the other side, a consumer can retrieve the headers as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.eventBus().consumer("news.uk.sport",  { e -&gt;
+ println e.headers()["some-header"];
+});</code></pre>
 </div>
 </div>
 </div>
@@ -1948,7 +2183,7 @@ for example the default <code>HazelcastClusterManager</code>.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>vertx run MyVerticle -cluster</pre>
+<pre>vertx run my-verticle.js -cluster</pre>
 </div>
 </div>
 </div>
@@ -1966,7 +2201,168 @@ when the verticle is undeployed.</p>
 <h2 id="_json">JSON</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Todo json for Groovy.</p>
+<p>To manipulate JSON object, Vert.x proposes its own implementation of <code>JsonObject</code> and
+<code>JsonArray</code>.</p>
+</div>
+<div class="paragraph">
+<p>This is because, unlike some other languages, Java does not have first class
+support for <a href="http://json.org/">JSON</a>.</p>
+</div>
+<div class="paragraph">
+<p>When developping a vert.x application with Groovy, you can rely on these two classes, or use the
+(<a href="http://www.groovy-lang.org/json.html)">JSON support from Groovy</a>. This section explains how to use the Vert.x
+classes.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Most vert.x methods taking a JSON object as argument in their Java version, take a map instead.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_json_objects">JSON objects</h3>
+<div class="paragraph">
+<p>The <code>JsonObject</code> class represents JSON objects.</p>
+</div>
+<div class="paragraph">
+<p>A JSON object is basically just a map which has string keys and values can be of one of the JSON supported types
+(string, number, boolean).</p>
+</div>
+<div class="paragraph">
+<p>JSON objects also support <code>null</code> values.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_json_objects">Creating JSON objects</h4>
+<div class="paragraph">
+<p>Empty JSON objects can be created with the default constructor.</p>
+</div>
+<div class="paragraph">
+<p>You can create a JSON object from a string or g-string JSON representation as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def object = new JsonObject("{\"foo\":\"bar\"}")
+def object2 = new JsonObject("""
+{
+ "foo": "bar"
+}
+""")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Groovy it&#8217;s also convenient to create a JSON object from a map:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [ "foo" : "bar" ]
+def json = new JsonObject(map)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nested maps are transformed to nested JSON objects.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_putting_entries_into_a_json_object">Putting entries into a JSON object</h4>
+<div class="paragraph">
+<p>Use the <code>put</code> methods to put values into the JSON object.</p>
+</div>
+<div class="paragraph">
+<p>The method invocations can be chained because of the fluent API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def object = new JsonObject()
+object.put("foo", "bar").put("num", 123).put("mybool", true)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_getting_values_from_a_json_object">Getting values from a JSON object</h4>
+<div class="paragraph">
+<p>You get values from a JSON object using the <code>getXXX</code> methods, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">dev val1 = jsonObject.getString("some-key")
+def val2 = jsonObject.getInteger("some-other-key")</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_the_json_object_to_a_string">Encoding the JSON object to a String</h4>
+<div class="paragraph">
+<p>You use <code>encode</code> to encode the object to a String form. There is also a
+<code>encodePrettily</code> that makes the output pretty (understand multi-line and
+indented).</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_arrays">JSON arrays</h3>
+<div class="paragraph">
+<p>The <code>JsonArray</code> class represents JSON arrays.</p>
+</div>
+<div class="paragraph">
+<p>A JSON array is a sequence of values (string, number, boolean).</p>
+</div>
+<div class="paragraph">
+<p>JSON arrays can also contain <code>null</code> values.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_json_arrays">Creating JSON arrays</h4>
+<div class="paragraph">
+<p>Empty JSON arrays can be created with the default constructor.</p>
+</div>
+<div class="paragraph">
+<p>You can create a JSON array from a string JSON representation or a map as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def object = new JsonObject("""{foo:["bar", "baz"}""")
+def object2 = new JsonObject(["foo": ["bar", "baz"]])</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_entries_into_a_json_array">Adding entries into a JSON array</h4>
+<div class="paragraph">
+<p>You add entries to a JSON array using the <code>add</code> methods.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def array = new JsonArray()
+array.add("foo").add(123).add(false)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_getting_values_from_a_json_array">Getting values from a JSON array</h4>
+<div class="paragraph">
+<p>You get values from a JSON array using the <code>getXXX</code> methods, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def val = array.getString(0)
+def intVal = array.getInteger(1)
+def boolVal = array.getBoolean(2)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_the_json_array_to_a_string">Encoding the JSON array to a String</h4>
+<div class="paragraph">
+<p>You use <code>encode</code> to encode the array to a String form. There is also a
+<code>encodePrettily</code> that makes the output pretty (understand multi-line and
+indented).</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -6056,8 +6452,92 @@ client.reverseLookup("10.0.0.1", { ar -&gt;
 })</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_error_handling">Error handling</h3>
 <div class="paragraph">
-<p>Unresolved directive in dns.adoc - include::override/dns.adoc[]</p>
+<p>As you saw in previous sections the DnsClient allows you to pass in a Handler which will be notified with an
+AsyncResult once the query was complete.</p>
+</div>
+<div class="paragraph">
+<p>In case of an error it will be notified with a DnsException which will
+hole a <code>DnsResponseCode</code> that indicate why the resolution failed. This DnsResponseCode
+can be used to inspect the cause in more detail.</p>
+</div>
+<div class="paragraph">
+<p>Possible DnsResponseCodes are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="todo">NOERROR</a></code> No record was found for a given query</p>
+</li>
+<li>
+<p><code><a href="todo">FORMERROR</a></code> Format error</p>
+</li>
+<li>
+<p><code><a href="todo">SERVFAIL</a></code> Server failure</p>
+</li>
+<li>
+<p><code><a href="todo">NXDOMAIN</a></code> Name error</p>
+</li>
+<li>
+<p><code><a href="todo">NOTIMPL</a></code> Not implemented by DNS Server</p>
+</li>
+<li>
+<p><code><a href="todo">REFUSED</a></code> DNS Server refused the query</p>
+</li>
+<li>
+<p><code><a href="todo">YXDOMAIN</a></code> Domain name should not exist</p>
+</li>
+<li>
+<p><code><a href="todo">YXRRSET</a></code> Resource record should not exist</p>
+</li>
+<li>
+<p><code><a href="todo">NXRRSET</a></code> RRSET does not exist</p>
+</li>
+<li>
+<p><code><a href="todo">NOTZONE</a></code> Name not in zone</p>
+</li>
+<li>
+<p><code><a href="todo">BADVERS</a></code> Bad extension mechanism for version</p>
+</li>
+<li>
+<p><code><a href="todo">BADSIG</a></code> Bad signature</p>
+</li>
+<li>
+<p><code><a href="todo">BADKEY</a></code> Bad key</p>
+</li>
+<li>
+<p><code><a href="todo">BADTIME</a></code> Bad timestamp</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All of those errors are "generated" by the DNS Server itself.</p>
+</div>
+<div class="paragraph">
+<p>You can obtain the <code>DnsResponseCode</code> from the <code>DnsException</code> like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = vertx.createDnsClient(53, "8.8.8.8");
+client.lookup("missing.vertx.io", { ar -&gt;
+ if (ar.succeeded()) {
+   def record = ar.result();
+   println "record: " + record;
+ } else {
+   def cause = ar.cause();
+   if (cause instanceof DnsException) {
+   def code = cause.code();
+   println "Code : " + code
+   // ...
+   } else {
+     println("Failed to resolve entry" + ar.cause());
+   }
+ }
+})</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -6320,10 +6800,67 @@ This has the same meaning as <code><a href="groovydoc/io/vertx/groovy/core/strea
 </div>
 </div>
 <div class="sect1">
-<h2 id="_parse_tools">Parse tools</h2>
+<h2 id="_record_parser">Record Parser</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>TODO</p>
+<p>The record parser allows you to easily parse protocols which are delimited by a sequence of bytes, or fixed
+size records.</p>
+</div>
+<div class="paragraph">
+<p>It transforms an sequence of input buffer to a sequence of buffer structured as configured (either
+fixed size or separated records).</p>
+</div>
+<div class="paragraph">
+<p>For example, if you have a simple ASCII text protocol delimited by '\n' and the input is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO\nHOW ARE Y
+buffer2:OU?\nI AM
+buffer3: DOING OK
+buffer4:\n</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The record parser would produce</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>buffer1:HELLO
+buffer2:HOW ARE YOU?
+buffer3:I AM DOING OK</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see the associated code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.parsetools.RecordParser
+import io.vertx.groovy.core.buffer.Buffer
+def parser = RecordParser.newDelimited("\n", { h -&gt;
+  println(h.toString())
+})
+
+parser.handle(Buffer.buffer("HELLO\nHOW ARE Y"))
+parser.handle(Buffer.buffer("OU?\nI AM"))
+parser.handle(Buffer.buffer("DOING OK"))
+parser.handle(Buffer.buffer("\n"))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also produce fixed sized chunks as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.parsetools.RecordParser
+RecordParser.newFixed(4, { h -&gt;
+  println(h.toString())
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="groovydoc/io/vertx/groovy/core/parsetools/RecordParser.html">RecordParser</a></code> class.</p>
 </div>
 </div>
 </div>
@@ -7081,7 +7618,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

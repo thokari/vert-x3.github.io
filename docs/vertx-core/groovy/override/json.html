@@ -78,7 +78,12 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
-<li><a href="#_json">JSON</a></li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -86,14 +91,180 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
-<li><a href="#_json">JSON</a></li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
+</ul>
+</li>
 </ul>
         </div>
         <div class="sect1">
 <h2 id="_json">JSON</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Todo json for Groovy.</p>
+<p>To manipulate JSON object, Vert.x proposes its own implementation of <code>JsonObject</code> and
+<code>JsonArray</code>.</p>
+</div>
+<div class="paragraph">
+<p>This is because, unlike some other languages, Java does not have first class
+support for <a href="http://json.org/">JSON</a>.</p>
+</div>
+<div class="paragraph">
+<p>When developping a vert.x application with Groovy, you can rely on these two classes, or use the
+(<a href="http://www.groovy-lang.org/json.html)">JSON support from Groovy</a>. This section explains how to use the Vert.x
+classes.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Most vert.x methods taking a JSON object as argument in their Java version, take a map instead.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_json_objects">JSON objects</h3>
+<div class="paragraph">
+<p>The <code>JsonObject</code> class represents JSON objects.</p>
+</div>
+<div class="paragraph">
+<p>A JSON object is basically just a map which has string keys and values can be of one of the JSON supported types
+(string, number, boolean).</p>
+</div>
+<div class="paragraph">
+<p>JSON objects also support <code>null</code> values.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_json_objects">Creating JSON objects</h4>
+<div class="paragraph">
+<p>Empty JSON objects can be created with the default constructor.</p>
+</div>
+<div class="paragraph">
+<p>You can create a JSON object from a string or g-string JSON representation as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def object = new JsonObject("{\"foo\":\"bar\"}")
+def object2 = new JsonObject("""
+{
+ "foo": "bar"
+}
+""")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Groovy it&#8217;s also convenient to create a JSON object from a map:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [ "foo" : "bar" ]
+def json = new JsonObject(map)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nested maps are transformed to nested JSON objects.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_putting_entries_into_a_json_object">Putting entries into a JSON object</h4>
+<div class="paragraph">
+<p>Use the <code>put</code> methods to put values into the JSON object.</p>
+</div>
+<div class="paragraph">
+<p>The method invocations can be chained because of the fluent API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def object = new JsonObject()
+object.put("foo", "bar").put("num", 123).put("mybool", true)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_getting_values_from_a_json_object">Getting values from a JSON object</h4>
+<div class="paragraph">
+<p>You get values from a JSON object using the <code>getXXX</code> methods, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">dev val1 = jsonObject.getString("some-key")
+def val2 = jsonObject.getInteger("some-other-key")</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_the_json_object_to_a_string">Encoding the JSON object to a String</h4>
+<div class="paragraph">
+<p>You use <code>encode</code> to encode the object to a String form. There is also a
+<code>encodePrettily</code> that makes the output pretty (understand multi-line and
+indented).</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_arrays">JSON arrays</h3>
+<div class="paragraph">
+<p>The <code>JsonArray</code> class represents JSON arrays.</p>
+</div>
+<div class="paragraph">
+<p>A JSON array is a sequence of values (string, number, boolean).</p>
+</div>
+<div class="paragraph">
+<p>JSON arrays can also contain <code>null</code> values.</p>
+</div>
+<div class="sect3">
+<h4 id="_creating_json_arrays">Creating JSON arrays</h4>
+<div class="paragraph">
+<p>Empty JSON arrays can be created with the default constructor.</p>
+</div>
+<div class="paragraph">
+<p>You can create a JSON array from a string JSON representation or a map as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def object = new JsonObject("""{foo:["bar", "baz"}""")
+def object2 = new JsonObject(["foo": ["bar", "baz"]])</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_entries_into_a_json_array">Adding entries into a JSON array</h4>
+<div class="paragraph">
+<p>You add entries to a JSON array using the <code>add</code> methods.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def array = new JsonArray()
+array.add("foo").add(123).add(false)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_getting_values_from_a_json_array">Getting values from a JSON array</h4>
+<div class="paragraph">
+<p>You get values from a JSON array using the <code>getXXX</code> methods, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def val = array.getString(0)
+def intVal = array.getInteger(1)
+def boolVal = array.getBoolean(2)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_the_json_array_to_a_string">Encoding the JSON array to a String</h4>
+<div class="paragraph">
+<p>You use <code>encode</code> to encode the array to a String form. There is also a
+<code>encodePrettily</code> that makes the output pretty (understand multi-line and
+indented).</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -104,7 +275,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

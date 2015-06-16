@@ -157,12 +157,14 @@ in a JSON object.</p>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">var JWTAuth = require("vertx-auth-jwt-js/jwt_auth");
 
 var config = {
-  "keyStoreURI" : "classpath:///keystore.jceks",
-  "keyStoreType" : "jceks",
-  "keyStorePassword" : "secret"
+  "keyStore" : {
+    "path" : "keystore.jceks",
+    "type" : "jceks",
+    "password" : "secret"
+  }
 };
 
-var provider = JWTAuth.create(config);</code></pre>
+var provider = JWTAuth.create(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -175,12 +177,14 @@ do:</p>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">var JWTAuth = require("vertx-auth-jwt-js/jwt_auth");
 
 var config = {
-  "keyStoreURI" : "classpath:///keystore.jceks",
-  "keyStoreType" : "jceks",
-  "keyStorePassword" : "secret"
+  "keyStore" : {
+    "path" : "keystore.jceks",
+    "type" : "jceks",
+    "password" : "secret"
+  }
 };
 
-var provider = JWTAuth.create(config);
+var provider = JWTAuth.create(vertx, config);
 
 // on the verify endpoint once you verify the identity of the user by its username/password
 if ("paulo" == username &amp;&amp; "super_secret" == password) {
@@ -254,7 +258,7 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

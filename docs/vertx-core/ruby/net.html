@@ -210,7 +210,7 @@ For example:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server()
-server.listen(1234, "localhost") { |res,res_err|
+server.listen(1234, "localhost") { |res_err,res|
   if (res_err == nil)
     puts "Server is now listening!"
   else
@@ -231,7 +231,7 @@ server.listen(1234, "localhost") { |res,res_err|
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server()
-server.listen(0, "localhost") { |res,res_err|
+server.listen(0, "localhost") { |res_err,res|
   if (res_err == nil)
     puts "Server is now listening on actual port: #{server.actual_port()}"
   else
@@ -400,7 +400,7 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server.close() { |res,res_err|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server.close() { |res_err,res|
   if (res_err == nil)
     puts "Server is now closed"
   else
@@ -532,7 +532,7 @@ specifying the port and host of the server and a handler that will be called wit
   'connectTimeout' =&gt; 10000
 }
 client = vertx.create_net_client(options)
-client.connect(4321, "localhost") { |res,res_err|
+client.connect(4321, "localhost") { |res_err,res|
   if (res_err == nil)
     puts "Connected!"
     socket = res
@@ -1145,7 +1145,7 @@ server = vertx.create_net_server(options)</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

@@ -79,6 +79,8 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
 </ul>
         </div>
       </div>
@@ -87,12 +89,203 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
 </ul>
         </div>
         <div class="sect2">
 <h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>Todo verticles for Groovy.</p>
+<p>There is two alternatives to create verticles in Groovy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a plain Groovy script</p>
+</li>
+<li>
+<p>a Groovy class extending the <code>GroovyVerticle</code> class.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, the next snippet is a valid Groovy verticle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println "Hello from vertx"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On deployment, by default, Vert.x executes the script. Optionally, your script can provide the <code>startVertx</code> and
+<code>stopVertx</code> methods. Theses methods are called respectively when the verticle starts and stops:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void vertxStart() {
+ println "starting"
+}
+
+void vertxStop() {
+ println "stopping"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can extend the <code>GroovyVerticle</code> class and implement the <code>start</code> and
+<code>stop</code> methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.lang.groovy.GroovyVerticle;
+
+public class HelloWorldHttpVerticle extends GroovyVerticle {
+
+ public void start() {
+  println("Starting")
+ }
+
+ public void stop() {
+   println("Stopping")
+ }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As in Java, vert.x creates a new instance of the class automatically.  When Vert.x deploys the verticle it will call
+the <code>start</code> method, and when the method has completed the verticle will be considered started.</p>
+</div>
+<div class="paragraph">
+<p>You can also optionally override the <code>stop</code> method. This will be called by Vert.x when the verticle is undeployed
+and when the method has completed the verticle will be considered stopped.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</h3>
+<div class="paragraph">
+<p>Regardless the way you use to implement your verticle, you access the vert.x instance using the <code>vertx</code> variable /
+field.</p>
+</div>
+<div class="listingblock">
+<div class="title">Access to the vert.x instance in a Groovy script</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("another_verticle.rb")</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Access to the vert.x instance in a Groovy class</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.lang.groovy.GroovyVerticle;
+
+public class HelloWorldHttpVerticle extends GroovyVerticle {
+
+   public void start() {
+     vertx.deployVerticle("another_verticle.js")
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</h3>
+<div class="paragraph">
+<p>Sometimes you want to do something in your verticle start-up which takes some time and you don&#8217;t want the verticle to
+be considered deployed until that happens. For example you might want to deploy other verticles in the start method.</p>
+</div>
+<div class="paragraph">
+<p>You can&#8217;t block waiting for the other verticles to deploy in your start method as that would break the <a href="#golden_rule">Golden Rule</a>.</p>
+</div>
+<div class="paragraph">
+<p>So how can you do this?</p>
+</div>
+<div class="paragraph">
+<p>The way to do it is to implement the <strong>asynchronous</strong> start method. This version of the method takes a Future as a parameter.When the method returns the verticle will <strong>not</strong> be considered deployed.</p>
+</div>
+<div class="paragraph">
+<p>Some time later, after you&#8217;ve done everything you need to do (e.g. start other verticles), you can call complete
+on the Future (or fail) to signal that you&#8217;re done. Similarly, there is an asynchronous version of the stop method too.
+You use this if you want to do some verticle cleanup that takes some time.</p>
+</div>
+<div class="paragraph">
+<p>When your verticle is implemented as a script, asynchronous start and stop are implemented as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Future
+
+void vertxStart(Future&lt;Void&gt; future) {
+ println "starting"
+ vertx.deployVerticle("v.rb", { res -&gt;
+   if (res.succeeded()) {
+     future.complete()
+   } else {
+     future.fail()
+   }
+ })
+}
+
+void vertxStop(Future&lt;Void&gt; future) {
+ println "stopping"
+ future.complete()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If your verticle extends <code>GroovyVerticle</code>, you override the
+<code>start</code> and
+<code>stop</code> methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.Future
+import io.vertx.lang.groovy.GroovyVerticle
+
+public class HelloWorldHttpVerticle extends GroovyVerticle {
+ public void start(Future&lt;Void&gt; future) {
+   println "starting"
+   vertx.deployVerticle("v.rb",
+   { res -&gt;
+     if (res.succeeded()) {
+       future.complete()
+     } else {
+       future.fail()
+     }
+   })
+  }
+
+ public void stop(Future&lt;Void&gt; future) {
+  println("stopping")
+  future.complete()
+ }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Notice that depending your implementation choice, the <code>Future</code> class is different. Groovy verticle
+implemented as script are using <code>io.vertx.groovy.core.Future</code>, while classes are using
+<code>io.vertx.core.Future</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method.
+Vert.x will automatically undeploy any child verticles when the parent is undeployed.
+</td>
+</tr>
+</table>
 </div>
 </div>
 
@@ -102,7 +295,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>

@@ -154,7 +154,7 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.lookup("vertx.io") { |ar,ar_err|
+client.lookup("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     puts ar
   else
@@ -176,7 +176,7 @@ the same way as you may be used from when using "nslookup" on your operation sys
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.lookup4("vertx.io") { |ar,ar_err|
+client.lookup4("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     puts ar
   else
@@ -198,7 +198,7 @@ same way as you may be used from when using "nslookup" on your operation system.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.lookup6("vertx.io") { |ar,ar_err|
+client.lookup6("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     puts ar
   else
@@ -220,7 +220,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_a("vertx.io") { |ar,ar_err|
+client.resolve_a("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -245,7 +245,7 @@ operation systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_aaaa("vertx.io") { |ar,ar_err|
+client.resolve_aaaa("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -270,7 +270,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_cname("vertx.io") { |ar,ar_err|
+client.resolve_cname("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -295,7 +295,7 @@ emails for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_mx("vertx.io") { |ar,ar_err|
+client.resolve_mx("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -332,7 +332,7 @@ record.name()</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_txt("vertx.io") { |ar,ar_err|
+client.resolve_txt("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -357,7 +357,7 @@ for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_ns("vertx.io") { |ar,ar_err|
+client.resolve_ns("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -382,7 +382,7 @@ hostname of services. Some protocols need this extra informations.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_srv("vertx.io") { |ar,ar_err|
+client.resolve_srv("vertx.io") { |ar_err,ar|
   if (ar_err == nil)
     records = ar
     records.each do |record|
@@ -427,7 +427,7 @@ record.target()</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.resolve_ptr("1.0.0.10.in-addr.arpa") { |ar,ar_err|
+client.resolve_ptr("1.0.0.10.in-addr.arpa") { |ar_err,ar|
   if (ar_err == nil)
     record = ar
     puts record
@@ -450,7 +450,7 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_dns_client(53, "10.0.0.1")
-client.reverse_lookup("10.0.0.1") { |ar,ar_err|
+client.reverse_lookup("10.0.0.1") { |ar_err,ar|
   if (ar_err == nil)
     record = ar
     puts record
@@ -470,7 +470,7 @@ client.reverse_lookup("10.0.0.1") { |ar,ar_err|
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-13 00:25:18 BST
+                Last updated 2015-06-16 07:22:00 BST
               
               
             </div>
