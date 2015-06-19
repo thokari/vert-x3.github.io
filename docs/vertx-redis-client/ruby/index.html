@@ -221,7 +221,7 @@ if one wants to get a value of a key it can be done as:</p>
 redis = VertxRedis::RedisClient.create(vertx, {
 })
 
-redis.get("mykey") { |res,res_err|
+redis.get("mykey") { |res_err,res|
   if (res_err == nil)
     # so something...
   end
@@ -260,7 +260,7 @@ vertx.event_bus().consumer("redis.sub.channel1") { |received|
 redis = VertxRedis::RedisClient.create(vertx, {
 })
 
-redis.subscribe(["channel1"]) { |res,res_err|
+redis.subscribe(["channel1"]) { |res_err,res|
   if (res_err == nil)
     # so something...
   end
@@ -277,7 +277,7 @@ redis.subscribe(["channel1"]) { |res,res_err|
 redis = VertxRedis::RedisClient.create(vertx, {
 })
 
-redis.publish("channel1", "Hello World!") { |res,res_err|
+redis.publish("channel1", "Hello World!") { |res_err,res|
   if (res_err == nil)
     # so something...
   end
@@ -400,7 +400,7 @@ at the top level object.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-16 07:22:02 BST
+                Last updated 2015-06-19 12:00:10 BST
               
               
             </div>

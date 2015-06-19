@@ -96,7 +96,7 @@
         <div class="sect2">
 <h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>There is two alternatives to create verticles in Groovy:</p>
+<p>There are three alternatives to create verticles in Groovy:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -104,7 +104,16 @@
 <p>a plain Groovy script</p>
 </li>
 <li>
-<p>a Groovy class extending the <code>GroovyVerticle</code> class.</p>
+<p>a Groovy class extending the <code>GroovyVerticle</code> class</p>
+</li>
+<li>
+<p>a Groovy class implementing the <code>Verticle</code> interface or extending the <code>AbstractVerticle</code> class</p>
+<div class="literalblock">
+<div class="content">
+<pre>We will not cover the third case in this manual, as it is a plain Java class and instead you should read the
+Vert.x manual for Java.</pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
@@ -295,7 +304,7 @@ Vert.x will automatically undeploy any child verticles when the parent is undepl
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-16 07:22:00 BST
+                Last updated 2015-06-19 12:00:10 BST
               
               
             </div>

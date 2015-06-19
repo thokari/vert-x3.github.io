@@ -357,7 +357,13 @@ what you are doing, this may generate invalid messages.</p>
 <p><code>trustAll</code> boolean whether to accept all certs from the server (default is false)</p>
 </li>
 <li>
-<p><code>netClientOptions</code> NetClientOptions object to be used when connecting to the server port, this allows for example to set a custom keystore to use a self-defined certificate or a "custom" CA</p>
+<p><code>keyStore</code> String the key store filename, this can be used to trust a server cert that is custom generated</p>
+</li>
+<li>
+<p><code>keyStorePassword</code> String password used to decrypt the key store</p>
+</li>
+<li>
+<p><code>allowRcptErrors</code> boolean if true, sending continues if a recipient address is not accepted and the mail will be sent if at least one address is accepted</p>
 </li>
 </ul>
 </div>
@@ -373,7 +379,7 @@ what you are doing, this may generate invalid messages.</p>
 <p><code>messageID</code> the Message-ID of the generated mail</p>
 </li>
 <li>
-<p><code>recipients</code> the list of recipients the mail was sent to</p>
+<p><code>recipients</code> the list of recipients the mail was sent to (if allowRcptErrors is true, this may be fewer than the intended recipients)</p>
 </li>
 </ul>
 </div>
@@ -387,7 +393,7 @@ what you are doing, this may generate invalid messages.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-16 07:22:00 BST
+                Last updated 2015-06-19 12:00:10 BST
               
               
             </div>

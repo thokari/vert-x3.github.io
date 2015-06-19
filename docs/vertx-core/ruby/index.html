@@ -3804,7 +3804,7 @@ detailed explanation.</p>
 </td>
 <td class="content">
 Make sure you check the filename in a production system to avoid malicious clients uploading files
-to arbitrary places on your filesystem. See <a href="#security_notes">security notes</a> for more information.
+to arbitrary places on your filesystem. See <a href="#_security_notes">security notes</a> for more information.
 </td>
 </tr>
 </table>
@@ -4883,7 +4883,7 @@ server on your multi-core machine.</p>
 <p>Vert.x http servers and clients can be configured to use HTTPS in exactly the same way as net servers.</p>
 </div>
 <div class="paragraph">
-<p>Please see <a href="#netserver_ssl">configuring net servers to use SSL</a> for more information.</p>
+<p>Please see <a href="#ssl">configuring net servers to use SSL</a> for more information.</p>
 </div>
 </div>
 <div class="sect2">
@@ -7058,8 +7058,9 @@ can be easily replaced by a different implementation as Vert.x cluster managers 
 </div>
 <div class="paragraph">
 <p>A cluster manager must implement the interface <code><a href="unavailable">ClusterManager</a></code>. Vert.x locates
-cluster managers at run-time by using the Java <code>ServiceLoader</code> functionality to locate instances of
-<code><a href="unavailable">ClusterManager</a></code> on the classpath.</p>
+cluster managers at run-time by using the Java
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html">Service Loader</a> functionality to locate
+instances of <code><a href="unavailable">ClusterManager</a></code> on the classpath.</p>
 </div>
 <div class="paragraph">
 <p>If you are using Vert.x at the command line and you want to use clustering you should make sure the <code>lib</code> directory
@@ -7399,7 +7400,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-16 07:22:00 BST
+                Last updated 2015-06-19 12:00:10 BST
               
               
             </div>
