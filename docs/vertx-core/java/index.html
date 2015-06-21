@@ -50,7 +50,7 @@
         <li><a href="/docs/">Documentation</a></li>
         <li><a href="https://github.com/vert-x3/wiki/wiki">Wiki</a></li>
         <li><a href="/community/">Community</a></li>
-        <li><a href="http://vertx.io" class="vertx-2-link">Vert.x 2</a></li>
+        <li><a href="/vertx2/" class="vertx-2-link">Vert.x 2</a></li>
       </ul>
     </nav>
   </div>
@@ -4910,18 +4910,18 @@ providing a handler.</p>
 <div class="sect3">
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
-<p>If you wish to write a single binary WebSocket message containing a single WebSocket frame to the WebSocket (a
-common case) the simplest way to do this is to use <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeMessage-io.vertx.core.buffer.Buffer-">writeMessage</a></code>:</p>
+<p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
+<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeBinaryMessage-io.vertx.core.buffer.Buffer-">writeBinaryMessage</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer buffer = Buffer.buffer().appendInt(123).appendFloat(1.23f);
 
-websocket.writeMessage(buffer);</code></pre>
+websocket.writeBinaryMessage(buffer);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If the websocket message is larger than the maximum websocket frame size as configured with
+<p>If the WebSocket message is larger than the maximum websocket frame size as configured with
 <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setMaxWebsocketFrameSize-int-">setMaxWebsocketFrameSize</a></code>
 then Vert.x will split it into multiple WebSocket frames before sending it on the wire.</p>
 </div>
@@ -4930,7 +4930,7 @@ then Vert.x will split it into multiple WebSocket frames before sending it on th
 <h4 id="_writing_frames_to_websockets">Writing frames to WebSockets</h4>
 <div class="paragraph">
 <p>A WebSocket message can be composed of multiple frames. In this case the first frame is either a <em>binary</em> or <em>text</em> frame
-followed by one or more <em>continuation</em> frames.</p>
+followed by zero or more <em>continuation</em> frames.</p>
 </div>
 <div class="paragraph">
 <p>The last frame in the message is marked as <em>final</em>.</p>
@@ -4956,6 +4956,25 @@ websocket.writeFrame(frame2);
 // Write the final frame
 WebSocketFrame frame3 = WebSocketFrame.continuationFrame(buffer2, true);
 websocket.writeFrame(frame3);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In many cases you just want to send a websocket message that consists of a single final frame, so we provide a couple
+of shortcut methods to do that with <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeFinalBinaryFrame-io.vertx.core.buffer.Buffer-">writeFinalBinaryFrame</a></code>
+and <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeFinalTextFrame-java.lang.String-">writeFinalTextFrame</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">websocket.writeFinalTextFrame("Geronimo!");
+
+// Send a websocket messages consisting of a single final binary frame:
+
+Buffer buff = Buffer.buffer().appendInt(12).appendString("foo");
+
+websocket.writeFinalBinaryFrame(buff);</code></pre>
 </div>
 </div>
 </div>
@@ -7059,7 +7078,7 @@ the structure of a JUL config file please consult the JUL logging documentation.
 </div>
 <div class="paragraph">
 <p>Vert.x also provides a slightly more convenient way to specify a configuration file without having to set a system
-property. Just provide a JUL config file with the name <code>default-jul-logging.properties</code> on your classpath (e.g.
+property. Just provide a JUL config file with the name <code>vertx-default-jul-logging.properties</code> on your classpath (e.g.
 inside your fatjar) and Vert.x will use that to configure JUL.</p>
 </div>
 </div>
@@ -7364,7 +7383,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-19 12:24:44 BST
+                Last updated 2015-06-21 00:24:58 BST
               
               
             </div>
