@@ -233,7 +233,6 @@
 <li><a href="#_run_verticles">Run verticles</a></li>
 <li><a href="#_executing_verticles_packaged_as_a_fat_jar">Executing verticles packaged as a fat jar</a></li>
 <li><a href="#_displaying_version_of_vert_x">Displaying version of Vert.x</a></li>
-<li><a href="#_using_the_redeploy_argument">Using the redeploy argument</a></li>
 </ul>
 </li>
 <li><a href="#_cluster_managers">Cluster Managers</a></li>
@@ -420,7 +419,6 @@
 <li><a href="#_run_verticles">Run verticles</a></li>
 <li><a href="#_executing_verticles_packaged_as_a_fat_jar">Executing verticles packaged as a fat jar</a></li>
 <li><a href="#_displaying_version_of_vert_x">Displaying version of Vert.x</a></li>
-<li><a href="#_using_the_redeploy_argument">Using the redeploy argument</a></li>
 </ul>
 </li>
 <li><a href="#_cluster_managers">Cluster Managers</a></li>
@@ -990,7 +988,7 @@ update if needed.
 <p>vertx - A reference to the Vertx object</p>
 </li>
 <li>
-<p>console A reference to the <a href="#console">console</a> object</p>
+<p>console A reference to the <a href="#_the_console">console</a> object</p>
 </li>
 </ul>
 </div>
@@ -1426,8 +1424,8 @@ console.log(java.lang.System.getenv("HOME"));</code></pre>
 <div class="sect2">
 <h3 id="_verticle_isolation_groups">Verticle Isolation Groups</h3>
 <div class="paragraph">
-<p>By default, Vert.x has a <em>flat classpath</em>. I.e, it does everything, including deploying verticles without messing
-with class-loaders. In the majority of cases this is the simplest, clearest and sanest thing to do.</p>
+<p>By default, Vert.x has a <em>flat classpath</em>. I.e, when Vert.x deploys verticles it does so with the current classloader -
+it doesn&#8217;t create a new one. In the majority of cases this is the simplest, clearest and sanest thing to do.</p>
 </div>
 <div class="paragraph">
 <p>However, in some cases you may want to deploy a verticle so the classes of that verticle are isolated from others in
@@ -1436,6 +1434,21 @@ your application.</p>
 <div class="paragraph">
 <p>This might be the case, for example, if you want to deploy two different versions of a verticle with the same class name
 in the same Vert.x instance, or if you have two different verticles which use different versions of the same jar library.</p>
+</div>
+<div class="paragraph">
+<p>When using an isolation group you provide a list of the class names that you want isolated using
+<code><a href="../cheatsheet/DeploymentOptions.html#isolatedClasses">isolatedClasses</a></code>-  an entry can be a fully qualified
+classname such as <code>com.mycompany.myproject.engine.MyClass</code> or it can be a wildcard which will match any classes in a package and any
+sub-packages, e.g. <code>com.mycompany.myproject.*</code> would match any classes in the package <code>com.mycompany.myproject</code> or
+any sub-packages.</p>
+</div>
+<div class="paragraph">
+<p>Please note that <em>only</em> the classes that match will be isolated - any other classes will be loaded by the current
+class loader.</p>
+</div>
+<div class="paragraph">
+<p>Extra classpath entries can also be provided with <code><a href="../cheatsheet/DeploymentOptions.html#extraClasspath">extraClasspath</a></code> so if
+you want to load classes or resources that aren&#8217;t already present on the main classpath you can add this.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1458,17 +1471,9 @@ other things.
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
   "isolationGroup" : "mygroup"
 };
-options.extraClasspath = ["lib/jars/some-library.jar"];
-vertx.deployVerticle("com.mycompany.MyIsolatedVerticle", options);</code></pre>
+options.isolatedClasses = ["com.mycompany.myverticle.*", "com.mycompany.somepkg.SomeClass", "org.somelibrary.*"];
+vertx.deployVerticle("com.mycompany.myverticle.VerticleClass", options);</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Isolation groups are identified by a name, and the name can be used between different deployments if you want them
-to share an isolated class-loader.</p>
-</div>
-<div class="paragraph">
-<p>Extra classpath entries can also be provided with <code><a href="../cheatsheet/DeploymentOptions.html#extraClasspath">extraClasspath</a></code> so they
-can locate resources that are isolated to them.</p>
 </div>
 </div>
 <div class="sect2">
@@ -6816,9 +6821,6 @@ deploymentIDs</em> to be active. Defaults to 0.</p>
 multiple HA groups in a cluster. Nodes will only failover to other nodes in the same group. The default value is `
 __DEFAULT__`</p>
 </li>
-<li>
-<p><code>-redeploy</code> - Enables automatic redeployment of the verticle</p>
-</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -6957,23 +6959,6 @@ java -jar my-verticle-fat.jar -cluster -conf myconf.json -cp path/to/dir/conf/cl
 <div class="content">
 <pre class="prettyprint highlight"><code>vertx -version</code></pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_using_the_redeploy_argument">Using the redeploy argument</h3>
-<div class="paragraph">
-<p>When a verticle is launched with <code>vertx run &#8230;&#8203;. -redeploy</code>, vertx redeploys the verticle every time the verticle
-files change. This mode makes the development much more fun and efficient as you don&#8217;t have to restart the
-application.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>vertx run server.js -redeploy
-vertx run Server.java -redeploy</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When using Java source file, vert.x recompiles the class on the fly and redeploys the verticle.</p>
 </div>
 </div>
 </div>
@@ -7354,7 +7339,7 @@ the extent of damage in case the service was compromised.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-22 00:25:16 CEST
+                Last updated 2015-06-23 13:38:14 CEST
               
               
             </div>

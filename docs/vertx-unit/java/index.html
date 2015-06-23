@@ -937,6 +937,10 @@ and create a test suite after the class. The methods should declare a <code><a h
 argument, if they don&#8217;t it is fine too. However the <code>TestContext</code> is the only way to retrieve the associated
 Vertx instance of perform asynchronous tests.</p>
 </div>
+<div class="paragraph">
+<p>The JUnit integration is also available for the Groovy language with the <code>io.vertx.groovy.ext.unit.junit.VertxUnitRunner</code>
+runner.</p>
+</div>
 <div class="sect2">
 <h3 id="_running_a_test_on_a_vert_x_context">Running a test on a Vert.x context</h3>
 <div class="paragraph">
@@ -1018,6 +1022,9 @@ public class SimpleParameterizedTest {
   }
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Parameterized tests can also be done in Groovy with the <code>io.vertx.groovy.ext.unit.junit.VertxUnitRunnerWithParametersFactory</code>.</p>
 </div>
 </div>
 </div>
@@ -1217,7 +1224,7 @@ vertx.deployVerticle("my.verticle", context.asyncAssertFailure(cause -&gt; {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-22 00:25:16 CEST
+                Last updated 2015-06-23 13:38:14 CEST
               
               
             </div>

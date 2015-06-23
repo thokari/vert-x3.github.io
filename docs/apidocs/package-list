@@ -16,7 +16,6 @@ io.vertx.core.spi.cluster
 io.vertx.core.spi.logging
 io.vertx.core.spi.metrics
 io.vertx.core.streams
-io.vertx.ext.asyncsql
 io.vertx.ext.auth
 io.vertx.ext.auth.jdbc
 io.vertx.ext.auth.jwt
@@ -53,7 +52,6 @@ io.vertx.rxjava.core.net
 io.vertx.rxjava.core.parsetools
 io.vertx.rxjava.core.shareddata
 io.vertx.rxjava.core.streams
-io.vertx.rxjava.ext.asyncsql
 io.vertx.rxjava.ext.auth
 io.vertx.rxjava.ext.auth.common
 io.vertx.rxjava.ext.auth.jdbc
