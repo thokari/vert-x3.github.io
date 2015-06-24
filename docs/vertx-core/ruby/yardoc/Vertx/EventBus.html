@@ -98,7 +98,7 @@
   
   
     <dt class="r1 last">Defined in:</dt>
-    <dd class="r1 last">/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb</dd>
+    <dd class="r1 last">/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb</dd>
   
 </dl>
 <div class="clear"></div>
@@ -386,7 +386,7 @@
 132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 127</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 127</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close'>close</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -498,7 +498,7 @@
 85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 78</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 78</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_consumer'>consumer</span><span class='lparen'>(</span><span class='id identifier rubyid_address'>address</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_address'>address</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -612,7 +612,7 @@
 97</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 90</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 90</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_local_consumer'>local_consumer</span><span class='lparen'>(</span><span class='id identifier rubyid_address'>address</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_address'>address</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -688,7 +688,7 @@
 35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 30</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_metrics_enabled?'>metrics_enabled?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -815,7 +815,7 @@
 73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 64</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_publish'>publish</span><span class='lparen'>(</span><span class='id identifier rubyid_address'>address</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_message'>message</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_address'>address</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>  <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Array</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>NilClass</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Float</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -932,7 +932,7 @@
 123</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 116</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_publisher'>publisher</span><span class='lparen'>(</span><span class='id identifier rubyid_address'>address</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_address'>address</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1084,7 +1084,7 @@
 58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 43</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_address'>address</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_message'>message</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_address'>address</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>  <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Array</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>NilClass</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>||</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Float</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1207,7 +1207,7 @@
 110</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/event_bus.rb', line 103</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/event_bus.rb', line 103</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sender'>sender</span><span class='lparen'>(</span><span class='id identifier rubyid_address'>address</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_address'>address</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1227,7 +1227,7 @@
 </div>
 
     <div id="footer">
-  Generated on Tue Jun 23 00:38:40 2015 by
+  Generated on Tue Jun 23 18:41:54 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-1.9.3).
 </div>

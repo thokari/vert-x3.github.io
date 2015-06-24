@@ -98,7 +98,7 @@
   
   
     <dt class="r1 last">Defined in:</dt>
-    <dd class="r1 last">/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb</dd>
+    <dd class="r1 last">/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb</dd>
   
 </dl>
 <div class="clear"></div>
@@ -361,7 +361,7 @@
 80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb', line 75</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb', line 75</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_address'>address</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -453,7 +453,7 @@
 72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb', line 66</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delivery_options'>delivery_options</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -539,7 +539,7 @@
 62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb', line 56</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_drain_handler'>drain_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -625,7 +625,7 @@
 35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb', line 29</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb', line 29</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exception_handler'>exception_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -715,7 +715,7 @@
 53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb', line 47</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_write_queue_max_size'>set_write_queue_max_size</span><span class='lparen'>(</span><span class='id identifier rubyid_maxSize'>maxSize</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_maxSize'>maxSize</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -805,7 +805,7 @@
 44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb', line 38</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>  <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Array</span> <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>NilClass</span> <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span> <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>||</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Float</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -880,7 +880,7 @@
 26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-lang-ruby/src/main/resources/vertx/message_producer.rb', line 21</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/message_producer.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_queue_full?'>write_queue_full?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -898,7 +898,7 @@
 </div>
 
     <div id="footer">
-  Generated on Tue Jun 23 00:38:45 2015 by
+  Generated on Tue Jun 23 18:41:56 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-1.9.3).
 </div>
