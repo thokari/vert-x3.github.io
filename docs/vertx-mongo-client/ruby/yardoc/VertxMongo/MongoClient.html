@@ -94,7 +94,7 @@
   
   
     <dt class="r2 last">Defined in:</dt>
-    <dd class="r2 last">/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb</dd>
+    <dd class="r2 last">/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb</dd>
   
 </dl>
 <div class="clear"></div>
@@ -744,7 +744,7 @@
 25</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 20</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_non_shared'>create_non_shared</span><span class='lparen'>(</span><span class='id identifier rubyid_vertx'>vertx</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_config'>config</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_vertx'>vertx</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -873,7 +873,7 @@
 39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 32</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 32</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_shared'>create_shared</span><span class='lparen'>(</span><span class='id identifier rubyid_vertx'>vertx</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_config'>config</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_dataSourceName'>dataSourceName</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_vertx'>vertx</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_dataSourceName'>dataSourceName</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -939,7 +939,7 @@
 295</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 290</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 290</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close'>close</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1063,7 +1063,7 @@
 193</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 187</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 187</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1172,7 +1172,7 @@
 254</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 248</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 248</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_collection'>create_collection</span><span class='lparen'>(</span><span class='id identifier rubyid_collectionName'>collectionName</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collectionName'>collectionName</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1281,7 +1281,7 @@
 275</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 269</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 269</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_drop_collection'>drop_collection</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1406,7 +1406,7 @@
 155</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 149</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 149</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1547,7 +1547,7 @@
 181</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 175</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_find_one'>find_one</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_fields'>fields</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_fields'>fields</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1688,7 +1688,7 @@
 168</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 162</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 162</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_find_with_options'>find_with_options</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1777,7 +1777,7 @@
 264</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 258</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 258</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_collections'>get_collections</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1902,7 +1902,7 @@
 76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 70</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_insert'>insert</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_document'>document</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_document'>document</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2043,7 +2043,7 @@
 89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 83</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 83</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_insert_with_options'>insert_with_options</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_document'>document</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_writeOption'>writeOption</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_document'>document</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_writeOption'>writeOption</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Symbol</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2168,7 +2168,7 @@
 205</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 199</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 199</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove'>remove</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2293,7 +2293,7 @@
 230</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 224</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 224</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_one'>remove_one</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2434,7 +2434,7 @@
 243</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 237</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 237</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_one_with_options'>remove_one_with_options</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_writeOption'>writeOption</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_writeOption'>writeOption</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Symbol</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2575,7 +2575,7 @@
 218</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 212</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 212</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_with_options'>remove_with_options</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_writeOption'>writeOption</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_writeOption'>writeOption</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Symbol</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2716,7 +2716,7 @@
 129</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 123</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 123</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_replace'>replace</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_replace'>replace</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2873,7 +2873,7 @@
 143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 137</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 137</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_replace_with_options'>replace_with_options</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_replace'>replace</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_replace'>replace</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2998,7 +2998,7 @@
 287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 281</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 281</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_run_command'>run_command</span><span class='lparen'>(</span><span class='id identifier rubyid_commandName'>commandName</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_command'>command</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_commandName'>commandName</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_command'>command</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3123,7 +3123,7 @@
 51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 45</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_save'>save</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_document'>document</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_document'>document</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3264,7 +3264,7 @@
 64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 58</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_save_with_options'>save_with_options</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_document'>document</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_writeOption'>writeOption</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_document'>document</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_writeOption'>writeOption</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Symbol</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3405,7 +3405,7 @@
 102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 96</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_update'>update</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_update'>update</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3562,7 +3562,7 @@
 116</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/scratch/jenkins/workspace/vert.x3-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 110</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-mongo-client/vertx-mongo-client/src/main/resources/vertx-mongo/mongo_client.rb', line 110</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update_with_options'>update_with_options</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_query'>query</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_update'>update</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_update'>update</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3581,7 +3581,7 @@
 </div>
 
     <div id="footer">
-  Generated on Tue Jun 23 11:34:01 2015 by
+  Generated on Tue Jun 23 18:50:00 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-1.9.3).
 </div>
