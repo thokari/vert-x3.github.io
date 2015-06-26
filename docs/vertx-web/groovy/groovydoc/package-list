@@ -1,0 +1,5 @@
+io.vertx.groovy.ext.web
+io.vertx.groovy.ext.web.handler
+io.vertx.groovy.ext.web.handler.sockjs
+io.vertx.groovy.ext.web.sstore
+io.vertx.groovy.ext.web.templ
