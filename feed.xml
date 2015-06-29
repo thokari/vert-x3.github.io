@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title>vert.x</title>
+      <description>Vert.x is a tool-kit for building reactive applications on the JVM.</description>
+      <link>/</link>
+
+      <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
+      
+        <item>
+          <title>A Catchy Title</title>
+          <description>&lt;p&gt;this is the first blog post ;-)&lt;/p&gt;</description>
+          <pubDate>Fri, 26 Jun 2015 02:00:00 +0200</pubDate>
+          <link>/blog/a-catchy-title</link>
+          <guid isPermaLink="true">/blog/a-catchy-title</guid>
+        </item>
+      
+    </channel>
+</rss>
