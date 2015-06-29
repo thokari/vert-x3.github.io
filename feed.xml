@@ -5,14 +5,14 @@
       <description>Vert.x is a tool-kit for building reactive applications on the JVM.</description>
       <link>http://vertx.io/</link>
 
-      <atom:link href="http://vertx.io//feed.xml" rel="self" type="application/rss+xml" />
+      <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
           <title>A Catchy Title</title>
           <description>&lt;p&gt;this is the first blog post ;-)&lt;/p&gt;</description>
           <pubDate>Fri, 26 Jun 2015 02:00:00 +0200</pubDate>
-          <link>http://vertx.io//blog/a-catchy-title</link>
-          <guid isPermaLink="true">http://vertx.io//blog/a-catchy-title</guid>
+          <link>http://vertx.io/blog/a-catchy-title</link>
+          <guid isPermaLink="true">http://vertx.io/blog/a-catchy-title</guid>
         </item>
       
     </channel>
