@@ -13,6 +13,10 @@
           <pubDate>Tue, 30 Jun 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-2-1-6-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-2-1-6-released</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
         </item>
       
     </channel>
