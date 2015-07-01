@@ -8,6 +8,18 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x 3 init.d Script</title>
+          <description>&lt;p&gt;Let’s say you have a Vert.x 3 application you want to install on a Linux server. But you want the &lt;em&gt;old school&lt;/em&gt; way (I meant not the docker way &amp;#9786;). So, in other words, you need an &lt;em&gt;init.d&lt;/em&gt; script. This post proposes an &lt;em&gt;init.d&lt;/em&gt; script that you can use to start / stop / restart a Vert.x 3 application.&lt;/p&gt;</description>
+          <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x-3-init-d-script</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-init-d-script</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x3 Web easy as Pi</title>
           <description>&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/#web&quot;&gt;Vert.x Web&lt;/a&gt; distinguishes itself from traditional application servers like JavaEE by just&lt;br&gt;being a simple extension toolkit to &lt;a href=&quot;http://vertx.io/docs/#core&quot;&gt;Vert.x&lt;/a&gt;, which makes it quite lightweight and small but&lt;br&gt;nevertheless very powerful.&lt;/p&gt;</description>
           <pubDate>Wed, 01 Jul 2015 02:00:00 +0200</pubDate>
