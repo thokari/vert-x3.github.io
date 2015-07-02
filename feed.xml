@@ -8,6 +8,18 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x3 and PostgreSQL JSON type</title>
+          <description>&lt;p&gt;One of the interesting features of NoSQL databases is their schema-less mode of operation. This feature is very useful&lt;br&gt;during project prototyping and early development since at early the stages of development of projects all data&lt;br&gt;structures are not clear or have been defined yet. The reason of this post is not to discuss about that subject, but to&lt;br&gt;show that sometimes you can also use NoSQL with a more traditional database engine like &lt;a href=&quot;http://www.postgresql.org/&quot;&gt;PostgreSQL&lt;/a&gt;.&lt;/p&gt;</description>
+          <pubDate>Fri, 03 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
+          <author>
+            <name>pmlopes</name>
+            <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x 3 init.d Script</title>
           <description>&lt;p&gt;Let’s say you have a Vert.x 3 application you want to install on a Linux server. But you want the &lt;em&gt;old school&lt;/em&gt; way (I meant not the docker way &amp;#9786;). So, in other words, you need an &lt;em&gt;init.d&lt;/em&gt; script. This post proposes an &lt;em&gt;init.d&lt;/em&gt; script that you can use to start / stop / restart a Vert.x 3 application.&lt;/p&gt;</description>
           <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
@@ -16,18 +28,6 @@
           <author>
             <name>cescoffier</name>
             <uri>http://github.com/cescoffier</uri>
-          </author>
-        </item>
-      
-        <item>
-          <title>Vert.x3 and PostgreSQL JSON type</title>
-          <description>&lt;p&gt;One of the interesting features of NoSQL databases is their schema-less mode of operation. This feature is very useful&lt;br&gt;during project prototyping and early development since at early the stages of development of projects all data&lt;br&gt;structures are not clear or have been defined yet. The reason of this post is not to discuss about that subject, but to&lt;br&gt;show that sometimes you can also use NoSQL with a more traditional database engine like &lt;a href=&quot;http://www.postgresql.org/&quot;&gt;PostgreSQL&lt;/a&gt;.&lt;/p&gt;</description>
-          <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
-          <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
-          <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
-          <author>
-            <name>pmlopes</name>
-            <uri>http://github.com/pmlopes</uri>
           </author>
         </item>
       
