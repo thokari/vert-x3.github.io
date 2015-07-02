@@ -20,6 +20,18 @@
         </item>
       
         <item>
+          <title>Vert.x3 and PostgreSQL JSON type</title>
+          <description>&lt;p&gt;One of the interesting features of NoSQL databases is their schema-less mode of operation. This feature is very useful&lt;br&gt;during project prototyping and early development since at early the stages of development of projects all data&lt;br&gt;structures are not clear or have been defined yet. The reason of this post is not to discuss about that subject, but to&lt;br&gt;show that sometimes you can also use NoSQL with a more traditional database engine like &lt;a href=&quot;http://www.postgresql.org/&quot;&gt;PostgreSQL&lt;/a&gt;.&lt;/p&gt;</description>
+          <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
+          <author>
+            <name>pmlopes</name>
+            <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x3 Web easy as Pi</title>
           <description>&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/#web&quot;&gt;Vert.x Web&lt;/a&gt; distinguishes itself from traditional application servers like JavaEE by just&lt;br&gt;being a simple extension toolkit to &lt;a href=&quot;http://vertx.io/docs/#core&quot;&gt;Vert.x&lt;/a&gt;, which makes it quite lightweight and small but&lt;br&gt;nevertheless very powerful.&lt;/p&gt;</description>
           <pubDate>Wed, 01 Jul 2015 02:00:00 +0200</pubDate>
