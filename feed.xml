@@ -8,6 +8,18 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Checklist for Migrating from Vert.x 2.1.x to Vert.x 3 - Part One</title>
+          <description>&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;</description>
+          <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
+          <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
+          <author>
+            <name>bytor99999</name>
+            <uri>http://github.com/bytor99999</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x3 and PostgreSQL JSON type</title>
           <description>&lt;p&gt;One of the interesting features of NoSQL databases is their schema-less mode of operation. This feature is very useful&lt;br&gt;during project prototyping and early development since at early the stages of development of projects all data&lt;br&gt;structures are not clear or have been defined yet. The reason of this post is not to discuss about that subject, but to&lt;br&gt;show that sometimes you can also use NoSQL with a more traditional database engine like &lt;a href=&quot;http://www.postgresql.org/&quot;&gt;PostgreSQL&lt;/a&gt;.&lt;/p&gt;</description>
           <pubDate>Fri, 03 Jul 2015 02:00:00 +0200</pubDate>
