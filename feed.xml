@@ -9,7 +9,107 @@
       
         <item>
           <title>Checklist for Migrating from Vert.x 2.1.x to Vert.x 3 - Part One</title>
-          <description>&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;</description>
+          <description>
+      &lt;article&gt;&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;
+&lt;h2 id=&quot;we-are-in-the-process-of-converting-our-vert-x-2-1-5-application-to-vert-x-3-0-&quot;&gt;We are in the process of converting our Vert.x 2.1.5 application to Vert.x 3.0.&lt;/h2&gt;
+&lt;p&gt;So while upgrading our application, I thought I should note down all the changes that we had to do in the process. Since Vert.x 3 is a major upgrade from the previous version, with so many changes.&lt;/p&gt;
+&lt;p&gt;It requires re-thinking your current 2.x Vert.x application. There are new classes, new apis, and a new package structure that has greatly simplified things that we used to have to work around. Therefore in our upgrade it required us to refactor and remove any unnecessary &lt;em&gt;“hacks”&lt;/em&gt; that weren’t available in 2 that are now a part of Vert.x 3 that you really want and need to take advantage of. (I don’t mean there are hacks in 3.x, just that we had in our application with Vert.x 2.x)&lt;/p&gt;
+&lt;p&gt;There are &lt;em&gt;Metrics&lt;/em&gt;, and &lt;em&gt;Clustered shared data&lt;/em&gt;, with locking and many more features that are amazing new additions. These are things we had to hack into our application with Vert.x 2.x. We added our own &lt;code&gt;MetricsRegistry&lt;/code&gt; from &lt;a href=&quot;https://dropwizard.github.io/metrics/3.1.0/getting-started/&quot;&gt;DropWizard&lt;/a&gt; which meant making our own &lt;code&gt;Main&lt;/code&gt; class that called Vert.x’s &lt;code&gt;Starter&lt;/code&gt; class after starting up the registry, but only in our &lt;em&gt;Devops&lt;/em&gt; server deploys, not our developer machines. And we had to build our own distributed locked of clustered data that also required writing a comprehensive distributed timers. (The timers got fixed with a better actor model). But now we can use what Vert.x gives us internally for those use cases.&lt;/p&gt;
+&lt;p&gt;This blog post is part one, as I am sure there will be some new changes that we need to do that we haven’t gotten to yet. Which as we go, will post in part two. Also that this post is a work in progress in that whenever you are upgrading and refactoring your code, it doesn’t leave much time for taking detailed notes, or writing beautiful prose. I am a terrible writer even when I can fully concentrate on it. So the first draft will just be a list of my notes. These notes are not in any particular order, but some things like tests you might want to save for last. (Just DON’T delete your tests, tests are very important)&lt;/p&gt;
+&lt;p&gt;One of the first things that Vert.x has changed is the whole &lt;em&gt;classloader&lt;/em&gt; setup. Read the Vert.x Docs for more information but basically, we have a flat &lt;em&gt;classloader&lt;/em&gt; system now. YAY! And one of the first things I noticed that is gone is the &lt;code&gt;Platform&lt;/code&gt; module.&lt;/p&gt;
+&lt;h2 id=&quot;changes-we-have-made-&quot;&gt;Changes we have made.&lt;/h2&gt;
+&lt;h3 id=&quot;dependency-changes&quot;&gt;Dependency changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;So the first thing we did was to remove the &lt;code&gt;vert.x-platform&lt;/code&gt; dependency from our &lt;code&gt;pom&lt;/code&gt; file (Build dependency file of whatever build system you use) This also means that you will be removing any import statements from your code that has &lt;code&gt;.platform&lt;/code&gt;. Which leads us to the next point.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Change all the imports for Vertx. from &lt;code&gt;org.vertx&lt;/code&gt; to &lt;code&gt;io.vertx&lt;/code&gt;. This could be a lot of work, as it is in every class you use Vert.x in. We had at least 250 locations to change here. Some classes have moved packages and “jars” that have them, so there will be some new jars to include as dependencies and different import statements for them.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If using a language other than Java, change the dependency to &lt;code&gt;vertx-lang-&lt;&lt;language&gt;&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Remove any modules references that are using Vert.x 2.x stuff. You can get an odd error like&lt;br&gt;&lt;em&gt;The type org.vertx.java.core.json.JsonObject cannot be resolved. It is indirectly referenced from required .class files&lt;/em&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;testtools&lt;/code&gt; dependency is gone. There is now Vertx-unit. So all your previous tests need to be completely re-written in the new style. This can be really difficult and time consuming as the tests you already have written really do need to be re-written from scratch. But these tests are also the backbone in knowing if your code is working. So this could take months if you have a really full set of test suites already. Also note the list below is to convert your JUnit Integration tests. as vertx-unit first and foremost provides its own testing framework/suite but it also works in JUnit, and if you are using JUnit you need to do the following&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Remove all the imports to &lt;code&gt;TestTools&lt;/code&gt;, including &lt;code&gt;VertxAssert&lt;/code&gt;. I would do a find/replace to replace all the &lt;code&gt;VertxAssert&lt;/code&gt; to &lt;code&gt;testContext&lt;/code&gt; for when you have to add &lt;code&gt;TestContext&lt;/code&gt; to all your &lt;code&gt;@Test&lt;/code&gt; methods. I recommend naming the parameter &lt;code&gt;testContext&lt;/code&gt;, just to put more context, into your context. Because if you just have &lt;code&gt;context&lt;/code&gt; as your parameter name, how do you know what context the context is? Sorry, that was too much fun. Basically, what I am saying is if you have say &lt;code&gt;Spring ApplicationContext&lt;/code&gt; in with your integration tests with Vert.x what does &lt;code&gt;context&lt;/code&gt; represent? Spring or Vert.x test context.&lt;/li&gt;
+&lt;li&gt;Add &lt;code&gt;@RunWith(VertxUnitRunner.class)&lt;/code&gt; above your test class&lt;/li&gt;
+&lt;li&gt;Remove any &lt;code&gt;VertxAssert.testComplete()&lt;/code&gt; those are gone. It needs &lt;code&gt;TestContext.async().complete()&lt;/code&gt;. It is also important to understand what &lt;code&gt;async()&lt;/code&gt; means. When to call it, when to complete it. It also allows you to do multiple &lt;code&gt;async()&lt;/code&gt; calls and nested ones. I think I needed that when I had a test that was a longer use case of many messages being sent, but only after responses to other ones occurred. For instance, to do chat in our app, you have to connect, subscribe, friend someone, then you can send a chat message. So that is 4 total Vert.x Messages sent from the Test client. And you can subscribe until connect completed, and you can send or receive messages unless you are subscribed and have a friend. So we need to have a few &lt;code&gt;async()&lt;/code&gt; calls in that scenario.&lt;/li&gt;
+&lt;li&gt;What is in your &lt;code&gt;start&lt;/code&gt; method override. Make that an &lt;code&gt;@Before&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;What is in your &lt;code&gt;stop&lt;/code&gt; method override. Make that an &lt;code&gt;@After&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;If you have your assertions have custom message &lt;em&gt;strings&lt;/em&gt; to log out when they fail, that parameter is now at the end of the &lt;code&gt;assert&lt;/code&gt; method call. Yes, this one can be painful.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;build-changes&quot;&gt;Build Changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Remove all &lt;em&gt;vertx maven plugin&lt;/em&gt; code to generate modules, instead create &lt;em&gt;fat&lt;/em&gt; jars, which requires adding the &lt;em&gt;Shade maven plugin&lt;/em&gt; to put all jar files into a big fat jar. The vertx-examples project has &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/maven-simplest&quot;&gt;simplest-maven&lt;/a&gt; which has the stuff to create the fat jar. &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/gradle-simplest&quot;&gt;simplest-gradle&lt;/a&gt; is the gradle equivalent.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If you were running your application with &lt;code&gt;runMod&lt;/code&gt; or something like that then you need to create a &lt;em&gt;fat&lt;/em&gt; jar, changing the build file as in &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/pom.xml&quot;&gt;this one&lt;/a&gt; and create a Main class like here &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/src/main/java/io/vertx/example/HelloWorldEmbedded.java&quot;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;class-code-changes&quot;&gt;Class/Code Changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Verticle&lt;/code&gt; is now an interface and not a class to extend, so using Groovy as an example you now extend &lt;code&gt;GroovyVerticle&lt;/code&gt;. In Java extend &lt;code&gt;AbstractVerticle&lt;/code&gt; instead.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There is no &lt;code&gt;registerHandler&lt;/code&gt; on the eventBus anymore. So everywhere you do that has to change to create/call &lt;code&gt;consumer()&lt;/code&gt; and to unregister that handler, you have to have a reference to the &lt;code&gt;MessageConsumer&lt;/code&gt; that &lt;code&gt;consumer()&lt;/code&gt; call returns and call its &lt;code&gt;unregister&lt;/code&gt; method.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject.toMap()&lt;/code&gt; changed to &lt;code&gt;JsonObject.getMap()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject&lt;/code&gt; also removed all the &lt;code&gt;putXXX&lt;/code&gt; methods with just one &lt;code&gt;put&lt;/code&gt; method with overloaded versions for different types.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObjectMessage&lt;/code&gt; no longer exists. What replaces depends on what you are doing. Meaning, if it is an &lt;code&gt;async&lt;/code&gt; callback to a deploy, you will get a &lt;code&gt;Message&lt;/code&gt; instance back that has &lt;code&gt;succeeded()&lt;/code&gt; or &lt;code&gt;failed()&lt;/code&gt; methods as well as &lt;code&gt;body()&lt;/code&gt; to check any results. If it is a &lt;code&gt;Consumer&lt;/code&gt;, it is typically a straight forward&lt;br&gt;&lt;code&gt;JsonObject&lt;/code&gt;. If you are in Groovy it is also a &lt;code&gt;JsonObject&lt;/code&gt;, but the &lt;code&gt;body()&lt;/code&gt; is a &lt;code&gt;Map&lt;/code&gt; which you can use directly now, instead of having to convert from &lt;code&gt;JsonObject&lt;/code&gt; to &lt;code&gt;Map&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;container&lt;/code&gt; variable in &lt;code&gt;Verticles&lt;/code&gt; anymore for deploying verticles and also a config file. You need to use &lt;code&gt;vertx.getOrCreateContext().config()&lt;/code&gt; to get to it. I used that in the SockJS Example code below.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SharedData&lt;/code&gt; no longer has shared sets. It has a &lt;code&gt;Map&lt;/code&gt; of &lt;code&gt;SharedData&lt;/code&gt;, so an entry in that &lt;code&gt;Map&lt;/code&gt; of shared data could be the name of the set as the key, and a &lt;code&gt;Set&lt;/code&gt; as the value. It actually gives you more flexibility of what you put into Shared data, so this is actually a big win for us.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Getting the &lt;code&gt;writeHandlerID&lt;/code&gt; from a Socket type, is now a method call instead of &lt;code&gt;.writeHandlerID&lt;/code&gt;, so &lt;code&gt;.writeHandlerID()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SockJSSocket&lt;/code&gt; is in &lt;em&gt;vertx-web&lt;/em&gt; package now, so include it to get the class.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;SockJSServer&lt;/code&gt; class anymore either. So you will create a &lt;code&gt;WebServer&lt;/code&gt;, a &lt;code&gt;Router&lt;/code&gt;&lt;br&gt;and set SSL (if you are using SSL on the WebServer) then create a &lt;code&gt;SockJSHandler&lt;/code&gt; to assign to the router via the &lt;code&gt;route()&lt;/code&gt; method and &lt;code&gt;handler()&lt;/code&gt; methods in the Router api.&lt;br&gt;Here is an example of our code. Although I haven’t tested it yet. ;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;GroovyVerticle&lt;/span&gt; {&lt;/span&gt;
+  Router router
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; start() &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; Exception {
+     router = Router.router(vertx)
+     (Map&lt;String, Object&gt;) sslConfig =
+        (Map&lt;String, Object&gt;)vertx.getOrCreateContext()
+          .config().get(&lt;span class=&quot;hljs-string&quot;&gt;&#39;ssl&#39;&lt;/span&gt;)
+
+     HttpServer sslHttpServer = vertx.createHttpServer(
+&lt;span class=&quot;hljs-label&quot;&gt;         SSL:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
+&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePath:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;keystore&quot;&lt;/span&gt;),
+&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePassword:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;password&quot;&lt;/span&gt;))
+
+     startWebApiServer(sslHttpServer)
+  }
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; startWebApiServer(&lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; HttpServer httpServer) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; sockHandler = SockJSHandler.create(vertx, [:])
+    sockHandler.socketHandler {
+      SockJSSocket ws -&gt; sockJSConnectHandler(ws)
+    }
+    router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hdpoker&quot;&lt;/span&gt;).handler(sockHandler)
+    httpServer.requestHandler(router.&amp;accept)
+    httpServer.listen()
+  }
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;more-testing-change&quot;&gt;More testing change&lt;/h4&gt;
+&lt;p&gt;Testing messages in Integration Tests. To tell the test method that this has async calls put&lt;br&gt;&lt;code&gt;Async async = testContext.async()&lt;/code&gt; as the first line in the test method. Yes, this is a little redundant from above, but I always forgot to put &lt;code&gt;async()&lt;/code&gt; calls in my integration tests and they would pass so quickly, without sending anything out, because it wasn’t waiting anymore&lt;/p&gt;
+&lt;h3 id=&quot;runtime-changes&quot;&gt;Runtime changes&lt;/h3&gt;
+&lt;p&gt;If you don’t use Vert.x built-in Logging and need to use slf4j, then remember that you should set a system property called &lt;code&gt;vertx.logger-delegate-factory-class-name&lt;/code&gt; with the name of a Java class which implements the interface &lt;code&gt;LoggerFactory&lt;/code&gt;. Vert.x provides pre-built implementations for Log4J and SLF4J with the class names &lt;code&gt;io.vertx.core.logging.Log4jLogDelegateFactory&lt;/code&gt; and &lt;code&gt;io.vertx.core.logging.SLF4JLogDelegateFactory&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;still-working&quot;&gt;Still working&lt;/h2&gt;
+&lt;p&gt;Well, that is all I have for you folks so far. We are still not done, as we haven’t gotten our application running with real clients just yet. But we do have all our integration tests from before completely passing&lt;br&gt;so, if something does come up, it should be a small one (KNOCK ON WOOD)&lt;/p&gt;
+&lt;p&gt;Please feel free to post on the Vert.x Google Group with any comments or suggestions on what to add to this blog post or for Part Two.&lt;/p&gt;
+&lt;p&gt;Thanks&lt;/p&gt;
+&lt;p&gt;Mark S&lt;/p&gt;
+&lt;/article&gt;
+      </description>
           <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
           <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
@@ -21,7 +121,32 @@
       
         <item>
           <title>Vert.x3 and PostgreSQL JSON type</title>
-          <description>&lt;p&gt;One of the interesting features of NoSQL databases is their schema-less mode of operation. This feature is very useful&lt;br&gt;during project prototyping and early development since at early the stages of development of projects all data&lt;br&gt;structures are not clear or have been defined yet. The reason of this post is not to discuss about that subject, but to&lt;br&gt;show that sometimes you can also use NoSQL with a more traditional database engine like &lt;a href=&quot;http://www.postgresql.org/&quot;&gt;PostgreSQL&lt;/a&gt;.&lt;/p&gt;</description>
+          <description>
+      &lt;article&gt;&lt;p&gt;One of the interesting features of NoSQL databases is their schema-less mode of operation. This feature is very useful&lt;br&gt;during project prototyping and early development since at early the stages of development of projects all data&lt;br&gt;structures are not clear or have been defined yet. The reason of this post is not to discuss about that subject, but to&lt;br&gt;show that sometimes you can also use NoSQL with a more traditional database engine like &lt;a href=&quot;http://www.postgresql.org/&quot;&gt;PostgreSQL&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Since version &lt;a href=&quot;http://www.postgresql.org/docs/9.3/static/datatype-json.html&quot;&gt;9.3&lt;/a&gt; there is support for JSON however with&lt;br&gt;version &lt;a href=&quot;http://www.postgresql.org/docs/9.4/static/datatype-json.html&quot;&gt;9.4&lt;/a&gt; there is even better support with the new type&lt;br&gt;JSONB. I will now show how to use the basic JSON type in a simple REST application written with Vert.x3:&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/pmlopes/47f7f02b0b102b5e68d8.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;Now all you need to do is play with this REST service, for this you can use curl to create a sale:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl \
+    -&lt;span class=&quot;ruby&quot;&gt;i \
+&lt;/span&gt;    -&lt;span class=&quot;ruby&quot;&gt;&lt;span class=&quot;hljs-constant&quot;&gt;H&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;Content-Type: application/json&quot;&lt;/span&gt; \
+&lt;/span&gt;    -&lt;span class=&quot;ruby&quot;&gt;&lt;span class=&quot;hljs-constant&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;hljs-constant&quot;&gt;POST&lt;/span&gt; \
+&lt;/span&gt;    -&lt;span class=&quot;ruby&quot;&gt;d &lt;span class=&quot;hljs-string&quot;&gt;&#39;{&quot;id&quot;: 1, &quot;customer_name&quot;: &quot;John&quot;, &quot;items&quot;: {&quot;description&quot;: &quot;milk&quot;, &quot;quantity&quot;: 4}}&#39;&lt;/span&gt; \
+&lt;/span&gt;    http://localhost:8080/sales
+
+HTTP/1.1 201 Created
+Content-Length: 0
+$&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And if you want to read that new document:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -i -H &lt;span class=&quot;hljs-string&quot;&gt;&quot;Accept: application/json&quot;&lt;/span&gt; -X GET &lt;span class=&quot;hljs-string&quot;&gt;http:&lt;/span&gt;&lt;span class=&quot;hljs-comment&quot;&gt;//localhost:8080/sales/1&lt;/span&gt;
+HTTP/&lt;span class=&quot;hljs-number&quot;&gt;1.1&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt; OK
+content-&lt;span class=&quot;hljs-string&quot;&gt;type:&lt;/span&gt; application/json
+Content-&lt;span class=&quot;hljs-string&quot;&gt;Length:&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;75&lt;/span&gt;
+
+{&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;customer_name&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;John&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;items&quot;&lt;/span&gt;:{&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;milk&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;quantity&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;}}
+$&lt;/code&gt;&lt;/pre&gt;&lt;/article&gt;
+      </description>
           <pubDate>Fri, 03 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
@@ -33,7 +158,53 @@
       
         <item>
           <title>Vert.x 3 init.d Script</title>
-          <description>&lt;p&gt;Let’s say you have a Vert.x 3 application you want to install on a Linux server. But you want the &lt;em&gt;old school&lt;/em&gt; way (I meant not the docker way &amp;#9786;). So, in other words, you need an &lt;em&gt;init.d&lt;/em&gt; script. This post proposes an &lt;em&gt;init.d&lt;/em&gt; script that you can use to start / stop / restart a Vert.x 3 application.&lt;/p&gt;</description>
+          <description>
+      &lt;article&gt;&lt;p&gt;Let’s say you have a Vert.x 3 application you want to install on a Linux server. But you want the &lt;em&gt;old school&lt;/em&gt; way (I meant not the docker way &amp;#9786;). So, in other words, you need an &lt;em&gt;init.d&lt;/em&gt; script. This post proposes an &lt;em&gt;init.d&lt;/em&gt; script that you can use to start / stop / restart a Vert.x 3 application.&lt;/p&gt;
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+&lt;p&gt;The proposed script assumes your application is packaged as a &lt;em&gt;fat jar&lt;/em&gt;. So, your application is going to be launched using &lt;code&gt;java -jar your-fat-jar ...&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;the-script&quot;&gt;The script&lt;/h2&gt;
+&lt;p&gt;The &lt;em&gt;init.d&lt;/em&gt; scripts have to reply to a set of &lt;em&gt;commands&lt;/em&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;start&lt;/code&gt; : starts the application (if not yet started)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;stop&lt;/code&gt; : stops the application (if started)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;status&lt;/code&gt; : let you know if the application is started or not&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;restart&lt;/code&gt; : restart the application&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These &lt;em&gt;commands&lt;/em&gt; are invoked using:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt; my-&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt;-script &lt;span class=&quot;hljs-literal&quot;&gt;start&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt; my-&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt;-script &lt;span class=&quot;hljs-literal&quot;&gt;stop&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt; my-&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt;-script &lt;span class=&quot;hljs-literal&quot;&gt;status&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt; my-&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt;-script &lt;span class=&quot;hljs-literal&quot;&gt;restart&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In general, service scripts are hooked in the boot and shutdown sequences to start and stop automatically during the system starts and stops.&lt;/p&gt;
+&lt;p&gt;So, enough talks, let’s look at the script:&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/cescoffier/ccc8b391787e93f4e6e0.js&quot;&gt;&lt;/script&gt;
+
+&lt;h2 id=&quot;using-the-script&quot;&gt;Using the script&lt;/h2&gt;
+&lt;p&gt;First download the script from the &lt;a href=&quot;https://gist.githubusercontent.com/cescoffier/ccc8b391787e93f4e6e0/raw/my-vertx-application&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You need to set a couple of variables located at the beginning of the file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;# The directory in which your application is installed&lt;/span&gt;
+&lt;span class=&quot;hljs-variable&quot;&gt;APPLICATION_DIR=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;/opt/my-vertx-app&quot;&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;# The fat jar containing your application&lt;/span&gt;
+&lt;span class=&quot;hljs-variable&quot;&gt;APPLICATION_JAR=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;maven-verticle-3.0.0-fat.jar&quot;&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;# The application argument such as -cluster -cluster-host ...&lt;/span&gt;
+&lt;span class=&quot;hljs-variable&quot;&gt;APPLICATION_ARGS=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;# vert.x options and system properties (-Dfoo=bar).&lt;/span&gt;
+&lt;span class=&quot;hljs-variable&quot;&gt;VERTX_OPTS=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;# The path to the Java command to use to launch the application (must be java 8+)&lt;/span&gt;
+&lt;span class=&quot;hljs-variable&quot;&gt;JAVA=&lt;/span&gt;/opt/java/java/bin/java&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The rest of the script can stay as it is, but feel free to adapt it to your needs. Once you have set these variables based on your environment, move the file to &lt;code&gt;/etc/init.d&lt;/code&gt; and set it as executable:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mv &lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-vertx-&lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt; /etc/init.d
+sudo chmod +x &lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-vertx-&lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, you should be able to start your application using:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;sudo service &lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-vertx-&lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt; start&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Depending to your operating system, adding the hooks to the boot and shutdown sequence differs. For instance on Ubuntu you need to use the &lt;code&gt;update-rc.d&lt;/code&gt; command while on CentOS &lt;code&gt;chkconfig&lt;/code&gt; is used&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;That’s all, enjoy !&lt;/strong&gt;&lt;/p&gt;
+&lt;/article&gt;
+      </description>
           <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-init-d-script</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-init-d-script</guid>
@@ -45,7 +216,100 @@
       
         <item>
           <title>Vert.x3 Web easy as Pi</title>
-          <description>&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/#web&quot;&gt;Vert.x Web&lt;/a&gt; distinguishes itself from traditional application servers like JavaEE by just&lt;br&gt;being a simple extension toolkit to &lt;a href=&quot;http://vertx.io/docs/#core&quot;&gt;Vert.x&lt;/a&gt;, which makes it quite lightweight and small but&lt;br&gt;nevertheless very powerful.&lt;/p&gt;</description>
+          <description>
+      &lt;article&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/#web&quot;&gt;Vert.x Web&lt;/a&gt; distinguishes itself from traditional application servers like JavaEE by just&lt;br&gt;being a simple extension toolkit to &lt;a href=&quot;http://vertx.io/docs/#core&quot;&gt;Vert.x&lt;/a&gt;, which makes it quite lightweight and small but&lt;br&gt;nevertheless very powerful.&lt;/p&gt;
+&lt;p&gt;One can create simple applications targeting &lt;em&gt;small&lt;/em&gt; devices such as Raspberry Pi without having to write much code but&lt;br&gt;still very fast as it is expected from any Vert.x application.&lt;/p&gt;
+&lt;p&gt;Lets for example think of making a &lt;a href=&quot;https://github.com/pmlopes/vert-x3-experiments/archive/experiments/rpi-cpuload.zip&quot;&gt;realtime cpu load visualization web app&lt;/a&gt;.&lt;br&gt;For this example we need a few things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;a &lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/lang/management/OperatingSystemMXBean.html&quot;&gt;MXBean&lt;/a&gt; to collect CPU load&lt;/li&gt;
+&lt;li&gt;a &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_writing_http_servers_and_clients&quot;&gt;HTTP server&lt;/a&gt; (to serve the static resources and host our app)&lt;/li&gt;
+&lt;li&gt;a &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/#_sockjs&quot;&gt;SockJS server&lt;/a&gt; to provide realtime updates&lt;/li&gt;
+&lt;li&gt;a SockJS to &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/#_sockjs_event_bus_bridge&quot;&gt;EventBus bridge&lt;/a&gt; to pass messages around&lt;/li&gt;
+&lt;li&gt;some &lt;a href=&quot;http://d3js.org/&quot;&gt;visualization&lt;/a&gt; JS library&lt;/li&gt;
+&lt;li&gt;a bit of coding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To bootstrap this project we start by creating the &lt;a href=&quot;https://github.com/pmlopes/vert-x3-experiments/blob/experiments/rpi-cpuload/pom.xml&quot;&gt;pom.xml&lt;/a&gt;&lt;br&gt;file. A good start is always to consult the &lt;a href=&quot;https://github.com/vert-x3/vertx-examples&quot;&gt;examples&lt;/a&gt;,&lt;br&gt;and you should end up with something like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;...
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx.blog&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;rpi&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependencies&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-core&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-web&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependencies&lt;/span&gt;&gt;&lt;/span&gt;
+...&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;At this moment you can start coding the application using the standard maven source &lt;code&gt;src/main/java&lt;/code&gt; and resource&lt;br&gt;&lt;code&gt;src/main/resouces&lt;/code&gt; locations. And add a the class &lt;a href=&quot;https://github.com/pmlopes/vert-x3-experiments/blob/experiments/rpi-cpuload/src/main/java/io/vertx/blog/RPiVerticle.java&quot;&gt;io.vertx.blog.RpiVerticle&lt;/a&gt;&lt;br&gt;to the project:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;RPiVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; OperatingSystemMXBean osMBean;
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;try&lt;/span&gt; {
+      osMBean = ManagementFactory.newPlatformMXBeanProxy(ManagementFactory.getPlatformMBeanServer(),
+          ManagementFactory.OPERATING_SYSTEM_MXBEAN_NAME, OperatingSystemMXBean.class);
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;catch&lt;/span&gt; (IOException e) {
+      &lt;span class=&quot;hljs-keyword&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; RuntimeException(e);
+    }
+  }
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+    Router router = Router.router(vertx);
+
+    router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/eventbus/*&quot;&lt;/span&gt;).handler(SockJSHandler.create(vertx)
+        .bridge(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; BridgeOptions().addOutboundPermitted(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; PermittedOptions().setAddress(&lt;span class=&quot;hljs-string&quot;&gt;&quot;load&quot;&lt;/span&gt;))));
+
+    router.route().handler(StaticHandler.create());
+
+    vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);
+
+    vertx.setPeriodic(&lt;span class=&quot;hljs-number&quot;&gt;1000&lt;/span&gt;, t -&gt; vertx.eventBus().publish(&lt;span class=&quot;hljs-string&quot;&gt;&quot;load&quot;&lt;/span&gt;,
+        &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()
+            .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;creatTime&quot;&lt;/span&gt;, System.currentTimeMillis())
+            .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;cpuTime&quot;&lt;/span&gt;, osMBean.getSystemLoadAverage())));
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So lets go through the code, first in the static constructor we initialize the &lt;code&gt;MXBean&lt;/code&gt; that will allow us to collect&lt;br&gt;the current &lt;code&gt;System Load Average&lt;/code&gt;, then on the &lt;code&gt;start&lt;/code&gt; method we create a &lt;code&gt;Vert.x Web Router&lt;/code&gt; and define that for all&lt;br&gt;requests starting with &lt;code&gt;/eventbus&lt;/code&gt; should be handled by the SockJS server, which we then bridge to the Vert.x&lt;br&gt;&lt;code&gt;EventBus&lt;/code&gt; and allow outbound messages addressed to the &lt;code&gt;load&lt;/code&gt; address.&lt;/p&gt;
+&lt;p&gt;Since our application is a web application we will also server some static content with the &lt;code&gt;StaticHandler&lt;/code&gt; and we&lt;br&gt;finally start a &lt;code&gt;HTTP server&lt;/code&gt; listening on port &lt;code&gt;8080&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So now all we are missing is a way to push real time data to the client so we end up creating a &lt;code&gt;Periodic&lt;/code&gt; task that&lt;br&gt;repeats every 1000 milliseconds and sends some &lt;code&gt;JSON&lt;/code&gt; payload to the address &lt;code&gt;&quot;load&quot;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;If you run this application right now you won’t see much since there is no frontend yet, so lets build a very basic&lt;br&gt;&lt;a href=&quot;https://github.com/pmlopes/vert-x3-experiments/blob/experiments/rpi-cpuload/src/main/resources/webroot/index.html&quot;&gt;index.html&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;...
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; eb = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; vertx.EventBus(&lt;span class=&quot;hljs-built_in&quot;&gt;window&lt;/span&gt;.location + &lt;span class=&quot;hljs-string&quot;&gt;&quot;eventbus&quot;&lt;/span&gt;);
+
+eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+  eb.registerHandler(&lt;span class=&quot;hljs-string&quot;&gt;&quot;load&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(msg)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (data.length === &lt;span class=&quot;hljs-number&quot;&gt;25&lt;/span&gt;) {
+      &lt;span class=&quot;hljs-comment&quot;&gt;// when length of data equal 25 then pop data[0]&lt;/span&gt;
+      data.shift();
+    }
+    data.push({
+      &lt;span class=&quot;hljs-string&quot;&gt;&quot;creatTime&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;Date&lt;/span&gt;(msg.creatTime),
+      &lt;span class=&quot;hljs-string&quot;&gt;&quot;cpuTime&quot;&lt;/span&gt;: msg.cpuTime
+    });
+    render();
+  });
+};
+...&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Lets walk again the code, we start by opening a &lt;code&gt;EventBus&lt;/code&gt; bridge over &lt;code&gt;SockJS&lt;/code&gt; and register a handler &lt;code&gt;data&lt;/code&gt; to consume&lt;br&gt;messages sent to that address. Once such a message arrives we do some house keeping to avoid filling our browser memory&lt;br&gt;and then add the incoming message to the data queue and triger a rendering of the data. There is however one interesting&lt;br&gt;issue here, since the message payload is &lt;code&gt;JSON&lt;/code&gt; there is no native support for &lt;code&gt;Date&lt;/code&gt; objects so we need to do some&lt;br&gt;parsing from what arrives from the server. In this case the server sends a simple time since epoch number, but one can&lt;br&gt;choose any format he likes.&lt;/p&gt;
+&lt;p&gt;At this moment you can build and package your app like &lt;code&gt;mvn clean package&lt;/code&gt;, then deploy it to your raspberrypi like:&lt;br&gt;&lt;code&gt;scp target/rpi-1.0-fat.jar pi@raspberrypi:~/&lt;/code&gt; and finally run it: &lt;code&gt;java -jar rpi-1.0-fat.jar&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Open a browser to &lt;a href=&quot;http://raspberrypi:8080&quot;&gt;see&lt;/a&gt; the realtime graph!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-web-easy-as-pi/rpi.png&quot; alt=&quot;screeshot&quot;&gt;&lt;/p&gt;
+&lt;/article&gt;
+      </description>
           <pubDate>Wed, 01 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-web-easy-as-pi</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-web-easy-as-pi</guid>
@@ -57,7 +321,22 @@
       
         <item>
           <title>Vert.x 2.1.6 released !</title>
-          <description>&lt;p&gt;The Vert.x team is pleased to announce the release of Vert.x &lt;strong&gt;2.1.6&lt;/strong&gt;.&lt;/p&gt;</description>
+          <description>
+      &lt;article&gt;&lt;p&gt;The Vert.x team is pleased to announce the release of Vert.x &lt;strong&gt;2.1.6&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;This is a maintenance release on the 2.x branch that fixes a few bugs and is designed for Vert.x 2 production users who cannot upgrade to 3.0 immediately.&lt;/p&gt;
+&lt;p&gt;For the latest production version for new projects please see &lt;a href=&quot;http://vertx.io&quot;&gt;Vert.x 3.0&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Fixes in this release include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;runZip&lt;/em&gt; - fix bugs in unpacking zips&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;HttpClient&lt;/em&gt; - make sure writeHead is set to true before connect&lt;/li&gt;
+&lt;li&gt;Upgrade to Hazelcast 3.5 to fix bug in &lt;code&gt;Multimap&lt;/code&gt; state.&lt;/li&gt;
+&lt;li&gt;Workaround for Hazelcast bug which could result in inconsistent cluster state if multiple nodes shutdown concurrently&lt;/li&gt;
+&lt;li&gt;Clustering fixes related to clearing up state in case of event bus connections closing and on close of event bus.&lt;/li&gt;
+&lt;li&gt;Fix message replies to nodes other than the node the SockJS bridge is deployed on.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The artifacts has been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%222.1.6%22&quot;&gt;Maven Central&lt;/a&gt;, and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/2.1.6/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
           <pubDate>Tue, 30 Jun 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-2-1-6-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-2-1-6-released</guid>
