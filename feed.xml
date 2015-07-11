@@ -110,7 +110,7 @@
 &lt;p&gt;Mark S&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
+          <pubDate>Mon, 06 Jul 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
           <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
           <author>
@@ -147,7 +147,7 @@ Content-&lt;span class=&quot;hljs-string&quot;&gt;Length:&lt;/span&gt; &lt;span 
 {&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;customer_name&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;John&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;items&quot;&lt;/span&gt;:{&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;milk&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;quantity&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;}}
 $&lt;/code&gt;&lt;/pre&gt;&lt;/article&gt;
       </description>
-          <pubDate>Fri, 03 Jul 2015 02:00:00 +0200</pubDate>
+          <pubDate>Fri, 03 Jul 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
           <author>
@@ -205,7 +205,7 @@ sudo chmod +x &lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-vertx-&
 &lt;p&gt;&lt;strong&gt;That’s all, enjoy !&lt;/strong&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
+          <pubDate>Thu, 02 Jul 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x-3-init-d-script</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-init-d-script</guid>
           <author>
@@ -310,7 +310,7 @@ eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hlj
 &lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-web-easy-as-pi/rpi.png&quot; alt=&quot;screeshot&quot;&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 01 Jul 2015 02:00:00 +0200</pubDate>
+          <pubDate>Wed, 01 Jul 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x3-web-easy-as-pi</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-web-easy-as-pi</guid>
           <author>
@@ -337,7 +337,7 @@ eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hlj
 &lt;p&gt;The artifacts has been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%222.1.6%22&quot;&gt;Maven Central&lt;/a&gt;, and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/2.1.6/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 30 Jun 2015 02:00:00 +0200</pubDate>
+          <pubDate>Tue, 30 Jun 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x-2-1-6-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-2-1-6-released</guid>
           <author>
