@@ -22,7 +22,7 @@ vertx.createHttpServer()
 }).listen(8080);</code></pre></div><div class=tab-pane id=ws_groovy><pre class=prettyprint><code class=groovy>
 vertx.createHttpServer().requestHandler({ req ->
   req.response()
-    .putHeader("Content-Type", "text/html")
+    .putHeader("content-type", "text/plain")
     .end("Hello from Vert.x!")
 }).listen(8080)</code></pre></div><div class=tab-pane id=ws_ruby><pre class=prettyprint><code class=ruby>
 $vertx.create_http_server().request_handler() { |req|
