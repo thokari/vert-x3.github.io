@@ -8,6 +8,304 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>My first Vert.x 3 Application</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Let’s say, you heard someone saying that Vert.x is &lt;em&gt;awesome&lt;/em&gt;. Ok great, but you may want to try it by yourself. Well, the next natural question is “where do I start ?”. This post is a good starting point. It shows how is built a very simple vert.x application (nothing fancy), how it is tested and how it is packaged and executed. So, everything you need to know before building your own groundbreaking application.&lt;/p&gt;
+&lt;p&gt;The code developed in this post is available on &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app&quot;&gt;github&lt;/a&gt;. This post is part of the &lt;em&gt;Introduction to Vert.x series&lt;/em&gt;. The code of this post in in the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-1&quot;&gt;post-1 branch&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;let-s-start-&quot;&gt;Let’s start !&lt;/h2&gt;
+&lt;p&gt;First, let’s create a project. In this post, we use Apache Maven, but you can use Gradle or the build process tool you prefer. You could use the Maven jar archetype to create the structure, but basically, you just need a directory with:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;a &lt;code&gt;src/main/java&lt;/code&gt; directory&lt;/li&gt;
+&lt;li&gt;a &lt;code&gt;src/main/test&lt;/code&gt; directory&lt;/li&gt;
+&lt;li&gt;a &lt;code&gt;pom.xml&lt;/code&gt; file&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;So, you would get something like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;.
+├── pom&lt;span class=&quot;hljs-class&quot;&gt;.xml&lt;/span&gt;
+├── src
+│   ├── main
+│   │   └── java
+│   └── test
+│       └── java&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let’s create the &lt;code&gt;pom.xml&lt;/code&gt; file with the following content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;project&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;xmlns&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0&quot;&lt;/span&gt;
+         &lt;span class=&quot;hljs-attribute&quot;&gt;xmlns:xsi&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
+         &lt;span class=&quot;hljs-attribute&quot;&gt;xsi:schemaLocation&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;modelVersion&lt;/span&gt;&gt;&lt;/span&gt;4.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;modelVersion&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx.blog&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;my-first-app&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.0-SNAPSHOT&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependencies&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-core&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependencies&lt;/span&gt;&gt;&lt;/span&gt;
+
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;build&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugins&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;maven-compiler-plugin&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.3&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;source&lt;/span&gt;&gt;&lt;/span&gt;1.8&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;source&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;1.8&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugins&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;build&lt;/span&gt;&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;project&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This &lt;code&gt;pom.xml&lt;/code&gt; file is pretty straightforward:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;it declares a dependency on &lt;code&gt;vertx-core&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;it configures the &lt;em&gt;maven-compiler-plugin&lt;/em&gt; to use Java 8.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This second point is important, Vert.x applications require Java 8.&lt;/p&gt;
+&lt;h2 id=&quot;let-s-code-&quot;&gt;Let’s code !&lt;/h2&gt;
+&lt;p&gt;Ok, now we have made the &lt;code&gt;pom.xml&lt;/code&gt; file. Let’s do some real coding… Create the &lt;code&gt;src/main/java/io/vertx/blog/first/MyFirstVerticle.java&lt;/code&gt; file with the following content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.blog.first;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.core.AbstractVerticle;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.core.Future;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyFirstVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Future&lt;Void&gt; fut)&lt;/span&gt; &lt;/span&gt;{
+    vertx
+        .createHttpServer()
+        .requestHandler(r -&gt; {
+          r.response().end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;&lt;h1&gt;Hello from my first &quot;&lt;/span&gt; +
+              &lt;span class=&quot;hljs-string&quot;&gt;&quot;Vert.x 3 application&lt;/h1&gt;&quot;&lt;/span&gt;);
+        })
+        .listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, result -&gt; {
+          &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (result.succeeded()) {
+            fut.complete();
+          } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+            fut.fail(result.cause());
+          }
+        });
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is actually our not fancy application. The class extends &lt;code&gt;AbstractVerticle&lt;/code&gt;. In the Vert.x world, a &lt;em&gt;verticle&lt;/em&gt; is a component. By extending &lt;code&gt;AbstractVerticle&lt;/code&gt;, our class gets access to the &lt;code&gt;vertx&lt;/code&gt; field.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;start&lt;/code&gt; method is called when the verticle is deployed. We could also implement a &lt;code&gt;stop&lt;/code&gt; method, but in this case Vert.x takes care of the garbage for us. The &lt;code&gt;start&lt;/code&gt; method receives a &lt;code&gt;Future&lt;/code&gt; object that will let us inform Vert.x when our start sequence is completed or report an error. One of the particularity of Vert.x is its asynchronous / non-blocking aspect. When our verticle is going to be deployed it won’t wait until the start method has been completed. So, the &lt;code&gt;Future&lt;/code&gt; parameter is important to notify of the completion.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;start&lt;/code&gt; method creates a HTTP server and attaches a request handler to it. The request handler is a lambda, passed in the &lt;code&gt;requestHandler&lt;/code&gt; method, called every time the server receives a request. Here, we just reply &lt;code&gt;Hello ...&lt;/code&gt; (nothing fancy I told you). Finally, the server is bound to the 8080 port. As this may fails (because the port may already be used), we pass another lambda expression checking whether or not the connection has succeeded. As mentioned above it calls either &lt;code&gt;fut.complete&lt;/code&gt; in case of success or &lt;code&gt;fut.fail&lt;/code&gt; to report an error.&lt;/p&gt;
+&lt;p&gt;Let’s try to compile the application using:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean &lt;span class=&quot;hljs-keyword&quot;&gt;compile&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Fortunately, it should succeed.&lt;/p&gt;
+&lt;p&gt;That’s all for the application.&lt;/p&gt;
+&lt;h2 id=&quot;let-s-test&quot;&gt;Let’s test&lt;/h2&gt;
+&lt;p&gt;Well, that’s good to have developed an application, but we can never be too careful, so let’s test it. The test uses Junit and &lt;a href=&quot;http://vertx.io/docs/vertx-unit/java/&quot;&gt;vertx-unit&lt;/a&gt; - a framework delivered with vert.x to make the testing of vert.x application more natural.&lt;/p&gt;
+&lt;p&gt;Now create the &lt;code&gt;src/test/java/io/vertx/blog/first/MyFirstVerticleTest.java&lt;/code&gt; with the following content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.blog.first;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.core.Vertx;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.ext.unit.Async;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.ext.unit.TestContext;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.ext.unit.junit.VertxUnitRunner;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.junit.After;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.junit.Before;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.junit.Test;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.junit.runner.RunWith;
+
+&lt;span class=&quot;hljs-annotation&quot;&gt;@RunWith&lt;/span&gt;(VertxUnitRunner.class)
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyFirstVerticleTest&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; Vertx vertx;
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Before&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;setUp&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    vertx = Vertx.vertx();
+    vertx.deployVerticle(MyFirstVerticle.class.getName(),
+        context.asyncAssertSuccess());
+  }
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@After&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;tearDown&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    vertx.close(context.asyncAssertSuccess());
+  }
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;testMyApplication&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; Async async = context.async();
+
+    vertx.createHttpClient().getNow(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;,
+     response -&gt; {
+      response.handler(body -&gt; {
+        context.assertTrue(body.toString().contains(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;));
+        async.complete();
+      });
+    });
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is a JUnit test for our verticle. The test uses vertx-unit, so we use a custom runner. vert.x-unit makes easy to test asynchronous interactions, which are the basis of vert.x applications.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;setUp&lt;/code&gt; method, we creates an instance of &lt;code&gt;Vertx&lt;/code&gt; and deploy our verticle. You may have noticed that unlike the traditional Junit &lt;code&gt;@Before&lt;/code&gt; method, it receives a &lt;code&gt;TestContext&lt;/code&gt;. This object lets us control the asynchronous aspect of our test. For instance, when we deploy our verticle, it starts asynchronously, as most Vert.x interactions. We cannot check anything until it gets started correctly. So, as second argument of the &lt;code&gt;deployVerticle&lt;/code&gt; method, we pass a result handler: &lt;code&gt;context.asyncAssertSuccess()&lt;/code&gt;. It fails the test if the verticle does not start correctly. In addition it waits until the verticle has completed its start sequence. Remember, in our verticle, we call &lt;code&gt;fut.complete()&lt;/code&gt;. So it waits until this method is called, and in the case of a failures, fails the test.&lt;/p&gt;
+&lt;p&gt;Well, the &lt;code&gt;tearDown&lt;/code&gt; method is straightforward, and just terminates the &lt;code&gt;vertx&lt;/code&gt; instance we created.&lt;/p&gt;
+&lt;p&gt;Let’s now have a look to the test of our application: the &lt;code&gt;testMyApplication&lt;/code&gt; method. The test emits a request to our application and checks the result.  Emitting the request and receiving the response is asynchronous. So we need a way to control this. As the &lt;code&gt;setUp&lt;/code&gt; and &lt;code&gt;tearDown&lt;/code&gt; methods, the test method receives a &lt;code&gt;TestContext&lt;/code&gt;. From this object we creates an &lt;em&gt;async handle&lt;/em&gt; (&lt;code&gt;async&lt;/code&gt;) that lets us notify the test framework when the test has completed (using &lt;code&gt;async.complete()&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;So, once the &lt;em&gt;async handle&lt;/em&gt; is created, we create a HTTP client and emits a HTTP request handled by our application. The response is handled by a lambda. In this lambda we retrieves the response body by passing another lambda to the &lt;code&gt;handler&lt;/code&gt; method. The &lt;code&gt;body&lt;/code&gt; argument is the response body (as a &lt;code&gt;buffer&lt;/code&gt; object). We check that the body contains the &lt;code&gt;&quot;Hello&quot;&lt;/code&gt; String and declare the test complete.&lt;/p&gt;
+&lt;p&gt;Let’s take a minute to mention the &lt;em&gt;assertions&lt;/em&gt;. Unlike in traditional Junit tests, it uses &lt;code&gt;context.assert...&lt;/code&gt;. Indeed, if the assertion fails, it will interrupt the test immediately. So it’s pretty important to always uses these assertion methods because of the asynchronous aspect of the Vert.x application and so tests.&lt;/p&gt;
+&lt;p&gt;Our test can be run from an IDE, or using Maven:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;mvn&lt;/span&gt; clean test&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;packaging&quot;&gt;Packaging&lt;/h2&gt;
+&lt;p&gt;So, let’s sum up. We have an application and a test. Well, let’s now package the application. In this post we package the application in a &lt;em&gt;fat jar&lt;/em&gt;. A &lt;em&gt;fat jar&lt;/em&gt; is a standalone executable Jar file containing all the dependencies required to run the application. This is a very convenient way to package Vert.x applications as it’s only one file. It also make them easy to execute.&lt;/p&gt;
+&lt;p&gt;To create a &lt;em&gt;fat jar&lt;/em&gt;, edit the &lt;code&gt;pom.xml&lt;/code&gt; file and add the following snippet just before &lt;code&gt;&lt;/plugins&gt;&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;org.apache.maven.plugins&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;maven-shade-plugin&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;2.3&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;package&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;shade&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;transformers&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;transformer&lt;/span&gt;
+            &lt;span class=&quot;hljs-attribute&quot;&gt;implementation&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;org.apache.maven.plugins.shade.resource.ManifestResourceTransformer&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;manifestEntries&lt;/span&gt;&gt;&lt;/span&gt;
+              &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;Main-Class&lt;/span&gt;&gt;&lt;/span&gt;io.vertx.core.Starter&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;Main-Class&lt;/span&gt;&gt;&lt;/span&gt;
+              &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;Main-Verticle&lt;/span&gt;&gt;&lt;/span&gt;io.vertx.blog.first.MyFirstVerticle&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;Main-Verticle&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;manifestEntries&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;transformer&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;transformers&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactSet&lt;/span&gt;/&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;outputFile&lt;/span&gt;&gt;&lt;/span&gt;${project.build.directory}/${project.artifactId}-${project.version}-fat.jar&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;outputFile&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It uses the &lt;a href=&quot;https://maven.apache.org/plugins/maven-shade-plugin/&quot;&gt;maven-shade-plugin&lt;/a&gt; to create the &lt;code&gt;fat jar&lt;/code&gt;. In the &lt;code&gt;manifestEntries&lt;/code&gt; it indicates the name of our verticle. You may wonder from where comes the &lt;code&gt;Starter&lt;/code&gt; class. It’s actually a class from vert.x, that is going to create the &lt;code&gt;vertx&lt;/code&gt; instance and deploy our verticle.&lt;/p&gt;
+&lt;p&gt;So, with this plugin configured, let’s launch:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean &lt;span class=&quot;hljs-package&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is going to create &lt;code&gt;target/my-first-app-1.0-SNAPSHOT-fat.jar&lt;/code&gt; embedding our application along with all the dependencies (including vert.x itself).&lt;/p&gt;
+&lt;h2 id=&quot;executing-our-application&quot;&gt;Executing our application&lt;/h2&gt;
+&lt;p&gt;Well, it’s nice to have a &lt;em&gt;fat jar&lt;/em&gt;, but we want to see our application running! As said above, thanks to the &lt;em&gt;fat jar&lt;/em&gt; packaging, running Vert.x application is easy as:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, open a browser to &lt;a href=&quot;http://localhost:8080&quot;&gt;http://localhost:8080&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To stop the application, hit &lt;code&gt;CTRL+C&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;This Vert.x 3 crash class has presented how you can develop a simple application using Vert.x 3, how to test it, package it and run it. So, you now know everything you need to build amazing system on top of Vert.x 3. Next time we will see how to configure our application.&lt;/p&gt;
+&lt;p&gt;Happy coding &amp; Stay tuned !&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Tue, 14 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/my-first-vert-x-3-application</link>
+          <guid isPermaLink="true">http://vertx.io/blog/my-first-vert-x-3-application</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
+          <title>Vert.x3 says &quot;hello&quot; to NPM users</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;In programming literature it has become the standard to create a hello world program as the first example. In this&lt;br&gt;article I’ll be demonstrating how &lt;code&gt;NPM&lt;/code&gt; users can quickly get started with &lt;code&gt;vert.x&lt;/code&gt;. You will see that it is not&lt;br&gt;that different and in fact it can be done using the tools you’re used to. Note that although we are using &lt;code&gt;NPM&lt;/code&gt; we are&lt;br&gt;not relying on &lt;code&gt;node.js&lt;/code&gt;, all &lt;code&gt;javascript&lt;/code&gt; code runs on the &lt;code&gt;JVM&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;hello-world-examples&quot;&gt;Hello World Examples&lt;/h2&gt;
+&lt;p&gt;Here are four simple hello world examples. The comments in the code explain how the code works and the text around it&lt;br&gt;explain what it does and how to test it.&lt;/p&gt;
+&lt;h2 id=&quot;hello-console&quot;&gt;Hello Console&lt;/h2&gt;
+&lt;p&gt;This example is about as plain as it can get. It prints the words “&lt;code&gt;Hello World&lt;/code&gt;“ to the terminal. If you’re a&lt;br&gt;javascript developer you should be already used to &lt;code&gt;npm&lt;/code&gt; and know that you always start a project with the file&lt;br&gt;&lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx3-hello-console&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;private&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;dependencies&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx3-min&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;3.0.0-1&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;scripts&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;start&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;./node_modules/.bin/vertx run server.js&quot;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that we have a dependency wich is obvious &lt;code&gt;vert.x&lt;/code&gt; now note that there are 3 flavours of this dependency:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-min&quot;&gt;min&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-base&quot;&gt;base&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-full&quot;&gt;full&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;According to your needs you can pick a different flavour, since for a simple hello world we only need the minimal that&lt;br&gt;is the one we add to the dependency property.&lt;/p&gt;
+&lt;p&gt;Now we need to do a simple hello app, we will call this file “&lt;code&gt;server.js&lt;/code&gt;“:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Call the console.log function.&lt;/span&gt;
+&lt;span class=&quot;hljs-built_in&quot;&gt;console&lt;/span&gt;.log(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World&quot;&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can run this by running &lt;code&gt;npm start&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;hello-http&quot;&gt;Hello HTTP&lt;/h2&gt;
+&lt;p&gt;I’d guess that while it’s not the only use case for &lt;code&gt;vert.x&lt;/code&gt;, most people are using it as a web application platform. So&lt;br&gt;the next example will be a simple HTTP server that responds to every request with the plain text message “&lt;code&gt;Hello World&lt;/code&gt;“&lt;br&gt;&lt;code&gt;server.js&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.createHttpServer&lt;/span&gt;()
+  &lt;span class=&quot;hljs-class&quot;&gt;.requestHandler&lt;/span&gt;(function (req) {
+    &lt;span class=&quot;hljs-attribute&quot;&gt;req&lt;/span&gt;.&lt;span class=&quot;hljs-function&quot;&gt;response&lt;/span&gt;()
+      .&lt;span class=&quot;hljs-function&quot;&gt;putHeader&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;text/plain&quot;&lt;/span&gt;)
+      .&lt;span class=&quot;hljs-function&quot;&gt;end&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;);
+})&lt;span class=&quot;hljs-class&quot;&gt;.listen&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can reuse the same &lt;code&gt;package.json&lt;/code&gt; we’ve just defined in the previous section and start the server with&lt;br&gt;&lt;code&gt;npm start&lt;/code&gt;. Once the server starts you can open a browser to &lt;code&gt;http://localhost:8080&lt;/code&gt; and enjoy the message.&lt;/p&gt;
+&lt;h2 id=&quot;hello-tcp&quot;&gt;Hello TCP&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;Vert.x&lt;/code&gt; also makes an excellent TCP server, and here is an example that responds to all TCP connections with the&lt;br&gt;message “Hello World” and then closes the connection &lt;code&gt;server.js&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;var server = vertx.createNetServer();
+server.connectHandler(function (&lt;span class=&quot;hljs-keyword&quot;&gt;socket&lt;/span&gt;) {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;socket&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;write&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World!\n&quot;&lt;/span&gt;);
+  &lt;span class=&quot;hljs-keyword&quot;&gt;socket&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;close&lt;/span&gt;();
+});
+
+server.&lt;span class=&quot;hljs-keyword&quot;&gt;listen&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;7000&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Again reuse the previous &lt;code&gt;package.json&lt;/code&gt; and test it by doing &lt;code&gt;telnet localhost 7000&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;hello-web&quot;&gt;Hello Web&lt;/h2&gt;
+&lt;p&gt;Often you won’t be using &lt;code&gt;vert.x&lt;/code&gt; built-in libraries because they are designed to be very low level. This makes &lt;code&gt;vert.x&lt;/code&gt;&lt;br&gt;quick, nimble, and easy to maintain, but if you are planning to build a complex application you want some productivity&lt;br&gt;and rely on a simple web framework. For this specific case there is &lt;code&gt;vert.x web&lt;/code&gt;,&lt;br&gt;&lt;a href=&quot;http://vertx.io/docs/#web&quot;&gt;a simple, yet productive framework&lt;/a&gt;, to build fast web application with routing, template&lt;br&gt;rendering, lots of middleware etc…usually not enough to get started on a real world application. This example shows an&lt;br&gt;HTTP server that responds with “Hello World” to all requests to “/“ and responds with a 404 error to everything else&lt;br&gt;&lt;code&gt;server.js&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; Router = require(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-web-js/router&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; server = vertx.createHttpServer();
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; router = Router.router(vertx);
+
+router.&lt;span class=&quot;hljs-keyword&quot;&gt;get&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;).handler(&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(ctx)&lt;/span&gt; &lt;/span&gt;{
+  &lt;span class=&quot;hljs-comment&quot;&gt;// This handler will be called for &quot;/&quot; requests&lt;/span&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; response = ctx.response();
+  response.putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;text/plain&quot;&lt;/span&gt;);
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Write to the response and end it&lt;/span&gt;
+  response.end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;);
+});
+
+server.requestHandler(router.accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to test this, you will need to install the &lt;code&gt;vertx3-full&lt;/code&gt; stack. There are two ways to do this. You can either&lt;br&gt;install it globally &lt;code&gt;npm install -g vertx3-full&lt;/code&gt; or add it as a dependency to our &lt;code&gt;package.json&lt;/code&gt; as we have done before,&lt;br&gt;for example &lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx3-hello-web&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;private&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;dependencies&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx3-full&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;3.0.0-1&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;scripts&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;start&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;./node_modules/.bin/vertx run server.js&quot;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That’s it for now, Hopefully this will help you get started working with &lt;code&gt;vert.x&lt;/code&gt;!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 13 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x3-says-hello-to-npm-users</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x3-says-hello-to-npm-users</guid>
+          <author>
+            <name>pmlopes</name>
+            <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Checklist for Migrating from Vert.x 2.1.x to Vert.x 3 - Part One</title>
           <description>
       &lt;article&gt;&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;
