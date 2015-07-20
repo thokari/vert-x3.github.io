@@ -8,6 +8,106 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x Application Configuration</title>
+          <description>
+      &lt;article&gt;&lt;h2 id=&quot;previously-in-introduction-to-vert-x-&quot;&gt;Previously in ‘Introduction to Vert.x’&lt;/h2&gt;
+&lt;p&gt;In &lt;a href=&quot;/blog/my-first-vert-x-3-application/index.html&quot;&gt;this post&lt;/a&gt;, we developed a very simple Vert.x 3 application, and saw how this application can be tested, packaged and executed. That was nice, isn’t it ? Well, ok, that was only the beginning. In this post, we are going to enhance our application to support &lt;em&gt;external&lt;/em&gt; configuration.&lt;/p&gt;
+&lt;p&gt;So just to remind you, we have an application starting a HTTP server on the port 8080 and replying a polite “Hello” message to all HTTP requests. The previous code is available &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-1&quot;&gt;here&lt;/a&gt;. The code developed in this post is in the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-2&quot;&gt;post-2 branch&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;so-why-do-we-need-configuration-&quot;&gt;So, why do we need configuration?&lt;/h2&gt;
+&lt;p&gt;That’s a good question. The application works right now, but well, let’s say you want to deploy it on a machine where the port 8080 is already taken. We would need to change the port in the application code and in the test, just for this machine. That would be sad. Fortunately, Vert.x applications are configurable.&lt;/p&gt;
+&lt;p&gt;Vert.x configurations are using the JSON format, so don’t expect anything complicated. They can be passed to verticle either from the command line, or using an API. Let’s have a look.&lt;/p&gt;
+&lt;h2 id=&quot;no-8080-anymore&quot;&gt;No ‘8080’ anymore&lt;/h2&gt;
+&lt;p&gt;The first step is to modify the &lt;code&gt;io.vertx.blog.first.MyFirstVerticle&lt;/code&gt; class to not bind to the port 8080, but to read it from the configuration:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Future&lt;Void&gt; fut)&lt;/span&gt; &lt;/span&gt;{
+  vertx
+      .createHttpServer()
+      .requestHandler(r -&gt; {
+        r.response().end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;&lt;h1&gt;Hello from my first &quot;&lt;/span&gt; +
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;Vert.x 3 application&lt;/h1&gt;&quot;&lt;/span&gt;);
+      })
+      .listen(
+          &lt;span class=&quot;hljs-comment&quot;&gt;// Retrieve the port from the configuration,&lt;/span&gt;
+          &lt;span class=&quot;hljs-comment&quot;&gt;// default to 8080.&lt;/span&gt;
+          config().getInteger(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;),
+          result -&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (result.succeeded()) {
+              fut.complete();
+            } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+              fut.fail(result.cause());
+            }
+          }
+      );
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, the only difference with the previous version is &lt;code&gt;config().getInteger(&quot;http.port&quot;, 8080)&lt;/code&gt;. Here, our code is now requesting the configuration and check whether the &lt;em&gt;http.port&lt;/em&gt; property is set. If not, the port 8080 is used as fall-back. The retrieved configuration is a &lt;code&gt;JsonObject&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As we are using the port 8080 by default, you can still package our application and run it as before:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean package
+java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Simple right ?&lt;/p&gt;
+&lt;h2 id=&quot;api-based-configuration-random-port-for-the-tests&quot;&gt;API-based configuration - Random port for the tests&lt;/h2&gt;
+&lt;p&gt;Now that the application is configurable, let’s try to provide a configuration. In our test, we are going to configure our application to use the port 8081. So, previously we were deploying our verticle with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;vertx.deployVerticle(MyFirstVerticle.class.getName(), context.asyncAssertSuccess());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let’s now pass some &lt;em&gt;deployment options&lt;/em&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;port = &lt;span class=&quot;hljs-number&quot;&gt;8081&lt;/span&gt;;
+DeploymentOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; DeploymentOptions()
+    .setConfig(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, port)
+);
+vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAssertSuccess());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;DeploymentOptions&lt;/code&gt; object lets us customize various parameters. In particular, it lets us inject the &lt;code&gt;JsonObject&lt;/code&gt; retrieved by the verticle when using the &lt;code&gt;config()&lt;/code&gt; method.&lt;/p&gt;
+&lt;p&gt;Obviously, the test connecting to the server needs to be slightly modified to use the right port (&lt;code&gt;port&lt;/code&gt; is a field):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;vertx.createHttpClient().getNow(port, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;, response -&gt; {
+  response.handler(body -&gt; {
+    context.assertTrue(body.toString().contains(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;));
+    async.complete();
+  });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, well, this does not really fix our issue. What happens when the port 8081 is used too. Let’s now pick a random port:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;ServerSocket socket = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ServerSocket(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;);
+port = socket.getLocalPort();
+socket.close();
+
+DeploymentOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; DeploymentOptions()
+    .setConfig(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, port)
+    );
+
+vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAssertSuccess());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, the idea is very simple. We open a &lt;em&gt;server socket&lt;/em&gt; that would pick a random port (that’s why we put 0 as parameter). We retrieve the used port and close the socket. Be aware that this method is &lt;strong&gt;not&lt;/strong&gt; perfect and may fail if the picked port becomes used between the &lt;code&gt;close&lt;/code&gt; method and the start of our HTTP server. However, it would work fine in the very high majority of the case.&lt;/p&gt;
+&lt;p&gt;With this in place, our test is now using a random port. Execute them with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;mvn&lt;/span&gt; clean test&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;external-configuration-let-s-run-on-another-port&quot;&gt;External configuration - Let’s run on another port&lt;/h2&gt;
+&lt;p&gt;Ok, well random port is not what we want in &lt;em&gt;production&lt;/em&gt;. Could you imagine the face of your production team if you tell them that your application is picking a random port. It can actually be funny, but we should never mess with the production team.&lt;/p&gt;
+&lt;p&gt;So for the actual execution of your application, let’s pass the configuration in an external file. The configuration is stored in a &lt;em&gt;json&lt;/em&gt; file.&lt;/p&gt;
+&lt;p&gt;Create the &lt;code&gt;src/main/conf/my-application-conf.json&lt;/code&gt; with the following content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt; : &lt;span class=&quot;hljs-number&quot;&gt;8082&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And now, to use this configuration just launch your application with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar -conf src/main/conf/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt;-conf.json&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Open a browser on &lt;a href=&quot;http://localhost:8082&quot;&gt;http://localhost:8082&lt;/a&gt;, here it is !&lt;/p&gt;
+&lt;p&gt;How does that work ? Remember, our &lt;em&gt;fat jar&lt;/em&gt; is using the &lt;code&gt;Starter&lt;/code&gt; class (provided by Vert.x) to launch our application. This class is reading the &lt;code&gt;-conf&lt;/code&gt; parameter and create the corresponding deployment options when deploying our verticle.&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;After having developed your first Vert.x application, we have seen how this application is configurable, and this without adding any complexity to our application. Next time we are going to see how we can use vertx-web to develop a small application serving static pages and a REST API. A bit more fancy, but still very simple.&lt;/p&gt;
+&lt;p&gt;Happy Coding and &amp; Stay Tuned!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 20 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x-application-configuration</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-application-configuration</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>My first Vert.x 3 Application</title>
           <description>
       &lt;article&gt;&lt;p&gt;Let’s say, you heard someone saying that Vert.x is &lt;em&gt;awesome&lt;/em&gt;. Ok great, but you may want to try it by yourself. Well, the next natural question is “where do I start ?”. This post is a good starting point. It shows how is built a very simple vert.x application (nothing fancy), how it is tested and how it is packaged and executed. So, everything you need to know before building your own groundbreaking application.&lt;/p&gt;
@@ -103,7 +203,7 @@
 &lt;p&gt;Fortunately, it should succeed.&lt;/p&gt;
 &lt;p&gt;That’s all for the application.&lt;/p&gt;
 &lt;h2 id=&quot;let-s-test&quot;&gt;Let’s test&lt;/h2&gt;
-&lt;p&gt;Well, that’s good to have developed an application, but we can never be too careful, so let’s test it. The test uses Junit and &lt;a href=&quot;http://vertx.io/docs/vertx-unit/java/&quot;&gt;vertx-unit&lt;/a&gt; - a framework delivered with vert.x to make the testing of vert.x application more natural.&lt;/p&gt;
+&lt;p&gt;Well, that’s good to have developed an application, but we can never be too careful, so let’s test it. The test uses JUnit and &lt;a href=&quot;http://vertx.io/docs/vertx-unit/java/&quot;&gt;vertx-unit&lt;/a&gt; - a framework delivered with vert.x to make the testing of vert.x application more natural.&lt;/p&gt;
 &lt;p&gt;Now create the &lt;code&gt;src/test/java/io/vertx/blog/first/MyFirstVerticleTest.java&lt;/code&gt; with the following content:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.blog.first;
 
@@ -148,11 +248,11 @@
 }&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This is a JUnit test for our verticle. The test uses vertx-unit, so we use a custom runner. vert.x-unit makes easy to test asynchronous interactions, which are the basis of vert.x applications.&lt;/p&gt;
-&lt;p&gt;In the &lt;code&gt;setUp&lt;/code&gt; method, we creates an instance of &lt;code&gt;Vertx&lt;/code&gt; and deploy our verticle. You may have noticed that unlike the traditional Junit &lt;code&gt;@Before&lt;/code&gt; method, it receives a &lt;code&gt;TestContext&lt;/code&gt;. This object lets us control the asynchronous aspect of our test. For instance, when we deploy our verticle, it starts asynchronously, as most Vert.x interactions. We cannot check anything until it gets started correctly. So, as second argument of the &lt;code&gt;deployVerticle&lt;/code&gt; method, we pass a result handler: &lt;code&gt;context.asyncAssertSuccess()&lt;/code&gt;. It fails the test if the verticle does not start correctly. In addition it waits until the verticle has completed its start sequence. Remember, in our verticle, we call &lt;code&gt;fut.complete()&lt;/code&gt;. So it waits until this method is called, and in the case of a failures, fails the test.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;setUp&lt;/code&gt; method, we creates an instance of &lt;code&gt;Vertx&lt;/code&gt; and deploy our verticle. You may have noticed that unlike the traditional JUnit &lt;code&gt;@Before&lt;/code&gt; method, it receives a &lt;code&gt;TestContext&lt;/code&gt;. This object lets us control the asynchronous aspect of our test. For instance, when we deploy our verticle, it starts asynchronously, as most Vert.x interactions. We cannot check anything until it gets started correctly. So, as second argument of the &lt;code&gt;deployVerticle&lt;/code&gt; method, we pass a result handler: &lt;code&gt;context.asyncAssertSuccess()&lt;/code&gt;. It fails the test if the verticle does not start correctly. In addition it waits until the verticle has completed its start sequence. Remember, in our verticle, we call &lt;code&gt;fut.complete()&lt;/code&gt;. So it waits until this method is called, and in the case of a failures, fails the test.&lt;/p&gt;
 &lt;p&gt;Well, the &lt;code&gt;tearDown&lt;/code&gt; method is straightforward, and just terminates the &lt;code&gt;vertx&lt;/code&gt; instance we created.&lt;/p&gt;
 &lt;p&gt;Let’s now have a look to the test of our application: the &lt;code&gt;testMyApplication&lt;/code&gt; method. The test emits a request to our application and checks the result.  Emitting the request and receiving the response is asynchronous. So we need a way to control this. As the &lt;code&gt;setUp&lt;/code&gt; and &lt;code&gt;tearDown&lt;/code&gt; methods, the test method receives a &lt;code&gt;TestContext&lt;/code&gt;. From this object we creates an &lt;em&gt;async handle&lt;/em&gt; (&lt;code&gt;async&lt;/code&gt;) that lets us notify the test framework when the test has completed (using &lt;code&gt;async.complete()&lt;/code&gt;).&lt;/p&gt;
-&lt;p&gt;So, once the &lt;em&gt;async handle&lt;/em&gt; is created, we create a HTTP client and emits a HTTP request handled by our application. The response is handled by a lambda. In this lambda we retrieves the response body by passing another lambda to the &lt;code&gt;handler&lt;/code&gt; method. The &lt;code&gt;body&lt;/code&gt; argument is the response body (as a &lt;code&gt;buffer&lt;/code&gt; object). We check that the body contains the &lt;code&gt;&quot;Hello&quot;&lt;/code&gt; String and declare the test complete.&lt;/p&gt;
-&lt;p&gt;Let’s take a minute to mention the &lt;em&gt;assertions&lt;/em&gt;. Unlike in traditional Junit tests, it uses &lt;code&gt;context.assert...&lt;/code&gt;. Indeed, if the assertion fails, it will interrupt the test immediately. So it’s pretty important to always uses these assertion methods because of the asynchronous aspect of the Vert.x application and so tests.&lt;/p&gt;
+&lt;p&gt;So, once the &lt;em&gt;async handle&lt;/em&gt; is created, we create a HTTP client and emits a HTTP request handled by our application with the &lt;code&gt;getNow()&lt;/code&gt; method (&lt;code&gt;getNow&lt;/code&gt; is just a shortcut for &lt;code&gt;get(...).end()&lt;/code&gt;). The response is handled by a lambda. In this lambda we retrieves the response body by passing another lambda to the &lt;code&gt;handler&lt;/code&gt; method. The &lt;code&gt;body&lt;/code&gt; argument is the response body (as a &lt;code&gt;buffer&lt;/code&gt; object). We check that the body contains the &lt;code&gt;&quot;Hello&quot;&lt;/code&gt; String and declare the test complete.&lt;/p&gt;
+&lt;p&gt;Let’s take a minute to mention the &lt;em&gt;assertions&lt;/em&gt;. Unlike in traditional JUnit tests, it uses &lt;code&gt;context.assert...&lt;/code&gt;. Indeed, if the assertion fails, it will interrupt the test immediately. So it’s pretty important to always uses these assertion methods because of the asynchronous aspect of the Vert.x application and so tests.&lt;/p&gt;
 &lt;p&gt;Our test can be run from an IDE, or using Maven:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;mvn&lt;/span&gt; clean test&lt;/code&gt;&lt;/pre&gt;
 
@@ -202,7 +302,7 @@
 &lt;p&gt;Happy coding &amp; Stay tuned !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 14 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Tue, 14 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/my-first-vert-x-3-application</link>
           <guid isPermaLink="true">http://vertx.io/blog/my-first-vert-x-3-application</guid>
           <author>
@@ -296,7 +396,7 @@ server.requestHandler(router.accept).listen(&lt;span class=&quot;hljs-number&quo
 &lt;p&gt;That’s it for now, Hopefully this will help you get started working with &lt;code&gt;vert.x&lt;/code&gt;!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 13 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 13 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-says-hello-to-npm-users</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-says-hello-to-npm-users</guid>
           <author>
@@ -408,7 +508,7 @@ server.requestHandler(router.accept).listen(&lt;span class=&quot;hljs-number&quo
 &lt;p&gt;Mark S&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 06 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
           <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
           <author>
@@ -445,7 +545,7 @@ Content-&lt;span class=&quot;hljs-string&quot;&gt;Length:&lt;/span&gt; &lt;span 
 {&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;customer_name&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;John&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;items&quot;&lt;/span&gt;:{&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;milk&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;quantity&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;}}
 $&lt;/code&gt;&lt;/pre&gt;&lt;/article&gt;
       </description>
-          <pubDate>Fri, 03 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Fri, 03 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
           <author>
@@ -503,7 +603,7 @@ sudo chmod +x &lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-vertx-&
 &lt;p&gt;&lt;strong&gt;That’s all, enjoy !&lt;/strong&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 02 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-init-d-script</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-init-d-script</guid>
           <author>
@@ -608,7 +708,7 @@ eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hlj
 &lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-web-easy-as-pi/rpi.png&quot; alt=&quot;screeshot&quot;&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 01 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Wed, 01 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-web-easy-as-pi</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-web-easy-as-pi</guid>
           <author>
@@ -635,7 +735,7 @@ eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hlj
 &lt;p&gt;The artifacts has been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%222.1.6%22&quot;&gt;Maven Central&lt;/a&gt;, and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/2.1.6/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 30 Jun 2015 01:00:00 +0100</pubDate>
+          <pubDate>Tue, 30 Jun 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-2-1-6-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-2-1-6-released</guid>
           <author>
