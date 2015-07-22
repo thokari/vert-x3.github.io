@@ -204,6 +204,20 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;That’s all for the application.&lt;/p&gt;
 &lt;h2 id=&quot;let-s-test&quot;&gt;Let’s test&lt;/h2&gt;
 &lt;p&gt;Well, that’s good to have developed an application, but we can never be too careful, so let’s test it. The test uses JUnit and &lt;a href=&quot;http://vertx.io/docs/vertx-unit/java/&quot;&gt;vertx-unit&lt;/a&gt; - a framework delivered with vert.x to make the testing of vert.x application more natural.&lt;/p&gt;
+&lt;p&gt;Open the &lt;code&gt;pom.xml&lt;/code&gt; file to add the two following dependencies:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;junit&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;junit&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;4.12&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-unit&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;Now create the &lt;code&gt;src/test/java/io/vertx/blog/first/MyFirstVerticleTest.java&lt;/code&gt; with the following content:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.blog.first;
 
@@ -341,7 +355,11 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Call the console.log function.&lt;/span&gt;
 &lt;span class=&quot;hljs-built_in&quot;&gt;console&lt;/span&gt;.log(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World&quot;&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;You can run this by running &lt;code&gt;npm start&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;You can run this by executing:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;npm&lt;/span&gt; install
+&lt;span class=&quot;hljs-built_in&quot;&gt;npm&lt;/span&gt; start&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first command retrieve the vert.x stack while the seconds starts your program.&lt;/p&gt;
 &lt;h2 id=&quot;hello-http&quot;&gt;Hello HTTP&lt;/h2&gt;
 &lt;p&gt;I’d guess that while it’s not the only use case for &lt;code&gt;vert.x&lt;/code&gt;, most people are using it as a web application platform. So&lt;br&gt;the next example will be a simple HTTP server that responds to every request with the plain text message “&lt;code&gt;Hello World&lt;/code&gt;“&lt;br&gt;&lt;code&gt;server.js&lt;/code&gt;:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;vertx&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.createHttpServer&lt;/span&gt;()
