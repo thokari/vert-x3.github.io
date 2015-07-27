@@ -8,6 +8,318 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Some Rest with Vert.x</title>
+          <description>
+      &lt;article&gt;&lt;h2 id=&quot;previously-in-this-blog-series&quot;&gt;Previously in this blog series&lt;/h2&gt;
+&lt;p&gt;This post is part of the &lt;em&gt;Introduction to Vert.x&lt;/em&gt; series. So, let’s have a quick look about the content of the previous posts. In &lt;a href=&quot;/blog/my-first-vert-x-3-application/index.html&quot;&gt;the first post&lt;/a&gt;, we developed a very simple Vert.x 3 application, and saw how this application can be tested, packaged and executed. In &lt;a href=&quot;/blog/vert-x-application-configuration/index.html&quot;&gt;the last post&lt;/a&gt;, we saw how this application became configurable and how we can use a random port in test.&lt;/p&gt;
+&lt;p&gt;Well, nothing fancy… Let’s go a bit further this time and develop a &lt;em&gt;CRUD-ish&lt;/em&gt; application. So an application exposing an HTML page interacting with the backend using a REST API. The level of &lt;em&gt;RESTfullness&lt;/em&gt; of the API is not the topic of this post, I let you decide as it’s a very slippery topic.&lt;/p&gt;
+&lt;p&gt;So, in other words we are going to see:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Vert.x Web - a framework that let you create Web applications easily using Vert.x&lt;/li&gt;
+&lt;li&gt;How to expose static resources&lt;/li&gt;
+&lt;li&gt;How to develop a REST API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The code developed in this post is available on the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-3&quot;&gt;post-3&lt;/a&gt; branch of this &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app&quot;&gt;Github&lt;/a&gt; project. We are going to start from the  &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-2&quot;&gt;post-2&lt;/a&gt; codebase.&lt;/p&gt;
+&lt;p&gt;So, let’s start.&lt;/p&gt;
+&lt;h2 id=&quot;vert-x-web&quot;&gt;Vert.x Web&lt;/h2&gt;
+&lt;p&gt;As you may have notices in the previous posts, dealing with complex HTTP application using only Vert.x Core would be kind of cumbersome. That’s the main reason behind &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/&quot;&gt;Vert.x Web&lt;/a&gt;. It makes the development of Vert.x base web applications really easy, without changing the philosophy.&lt;/p&gt;
+&lt;p&gt;To use Vert.x Web, you need to update the &lt;code&gt;pom.xml&lt;/code&gt; file to add the following dependency:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-web&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That’s the only thing you need to use Vert.x Web. Sweet, no ?&lt;/p&gt;
+&lt;p&gt;Let’s now use it. Remember, in the previous post, when we requested &lt;a href=&quot;http://localhost:8080&quot;&gt;http://localhost:8080&lt;/a&gt;, we reply a nice &lt;em&gt;Hello World&lt;/em&gt; message. Let’s do the same with Vert.x Web.  Open the &lt;code&gt;io.vertx.blog.first.MyFirstVerticle&lt;/code&gt; class and change the &lt;code&gt;start&lt;/code&gt; method to be:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Future&lt;Void&gt; fut)&lt;/span&gt; &lt;/span&gt;{
+ &lt;span class=&quot;hljs-comment&quot;&gt;// Create a router object.&lt;/span&gt;
+ Router router = Router.router(vertx);
+
+ &lt;span class=&quot;hljs-comment&quot;&gt;// Bind &quot;/&quot; to our hello message - so we are still compatible.&lt;/span&gt;
+ router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;).handler(routingContext -&gt; {
+   HttpServerResponse response = routingContext.response();
+   response
+       .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;text/html&quot;&lt;/span&gt;)
+       .end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;&lt;h1&gt;Hello from my first Vert.x 3 application&lt;/h1&gt;&quot;&lt;/span&gt;);
+ });
+
+ &lt;span class=&quot;hljs-comment&quot;&gt;// Create the HTTP server and pass the &quot;accept&quot; method to the request handler.&lt;/span&gt;
+ vertx
+     .createHttpServer()
+     .requestHandler(router::accept)
+     .listen(
+         &lt;span class=&quot;hljs-comment&quot;&gt;// Retrieve the port from the configuration,&lt;/span&gt;
+         &lt;span class=&quot;hljs-comment&quot;&gt;// default to 8080.&lt;/span&gt;
+         config().getInteger(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;),
+         result -&gt; {
+           &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (result.succeeded()) {
+             fut.complete();
+           } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+             fut.fail(result.cause());
+           }
+         }
+     );
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You may be surprise by the length of this snippet (in comparison to the previous code). But as we are going to see, it will make our app on steroids, just be patient.&lt;/p&gt;
+&lt;p&gt;As you can see, we start by creating a &lt;code&gt;Router&lt;/code&gt; object. The router is the cornerstone of Vert.x Web. This object is responsible for dispatching the HTTP requests to the right &lt;em&gt;handler&lt;/em&gt;. Two other concepts are very important in Vert.x Web:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Routes - which let you define how request are dispatched&lt;/li&gt;
+&lt;li&gt;Handlers - which are the actual action processing the requests and writing the result. Handlers can be chained.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you understand these 3 concepts, you have understood everything in Vert.x Web.&lt;/p&gt;
+&lt;p&gt;Let’s focus on this code first:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;).handler(routingContext -&gt; {
+  HttpServerResponse response = routingContext.response();
+  response
+      .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;text/html&quot;&lt;/span&gt;)
+      .end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;&lt;h1&gt;Hello from my first Vert.x 3 application&lt;/h1&gt;&quot;&lt;/span&gt;);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It &lt;em&gt;routes&lt;/em&gt; requests arriving on “/“ to the given &lt;em&gt;handler&lt;/em&gt;. Handlers receive a &lt;code&gt;RoutingContext&lt;/code&gt; object. This handler is quite similar to the code we had before, and it’s quite normal as it manipulates the same type of object: &lt;code&gt;HttpServerResponse&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s now have a look to the rest of the code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;vertx
+    .createHttpServer()
+    .requestHandler(router::accept)
+    .listen(
+        &lt;span class=&quot;hljs-comment&quot;&gt;// Retrieve the port from the configuration,&lt;/span&gt;
+        &lt;span class=&quot;hljs-comment&quot;&gt;// default to 8080.&lt;/span&gt;
+        config().getInteger(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;),
+        result -&gt; {
+          &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (result.succeeded()) {
+            fut.complete();
+          } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+            fut.fail(result.cause());
+          }
+        }
+    );
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It’s basically the same code as before, except that we change the request handler. We pass &lt;code&gt;router::accept&lt;/code&gt; to the handler. You may not be familiar with this notation. It’s a reference to a method (here the method &lt;code&gt;accept&lt;/code&gt; from the &lt;code&gt;router&lt;/code&gt; object). In other worlds, it instructs vert.x to call the &lt;code&gt;accept&lt;/code&gt; method of the &lt;code&gt;router&lt;/code&gt; when it receives a request.&lt;/p&gt;
+&lt;p&gt;Let’s try to see if this work:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean package
+java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By opening &lt;code&gt;http://localhost:8080&lt;/code&gt; in your browser you should see the &lt;em&gt;Hello&lt;/em&gt; message. As we didn’t change the behavior of the application, our tests are still valid.&lt;/p&gt;
+&lt;h2 id=&quot;exposing-static-resources&quot;&gt;Exposing static resources&lt;/h2&gt;
+&lt;p&gt;Ok, so we have a first application using vert.x web. Let’s see some of the benefits. Let’s start with serving static resources, such as an &lt;code&gt;index.html&lt;/code&gt; page. Before we go further, I should start with a disclaimer: “the HTML page we are going to see here is ugly like hell : I’m not a UI guy”. I should also add that there are probably plenty of better ways to implement this and a myriad of frameworks I should try, but that’s not the point. I tried to keep things simple and just relying on JQuery and Twitter Bootstrap, so if you know a bit of JavaScript you can understand and edit the page.&lt;/p&gt;
+&lt;p&gt;Let’s create the HTML page that will be the entry point of our application. Create an &lt;code&gt;index.html&lt;/code&gt; page in &lt;code&gt;src/main/resources/assets&lt;/code&gt; with the content from &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/blob/post-3/src/main/resources/assets/index.html&quot;&gt;here&lt;/a&gt;. As it’s just a HTML page with a bit of JavaScript, we won’t detail the file here. If you have questions, just post comments.&lt;/p&gt;
+&lt;p&gt;Basically, the page is a simple &lt;em&gt;CRUD&lt;/em&gt; UI to manage my collection of &lt;em&gt;not-yet-finished&lt;/em&gt; bottles of Whisky. It was made in a generic way, so you can transpose it to your own collection. The list of product is displayed in the main table. You can create a new product, edit one or delete one. These actions are relying on a REST API (that we are going to implement) through AJAX calls. That’s all.&lt;/p&gt;
+&lt;p&gt;Once this page is created, edit the &lt;code&gt;io.vertx.blog.first.MyFirstVerticle&lt;/code&gt; class and change the &lt;code&gt;start&lt;/code&gt; method to be:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Future&lt;Void&gt; fut)&lt;/span&gt; &lt;/span&gt;{
+ Router router = Router.router(vertx);
+ router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;).handler(routingContext -&gt; {
+   HttpServerResponse response = routingContext.response();
+   response
+       .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;text/html&quot;&lt;/span&gt;)
+       .end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;&lt;h1&gt;Hello from my first Vert.x 3 application&lt;/h1&gt;&quot;&lt;/span&gt;);
+ });
+
+ &lt;span class=&quot;hljs-comment&quot;&gt;// Serve static resources from the /assets directory&lt;/span&gt;
+ router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/assets/*&quot;&lt;/span&gt;).handler(StaticHandler.create(&lt;span class=&quot;hljs-string&quot;&gt;&quot;assets&quot;&lt;/span&gt;));
+
+ vertx
+     .createHttpServer()
+     .requestHandler(router::accept)
+     .listen(
+         &lt;span class=&quot;hljs-comment&quot;&gt;// Retrieve the port from the configuration,&lt;/span&gt;
+         &lt;span class=&quot;hljs-comment&quot;&gt;// default to 8080.&lt;/span&gt;
+         config().getInteger(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;),
+         result -&gt; {
+           &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (result.succeeded()) {
+             fut.complete();
+           } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+             fut.fail(result.cause());
+           }
+         }
+     );
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The only difference with the previous code is the &lt;code&gt;router.route(&quot;/assets/*&quot;).handler(StaticHandler.create(&quot;assets&quot;));&lt;/code&gt; line. So, what does this line mean? It’s actually quite simple. It &lt;em&gt;routes&lt;/em&gt; requests on “/assets/*” to resources stored in the “assets” directory. So our &lt;code&gt;index.html&lt;/code&gt; page is going to be served using &lt;code&gt;http://localhost:8080/assets/index.html&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Before testing this, let’s take a few seconds on the handler creation. All processing actions in Vert.x web are implemented as &lt;em&gt;handler&lt;/em&gt;. To create a handler you always call the &lt;code&gt;create&lt;/code&gt; method.&lt;/p&gt;
+&lt;p&gt;So, I’m sure you are impatient to see our beautiful HTML page. Let’s build and run the application:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean package
+java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, open your browser to &lt;code&gt;http://localhost:8080/assets/index.html&lt;/code&gt;. Here it is… Ugly right? I told you.&lt;/p&gt;
+&lt;p&gt;As you may notice too… the table is empty, this is because we didn’t implement the REST API yet. Let’s do that now.&lt;/p&gt;
+&lt;h2 id=&quot;rest-api-with-vert-x-web&quot;&gt;REST API with Vert.x Web&lt;/h2&gt;
+&lt;p&gt;Vert.x Web makes the implementation of REST API really easy, as it basically &lt;em&gt;routes&lt;/em&gt; your URL to the right handler. The API is very simple, and will be structured as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;GET /api/whiskies&lt;/code&gt; =&gt; get all bottles (&lt;code&gt;getAll&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;GET /api/whiskies/:id&lt;/code&gt; =&gt; get the bottle with the corresponding id (&lt;code&gt;getOne&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POST /api/whiskies&lt;/code&gt; =&gt; add a new bottle (&lt;code&gt;addOne&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PUT /api/whiskies/:id&lt;/code&gt; =&gt; update a bottle (&lt;code&gt;updateOne&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DELETE /api/whiskies/id&lt;/code&gt; =&gt; delete a bottle (&lt;code&gt;deleteOne&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;we-need-some-data-&quot;&gt;We need some data…&lt;/h3&gt;
+&lt;p&gt;But before going further, let’s create our &lt;em&gt;data&lt;/em&gt; object. Create the &lt;code&gt;src/main/java/io/vertx/blog/first/Whisky.java&lt;/code&gt; with the following content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.blog.first;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; java.util.concurrent.atomic.AtomicInteger;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;Whisky&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; AtomicInteger COUNTER = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; AtomicInteger();
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; id;
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; String name;
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; String origin;
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;Whisky&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(String name, String origin)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.id = COUNTER.getAndIncrement();
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.name = name;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.origin = origin;
+  }
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;Whisky&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.id = COUNTER.getAndIncrement();
+  }
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; String &lt;span class=&quot;hljs-title&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; name;
+  }
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; String &lt;span class=&quot;hljs-title&quot;&gt;getOrigin&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; origin;
+  }
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;getId&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; id;
+  }
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;setName&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(String name)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.name = name;
+  }
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;setOrigin&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(String origin)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.origin = origin;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It’s a very simple &lt;em&gt;bean&lt;/em&gt; class (so with getters and setters). We choose this format because Vert.x is relying on &lt;a href=&quot;http://wiki.fasterxml.com/JacksonHome&quot;&gt;Jackson&lt;/a&gt; to handle the JSON format. Jackson automates the serialization and deserialization of &lt;em&gt;bean&lt;/em&gt; classes, making our code much simpler.&lt;/p&gt;
+&lt;p&gt;Now, let’s create a couple of bottles. In the &lt;code&gt;MyFirstVerticle&lt;/code&gt; class, add the following code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Store our product&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; Map&lt;Integer, Whisky&gt; products = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; LinkedHashMap&lt;&gt;();
+&lt;span class=&quot;hljs-comment&quot;&gt;// Create some product&lt;/span&gt;
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;createSomeData&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+  Whisky bowmore = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Whisky(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Bowmore 15 Years Laimrig&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Islay&quot;&lt;/span&gt;);
+  products.put(bowmore.getId(), bowmore);
+  Whisky talisker = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Whisky(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Talisker 57° North&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Island&quot;&lt;/span&gt;);
+  products.put(talisker.getId(), talisker);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, in the &lt;code&gt;start&lt;/code&gt; method, call the &lt;code&gt;createSomeData&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Future&lt;Void&gt; fut)&lt;/span&gt; &lt;/span&gt;{
+
+  createSomeData();
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Create a router object.&lt;/span&gt;
+  Router router = Router.router(vertx);
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Rest of the method&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you have noticed, we don’t really have a &lt;em&gt;backend&lt;/em&gt; here, it’s just a (in-memory) map. Adding a backend will be covered by another post.&lt;/p&gt;
+&lt;h3 id=&quot;get-our-products&quot;&gt;Get our products&lt;/h3&gt;
+&lt;p&gt;Enough decoration, let’s implement the REST API. We are going to start with &lt;code&gt;GET /api/whiskies&lt;/code&gt;. It returns the list of bottles in a JSON Array.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;start&lt;/code&gt; method, add this line just below the static handler line:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;router.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies&quot;&lt;/span&gt;).handler(&lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;::getAll);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This line instructs the &lt;code&gt;router&lt;/code&gt; to handle the &lt;code&gt;GET&lt;/code&gt; requests on “/api/whiskies” by calling the &lt;code&gt;getAll&lt;/code&gt; method. We could have inlined the handler code, but for clarity reasons let’s create another  method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;getAll&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext routingContext)&lt;/span&gt; &lt;/span&gt;{
+  routingContext.response()
+      .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;)
+      .end(Json.encodePrettily(products.values()));
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As every &lt;em&gt;handler&lt;/em&gt; our method receives a &lt;code&gt;RoutingContext&lt;/code&gt;. It populates the &lt;code&gt;response&lt;/code&gt; by setting the &lt;code&gt;content-type&lt;/code&gt; and the actual content. Because our content may contain &lt;em&gt;weird&lt;/em&gt; characters, we force the charset to UTF-8. To create the actual content, no need to compute the JSON string ourself. Vert.x lets us use the &lt;code&gt;Json&lt;/code&gt; API. So &lt;code&gt;Json.encodePrettily(products.values())&lt;/code&gt; computes the JSON string representing the set of bottles.&lt;/p&gt;
+&lt;p&gt;We could have used &lt;code&gt;Json.encodePrettily(products)&lt;/code&gt;, but to make the JavaScript code simpler, we just return the set of bottles and not an object containing &lt;code&gt;ID =&gt; Bottle&lt;/code&gt; entries.&lt;/p&gt;
+&lt;p&gt;With this in place, we should be able to retrieve the set of bottle from our HTML page. Let’s try it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean package
+java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then open the HTML page in your browser (&lt;code&gt;http://localhost:8080/assets/index.html&lt;/code&gt;), and should should see:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/intro-series/post-3-My_Whisky_Collection.png&quot; alt=&quot;Alt text&quot;&gt;&lt;/p&gt;
+&lt;p&gt;I’m sure you are curious, and want to actually see what is returned by our REST API. Let’s open a browser to &lt;code&gt;http://localhost:8080/api/whiskies&lt;/code&gt;. You should get:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;[ {
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;id&lt;/span&gt;&quot; : &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;&quot; : &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;Bowmore 15 Years Laimrig&quot;&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;origin&lt;/span&gt;&quot; : &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Islay&quot;&lt;/span&gt;
+&lt;/span&gt;}, {
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;id&lt;/span&gt;&quot; : &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;&quot; : &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;Talisker 57° North&quot;&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;origin&lt;/span&gt;&quot; : &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Island&quot;&lt;/span&gt;
+&lt;/span&gt;} ]&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;create-a-product&quot;&gt;Create a product&lt;/h2&gt;
+&lt;p&gt;Now we can retrieve the set of bottles, let’s create a new one. Unlike the previous REST API endpoint, this one need to read the request’s body. For performance reason, it should be explicitly enabled. Don’t be scared… it’s just a handler.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;start&lt;/code&gt; method, add these lines just below the line ending by &lt;code&gt;getAll&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies*&quot;&lt;/span&gt;).handler(BodyHandler.create());
+router.post(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies&quot;&lt;/span&gt;).handler(&lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;::addOne);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first line enables the reading of the request body for all routes under “/api/whiskies”. We could have enabled it globally with &lt;code&gt;router.route().handler(BodyHandler.create())&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The second line maps &lt;code&gt;POST&lt;/code&gt; requests on &lt;code&gt;/api/whiskies&lt;/code&gt; to the &lt;code&gt;addOne&lt;/code&gt; method. Let’s create this method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;addOne&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext routingContext)&lt;/span&gt; &lt;/span&gt;{
+  &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; Whisky whisky = Json.decodeValue(routingContext.getBodyAsString(),
+      Whisky.class);
+  products.put(whisky.getId(), whisky);
+  routingContext.response()
+      .setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;201&lt;/span&gt;)
+      .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;)
+      .end(Json.encodePrettily(whisky));
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The method starts by retrieving the &lt;code&gt;Whisky&lt;/code&gt; object from the request body. It just reads the body into a String and passes it to the &lt;code&gt;Json.decodeValue&lt;/code&gt; method. Once created it adds it to the &lt;em&gt;backend&lt;/em&gt; map and returns the created bottle as JSON.&lt;/p&gt;
+&lt;p&gt;Let’s try this. Rebuild and restart the application with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean package
+java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, refresh the HTML page and click on the &lt;code&gt;Add a new bottle&lt;/code&gt; button. Enter the data such as: “Jameson” as name and “Ireland” as origin (purists would have noticed that this is actually a Whiskey and not a Whisky). The bottle should be added to the table.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Status 201 ? &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; As you can see, we have set the response status to &lt;code&gt;201&lt;/code&gt;. It means &lt;code&gt;CREATED&lt;/code&gt;, and is the generally used in REST API that create an entity. By default vert.x web is setting the status to &lt;code&gt;200&lt;/code&gt; meaning &lt;code&gt;OK&lt;/code&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h3 id=&quot;finishing-a-bottle&quot;&gt;Finishing a bottle&lt;/h3&gt;
+&lt;p&gt;Well, bottles do not last forever, so we should be able to delete a bottle. In the &lt;code&gt;start&lt;/code&gt; method, add this line:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;router.delete(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/:id&quot;&lt;/span&gt;).handler(&lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;::deleteOne);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the URL, we define a &lt;em&gt;path parameter&lt;/em&gt; &lt;code&gt;:id&lt;/code&gt;. So, when handling a matching request, Vert.x extracts the path segment corresponding to the parameter and let us access it in the handler method. For instance, &lt;code&gt;/api/whiskies/0&lt;/code&gt; maps &lt;code&gt;id&lt;/code&gt; to &lt;code&gt;0&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s see how the parameter can be used in the handler method. Create the &lt;code&gt;deleteOne&lt;/code&gt; method as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;deleteOne&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext routingContext)&lt;/span&gt; &lt;/span&gt;{
+  String id = routingContext.request().getParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;);
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (id == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;) {
+    routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;);
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    Integer idAsInteger = Integer.valueOf(id);
+    products.remove(idAsInteger);
+  }
+  routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;204&lt;/span&gt;).end();
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;em&gt;path parameter&lt;/em&gt; is retrieved using &lt;code&gt;routingContext.request().getParam(&quot;id&quot;)&lt;/code&gt;.  It checks whether it’s &lt;code&gt;null&lt;/code&gt; (not set), and in this case returns a &lt;code&gt;Bad Request&lt;/code&gt; response (status code 400). Otherwise, it removes it from the &lt;em&gt;backend&lt;/em&gt; map.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Status 204 ? &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; As you can see, we have set the response status to &lt;code&gt;204 - NO CONTENT&lt;/code&gt;. Response to the HTTP Verb &lt;code&gt;delete&lt;/code&gt; have generally no content.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h3 id=&quot;the-other-methods&quot;&gt;The other methods&lt;/h3&gt;
+&lt;p&gt;We won’t detail &lt;code&gt;getOne&lt;/code&gt; and &lt;code&gt;updateOne&lt;/code&gt; as the implementations are straightforward and very similar. Their implementations are available on &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/blob/post-3/src/main/java/io/vertx/blog/first/MyFirstVerticle.java&quot;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;cheers-&quot;&gt;Cheers !&lt;/h3&gt;
+&lt;p&gt;It’s time to conclude this post. We have seen how Vert.x Web lets you implement a REST API easily and how it can serve static resources. A bit more fancy than before, but still pretty easy.&lt;/p&gt;
+&lt;p&gt;Next time, we are going to improve our tests to cover the REST API.&lt;/p&gt;
+&lt;p&gt;Say Tuned &amp; Happy Coding !&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 27 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/some-rest-with-vert-x</link>
+          <guid isPermaLink="true">http://vertx.io/blog/some-rest-with-vert-x</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x Application Configuration</title>
           <description>
       &lt;article&gt;&lt;h2 id=&quot;previously-in-introduction-to-vert-x-&quot;&gt;Previously in ‘Introduction to Vert.x’&lt;/h2&gt;
