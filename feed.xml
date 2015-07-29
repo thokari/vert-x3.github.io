@@ -292,7 +292,7 @@ java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;
 &lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;deleteOne&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext routingContext)&lt;/span&gt; &lt;/span&gt;{
   String id = routingContext.request().getParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;);
   &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (id == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;) {
-    routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;);
+    routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;).end();
   } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
     Integer idAsInteger = Integer.valueOf(id);
     products.remove(idAsInteger);
