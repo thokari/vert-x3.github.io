@@ -8,6 +8,400 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Unit and Integration Tests</title>
+          <description>
+      &lt;article&gt;&lt;h2 id=&quot;previously-in-introduction-to-vert-x-&quot;&gt;Previously in “introduction to vert.x”&lt;/h2&gt;
+&lt;p&gt;Let’s refresh our mind about what we developed so far in the &lt;em&gt;introduction to vert.x&lt;/em&gt; series. In &lt;a href=&quot;/blog/my-first-vert-x-3-application/index.html&quot;&gt;the first post&lt;/a&gt;, we developed a very simple Vert.x 3 application, and saw how this application can be tested, packaged and executed. In &lt;a href=&quot;/blog/vert-x-application-configuration/index.html&quot;&gt;the second post&lt;/a&gt;, we saw how this application became configurable and how we can use a random port in test, and use another configurable port in production. Finally, the &lt;a href=&quot;http://vertx.io/blog/some-rest-with-vert-x/index.html&quot;&gt;previous post&lt;/a&gt; has shown how to use vertx-web and how to implement a small REST API. However, we forgot an important task. We didn’t test the API. In this post we will increase the confidence we have on this application by implementing unit and integration tests.&lt;/p&gt;
+&lt;p&gt;The code of this post is available in the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-4&quot;&gt;post-4 branch&lt;/a&gt; of the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app&quot;&gt;project&lt;/a&gt;. The starting post, however is the code available in the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-3&quot;&gt;post-3 branch&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;tests-tests-tests-&quot;&gt;Tests, Tests, Tests…&lt;/h2&gt;
+&lt;p&gt;This post is mainly about tests. We distinguish two types of tests: unit tests and integration tests. Both are equally important, but have different focus. Unit tests ensure that one &lt;em&gt;component&lt;/em&gt; of your application, generally a class in the Java world, behaves as expected. The application is not tested as a whole, but pieces by pieces. Integration tests are more &lt;em&gt;black box&lt;/em&gt; in the sense that the application is started and tested generally externally.&lt;/p&gt;
+&lt;p&gt;In this post we are going to start with some more unit tests as a warm up session and then focus on integration tests. If you already implemented integration tests, you may be a bit scared, and it makes sense. But don’t worry, with Vert.x there are no hidden surprises.&lt;/p&gt;
+&lt;h2 id=&quot;warmup-some-more-unit-tests&quot;&gt;Warmup : Some more unit tests&lt;/h2&gt;
+&lt;p&gt;Let’s start slowly. Remember in the first post we have implemented a unit test with &lt;a href=&quot;http://vertx.io/docs/vertx-unit/java/&quot;&gt;vertx-unit&lt;/a&gt;.  The test we did is dead simple:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;we started the application before the test&lt;/li&gt;
+&lt;li&gt;we checks that it replies “Hello”&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Just to refresh your mind, let’s have a look to the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/blob/post-4/src/test/java/io/vertx/blog/first/MyFirstVerticleTest.java&quot;&gt;code&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Before&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;setUp&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; IOException &lt;/span&gt;{
+    vertx = Vertx.vertx();
+    ServerSocket socket = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ServerSocket(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;);
+    port = socket.getLocalPort();
+    socket.close();
+    DeploymentOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; DeploymentOptions()
+        .setConfig(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, port)
+        );
+    vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAssertSuccess());
+  }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;setUp&lt;/code&gt; method is invoked before each test (as instructed by the &lt;code&gt;@Before&lt;/code&gt; annotation). It, first, creates a new instance of Vert.x. Then, it gets a free port and then deploys our verticle with the right configuration. Thanks to the &lt;code&gt;context.asyncAssertSuccess()&lt;/code&gt; it waits until the successful deployment of the verticle.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;tearDown&lt;/code&gt; is straightforward and just closes the Vert.x instance. It automatically un-deploys the verticles:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@After&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;tearDown&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    vertx.close(context.asyncAssertSuccess());
+  }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, our single test is:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;testMyApplication&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; Async async = context.async();
+    vertx.createHttpClient().getNow(port, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;, response -&gt; {
+      response.handler(body -&gt; {
+        context.assertTrue(body.toString().contains(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello&quot;&lt;/span&gt;));
+        async.complete();
+      });
+    });
+   }&lt;/code&gt;&lt;/pre&gt;
+It is only checking that the application replies &quot;Hello&quot; when we emit a HTTP request on `/`.
+
+Let&#39;s now try to implement some unit tests checkin that our web application and the REST API behave as expected. Let&#39;s start by checking that the `index.html` page is correctly served. This test is very similar to the previous one:
+
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;checkThatTheIndexPageIsServed&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    Async async = context.async();
+    vertx.createHttpClient().getNow(port, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/assets/index.html&quot;&lt;/span&gt;, response -&gt; {
+      context.assertEquals(response.statusCode(), &lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;);
+      context.assertEquals(response.headers().get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;), &lt;span class=&quot;hljs-string&quot;&gt;&quot;text/html&quot;&lt;/span&gt;);
+      response.bodyHandler(body -&gt; {
+        context.assertTrue(body.toString().contains(&lt;span class=&quot;hljs-string&quot;&gt;&quot;&lt;title&gt;My Whisky Collection&lt;/title&gt;&quot;&lt;/span&gt;));
+        async.complete();
+      });
+    });
+  }&lt;/code&gt;&lt;/pre&gt;
+We retrieve the `index.html` page and check:
+
+1. it&#39;s there (status code 200)
+2. it&#39;s a HTML page (content type set to &quot;text/html&quot;)
+3. it has the right title (&quot;My Whisky Collection&quot;)
+
+&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Retrieving content &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; As you can see, we can test the status code and the headers directly on the HTTP response, but ensure that the body is right, we need to retrieve it. This is done with a body handler that receives the complete body as parameter. Once the last check is made, we release the `async` by calling `complete`.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+Ok, great, but this actually does not test our REST API. Let&#39;s ensure that we can add a bottle to the collection. Unlike the previous tests, this one is using `post` to _post_ data to the server:
+
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;checkThatWeCanAdd&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    Async async = context.async();
+    &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; String json = Json.encodePrettily(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Whisky(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Jameson&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Ireland&quot;&lt;/span&gt;));
+    &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; String length = Integer.toString(json.length());
+    vertx.createHttpClient().post(port, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies&quot;&lt;/span&gt;)
+        .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json&quot;&lt;/span&gt;)
+        .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-length&quot;&lt;/span&gt;, length)
+        .handler(response -&gt; {
+          context.assertEquals(response.statusCode(), &lt;span class=&quot;hljs-number&quot;&gt;201&lt;/span&gt;);
+          context.assertTrue(response.headers().get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;).contains(&lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json&quot;&lt;/span&gt;));
+          response.bodyHandler(body -&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; Whisky whisky = Json.decodeValue(body.toString(), Whisky.class);
+            context.assertEquals(whisky.getName(), &lt;span class=&quot;hljs-string&quot;&gt;&quot;Jameson&quot;&lt;/span&gt;);
+            context.assertEquals(whisky.getOrigin(), &lt;span class=&quot;hljs-string&quot;&gt;&quot;Ireland&quot;&lt;/span&gt;);
+            context.assertNotNull(whisky.getId());
+            async.complete();
+          });
+        })
+        .write(json)
+        .end();
+  }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;First we create the content we want to add. The server consumes JSON data, so we need a JSON string. You can either write your JSON document manually, or use the Vert.x method (&lt;code&gt;Json.encodePrettily&lt;/code&gt;) as done here. Once we have the content, we create a &lt;code&gt;post&lt;/code&gt; request. We need to configure some headers to be correctly read by the server. First, we say that we are sending JSON data and we also set the content length. We also attach a response handler very close to the checks made in the previous test. Notice that we can rebuild our object from the JSON document send by the server using the &lt;code&gt;JSON.decodeValue&lt;/code&gt; method. It’s very convenient as it avoids lots of boilerplate code.  At this point the request is not emitted, we need to write the data and call the &lt;code&gt;end()&lt;/code&gt; method. This is made using &lt;code&gt;.write(json).end();&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The order of the methods is important. You cannot &lt;em&gt;write&lt;/em&gt; data if you don’t have a response handler configured. Finally don’t forget to call &lt;code&gt;end&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So, let’s try this. You can run the test using:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;mvn&lt;/span&gt; clean test&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We could continue writing more unit test like that, but it could become quite complex. Let’s see how we could continue our tests using integration tests.&lt;/p&gt;
+&lt;h2 id=&quot;it-hurts&quot;&gt;IT hurts&lt;/h2&gt;
+&lt;p&gt;Well, I think we need to make that clear, integration testing hurts. If you have experience in this area, can you remember how long did it take to setup everything correctly? I get new white hairs by just thinking about it. Why are integration tests more complicated? It’s basically because of the setup:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We must start the application in a &lt;em&gt;close to production&lt;/em&gt; way&lt;/li&gt;
+&lt;li&gt;We must then run the tests (and configure them to hit the right application instance)&lt;/li&gt;
+&lt;li&gt;We must stop the application&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That does not sound unconquerable like that, but if you need Linux, MacOS X and Windows support, it quickly get messy. There are plenty of great frameworks easing this such as &lt;a href=&quot;http://arquillian.org&quot;&gt;Arquillian&lt;/a&gt;, but let’s do it without any framework to understand how it works.&lt;/p&gt;
+&lt;h2 id=&quot;we-need-a-battle-plan&quot;&gt;We need a battle plan&lt;/h2&gt;
+&lt;p&gt;Before rushing into the complex configuration, let’s think a minute about the tasks:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 1 - Reserve a free port&lt;/strong&gt;&lt;br&gt;We need to get a free port on which the application can &lt;em&gt;listen&lt;/em&gt;, and we need to inject this port in our integration tests.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 2 - Generate the application configuration&lt;/strong&gt;&lt;br&gt;Once we have the free port, we need to write a JSON file configuring the application HTTP Port to this port.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 3 - Start the application&lt;/strong&gt;&lt;br&gt;Sounds easy right? Well it’s not that simple as we need to launch our application in a background process.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 4 - Execute the integration tests&lt;/strong&gt;&lt;br&gt;Finally, the central part, run the tests. But before that we should implement some integration tests. Let’s come to that later.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 5 - Stop the application&lt;/strong&gt;&lt;br&gt;Once the tests have been executed, regardless if there are failures or errors in the tests, we need to stop the application.&lt;/p&gt;
+&lt;p&gt;There are multiple way to implement this plan. We are going to use a &lt;em&gt;generic&lt;/em&gt; way. It’s not necessarily the better, but can be applied almost everywhere. The approach is tight to Apache Maven. If you want to propose an alternative using Gradle or a different tool, I will be happy to add your way to the post.&lt;/p&gt;
+&lt;h2 id=&quot;implement-the-plan&quot;&gt;Implement the plan&lt;/h2&gt;
+&lt;p&gt;As said above, this section is Maven-centric, and most of the code goes in the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/blob/post-4/pom.xml&quot;&gt;pom.xml&lt;/a&gt; file. If you never used the different Maven lifecycle phases, I recommend you to look at the &lt;a href=&quot;https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html&quot;&gt;introduction to the Maven lifecycle&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;We need to add and configure a couple of plugins. Open the &lt;code&gt;pom.xml&lt;/code&gt; file and in the &lt;code&gt;&lt;plugins&gt;&lt;/code&gt; section add:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;org.codehaus.mojo&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;build-helper-maven-plugin&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.9.1&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;reserve-network-port&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;reserve-network-port&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;process-sources&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;portNames&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;portName&lt;/span&gt;&gt;&lt;/span&gt;http.port&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;portName&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;portNames&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We use the &lt;code&gt;build-helper-maven-plugin&lt;/code&gt; (a plugin to know if you are often using Maven) to pick up a free port. Once found, the plugin assigns the &lt;code&gt;http.port&lt;/code&gt; variable to the picked port. We execute this plugin early in the build (during the &lt;code&gt;process-sources&lt;/code&gt; phase), so we can use the &lt;code&gt;http.port&lt;/code&gt; variable in the other plugin. This was for the first step.&lt;/p&gt;
+&lt;p&gt;Two actions are required for the second step. First, in the &lt;code&gt;pom.xml&lt;/code&gt; file, just below the &lt;code&gt;&lt;build&gt;&lt;/code&gt; opening tag, add:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;testResources&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;testResource&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;directory&lt;/span&gt;&gt;&lt;/span&gt;src/test/resources&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;directory&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;filtering&lt;/span&gt;&gt;&lt;/span&gt;true&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;filtering&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;testResource&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;testResources&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This instructs Maven to &lt;em&gt;filter&lt;/em&gt; resources from the &lt;code&gt;src/test/resources&lt;/code&gt; directory. &lt;em&gt;Filter&lt;/em&gt; means replacing placeholders by actual values. That’s exactly what we need as we now have the &lt;code&gt;http.port&lt;/code&gt; variable. So create the &lt;code&gt;src/test/resources/my-it-config.json&lt;/code&gt; file with the following content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-variable&quot;&gt;${http.port}&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This configuration file is similar to the one we did in previous posts. The only difference is the &lt;code&gt;${http.port}&lt;/code&gt; which is the (default) Maven syntax for filtering. So, when Maven is going to process or file it will replace &lt;code&gt;${http.port}&lt;/code&gt; by the selected port. That’s all for the second step.&lt;/p&gt;
+&lt;p&gt;The step 3 and 5 are a bit more tricky. We should start and stop the application. We are going to use the &lt;code&gt;maven-antrun-plugin&lt;/code&gt; to achieve this. In the &lt;code&gt;pom.xml&lt;/code&gt; file, below the &lt;code&gt;build-helper-maven-plugin&lt;/code&gt;, add:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;&lt;!-- We use the maven-antrun-plugin to start the application before the integration tests
+and stop them afterward --&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;maven-antrun-plugin&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.8&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;start-vertx-app&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;pre-integration-test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;run&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-comment&quot;&gt;&lt;!--
+          Launch the application as in &#39;production&#39; using the fatjar.
+          We pass the generated configuration, configuring the http port to the picked one
+          --&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;executable&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;${java.home}/bin/java&quot;&lt;/span&gt;
+                &lt;span class=&quot;hljs-attribute&quot;&gt;dir&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;${project.build.directory}&quot;&lt;/span&gt;
+                &lt;span class=&quot;hljs-attribute&quot;&gt;spawn&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;true&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;-jar&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;${project.artifactId}-${project.version}-fat.jar&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;-conf&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;${project.build.directory}/test-classes/my-it-config.json&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;exec&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;stop-vertx-app&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;post-integration-test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;run&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-comment&quot;&gt;&lt;!--
+          Kill the started process.
+          Finding the right process is a bit tricky. Windows command in in the windows profile (below)
+          --&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;executable&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;bash&quot;&lt;/span&gt;
+                &lt;span class=&quot;hljs-attribute&quot;&gt;dir&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;${project.build.directory}&quot;&lt;/span&gt;
+                &lt;span class=&quot;hljs-attribute&quot;&gt;spawn&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;false&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;-c&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;ps ax | grep -i &#39;${project.artifactId}&#39; | awk &#39;NR==1{print $1}&#39; | xargs kill -SIGTERM&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;exec&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That’s a huge piece of XML, isn’t it ? We configure two executions of the plugin. The first one, happening in the &lt;code&gt;pre-integration-test&lt;/code&gt; phase, executes a set of bash command to start the application. It basically executes:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;java -jar my-first-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar -conf &lt;span class=&quot;hljs-keyword&quot;&gt;...&lt;/span&gt;/my-it-config.json&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Is the fatjar created ? &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; The fat jar embedding our application is created in the &lt;code&gt;package&lt;/code&gt; phase, preceding the &lt;code&gt;pre-integration-test&lt;/code&gt;, so yes, the fat jar is created.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;As mentioned above, we launch the application as we would in a production environment.&lt;/p&gt;
+&lt;p&gt;Once, the integration tests are executed (step 4 we didn’t look at it yet), we need to stop the application (so in the the &lt;code&gt;post-integration-test&lt;/code&gt; phase).  To close the application, we are going to invoke some shell magic command to find our process in with the &lt;code&gt;ps&lt;/code&gt; command and send the &lt;code&gt;SIGTERM&lt;/code&gt; signal. It is equivalent to:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;ps
+&lt;span class=&quot;hljs-prompt&quot;&gt;.... -&gt;&lt;/span&gt; find your process id
+kill your_process_id -&lt;span class=&quot;hljs-constant&quot;&gt;SIGTERM&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;And Windows ? &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; I mentioned it above, we want Windows to be supported and these commands are not going to work on Windows. Don’t worry, Windows configuration is below….&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;We should now do the fourth step we (silently) skipped. To execute our integration tests, we use the &lt;code&gt;maven-failsafe-plugin&lt;/code&gt;. Add the following plugin configuration to your &lt;code&gt;pom.xml&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;org.apache.maven.plugins&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;maven-failsafe-plugin&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;2.18.1&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;integration-test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;verify&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;systemProperties&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;http.port&lt;/span&gt;&gt;&lt;/span&gt;${http.port}&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;http.port&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;systemProperties&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, we pass the &lt;code&gt;http.port&lt;/code&gt; property as a system variable, so our tests are able to connect on the right port.&lt;/p&gt;
+&lt;p&gt;That’s all ! Wow…. Let’s try this (for windows users, you will need to be patient or to jump to the last section).&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean &lt;span class=&quot;hljs-built_in&quot;&gt;verify&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We should not use &lt;code&gt;mvn integration-test&lt;/code&gt; because the application would still be running. The &lt;code&gt;verify&lt;/code&gt; phase is after the &lt;code&gt;post-integration-test&lt;/code&gt; phase and will analyse the integration-tests results. Build failures because of integration tests failed assertions are reported in this phase.&lt;/p&gt;
+&lt;h2 id=&quot;hey-we-don-t-have-integration-tests-&quot;&gt;Hey, we don’t have integration tests !&lt;/h2&gt;
+&lt;p&gt;And that’s right, we set up everything, but we don’t have a single integration test. To ease the implementation, let’s use two libraries: &lt;a href=&quot;http://joel-costigliola.github.io/assertj/&quot;&gt;AssertJ&lt;/a&gt; and &lt;a href=&quot;https://github.com/jayway/rest-assured&quot;&gt;Rest-Assured&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;AssertJ proposes a set of assertions that you can chain and use fluently. Rest Assured is a framework to test REST API.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;pom.xml&lt;/code&gt; file, add the two following dependencies just before &lt;code&gt;&lt;/dependencies&gt;&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;com.jayway.restassured&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;rest-assured&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;2.4.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;org.assertj&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;assertj-core&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;2.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, create the &lt;code&gt;src/test/java/io/vertx/blog/first/MyRestIT.java&lt;/code&gt; file. Unlike unit test, integration test ends with &lt;code&gt;IT&lt;/code&gt;. It’s a convention from the Failsafe plugin to distinguish unit (starting or ending with &lt;em&gt;Test&lt;/em&gt;) from integration tests (starting or ending with &lt;em&gt;IT&lt;/em&gt;). In the created file add:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.blog.first;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; com.jayway.restassured.RestAssured;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.junit.AfterClass;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.junit.BeforeClass;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyRestIT&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@BeforeClass&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;configureRestAssured&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    RestAssured.baseURI = &lt;span class=&quot;hljs-string&quot;&gt;&quot;http://localhost&quot;&lt;/span&gt;;
+    RestAssured.port = Integer.getInteger(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);
+  }
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@AfterClass&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;unconfigureRestAssured&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    RestAssured.reset();
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The methods annotated with &lt;code&gt;@BeforeClass&lt;/code&gt; and &lt;code&gt;@AfterClass&lt;/code&gt; are invoked once before / after all tests of the class. Here, we just retrieve the http port (passed as a system property) and we configure REST Assured.&lt;/p&gt;
+&lt;p&gt;It’s now time to implement a real test. Let’s check we can retrieve an individual product:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;checkThatWeCanRetrieveIndividualProduct&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+&lt;span class=&quot;hljs-comment&quot;&gt;// Get the list of bottles, ensure it&#39;s a success and extract the first id.&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; id = get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies&quot;&lt;/span&gt;).then()
+    .assertThat()
+    .statusCode(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;)
+    .extract()
+    .jsonPath().getInt(&lt;span class=&quot;hljs-string&quot;&gt;&quot;find { it.name==&#39;Bowmore 15 Years Laimrig&#39; }.id&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-comment&quot;&gt;// Now get the individual resource and check the content&lt;/span&gt;
+get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + id).then()
+    .assertThat()
+    .statusCode(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;)
+    .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;, equalTo(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Bowmore 15 Years Laimrig&quot;&lt;/span&gt;))
+    .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;origin&quot;&lt;/span&gt;, equalTo(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Islay&quot;&lt;/span&gt;))
+    .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;, equalTo(id));
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here you can appreciate the power and expressiveness of Rest Assured. We retrieve the list of product, ensure the response is correct, and extract the &lt;em&gt;id&lt;/em&gt; of a specific bottle using a JSON (Groovy) Path expression.&lt;/p&gt;
+&lt;p&gt;Then, we try to retrieve the metadata of this individual product, and check the result.&lt;/p&gt;
+&lt;p&gt;Let’s now implement a more sophisticated scenario. Let’s add and delete a product:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;checkWeCanAddAndDeleteAProduct&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Create a new bottle and retrieve the result (as a Whisky instance).&lt;/span&gt;
+  Whisky whisky = given()
+      .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;{\&quot;name\&quot;:\&quot;Jameson\&quot;, \&quot;origin\&quot;:\&quot;Ireland\&quot;}&quot;&lt;/span&gt;).request().post(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies&quot;&lt;/span&gt;).thenReturn().as(Whisky.class);
+  assertThat(whisky.getName()).isEqualToIgnoringCase(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Jameson&quot;&lt;/span&gt;);
+  assertThat(whisky.getOrigin()).isEqualToIgnoringCase(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Ireland&quot;&lt;/span&gt;);
+  assertThat(whisky.getId()).isNotZero();
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Check that it has created an individual resource, and check the content.&lt;/span&gt;
+  get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then()
+      .assertThat()
+      .statusCode(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;)
+      .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;, equalTo(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Jameson&quot;&lt;/span&gt;))
+      .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;origin&quot;&lt;/span&gt;, equalTo(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Ireland&quot;&lt;/span&gt;))
+      .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;, equalTo(whisky.getId()));
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Delete the bottle&lt;/span&gt;
+  delete(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then().assertThat().statusCode(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;);
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Check that the resrouce is not available anymore&lt;/span&gt;
+  get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then()
+      .assertThat()
+      .statusCode(&lt;span class=&quot;hljs-number&quot;&gt;404&lt;/span&gt;);
+}&lt;/code&gt;&lt;/pre&gt;
+So, now we have integration tests let&#39;s try:
+
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean &lt;span class=&quot;hljs-built_in&quot;&gt;verify&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Simple no ? Well, simple once the setup is done right…. You can continue implementing other integration tests to be sure that everything behave as you expect.&lt;/p&gt;
+&lt;h2 id=&quot;dear-windows-users-&quot;&gt;Dear Windows users…&lt;/h2&gt;
+&lt;p&gt;This section is the bonus part for Windows user, or people wanting to run their integration tests on Windows machine too. The command we execute to stop the application is not going to work on Windows. Luckily, it’s possible to extend the &lt;code&gt;pom.xml&lt;/code&gt; with a profile executed on Windows.&lt;/p&gt;
+&lt;p&gt;In your &lt;code&gt;pom.xml&lt;/code&gt;, just after &lt;code&gt;&lt;/build&gt;&lt;/code&gt;, add:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;profiles&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;&lt;!-- A profile for windows as the stop command is different --&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;profile&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;windows&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;activation&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;os&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;family&lt;/span&gt;&gt;&lt;/span&gt;windows&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;family&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;os&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;activation&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;build&lt;/span&gt;&gt;&lt;/span&gt;
+       &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugins&lt;/span&gt;&gt;&lt;/span&gt;
+         &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+           &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;maven-antrun-plugin&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+           &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.8&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+           &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+             &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+               &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;stop-vertx-app&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+               &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;post-integration-test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;phase&lt;/span&gt;&gt;&lt;/span&gt;
+               &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+                 &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;run&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+               &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+               &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+                 &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
+                   &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;executable&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;wmic&quot;&lt;/span&gt;
+                         &lt;span class=&quot;hljs-attribute&quot;&gt;dir&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;${project.build.directory}&quot;&lt;/span&gt;
+                         &lt;span class=&quot;hljs-attribute&quot;&gt;spawn&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;false&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+                     &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;process&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+                     &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;where&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+                     &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;CommandLine like &#39;%${project.artifactId}%&#39; and not name=&#39;wmic.exe&#39;&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+                     &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;delete&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+                   &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;exec&lt;/span&gt;&gt;&lt;/span&gt;
+                 &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
+               &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+             &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+           &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+         &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+       &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugins&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;build&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;profile&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;profiles&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This profile replaces the actions described above to stop the application with a version working on windows. The profile is automatically enabled on Windows. As on others operating systems, execute with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean &lt;span class=&quot;hljs-built_in&quot;&gt;verify&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Wow, what a trip ! We are done… In this post we have seen how we can gain confidence in Vert.x applications by implementing both unit and integration tests. Unit tests, thanks to vert.x unit, are able to check the asynchronous aspect of Vert.x application, but could be complex for large scenarios. Thanks to Rest Assured and AssertJ, integration tests are dead simple to write… but the setup is not straightforward. This post have shown how it can be configured easily. Obviously, you could also use AssertJ and Rest Assured in your unit tests.&lt;/p&gt;
+&lt;p&gt;Next time, we are going to replace the &lt;em&gt;in memory&lt;/em&gt; backend with a database, and use asynchronous integration with this database.&lt;/p&gt;
+&lt;p&gt;Stay Tuned &amp; Happy Coding !&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 03 Aug 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/unit-and-integration-tests</link>
+          <guid isPermaLink="true">http://vertx.io/blog/unit-and-integration-tests</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Some Rest with Vert.x</title>
           <description>
       &lt;article&gt;&lt;h2 id=&quot;previously-in-this-blog-series&quot;&gt;Previously in this blog series&lt;/h2&gt;
@@ -306,7 +700,7 @@ java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;
 &lt;p&gt;We won’t detail &lt;code&gt;getOne&lt;/code&gt; and &lt;code&gt;updateOne&lt;/code&gt; as the implementations are straightforward and very similar. Their implementations are available on &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/blob/post-3/src/main/java/io/vertx/blog/first/MyFirstVerticle.java&quot;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 &lt;h3 id=&quot;cheers-&quot;&gt;Cheers !&lt;/h3&gt;
 &lt;p&gt;It’s time to conclude this post. We have seen how Vert.x Web lets you implement a REST API easily and how it can serve static resources. A bit more fancy than before, but still pretty easy.&lt;/p&gt;
-&lt;p&gt;Next time, we are going to improve our tests to cover the REST API.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;/blog/unit-and-integration-tests/index.html&quot;&gt;In the next post&lt;/a&gt;, we are going to improve our tests to cover the REST API.&lt;/p&gt;
 &lt;p&gt;Say Tuned &amp; Happy Coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
@@ -406,7 +800,7 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;Open a browser on &lt;a href=&quot;http://localhost:8082&quot;&gt;http://localhost:8082&lt;/a&gt;, here it is !&lt;/p&gt;
 &lt;p&gt;How does that work ? Remember, our &lt;em&gt;fat jar&lt;/em&gt; is using the &lt;code&gt;Starter&lt;/code&gt; class (provided by Vert.x) to launch our application. This class is reading the &lt;code&gt;-conf&lt;/code&gt; parameter and create the corresponding deployment options when deploying our verticle.&lt;/p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;After having developed your first Vert.x application, we have seen how this application is configurable, and this without adding any complexity to our application. Next time we are going to see how we can use vertx-web to develop a small application serving static pages and a REST API. A bit more fancy, but still very simple.&lt;/p&gt;
+&lt;p&gt;After having developed your first Vert.x application, we have seen how this application is configurable, and this without adding any complexity to our application. &lt;a href=&quot;/blog/some-rest-with-vert-x/index.html&quot;&gt;In the next post&lt;/a&gt;, we are going to see how we can use vertx-web to develop a small application serving static pages and a REST API. A bit more fancy, but still very simple.&lt;/p&gt;
 &lt;p&gt;Happy Coding and &amp; Stay Tuned!&lt;/p&gt;
 &lt;/article&gt;
       </description>
@@ -624,7 +1018,7 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;Then, open a browser to &lt;a href=&quot;http://localhost:8080&quot;&gt;http://localhost:8080&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;To stop the application, hit &lt;code&gt;CTRL+C&lt;/code&gt;.&lt;/p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;This Vert.x 3 crash class has presented how you can develop a simple application using Vert.x 3, how to test it, package it and run it. So, you now know everything you need to build amazing system on top of Vert.x 3. Next time we will see how to configure our application.&lt;/p&gt;
+&lt;p&gt;This Vert.x 3 crash class has presented how you can develop a simple application using Vert.x 3, how to test it, package it and run it. So, you now know everything you need to build amazing system on top of Vert.x 3. Next time we will see how to &lt;a href=&quot;/blog/vert-x-application-configuration/index.html&quot;&gt;configure our application&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Happy coding &amp; Stay tuned !&lt;/p&gt;
 &lt;/article&gt;
       </description>
