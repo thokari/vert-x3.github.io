@@ -8,6 +8,231 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x3 real time web apps</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;One of the interesting features of Vert.x is the &lt;a href=&quot;http://sockjs.org&quot;&gt;SockJS&lt;/a&gt; event bus bridge. This piece of software&lt;br&gt;allows external applications to communicate with Vert.x event bus using Websockets and if your browser does not&lt;br&gt;support it then it gracefully degrades to pooling AJAX calls.&lt;/p&gt;
+&lt;p&gt;WebSockets bring a new level of interaction to the web, they really bring real time to web applications due to the&lt;br&gt;fact that its communication model is bi-directional in contrast to the traditional HTTP model where a client can&lt;br&gt;initiate a data request to a server but not the other way around.&lt;/p&gt;
+&lt;p&gt;In this small post I will demonstrate how you can create a simple collaborative drawing app. The idea is simple, all&lt;br&gt;users that open the app will be be presented with a empty canvas and what they draw or is drawn on other canvas is&lt;br&gt;shared in real time on their screen.&lt;/p&gt;
+&lt;p&gt;For the sake of simplicity and making this post light there is no security involved so, everyone is free to listen to&lt;br&gt;what is being drawn, however the external application has limited read write access to a single address on Vert.x&lt;br&gt;event bus, ensuring that other services running on the cluster will not be exposed.&lt;/p&gt;
+&lt;p&gt;This is what you should expect to see:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-realtime-webapps/screencast.gif&quot; alt=&quot;screecast&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;bootstrap-a-project&quot;&gt;Bootstrap a project&lt;/h2&gt;
+&lt;p&gt;If you followed the previous &lt;a href=&quot;(/blog/my-first-vert-x-3-application/index.html&quot;&gt;series&lt;/a&gt; on Vert.x development, you saw&lt;br&gt;that Java and Maven were the main topic, since Vert.x is polyglot I will focus on JavaScript and&lt;br&gt;&lt;a href=&quot;https://www.npmjs.com/&quot;&gt;NPM&lt;/a&gt; as my programming language and package management tool.&lt;/p&gt;
+&lt;p&gt;With NPM start by creating a &lt;code&gt;package.json&lt;/code&gt;, in order to do this we should run:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;npm&lt;/span&gt; init&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will present a selection of questions and in the end you should have a basic &lt;code&gt;package.json&lt;/code&gt; file. This&lt;br&gt;configuration is very basic so you need to add a &lt;a href=&quot;https://www.npmjs.com/package/vertx3-full&quot;&gt;dependency&lt;/a&gt; to Vert.x so&lt;br&gt;you can run the application. You can add it to the &lt;code&gt;dependencies&lt;/code&gt; property and it should look more or less like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;draw&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;private&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;dependencies&quot;&lt;/span&gt;: {
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx3-full&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;3.0.0-1&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;scripts&quot;&lt;/span&gt;: {
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;start&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx run server.js&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;version&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;1.0.0&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;main&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;server.js&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;devDependencies&quot;&lt;/span&gt;: {},
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;author&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;license&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;ISC&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;A Real Time Drawing App&quot;&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you do not know why there is the dependency on &lt;code&gt;vertx3-full&lt;/code&gt; or why the added &lt;code&gt;scripts&lt;/code&gt; property please check the&lt;br&gt;&lt;a href=&quot;/blog/vert-x3-says-hello-to-npm-users/index.html&quot;&gt;older&lt;/a&gt; blog post about it.&lt;/p&gt;
+&lt;h2 id=&quot;project-structure&quot;&gt;Project Structure&lt;/h2&gt;
+&lt;p&gt;This post has no preference over project structure, so if you do not agree with the structure used here feel free to&lt;br&gt;use what you feel best. For this example I will keep it to:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;├── package&lt;span class=&quot;hljs-class&quot;&gt;.json&lt;/span&gt;
+├── server&lt;span class=&quot;hljs-class&quot;&gt;.js&lt;/span&gt;
+└── webroot
+  ├── assets
+  │   └── js
+  │     ├── script&lt;span class=&quot;hljs-class&quot;&gt;.js&lt;/span&gt;
+  │     └── vertxbus&lt;span class=&quot;hljs-class&quot;&gt;.js&lt;/span&gt;
+  └── index&lt;span class=&quot;hljs-class&quot;&gt;.html&lt;/span&gt;
+
+&lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt; directories, &lt;span class=&quot;hljs-number&quot;&gt;5&lt;/span&gt; files&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can imagine &lt;code&gt;server.js&lt;/code&gt; will be our Vert.x application and everything under &lt;code&gt;webroot&lt;/code&gt; will be the client&lt;br&gt;application.&lt;/p&gt;
+&lt;p&gt;The client application is not really Vert.x specific and could in theory be used by any other framework so I will go&lt;br&gt;lightly over its code.&lt;/p&gt;
+&lt;h3 id=&quot;client-application&quot;&gt;Client Application&lt;/h3&gt;
+&lt;p&gt;Our application main entry point is as one can expect &lt;code&gt;index.html&lt;/code&gt;. In the index file define the following HTML:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs html&quot;&gt;&lt;span class=&quot;hljs-doctype&quot;&gt;&lt;!DOCTYPE html&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;html&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;head&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;meta&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;charset&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;title&lt;/span&gt;&gt;&lt;/span&gt;Real time drawing App&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;title&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-comment&quot;&gt;&lt;!--[if lt IE 9]&gt;
+  &lt;script src=&quot;http://html5shiv.googlecode.com/svn/trunk/html5.js&quot;&gt;&lt;/script&gt;
+  &lt;![endif]--&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;head&lt;/span&gt;&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;body&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;canvas&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;paper&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;width&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;1900&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;height&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;1000&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+  Your browser needs to support canvas for this to work!
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;canvas&lt;/span&gt;&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-comment&quot;&gt;&lt;!-- JavaScript includes. --&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;http://code.jquery.com/jquery-1.8.0.min.js&quot;&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;javascript&quot;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js&quot;&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;javascript&quot;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&#39;assets/js/vertxbus.js&#39;&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;javascript&quot;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;assets/js/script.js&quot;&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;javascript&quot;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;script&lt;/span&gt;&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;body&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;html&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As I previously wrote, the idea is to keep it as simple as possible so it is all about having a canvas element and a&lt;br&gt;application main script &lt;code&gt;script.js&lt;/code&gt;. All the rest are files served by CDNs that provide common web application&lt;br&gt;libraries such as &lt;code&gt;jQuery&lt;/code&gt;, &lt;code&gt;HTML5&lt;/code&gt; shim for older browsers, &lt;code&gt;SockJS&lt;/code&gt; client and &lt;code&gt;vertxbus&lt;/code&gt; bridge.&lt;/p&gt;
+&lt;p&gt;The main code is on &lt;code&gt;script.js&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;$(&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// This demo depends on the canvas element&lt;/span&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!(&lt;span class=&quot;hljs-string&quot;&gt;&#39;getContext&#39;&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;document&lt;/span&gt;.createElement(&lt;span class=&quot;hljs-string&quot;&gt;&#39;canvas&#39;&lt;/span&gt;))) {
+    alert(&lt;span class=&quot;hljs-string&quot;&gt;&#39;Sorry, it looks like your browser does not support canvas!&#39;&lt;/span&gt;);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;;
+  }
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; doc = $(&lt;span class=&quot;hljs-built_in&quot;&gt;document&lt;/span&gt;),
+    canvas = $(&lt;span class=&quot;hljs-string&quot;&gt;&#39;#paper&#39;&lt;/span&gt;),
+    ctx = canvas[&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;].getContext(&lt;span class=&quot;hljs-string&quot;&gt;&#39;2d&#39;&lt;/span&gt;);
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Generate an unique ID&lt;/span&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; id = &lt;span class=&quot;hljs-built_in&quot;&gt;Math&lt;/span&gt;.round($.now() * &lt;span class=&quot;hljs-built_in&quot;&gt;Math&lt;/span&gt;.random());
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// A flag for drawing activity&lt;/span&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; drawing = &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;;
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; clients = {};
+  &lt;span class=&quot;hljs-comment&quot;&gt;// create a event bus bridge to the server that served this file&lt;/span&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; eb = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; vertx.EventBus(
+      &lt;span class=&quot;hljs-built_in&quot;&gt;window&lt;/span&gt;.location.protocol + &lt;span class=&quot;hljs-string&quot;&gt;&#39;//&#39;&lt;/span&gt; + &lt;span class=&quot;hljs-built_in&quot;&gt;window&lt;/span&gt;.location.hostname + &lt;span class=&quot;hljs-string&quot;&gt;&#39;:&#39;&lt;/span&gt; + &lt;span class=&quot;hljs-built_in&quot;&gt;window&lt;/span&gt;.location.port + &lt;span class=&quot;hljs-string&quot;&gt;&#39;/eventbus&#39;&lt;/span&gt;);
+
+  eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-comment&quot;&gt;// listen to draw events&lt;/span&gt;
+    eb.registerHandler(&lt;span class=&quot;hljs-string&quot;&gt;&#39;draw&#39;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(data)&lt;/span&gt; &lt;/span&gt;{
+      &lt;span class=&quot;hljs-comment&quot;&gt;// Is the user drawing?&lt;/span&gt;
+      &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (data.drawing &amp;&amp; clients[data.id]) {
+
+        &lt;span class=&quot;hljs-comment&quot;&gt;// Draw a line on the canvas. clients[data.id] holds&lt;/span&gt;
+        &lt;span class=&quot;hljs-comment&quot;&gt;// the previous position of this user&#39;s mouse pointer&lt;/span&gt;
+
+        drawLine(clients[data.id].x, clients[data.id].y, data.x, data.y);
+      }
+
+      &lt;span class=&quot;hljs-comment&quot;&gt;// Saving the current client state&lt;/span&gt;
+      clients[data.id] = data;
+      clients[data.id].updated = $.now();
+    });
+  };
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; prev = {};
+
+  canvas.on(&lt;span class=&quot;hljs-string&quot;&gt;&#39;mousedown&#39;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(e)&lt;/span&gt; &lt;/span&gt;{
+    e.preventDefault();
+    drawing = &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;;
+    prev.x = e.pageX;
+    prev.y = e.pageY;
+  });
+
+  doc.bind(&lt;span class=&quot;hljs-string&quot;&gt;&#39;mouseup mouseleave&#39;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    drawing = &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;;
+  });
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; lastEmit = $.now();
+
+  doc.on(&lt;span class=&quot;hljs-string&quot;&gt;&#39;mousemove&#39;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(e)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; ($.now() - lastEmit &gt; &lt;span class=&quot;hljs-number&quot;&gt;30&lt;/span&gt;) {
+      eb.publish(&lt;span class=&quot;hljs-string&quot;&gt;&#39;draw&#39;&lt;/span&gt;, {
+        &lt;span class=&quot;hljs-string&quot;&gt;&#39;x&#39;&lt;/span&gt;: e.pageX,
+        &lt;span class=&quot;hljs-string&quot;&gt;&#39;y&#39;&lt;/span&gt;: e.pageY,
+        &lt;span class=&quot;hljs-string&quot;&gt;&#39;drawing&#39;&lt;/span&gt;: drawing,
+        &lt;span class=&quot;hljs-string&quot;&gt;&#39;id&#39;&lt;/span&gt;: id
+      });
+      lastEmit = $.now();
+    }
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Draw a line for the current user&#39;s movement, as it is&lt;/span&gt;
+    &lt;span class=&quot;hljs-comment&quot;&gt;// not received in the eventbus&lt;/span&gt;
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (drawing) {
+
+      drawLine(prev.x, prev.y, e.pageX, e.pageY);
+
+      prev.x = e.pageX;
+      prev.y = e.pageY;
+    }
+  });
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Remove inactive clients after 10 seconds of inactivity&lt;/span&gt;
+  setInterval(&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; (&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; ident &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; clients) {
+      &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (clients.hasOwnProperty(ident)) {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; ($.now() - clients[ident].updated &gt; &lt;span class=&quot;hljs-number&quot;&gt;10000&lt;/span&gt;) {
+          &lt;span class=&quot;hljs-comment&quot;&gt;// Last update was more than 10 seconds ago.&lt;/span&gt;
+          &lt;span class=&quot;hljs-comment&quot;&gt;// This user has probably closed the page&lt;/span&gt;
+          &lt;span class=&quot;hljs-keyword&quot;&gt;delete&lt;/span&gt; clients[ident];
+        }
+      }
+    }
+
+  }, &lt;span class=&quot;hljs-number&quot;&gt;10000&lt;/span&gt;);
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;drawLine&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(fromx, fromy, tox, toy)&lt;/span&gt; &lt;/span&gt;{
+    ctx.moveTo(fromx, fromy);
+    ctx.lineTo(tox, toy);
+    ctx.stroke();
+  }
+
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The most important part in this code is all the code related to &lt;code&gt;eb&lt;/code&gt;. The variable &lt;code&gt;eb&lt;/code&gt; is our bridge to the event&lt;br&gt;bus, Start by creating a bridge using the &lt;code&gt;vertx.EventBus&lt;/code&gt; object and define where to connect, using the details&lt;br&gt;of the current window location.&lt;/p&gt;
+&lt;p&gt;Then add a &lt;code&gt;onopen&lt;/code&gt; listener that will subscribe to the address &lt;code&gt;draw&lt;/code&gt; on the event bus so it can listen to all&lt;br&gt;messages regarding drawing and perform the drawing actions. Since listening is not enough I also add a mouse listener&lt;br&gt;to the document so when it moves it publishes events to the &lt;code&gt;draw&lt;/code&gt; address.&lt;/p&gt;
+&lt;p&gt;Note that I am using &lt;code&gt;publish&lt;/code&gt; and not &lt;code&gt;send&lt;/code&gt;, the reason should be obvious, I want everyone to know this users mouse&lt;br&gt;movements, I am not interested on sending the events to just a single user. You can see now that if you want to have&lt;br&gt;a drawing app in a one on one user basis then instead of &lt;code&gt;publish()&lt;/code&gt; you should use &lt;code&gt;send()&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;server-application&quot;&gt;Server Application&lt;/h3&gt;
+&lt;p&gt;The server code is quite straight forward, all you need is:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; Router = &lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-web-js/router&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; SockJSHandler = &lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-web-js/sock_js_handler&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; StaticHandler = &lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-web-js/static_handler&quot;&lt;/span&gt;);
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; router = Router.router(vertx);
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// Allow outbound traffic to the draw address&lt;/span&gt;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; options = {
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;outboundPermitteds&quot;&lt;/span&gt; : [{&lt;span class=&quot;hljs-string&quot;&gt;&quot;address&quot;&lt;/span&gt; : &lt;span class=&quot;hljs-string&quot;&gt;&quot;draw&quot;&lt;/span&gt;}],
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;inboundPermitteds&quot;&lt;/span&gt; :  [{&lt;span class=&quot;hljs-string&quot;&gt;&quot;address&quot;&lt;/span&gt; : &lt;span class=&quot;hljs-string&quot;&gt;&quot;draw&quot;&lt;/span&gt;}]
+};
+
+router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/eventbus/*&quot;&lt;/span&gt;).handler(SockJSHandler.create(vertx).bridge(options).handle);
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// Serve the static resources&lt;/span&gt;
+router.route().handler(StaticHandler.create().handle);
+
+vertx.createHttpServer().requestHandler(router.accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We start with the usual imports, we import a reference to the &lt;code&gt;Router&lt;/code&gt; object and a couple of helper handlers&lt;br&gt;&lt;code&gt;SockJSHandler&lt;/code&gt; and &lt;code&gt;StaticHandler&lt;/code&gt;. As their names should tell you one handler will be responsible to handle all&lt;br&gt;&lt;code&gt;SockJS&lt;/code&gt; data and the other all HTTP file serving requests.&lt;/p&gt;
+&lt;p&gt;We then add then to a router and start a HTTP server that will handle all incoming request using the handler accept&lt;br&gt;function. Finally we listen on port &lt;code&gt;8080&lt;/code&gt; and we are ready.&lt;/p&gt;
+&lt;p&gt;Note that there is a options object where a couple of properties are defined &lt;code&gt;outbound/inbound&lt;/code&gt; permitted addresses.&lt;br&gt;Without this configuration the external application will not be allowed to connect to the vert.x bus, in fact the&lt;br&gt;default configuration of the SockJSHandler is deny all. So you must specify explicitly which address are allowed to&lt;br&gt;receive messages from &lt;code&gt;SockJS&lt;/code&gt; and which ones are allowed to send/publish to &lt;code&gt;SockJS&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now you can start your application, don’t forget to install the dependencies for the first time:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;npm &lt;span class=&quot;hljs-keyword&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then run the application:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;npm&lt;/span&gt; start&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you now open 2 browser windows you will be able to draw nice pictures and see the drawing showing in “real time”&lt;br&gt;on the other window, if you then draw on the second you should get the mirror effect on the first window.&lt;/p&gt;
+&lt;p&gt;Have fun!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 31 Aug 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x3-real-time-web-apps</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x3-real-time-web-apps</guid>
+          <author>
+            <name>pmlopes</name>
+            <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Unit and Integration Tests</title>
           <description>
       &lt;article&gt;&lt;h2 id=&quot;previously-in-introduction-to-vert-x-&quot;&gt;Previously in “introduction to vert.x”&lt;/h2&gt;
@@ -392,7 +617,7 @@ So, now we have integration tests let&#39;s try:
 &lt;p&gt;Stay Tuned &amp; Happy Coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 03 Aug 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 03 Aug 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/unit-and-integration-tests</link>
           <guid isPermaLink="true">http://vertx.io/blog/unit-and-integration-tests</guid>
           <author>
@@ -704,7 +929,7 @@ java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;
 &lt;p&gt;Say Tuned &amp; Happy Coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 27 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 27 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/some-rest-with-vert-x</link>
           <guid isPermaLink="true">http://vertx.io/blog/some-rest-with-vert-x</guid>
           <author>
@@ -804,7 +1029,7 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;Happy Coding and &amp; Stay Tuned!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 20 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 20 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-application-configuration</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-application-configuration</guid>
           <author>
@@ -1022,7 +1247,7 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;Happy coding &amp; Stay tuned !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 14 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Tue, 14 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/my-first-vert-x-3-application</link>
           <guid isPermaLink="true">http://vertx.io/blog/my-first-vert-x-3-application</guid>
           <author>
@@ -1120,7 +1345,7 @@ server.requestHandler(router.accept).listen(&lt;span class=&quot;hljs-number&quo
 &lt;p&gt;That’s it for now, Hopefully this will help you get started working with &lt;code&gt;vert.x&lt;/code&gt;!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 13 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 13 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-says-hello-to-npm-users</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-says-hello-to-npm-users</guid>
           <author>
@@ -1232,7 +1457,7 @@ server.requestHandler(router.accept).listen(&lt;span class=&quot;hljs-number&quo
 &lt;p&gt;Mark S&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 06 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
           <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
           <author>
@@ -1269,7 +1494,7 @@ Content-&lt;span class=&quot;hljs-string&quot;&gt;Length:&lt;/span&gt; &lt;span 
 {&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;customer_name&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;John&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;items&quot;&lt;/span&gt;:{&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;milk&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;quantity&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;}}
 $&lt;/code&gt;&lt;/pre&gt;&lt;/article&gt;
       </description>
-          <pubDate>Fri, 03 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Fri, 03 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
           <author>
@@ -1327,7 +1552,7 @@ sudo chmod +x &lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-vertx-&
 &lt;p&gt;&lt;strong&gt;That’s all, enjoy !&lt;/strong&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 02 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-init-d-script</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-init-d-script</guid>
           <author>
@@ -1432,7 +1657,7 @@ eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hlj
 &lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-web-easy-as-pi/rpi.png&quot; alt=&quot;screeshot&quot;&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 01 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Wed, 01 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-web-easy-as-pi</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-web-easy-as-pi</guid>
           <author>
@@ -1459,7 +1684,7 @@ eb.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hlj
 &lt;p&gt;The artifacts has been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%222.1.6%22&quot;&gt;Maven Central&lt;/a&gt;, and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/2.1.6/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 30 Jun 2015 01:00:00 +0100</pubDate>
+          <pubDate>Tue, 30 Jun 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-2-1-6-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-2-1-6-released</guid>
           <author>
