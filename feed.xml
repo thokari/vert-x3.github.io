@@ -553,7 +553,7 @@ get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/spa
       .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;origin&quot;&lt;/span&gt;, equalTo(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Ireland&quot;&lt;/span&gt;))
       .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;, equalTo(whisky.getId()));
   &lt;span class=&quot;hljs-comment&quot;&gt;// Delete the bottle&lt;/span&gt;
-  delete(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then().assertThat().statusCode(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;);
+  delete(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then().assertThat().statusCode(&lt;span class=&quot;hljs-number&quot;&gt;204&lt;/span&gt;);
   &lt;span class=&quot;hljs-comment&quot;&gt;// Check that the resrouce is not available anymore&lt;/span&gt;
   get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then()
       .assertThat()

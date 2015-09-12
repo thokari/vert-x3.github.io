@@ -212,7 +212,7 @@ get(<span class=hljs-string>"/api/whiskies/"</span> + id).then()
       .body(<span class=hljs-string>"origin"</span>, equalTo(<span class=hljs-string>"Ireland"</span>))
       .body(<span class=hljs-string>"id"</span>, equalTo(whisky.getId()));
   <span class=hljs-comment>// Delete the bottle</span>
-  delete(<span class=hljs-string>"/api/whiskies/"</span> + whisky.getId()).then().assertThat().statusCode(<span class=hljs-number>200</span>);
+  delete(<span class=hljs-string>"/api/whiskies/"</span> + whisky.getId()).then().assertThat().statusCode(<span class=hljs-number>204</span>);
   <span class=hljs-comment>// Check that the resrouce is not available anymore</span>
   get(<span class=hljs-string>"/api/whiskies/"</span> + whisky.getId()).then()
       .assertThat()
