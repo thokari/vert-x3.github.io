@@ -8,6 +8,162 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Writing secure Vert.x Web apps</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;This is a starting guide for securing vert.x web applications. It is by no means a comprehensive guide on web application security such as &lt;a href=&quot;https://www.owasp.org&quot;&gt;OWASP&lt;/a&gt;. Standard rules and practices apply to vert.x apps as if they would to any other web framework.&lt;/p&gt;
+&lt;p&gt;The post will cover the items that always seem to come up on forums.&lt;/p&gt;
+&lt;h2 id=&quot;don-t-run-as-root&quot;&gt;Don’t run as root&lt;/h2&gt;
+&lt;p&gt;It is a common practise that your devops team member will constantly say, one shall run a service with the least amount of privileges necessary and no more. Although this might sound like folklore to less experienced developers that hit an issue when trying to run on privileged ports 80, 443, running as root solves it quickly but open a door to bigger problems. Lets look at this code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+    Router router = Router.router(vertx);
+
+    router.route().handler(StaticHandler.create(&lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;));
+
+    vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;80&lt;/span&gt;);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When started with the &lt;code&gt;CWD&lt;/code&gt; set to &lt;code&gt;/&lt;/code&gt; (&lt;code&gt;java -Dvertx.cwd=/ ...&lt;/code&gt;) you just created a simple file server for all your server storage. Now imagine that you want to start this application you will hit the error:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;Aug &lt;span class=&quot;hljs-number&quot;&gt;26&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;2015&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;02&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;18&lt;/span&gt; PM io&lt;span class=&quot;hljs-class&quot;&gt;.vertx&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.core&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.http&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.impl&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.HttpServerImpl&lt;/span&gt;
+SEVERE: java&lt;span class=&quot;hljs-class&quot;&gt;.net&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.SocketException&lt;/span&gt;: Permission denied&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So if you do now run as &lt;code&gt;root&lt;/code&gt; it will start, however in your browser now try to navigate to: &lt;code&gt;http://localhost/etc/shadow&lt;/code&gt; congratulations you just exposed your server &lt;code&gt;logins&lt;/code&gt; &lt;strong&gt;and&lt;/strong&gt; &lt;code&gt;passwords&lt;/code&gt;!&lt;/p&gt;
+&lt;p&gt;There are several ways to run as a under privileged user, you can use &lt;code&gt;iptables&lt;/code&gt; to forward requests to higher ports, use &lt;code&gt;authbind&lt;/code&gt;, run behind a proxy like &lt;code&gt;ngnix&lt;/code&gt;, etc…&lt;/p&gt;
+&lt;h2 id=&quot;sessions&quot;&gt;Sessions&lt;/h2&gt;
+&lt;p&gt;Many applications are going to deal with user sessions at some point.&lt;/p&gt;
+&lt;p&gt;Session cookies should have the &lt;code&gt;SECURE&lt;/code&gt; and &lt;code&gt;HTTPOnly&lt;/code&gt; flags set. This ensures that they can only be sent over &lt;code&gt;HTTPS&lt;/code&gt; (you are using &lt;code&gt;HTTPS&lt;/code&gt; right?) and there is no script access to the cookie client side:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;Router router = Router.router(vertx);
+
+    router.route().handler(CookieHandler.create());
+    router.route().handler(SessionHandler
+        .create(LocalSessionStore.create(vertx))
+        .setCookieHttpOnlyFlag(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;)
+        .setCookieSecureFlag(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;)
+    );
+
+    router.route().handler(routingContext -&gt; {
+
+      Session session = routingContext.session();
+
+      Integer cnt = session.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hitcount&quot;&lt;/span&gt;);
+      cnt = (cnt == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt; ? &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; : cnt) + &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
+
+      session.put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hitcount&quot;&lt;/span&gt;, cnt);
+
+      routingContext.response().end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hitcount: &quot;&lt;/span&gt; + cnt);
+    });
+
+    vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And in this case when inspecting your browser you should see:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-secure-webapps/nocookie.png&quot; alt=&quot;nocookie&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Of course if you do not do that any script on your browser has the capability of reading, sniffing hijacking or tampering your sessions.&lt;/p&gt;
+&lt;h2 id=&quot;security-headers&quot;&gt;Security Headers&lt;/h2&gt;
+&lt;p&gt;There are plenty of security headers that help improve security with just a couple of lines of code. There is no need to explain them here since there are good &lt;a href=&quot;http://recxltd.blogspot.nl/2012/03/seven-web-server-http-headers-that.html&quot;&gt;articles&lt;/a&gt; online that will probably do it better than me.&lt;/p&gt;
+&lt;p&gt;Here is how one could implement a couple of them:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+    Router router = Router.router(vertx);
+    router.route().handler(ctx -&gt; {
+      ctx.response()
+          &lt;span class=&quot;hljs-comment&quot;&gt;// do not allow proxies to cache the data&lt;/span&gt;
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Cache-Control&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;no-store, no-cache&quot;&lt;/span&gt;)
+          &lt;span class=&quot;hljs-comment&quot;&gt;// prevents Internet Explorer from MIME - sniffing a&lt;/span&gt;
+          &lt;span class=&quot;hljs-comment&quot;&gt;// response away from the declared content-type&lt;/span&gt;
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;X-Content-Type-Options&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;nosniff&quot;&lt;/span&gt;)
+          &lt;span class=&quot;hljs-comment&quot;&gt;// Strict HTTPS (for about ~6Months)&lt;/span&gt;
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Strict-Transport-Security&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;max-age=&quot;&lt;/span&gt; + &lt;span class=&quot;hljs-number&quot;&gt;15768000&lt;/span&gt;)
+          &lt;span class=&quot;hljs-comment&quot;&gt;// IE8+ do not allow opening of attachments in the context of this resource&lt;/span&gt;
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;X-Download-Options&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;noopen&quot;&lt;/span&gt;)
+          &lt;span class=&quot;hljs-comment&quot;&gt;// enable XSS for IE&lt;/span&gt;
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;X-XSS-Protection&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;1; mode=block&quot;&lt;/span&gt;)
+          &lt;span class=&quot;hljs-comment&quot;&gt;// deny frames&lt;/span&gt;
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;X-FRAME-OPTIONS&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;DENY&quot;&lt;/span&gt;);
+    });
+
+    vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;cross-site-request-forgery-csrf-protection&quot;&gt;Cross-Site Request Forgery (CSRF) Protection&lt;/h2&gt;
+&lt;p&gt;Vert.x web provides CSRF protection using an included handler. To enable CSRF protections you need to add it to your router as you would add any other handler:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+    Router router = Router.router(vertx);
+
+    router.route().handler(CookieHandler.create());
+    router.route().handler(SessionHandler
+        .create(LocalSessionStore.create(vertx))
+        .setCookieHttpOnlyFlag(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;)
+        .setCookieSecureFlag(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;)
+    );
+    router.route().handler(CSRFHandler.create(&lt;span class=&quot;hljs-string&quot;&gt;&quot;not a good secret&quot;&lt;/span&gt;));
+
+    router.route().handler(ctx -&gt; {
+      ...
+    });&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The handler adds a CSRF token to requests which mutate state. In order change the state a (&lt;code&gt;XSRF-TOKEN&lt;/code&gt;) cookie is set with a unique token, that is expected to be sent back in a (&lt;code&gt;X-XSRF-TOKEN&lt;/code&gt;) header.&lt;/p&gt;
+&lt;h2 id=&quot;limit-uploads&quot;&gt;Limit uploads&lt;/h2&gt;
+&lt;p&gt;When dealing with uploads &lt;strong&gt;always&lt;/strong&gt; define a upper bound, otherwise you will be vulnerable to &lt;code&gt;DDoS&lt;/code&gt; attacks. For example lets say that you have the following code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+    Router router = Router.router(vertx);
+
+    router.route().handler(BodyHandler.create());
+
+    router.route().handler(ctx -&gt; {
+      ...&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now a bad intentioned person could generate a random file with 1GB of trash:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;dd &lt;span class=&quot;hljs-variable&quot;&gt;if=&lt;/span&gt;/dev/urandom &lt;span class=&quot;hljs-variable&quot;&gt;of=&lt;/span&gt;ddos &lt;span class=&quot;hljs-variable&quot;&gt;bs=&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;G &lt;span class=&quot;hljs-variable&quot;&gt;count=&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then upload it to your server:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;curl --data-binary &lt;span class=&quot;hljs-string&quot;&gt;&quot;@ddos&quot;&lt;/span&gt; -H &lt;span class=&quot;hljs-string&quot;&gt;&quot;Content-Type: application/octet-stream&quot;&lt;/span&gt; -X POST &lt;span class=&quot;hljs-string&quot;&gt;http:&lt;/span&gt;&lt;span class=&quot;hljs-comment&quot;&gt;//localhost:8080/&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Your application will happily try to handle this until one of 2 things happens, it will run out of disk space or memory. In order to mitigate these kind of attacks always specify the maximum allowed upload size:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; KB = &lt;span class=&quot;hljs-number&quot;&gt;1024&lt;/span&gt;;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; MB = &lt;span class=&quot;hljs-number&quot;&gt;1024&lt;/span&gt; * KB;
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+
+    Router router = Router.router(vertx);
+    router.route().handler(BodyHandler.create().setBodyLimit(&lt;span class=&quot;hljs-number&quot;&gt;50&lt;/span&gt; * MB));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;final-words&quot;&gt;Final Words&lt;/h2&gt;
+&lt;p&gt;Although this is just a small list of things you should remember when implementing your application there are more comprehensive checklists to check:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project&quot;&gt;OWASP Top Ten Project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.owasp.org/index.php/Preventing_SQL_Injection_in_Java&quot;&gt;Preventing SQL Injection in Java&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.owasp.org/index.php/Testing_for_NoSQL_injection&quot;&gt;Testing for NoSQL injection&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 14 Sep 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/writing-secure-vert-x-web-apps</link>
+          <guid isPermaLink="true">http://vertx.io/blog/writing-secure-vert-x-web-apps</guid>
+          <author>
+            <name>pmlopes</name>
+            <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x3 real time web apps</title>
           <description>
       &lt;article&gt;&lt;p&gt;One of the interesting features of Vert.x is the &lt;a href=&quot;http://sockjs.org&quot;&gt;SockJS&lt;/a&gt; event bus bridge. This piece of software&lt;br&gt;allows external applications to communicate with Vert.x event bus using Websockets and if your browser does not&lt;br&gt;support it then it gracefully degrades to pooling AJAX calls.&lt;/p&gt;
