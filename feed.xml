@@ -8,6 +8,175 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Contract Driven REST Services with Vert.x3</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;We see a new trend in development where we are shifting from developing applications to develop APIs. More and more we see services being offered as REST APIs that we are allowed to consume and we already see this trend from the big names in the industry, e.g.: &lt;a href=&quot;https://developers.facebook.com/&quot;&gt;Facebook&lt;/a&gt;, &lt;a href=&quot;https://www.mediawiki.org/wiki/API:Main_page&quot;&gt;Wikipedia&lt;/a&gt;, &lt;a href=&quot;https://developer.amazon.com/public/apis&quot;&gt;Amazon&lt;/a&gt;, &lt;a href=&quot;https://dev.twitter.com/overview/documentation&quot;&gt;Twitter&lt;/a&gt;, &lt;a href=&quot;https://developers.google.com/apis-explorer/#p/&quot;&gt;Google&lt;/a&gt; and &lt;a href=&quot;https://www.reddit.com/dev/api&quot;&gt;Reddit&lt;/a&gt; they all offer APIs.&lt;/p&gt;
+&lt;p&gt;Of course making an REST API using Vert.x is quite simple, just use &lt;a href=&quot;http://vertx.io/docs/#web&quot;&gt;Vert.x Web&lt;/a&gt; and you can start writing your API in seconds, however an API without documentation is not an API since no developer will know how to use it. However this is one of the most sensitive issues to tackle in software development, nobody likes to write documentation. However, in the REST age where REST-based web-services are ubiquitous, documentation for public web-services is a necessity. There are a lot of tools out there, two of the most popular are without a doubt:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://swagger.io&quot;&gt;Swagger&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://raml.org&quot;&gt;RAML&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Both frameworks have a large ecosystem of tools and tooling around but they tackle the documentation from two different perspectives. While Swagger is purely a documentation tool it tackles the problem from bottom up and RAML does document top down. They both rely on a document (&lt;code&gt;JSON&lt;/code&gt; for Swagger, &lt;code&gt;YAML&lt;/code&gt; for RAML).&lt;/p&gt;
+&lt;p&gt;I’ll now go over building a simple Hello World API, document it and test it. For this example I’ll choose RAML since it feels more natural to the way we code with Vert.x Web.&lt;/p&gt;
+&lt;h2 id=&quot;define-the-hello-world-api&quot;&gt;Define the Hello World API&lt;/h2&gt;
+&lt;p&gt;We need a contract and as with any other development we need some specification, You can learn about RAML in its &lt;a href=&quot;http://raml.org&quot;&gt;website&lt;/a&gt; and quickly see how easy it is to get started. So we start with the following specification:&lt;/p&gt;
+&lt;h2 id=&quot;-pre-code-raml-span-class-hljs-number-0-8-span-&quot;&gt;&lt;pre&gt;&lt;code&gt;#%RAML &lt;span class=&quot;hljs-number&quot;&gt;0.8&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;span class=&quot;hljs-string&quot;&gt;title:&lt;/span&gt; Hello world REST API&lt;br&gt;&lt;span class=&quot;hljs-string&quot;&gt;baseUri:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;http:&lt;/span&gt;&lt;span class=&quot;hljs-comment&quot;&gt;//localhost:8080/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;hljs-string&quot;&gt;version:&lt;/span&gt; v1&lt;/p&gt;
+&lt;p&gt;/&lt;span class=&quot;hljs-string&quot;&gt;hello:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;hljs-label&quot;&gt;  get:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;hljs-label&quot;&gt;    responses:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;hljs-label&quot;&gt;      200:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;hljs-label&quot;&gt;        body:&lt;/span&gt;&lt;br&gt;          application/&lt;span class=&quot;hljs-string&quot;&gt;json:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;hljs-label&quot;&gt;            schema:&lt;/span&gt; |&lt;br&gt;              { &lt;span class=&quot;hljs-string&quot;&gt;“$schema”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“&lt;a href=&quot;http://json-schema.org/schema&quot;&gt;http://json-schema.org/schema&lt;/a&gt;“&lt;/span&gt;,&lt;br&gt;                &lt;span class=&quot;hljs-string&quot;&gt;“type”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“object”&lt;/span&gt;,&lt;br&gt;                &lt;span class=&quot;hljs-string&quot;&gt;“description”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“Hello World Greeting”&lt;/span&gt;,&lt;br&gt;                &lt;span class=&quot;hljs-string&quot;&gt;“properties”&lt;/span&gt;: {&lt;br&gt;                  &lt;span class=&quot;hljs-string&quot;&gt;“greeting”&lt;/span&gt;:  { &lt;span class=&quot;hljs-string&quot;&gt;“type”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“string”&lt;/span&gt; }&lt;br&gt;                },&lt;br&gt;                &lt;span class=&quot;hljs-string&quot;&gt;“required”&lt;/span&gt;: [ &lt;span class=&quot;hljs-string&quot;&gt;“greeting”&lt;/span&gt; ]&lt;br&gt;              }&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+&lt;p&gt;So if you didn’t understood why I named RAML as a top down documentation tool, I think it becomes clear now. So there are some basic definition on the top of the file like, &lt;code&gt;title&lt;/code&gt;, &lt;code&gt;baseUri&lt;/code&gt; and &lt;code&gt;version&lt;/code&gt; which should be self explanatory.&lt;/p&gt;
+&lt;p&gt;And then we start with the API documentation, so we specify that at the &lt;code&gt;URL&lt;/code&gt; &lt;code&gt;/hello&lt;/code&gt; using the HTTP verb &lt;code&gt;GET&lt;/code&gt; you are expected to get a response with status code &lt;code&gt;200&lt;/code&gt; and the body of the response should have content type &lt;code&gt;application/json&lt;/code&gt;. This is a very minimal document, one could go over and specify the &lt;a href=&quot;http://json-schema.org/&quot;&gt;&lt;code&gt;json schema&lt;/code&gt;&lt;/a&gt; for the response, input values, etc…, however lets just keep it simple for this example.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;IDE ? &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; if you do not like to write yaml in your editor you can always use the &lt;a href=&quot;http://raml.org/projects.html&quot;&gt;API Designer&lt;/a&gt; which gives you instant feedback on your API document and provides a testing platform&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;implement-the-api&quot;&gt;Implement the API&lt;/h2&gt;
+&lt;p&gt;So you got your contract, time to implement it, this is a very simple API so I’ll jump to the code immediately:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    Router router = Router.router(vertx);
+
+    router.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hello&quot;&lt;/span&gt;).handler(rc -&gt; {
+      rc.response()
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json&quot;&lt;/span&gt;)
+          .end(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;greeting&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;).encode());
+    });
+
+    vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see the code resembles the contract document, when there is a &lt;code&gt;GET&lt;/code&gt; request to &lt;code&gt;/hello&lt;/code&gt; we send to the client a empty &lt;code&gt;JSON&lt;/code&gt; document &lt;code&gt;{}&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;are-we-done-&quot;&gt;Are we done?&lt;/h2&gt;
+&lt;p&gt;The answer is &lt;strong&gt;NO!!!&lt;/strong&gt; how can we be sure that our implementation does comply to the contract? We need to test. As I wrote before there is no specific support for Vert.x from RAML or other tools however in this case it is not a problem we can still test our code without having the need to implement a test framework from the ground up.&lt;/p&gt;
+&lt;h2 id=&quot;testing-our-contract&quot;&gt;Testing our contract&lt;/h2&gt;
+&lt;p&gt;The initial step is to setup a test, this should be trivial we are using Java (although we could test any of Vert.x&lt;br&gt;supported languages using the same technique). We create a &lt;a href=&quot;http://junit.org/&quot;&gt;JUnit&lt;/a&gt; unit test.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;JUnit ? ! For this example I will be using JUnit instead of Vert.x Test mostly to let you know that Vert.x isn’t an opinionated framework, so you are free to choose the tool that best fits you.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;APITest&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@BeforeClass&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;bootApp&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    Runner.run(App.class);
+  }
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;testHelloEndpoint&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So at this moment you have a simple test, I’ll share the code of the runner class (basically it just instantiates a&lt;br&gt;&lt;code&gt;Vertx&lt;/code&gt; instance and load the &lt;code&gt;verticle&lt;/code&gt; we just implemented above) and has a empty test &lt;code&gt;testHelloEndpoint&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;load-the-api-definition-into-the-test&quot;&gt;Load the API definition into the test&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;APITest&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; RamlDefinition api = RamlLoaders.fromClasspath()
+        .load(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/hello.raml&quot;&lt;/span&gt;)
+        .assumingBaseUri(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http://localhost:8080/&quot;&lt;/span&gt;);
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; CheckingWebTarget checking;
+
+  ...
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So the first step is to load the &lt;code&gt;API&lt;/code&gt; definition into our test and have a reference to a &lt;code&gt;CheckingWebTarget&lt;/code&gt; object. The checking object is where you can perform assertions, but to do this we need some client make REST calls in order to test.&lt;/p&gt;
+&lt;h3 id=&quot;create-a-rest-client&quot;&gt;Create a REST client&lt;/h3&gt;
+&lt;p&gt;There are many options for this, you could use &lt;code&gt;JAX-RS&lt;/code&gt;, &lt;code&gt;RestAssured&lt;/code&gt;, &lt;code&gt;RestEasy&lt;/code&gt;, etc… so I’ll pick &lt;code&gt;RestEasy&lt;/code&gt; for now:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;APITest&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; RamlDefinition api = RamlLoaders.fromClasspath()
+      .load(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/hello.raml&quot;&lt;/span&gt;)
+      .assumingBaseUri(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http://localhost:8080/&quot;&lt;/span&gt;);
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; ResteasyClient client = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ResteasyClientBuilder().build();
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; CheckingWebTarget checking;
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@BeforeClass&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;bootApp&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    Runner.run(App.class);
+  }
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Before&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;createTarget&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    checking = api.createWebTarget(client.target(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http://localhost:8080&quot;&lt;/span&gt;));
+  }
+
+  ...
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;implement-the-test&quot;&gt;Implement the test&lt;/h3&gt;
+&lt;p&gt;All of the boilerplate code is in place and if you look at the previous section you will see that it wasn’t that bad, just a few lines and you loaded the RAML contract, created a REST client and started up your application and all this under ~10 lines of code.&lt;/p&gt;
+&lt;p&gt;So lets finish and implement the verification of the contract:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;APITest&lt;/span&gt; &lt;/span&gt;{
+  ...
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;testHelloEndpoint&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    checking.path(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hello&quot;&lt;/span&gt;).request().get();
+    Assert.assertThat(checking.getLastReport(), RamlMatchers.hasNoViolations());
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once you run your tests, you will see:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;13:09:28.200 [main] DEBUG o.a.h.i.conn.DefaultClientConnection - Sending request: GET /hello HTTP/1.1
+13:09:28.201 [&lt;span class=&quot;hljs-link_label&quot;&gt;main&lt;/span&gt;] DEBUG org.apache.http.wire -  &gt;&gt; &quot;GET /hello HTTP/1.1[&lt;span class=&quot;hljs-link_label&quot;&gt;\r&lt;/span&gt;][&lt;span class=&quot;hljs-link_reference&quot;&gt;\n&lt;/span&gt;]&quot;
+13:09:28.202 [&lt;span class=&quot;hljs-link_label&quot;&gt;main&lt;/span&gt;] DEBUG org.apache.http.wire -  &gt;&gt; &quot;Accept-Encoding: gzip, deflate[&lt;span class=&quot;hljs-link_label&quot;&gt;\r&lt;/span&gt;][&lt;span class=&quot;hljs-link_reference&quot;&gt;\n&lt;/span&gt;]&quot;
+13:09:28.202 [&lt;span class=&quot;hljs-link_label&quot;&gt;main&lt;/span&gt;] DEBUG org.apache.http.wire -  &gt;&gt; &quot;Host: localhost:8080[&lt;span class=&quot;hljs-link_label&quot;&gt;\r&lt;/span&gt;][&lt;span class=&quot;hljs-link_reference&quot;&gt;\n&lt;/span&gt;]&quot;
+13:09:28.202 [&lt;span class=&quot;hljs-link_label&quot;&gt;main&lt;/span&gt;] DEBUG org.apache.http.wire -  &gt;&gt; &quot;Connection: Keep-Alive[&lt;span class=&quot;hljs-link_label&quot;&gt;\r&lt;/span&gt;][&lt;span class=&quot;hljs-link_reference&quot;&gt;\n&lt;/span&gt;]&quot;
+13:09:28.202 [&lt;span class=&quot;hljs-link_label&quot;&gt;main&lt;/span&gt;] DEBUG org.apache.http.wire -  &gt;&gt; &quot;[&lt;span class=&quot;hljs-link_label&quot;&gt;\r&lt;/span&gt;][&lt;span class=&quot;hljs-link_reference&quot;&gt;\n&lt;/span&gt;]&quot;
+13:09:28.202 [main] DEBUG org.apache.http.headers - &gt;&gt; GET /hello HTTP/1.1
+13:09:28.202 [main] DEBUG org.apache.http.headers - &gt;&gt; Accept-Encoding: gzip, deflate
+13:09:28.203 [main] DEBUG org.apache.http.headers - &gt;&gt; Host: localhost:8080
+13:09:28.203 [main] DEBUG org.apache.http.headers - &gt;&gt; Connection: Keep-Alive
+13:09:28.412 [&lt;span class=&quot;hljs-link_label&quot;&gt;main&lt;/span&gt;] DEBUG org.apache.http.wire -  &lt;span class=&quot;xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt; &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;HTTP&lt;/span&gt;/&lt;span class=&quot;hljs-attribute&quot;&gt;1.1&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;200&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;OK&lt;/span&gt;[\&lt;span class=&quot;hljs-attribute&quot;&gt;r&lt;/span&gt;][\&lt;span class=&quot;hljs-attribute&quot;&gt;n&lt;/span&gt;]&quot;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.413&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;org.apache.http.wire&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt;  &lt;&lt; &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;content-type:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;application&lt;/span&gt;/&lt;span class=&quot;hljs-attribute&quot;&gt;json&lt;/span&gt;[\&lt;span class=&quot;hljs-attribute&quot;&gt;r&lt;/span&gt;][\&lt;span class=&quot;hljs-attribute&quot;&gt;n&lt;/span&gt;]&quot;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.413&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;org.apache.http.wire&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt;  &lt;&lt; &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;Content-Length:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;2&lt;/span&gt;[\&lt;span class=&quot;hljs-attribute&quot;&gt;r&lt;/span&gt;][\&lt;span class=&quot;hljs-attribute&quot;&gt;n&lt;/span&gt;]&quot;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.413&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;org.apache.http.wire&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt;  &lt;&lt; &quot;[\&lt;span class=&quot;hljs-attribute&quot;&gt;r&lt;/span&gt;][\&lt;span class=&quot;hljs-attribute&quot;&gt;n&lt;/span&gt;]&quot;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.414&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;o.a.h.i.conn.DefaultClientConnection&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;Receiving&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;response:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;HTTP&lt;/span&gt;/&lt;span class=&quot;hljs-attribute&quot;&gt;1.1&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;200&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;OK&lt;/span&gt;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.414&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;org.apache.http.headers&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt; &lt;&lt; &lt;span class=&quot;hljs-attribute&quot;&gt;HTTP&lt;/span&gt;/&lt;span class=&quot;hljs-attribute&quot;&gt;1.1&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;200&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;OK&lt;/span&gt;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.415&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;org.apache.http.headers&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt; &lt;&lt; &lt;span class=&quot;hljs-attribute&quot;&gt;content-type:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;application&lt;/span&gt;/&lt;span class=&quot;hljs-attribute&quot;&gt;json&lt;/span&gt;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.415&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;org.apache.http.headers&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt; &lt;&lt; &lt;span class=&quot;hljs-attribute&quot;&gt;Content-Length:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;hljs-attribute&quot;&gt;13:09:28.429&lt;/span&gt; [&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;] &lt;span class=&quot;hljs-attribute&quot;&gt;DEBUG&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;org.apache.http.wire&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;-&lt;/span&gt;  &lt;&lt; &quot;{}&quot;
+&lt;span class=&quot;hljs-attribute&quot;&gt;Tests&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;run:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;hljs-attribute&quot;&gt;Failures:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-attribute&quot;&gt;Errors:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-attribute&quot;&gt;Skipped:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-attribute&quot;&gt;Time&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;elapsed:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;1.076&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;sec&lt;/span&gt;
+
+&lt;span class=&quot;hljs-attribute&quot;&gt;Results&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;:&lt;/span&gt;
+
+&lt;span class=&quot;hljs-attribute&quot;&gt;Tests&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;run:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;1&lt;/span&gt;, &lt;span class=&quot;hljs-attribute&quot;&gt;Failures:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-attribute&quot;&gt;Errors:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-attribute&quot;&gt;Skipped:&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we are done, we now have a API that follow the contract, you can now keep developing your API and implementation and have a test driven approach to be sure that the contract is not broken.&lt;/p&gt;
+&lt;h2 id=&quot;next-steps&quot;&gt;Next steps&lt;/h2&gt;
+&lt;p&gt;Until now you have learn how to integrate RAML into Vert.x and CI, however the users of your API will not be able to know much about the API yet since its documentation is not publicly available. So lets publish online the documentation of your API, of course if your API is private you do not need to follow these steps.&lt;/p&gt;
+&lt;p&gt;In order to do this all we need it to include in our application the &lt;a href=&quot;https://github.com/mulesoft/api-console&quot;&gt;RAML console&lt;/a&gt;, the fastest way to do this is just download a &lt;a href=&quot;https://github.com/mulesoft/api-console/releases&quot;&gt;release&lt;/a&gt; to &lt;code&gt;src/main/resouces/webroot&lt;/code&gt; and in the original application [Vert.x Router] we add a Static Content Handler to serve the console files. Your application source code should look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;App&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    Router router = Router.router(vertx);
+
+    router.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hello&quot;&lt;/span&gt;).handler(rc -&gt; {
+      rc.response()
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json&quot;&lt;/span&gt;)
+          .end(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;greeting&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;).encode());
+    });
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;// optionally enable the web console so users can play with your API&lt;/span&gt;
+    &lt;span class=&quot;hljs-comment&quot;&gt;// online from their web browsers&lt;/span&gt;
+    router.route().handler(StaticHandler.create());
+
+    vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once you start you application open a browser pointing at the &lt;a href=&quot;http://localhost:8080?raml=/api/hello.raml&quot;&gt;console&lt;/a&gt;. Once you do that you should be presented with something similar to this:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-contract-driven-rest-services/raml-console.png&quot; alt=&quot;apiconsole&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;article-source-code&quot;&gt;Article source code&lt;/h2&gt;
+&lt;p&gt;You can get the full source code for this article &lt;a href=&quot;https://github.com/pmlopes/vert-x3-experiments/tree/experiments/raml&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Thu, 17 Sep 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/contract-driven-rest-services-with-vert-x3</link>
+          <guid isPermaLink="true">http://vertx.io/blog/contract-driven-rest-services-with-vert-x3</guid>
+          <author>
+            <name>pmlopes</name>
+            <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Writing secure Vert.x Web apps</title>
           <description>
       &lt;article&gt;&lt;p&gt;This is a starting guide for securing vert.x web applications. It is by no means a comprehensive guide on web application security such as &lt;a href=&quot;https://www.owasp.org&quot;&gt;OWASP&lt;/a&gt;. Standard rules and practices apply to vert.x apps as if they would to any other web framework.&lt;/p&gt;
