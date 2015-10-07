@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Buffers &amp;middot; Vert.x</title>
+  <title>Buffers - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -87,6 +87,7 @@
 <li><a href="#_creating_buffers">Creating buffers</a></li>
 <li><a href="#_writing_to_a_buffer">Writing to a Buffer</a></li>
 <li><a href="#_reading_from_a_buffer">Reading from a Buffer</a></li>
+<li><a href="#_working_with_unsigned_numbers">Working with unsigned numbers</a></li>
 <li><a href="#_buffer_length">Buffer length</a></li>
 <li><a href="#_copying_buffers">Copying buffers</a></li>
 <li><a href="#_slicing_buffers">Slicing buffers</a></li>
@@ -105,6 +106,7 @@
 <li><a href="#_creating_buffers">Creating buffers</a></li>
 <li><a href="#_writing_to_a_buffer">Writing to a Buffer</a></li>
 <li><a href="#_reading_from_a_buffer">Reading from a Buffer</a></li>
+<li><a href="#_working_with_unsigned_numbers">Working with unsigned numbers</a></li>
 <li><a href="#_buffer_length">Buffer length</a></li>
 <li><a href="#_copying_buffers">Copying buffers</a></li>
 <li><a href="#_slicing_buffers">Slicing buffers</a></li>
@@ -243,6 +245,29 @@ end</code></pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_working_with_unsigned_numbers">Working with unsigned numbers</h3>
+<div class="paragraph">
+<p>Unsigned numbers can be read from or appended/set to a buffer with the <code>getUnsignedXXX</code>,
+<code>appendUnsignedXXX</code> and <code>setUnsignedXXX</code> methods. This is useful when implementing a codec for a
+network protocol optimized to minimize bandwidth consumption.</p>
+</div>
+<div class="paragraph">
+<p>In the following example, value 200 is set at specified position with just one byte:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+buff = Vertx::Buffer.buffer(128)
+pos = 15
+buff.set_unsigned_byte(pos, 200)
+puts buff.get_unsigned_byte(pos)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The console shows '200'.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_buffer_length">Buffer length</h3>
 <div class="paragraph">
 <p>Use <code><a href="yardoc/Vertx/Buffer.html#length-instance_method">length</a></code> to obtain the length of the buffer.
@@ -277,7 +302,7 @@ Use <code><a href="yardoc/Vertx/Buffer.html#slice-instance_method">slice</a></co
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

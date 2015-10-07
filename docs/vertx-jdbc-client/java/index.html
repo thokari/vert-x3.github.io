@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Vert.x JDBC client &amp;middot; Vert.x</title>
+  <title>Vert.x JDBC client - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -93,6 +93,7 @@
 <li><a href="#_closing_the_client">Closing the client</a></li>
 <li><a href="#_getting_a_connection">Getting a connection</a></li>
 <li><a href="#_configuration">Configuration</a></li>
+<li><a href="#_jdbc_drivers">JDBC Drivers</a></li>
 </ul>
         </div>
       </div>
@@ -111,6 +112,7 @@
 <li><a href="#_closing_the_client">Closing the client</a></li>
 <li><a href="#_getting_a_connection">Getting a connection</a></li>
 <li><a href="#_configuration">Configuration</a></li>
+<li><a href="#_jdbc_drivers">JDBC Drivers</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -121,6 +123,37 @@ application.</p>
 </div>
 <div class="paragraph">
 <p>The client API is represented with the interface <code><a href="../../apidocs/io/vertx/ext/jdbc/JDBCClient.html">JDBCClient</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>To use this project, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-jdbc-client&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-jdbc-client:3.1.0</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -332,6 +365,25 @@ this property and provide your implementation.</p>
 </dl>
 </div>
 <div class="paragraph">
+<p>Other Connection Pool providers are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>BoneCP</p>
+</li>
+<li>
+<p>Hikari</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Similar to C3P0 they can be configured by passing the configuration values on the JSON config object. For the special
+case where you do not want to deploy your app as a fat jar but run with a vert.x distribution, then it is recommented
+to use BoneCP if you have no write permissions to add the JDBC driver to the vert.x lib directory and are passing it
+using the <code>-cp</code> command line flag.</p>
+</div>
+<div class="paragraph">
 <p>If you want to configure any other C3P0 properties, you can add a file <code>c3p0.properties</code> to the classpath.</p>
 </div>
 <div class="paragraph">
@@ -349,6 +401,22 @@ JDBCClient client = JDBCClient.createShared(vertx, config);</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_jdbc_drivers">JDBC Drivers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using the default <code>DataSourceProvider</code> (relying on c3p0), you would need to copy the JDBC driver class
+in your <em>classpath</em>.</p>
+</div>
+<div class="paragraph">
+<p>If your application is packaged as a <em>fat jar</em>, be sure to embed the jdbc driver. If your application is launched
+with the <code>vertx</code> command line, copy the JDBC driver to <code>${VERTX_HOME}\lib</code>.</p>
+</div>
+<div class="paragraph">
+<p>The behavior may be different when using a different connection pool.</p>
+</div>
+</div>
+</div>
 
         
 
@@ -356,7 +424,7 @@ JDBCClient client = JDBCClient.createShared(vertx, config);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

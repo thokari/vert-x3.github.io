@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>HttpClientOptions &amp;middot; Vert.x</title>
+  <title>HttpClientOptions - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -113,90 +113,9 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sendBufferSize"></a><code>sendBufferSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP send buffer size</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="receiveBufferSize"></a><code>receiveBufferSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP receive buffer size</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="reuseAddress"></a><code>reuseAddress</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of reuse address</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trafficClass"></a><code>trafficClass</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of traffic class</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpNoDelay"></a><code>tcpNoDelay</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether TCP no delay is enabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpKeepAlive"></a><code>tcpKeepAlive</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether TCP keep alive is enabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="soLinger"></a><code>soLinger</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether SO_linger keep alive is enabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="usePooledBuffers"></a><code>usePooledBuffers</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether Netty pooled buffers are enabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="idleTimeout"></a><code>idleTimeout</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the idle timeout, in seconds. zero means don't timeout.
- This determines if a connection will timeout and be closed if no data is received within the timeout.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ssl"></a><code>ssl</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether SSL/TLS is enabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyStoreOptions"></a><code>keyStoreOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="JksOptions.html">JksOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert options in jks format, aka Java keystore.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxKeyCertOptions"></a><code>pfxKeyCertOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PfxOptions.html">PfxOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert options in pfx format.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemKeyCertOptions"></a><code>pemKeyCertOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PemKeyCertOptions.html">PemKeyCertOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert store options in pem format.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trustStoreOptions"></a><code>trustStoreOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="JksOptions.html">JksOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the trust options in jks format, aka Java trustore</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxTrustOptions"></a><code>pfxTrustOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PfxOptions.html">PfxOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the trust options in pfx format</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemTrustOptions"></a><code>pemTrustOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PemTrustOptions.html">PemTrustOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the trust options in pem format</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="enabledCipherSuites"></a><code>enabledCipherSuites</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Add an enabled cipher suite</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="connectTimeout"></a><code>connectTimeout</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the connect timeout</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="crlPaths"></a><code>crlPaths</code></p></td>
@@ -204,44 +123,9 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Add a CRL path</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="connectTimeout"></a><code>connectTimeout</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the connect timeout</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trustAll"></a><code>trustAll</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether all server certificates should be trusted</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxPoolSize"></a><code>maxPoolSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum pool size for connections</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keepAlive"></a><code>keepAlive</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether keep alive is enabled on the client</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pipelining"></a><code>pipelining</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether pipe-lining is enabled on the client</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="verifyHost"></a><code>verifyHost</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether hostname verification is enabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tryUseCompression"></a><code>tryUseCompression</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether compression is enabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWebsocketFrameSize"></a><code>maxWebsocketFrameSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the max websocket frame size</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="crlValues"></a><code>crlValues</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add a CRL value</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="defaultHost"></a><code>defaultHost</code></p></td>
@@ -250,8 +134,134 @@
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="defaultPort"></a><code>defaultPort</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the default port to be used by this client in requests if none is provided when making the request.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="enabledCipherSuites"></a><code>enabledCipherSuites</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add an enabled cipher suite</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="idleTimeout"></a><code>idleTimeout</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the idle timeout, in seconds. zero means don't timeout.
+ This determines if a connection will timeout and be closed if no data is received within the timeout.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keepAlive"></a><code>keepAlive</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether keep alive is enabled on the client</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyStoreOptions"></a><code>keyStoreOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="JksOptions.html">JksOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert options in jks format, aka Java keystore.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxPoolSize"></a><code>maxPoolSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum pool size for connections</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWebsocketFrameSize"></a><code>maxWebsocketFrameSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the max websocket frame size</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemKeyCertOptions"></a><code>pemKeyCertOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PemKeyCertOptions.html">PemKeyCertOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert store options in pem format.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemTrustOptions"></a><code>pemTrustOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PemTrustOptions.html">PemTrustOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the trust options in pem format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxKeyCertOptions"></a><code>pfxKeyCertOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PfxOptions.html">PfxOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert options in pfx format.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxTrustOptions"></a><code>pfxTrustOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="PfxOptions.html">PfxOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the trust options in pfx format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pipelining"></a><code>pipelining</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether pipe-lining is enabled on the client</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="protocolVersion"></a><code>protocolVersion</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Enum</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the protocol version.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="receiveBufferSize"></a><code>receiveBufferSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP receive buffer size</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="reuseAddress"></a><code>reuseAddress</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of reuse address</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sendBufferSize"></a><code>sendBufferSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP send buffer size</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="soLinger"></a><code>soLinger</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether SO_linger keep alive is enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ssl"></a><code>ssl</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether SSL/TLS is enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpKeepAlive"></a><code>tcpKeepAlive</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether TCP keep alive is enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpNoDelay"></a><code>tcpNoDelay</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether TCP no delay is enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trafficClass"></a><code>trafficClass</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of traffic class</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trustAll"></a><code>trustAll</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether all server certificates should be trusted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trustStoreOptions"></a><code>trustStoreOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="JksOptions.html">JksOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the trust options in jks format, aka Java trustore</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tryUseCompression"></a><code>tryUseCompression</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether compression is enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="usePooledBuffers"></a><code>usePooledBuffers</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether Netty pooled buffers are enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="verifyHost"></a><code>verifyHost</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether hostname verification is enabled</p></td>
 </tr>
 </tbody>
 </table>
@@ -264,7 +274,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

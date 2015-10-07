@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Writing HTTP servers and clients &amp;middot; Vert.x</title>
+  <title>Writing HTTP servers and clients - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -825,6 +825,48 @@ Vert.x Web.
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>When there is a need to serve just a segment of a file, say starting from a given byte, you can achieve this by doing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  long offset = 0;
+  try {
+    offset = Long.parseLong(request.getParam("start"));
+  } catch (NumberFormatException e) {
+    // error handling...
+  }
+
+  long end = Long.MAX_VALUE;
+  try {
+    end = Long.parseLong(request.getParam("end"));
+  } catch (NumberFormatException e) {
+    // error handling...
+  }
+
+  request.response().sendFile("web/mybigfile.txt", offset, end);
+}).listen(8080);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You are not required to supply the length if you want to send a file starting from an offset until the end, in this
+case you can just do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  long offset = 0;
+  try {
+    offset = Long.parseLong(request.getParam("start"));
+  } catch (NumberFormatException e) {
+    // error handling...
+  }
+
+  request.response().sendFile("web/mybigfile.txt", offset);
+}).listen(8080);</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_pumping_responses">Pumping responses</h4>
@@ -1453,6 +1495,17 @@ request.continueHandler(v -&gt; {
 });</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>On the server side a Vert.x http server can be configured to automatically send back 100 Continue interim responses
+when it receives an <code>Expect: 100-Continue</code> header.
+This is done by setting the option <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setHandle100ContinueAutomatically-boolean-">setHandle100ContinueAutomatically</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
+<code>false</code> (the default), then you can inspect the headers and call <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#writeContinue--">writeContinue</a></code>
+if you wish the client to continue sending the body or you can reject the request by sending back a failure status code
+if you don&#8217;t want it to send the body. For example:</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1512,7 +1565,9 @@ connections when you&#8217;re making multiple requests to the same server.</p>
 on the options used when configuring the client. The default value is true.</p>
 </div>
 <div class="paragraph">
-<p>When keep alive is enabled. Vert.x will add a <code>Connection: Keep-Alive</code> header to each HTTP request sent.</p>
+<p>When keep alive is enabled. Vert.x will add a <code>Connection: Keep-Alive</code> header to each HTTP/1.0 request sent.
+When keep alive is disabled. Vert.x will add a <code>Connection: Close</code> header to each HTTP/1.1 request sent to signal
+that the connection will be closed after completion of the response.</p>
 </div>
 <div class="paragraph">
 <p>The maximum number of connections to pool <strong>for each server</strong> is configured using <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setMaxPoolSize-int-">setMaxPoolSize</a></code></p>
@@ -1522,12 +1577,11 @@ on the options used when configuring the client. The default value is true.</p>
 connections already created for that server, otherwise it will add the request to a queue.</p>
 </div>
 <div class="paragraph">
-<p>When a response returns, if there are pending requests for the server, then the connection will be reused, otherwise
-it will be closed.</p>
+<p>Keep alive connections will not be closed by the client automatically. To close them you can close the client instance.</p>
 </div>
 <div class="paragraph">
-<p>This gives the benefits of keep alive when the client is loaded but means we don&#8217;t keep connections hanging around
-unnecessarily when there would be no benefits anyway.</p>
+<p>Alternatively you can set idle timeout using <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setIdleTimeout-int-">setIdleTimeout</a></code> - any
+connections not used within this timeout will be closed. Please note the idle timeout value is in seconds not milliseconds.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1545,10 +1599,6 @@ By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
-</div>
-<div class="paragraph">
-<p>When pipe-line responses return at the client, the connection will be automatically closed when all in-flight
-responses have returned and there are no outstanding pending requests to write.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1836,7 +1886,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

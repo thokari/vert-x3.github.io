@@ -94,7 +94,7 @@
   
   
     <dt class="r2 last">Defined in:</dt>
-    <dd class="r2 last">/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb</dd>
+    <dd class="r2 last">/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb</dd>
   
 </dl>
 <div class="clear"></div>
@@ -833,15 +833,15 @@
       <pre class="lines">
 
 
-25
 26
 27
 28
 29
-30</pre>
+30
+31</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 25</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 26</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_router'>router</span><span class='lparen'>(</span><span class='id identifier rubyid_vertx'>vertx</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_vertx'>vertx</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -919,15 +919,15 @@
       <pre class="lines">
 
 
-36
 37
 38
 39
 40
-41</pre>
+41
+42</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 36</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_accept'>accept</span><span class='lparen'>(</span><span class='id identifier rubyid_request'>request</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -990,16 +990,16 @@
       <pre class="lines">
 
 
-265
 266
 267
 268
 269
 270
-271</pre>
+271
+272</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 265</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 266</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clear'>clear</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1086,17 +1086,17 @@
       <pre class="lines">
 
 
-218
 219
 220
 221
 222
 223
 224
-225</pre>
+225
+226</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 218</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 219</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_connect'>connect</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1184,15 +1184,15 @@
       <pre class="lines">
 
 
-229
 230
 231
 232
 233
-234</pre>
+234
+235</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 229</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 230</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_connect_with_regex'>connect_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1278,17 +1278,17 @@
       <pre class="lines">
 
 
-178
 179
 180
 181
 182
 183
 184
-185</pre>
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 178</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 179</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1376,15 +1376,15 @@
       <pre class="lines">
 
 
-189
 190
 191
 192
 193
-194</pre>
+194
+195</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 189</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 190</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete_with_regex'>delete_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1464,20 +1464,20 @@
       <pre class="lines">
 
 
-287
 288
 289
 290
 291
 292
-293</pre>
+293
+294</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 287</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 288</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exception_handler'>exception_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:exceptionHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:exceptionHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_from_throwable'>from_throwable</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='kw'>self</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling exception_handler()</span><span class='tstring_end'>&quot;</span></span>
@@ -1560,17 +1560,17 @@
       <pre class="lines">
 
 
-78
 79
 80
 81
 82
 83
 84
-85</pre>
+85
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 78</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1635,15 +1635,15 @@
       <pre class="lines">
 
 
-257
 258
 259
 260
 261
-262</pre>
+262
+263</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 257</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 258</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_routes'>get_routes</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1729,15 +1729,15 @@
       <pre class="lines">
 
 
-89
 90
 91
 92
 93
-94</pre>
+94
+95</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 89</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 90</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_with_regex'>get_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1807,15 +1807,15 @@
       <pre class="lines">
 
 
-297
 298
 299
 300
 301
-302</pre>
+302
+303</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 297</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 298</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_handle_context'>handle_context</span><span class='lparen'>(</span><span class='id identifier rubyid_context'>context</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_context'>context</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1885,15 +1885,15 @@
       <pre class="lines">
 
 
-306
 307
 308
 309
 310
-311</pre>
+311
+312</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 306</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 307</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_handle_failure'>handle_failure</span><span class='lparen'>(</span><span class='id identifier rubyid_context'>context</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_context'>context</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1979,17 +1979,17 @@
       <pre class="lines">
 
 
-98
 99
 100
 101
 102
 103
 104
-105</pre>
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 98</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_head'>head</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2077,15 +2077,15 @@
       <pre class="lines">
 
 
-109
 110
 111
 112
 113
-114</pre>
+114
+115</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 109</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 110</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_head_with_regex'>head_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2184,16 +2184,16 @@
       <pre class="lines">
 
 
-276
 277
 278
 279
 280
 281
-282</pre>
+282
+283</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 276</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 277</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mount_sub_router'>mount_sub_router</span><span class='lparen'>(</span><span class='id identifier rubyid_mountPoint'>mountPoint</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_subRouter'>subRouter</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_mountPoint'>mountPoint</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_subRouter'>subRouter</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2280,17 +2280,17 @@
       <pre class="lines">
 
 
-118
 119
 120
 121
 122
 123
 124
-125</pre>
+125
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 118</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 119</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_options'>options</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2378,15 +2378,15 @@
       <pre class="lines">
 
 
-129
 130
 131
 132
 133
-134</pre>
+134
+135</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 129</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 130</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_options_with_regex'>options_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2472,17 +2472,17 @@
       <pre class="lines">
 
 
-238
 239
 240
 241
 242
 243
 244
-245</pre>
+245
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 238</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 239</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_patch'>patch</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2570,15 +2570,15 @@
       <pre class="lines">
 
 
-249
 250
 251
 252
 253
-254</pre>
+254
+255</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 249</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 250</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_patch_with_regex'>patch_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2664,17 +2664,17 @@
       <pre class="lines">
 
 
-158
 159
 160
 161
 162
 163
 164
-165</pre>
+165
+166</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 158</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 159</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_post'>post</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2762,15 +2762,15 @@
       <pre class="lines">
 
 
-169
 170
 171
 172
 173
-174</pre>
+174
+175</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 169</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 170</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_post_with_regex'>post_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2856,17 +2856,17 @@
       <pre class="lines">
 
 
-138
 139
 140
 141
 142
 143
 144
-145</pre>
+145
+146</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 138</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 139</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put'>put</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2954,15 +2954,15 @@
       <pre class="lines">
 
 
-149
 150
 151
 152
 153
-154</pre>
+154
+155</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 149</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 150</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put_with_regex'>put_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3120,7 +3120,6 @@
       <pre class="lines">
 
 
-50
 51
 52
 53
@@ -3129,10 +3128,11 @@
 56
 57
 58
-59</pre>
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 50</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_route'>route</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_1'>param_1</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -3291,17 +3291,17 @@
       <pre class="lines">
 
 
-67
 68
 69
 70
 71
 72
 73
-74</pre>
+74
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 67</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_route_with_regex'>route_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -3389,17 +3389,17 @@
       <pre class="lines">
 
 
-198
 199
 200
 201
 202
 203
 204
-205</pre>
+205
+206</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 198</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 199</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_trace'>trace</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -3487,15 +3487,15 @@
       <pre class="lines">
 
 
-209
 210
 211
 212
 213
-214</pre>
+214
+215</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/router.rb', line 209</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/router.rb', line 210</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_trace_with_regex'>trace_with_regex</span><span class='lparen'>(</span><span class='id identifier rubyid_regex'>regex</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_regex'>regex</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3513,9 +3513,9 @@
 </div>
 
     <div id="footer">
-  Generated on Fri Jun 26 13:38:33 2015 by
+  Generated on Wed Oct  7 11:24:21 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-1.9.3).
+  0.8.7.6 (ruby-2.2.2).
 </div>
 
   </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>DatagramSocketOptions &amp;middot; Vert.x</title>
+  <title>DatagramSocketOptions - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -113,13 +113,33 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sendBufferSize"></a><code>sendBufferSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP send buffer size</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="broadcast"></a><code>broadcast</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if the socket can receive broadcast packets</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ipV6"></a><code>ipV6</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if IP v6 should be used</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="loopbackModeDisabled"></a><code>loopbackModeDisabled</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if loopback mode is disabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="multicastNetworkInterface"></a><code>multicastNetworkInterface</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the multicast network interface address</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="multicastTimeToLive"></a><code>multicastTimeToLive</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the multicast ttl value</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="receiveBufferSize"></a><code>receiveBufferSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP receive buffer size</p></td>
 </tr>
 <tr>
@@ -128,34 +148,14 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of reuse address</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sendBufferSize"></a><code>sendBufferSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP send buffer size</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trafficClass"></a><code>trafficClass</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of traffic class</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="broadcast"></a><code>broadcast</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set if the socket can receive broadcast packets</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="loopbackModeDisabled"></a><code>loopbackModeDisabled</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set if loopback mode is disabled</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="multicastTimeToLive"></a><code>multicastTimeToLive</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the multicast ttl value</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="multicastNetworkInterface"></a><code>multicastNetworkInterface</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the multicast network interface address</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ipV6"></a><code>ipV6</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set if IP v6 should be used</p></td>
 </tr>
 </tbody>
 </table>
@@ -168,7 +168,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

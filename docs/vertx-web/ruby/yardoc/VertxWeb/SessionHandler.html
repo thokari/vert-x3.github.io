@@ -94,7 +94,7 @@
   
   
     <dt class="r2 last">Defined in:</dt>
-    <dd class="r2 last">/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/session_handler.rb</dd>
+    <dd class="r2 last">/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb</dd>
   
 </dl>
 <div class="clear"></div>
@@ -106,7 +106,7 @@
  It looks up the session for each request based on a session cookie which contains a session ID. It stores the session
  when the response is ended in the session store.
  <p>
- The session is available on the routing context with <span class='object_link'><a href="RoutingContext.html#session-instance_method" title="VertxWeb::RoutingContext#session (method)">RoutingContext#session</a></span>.
+ The session is available on the routing context with .
  <p>
  The session handler requires a <span class='object_link'><a href="CookieHandler.html" title="VertxWeb::CookieHandler (class)">CookieHandler</a></span> to be on the routing chain before it.
 
@@ -179,6 +179,50 @@
 
   
     <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_cookie_http_only_flag-instance_method" title="#set_cookie_http_only_flag (instance method)">- (self) <strong>set_cookie_http_only_flag</strong>(httpOnly = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Sets whether the 'HttpOnly' flag should be set for the session cookie.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_cookie_secure_flag-instance_method" title="#set_cookie_secure_flag (instance method)">- (self) <strong>set_cookie_secure_flag</strong>(secure = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Sets whether the 'secure' flag should be set for the session cookie.</div></span>
   
 </li>
 
@@ -339,7 +383,7 @@
 41</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 36</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='id identifier rubyid_sessionStore'>sessionStore</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_sessionStore'>sessionStore</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -420,13 +464,201 @@
 32</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 27</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_handle'>handle</span><span class='lparen'>(</span><span class='id identifier rubyid_arg0'>arg0</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_arg0'>arg0</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
     <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:handle</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxExtWeb</span><span class='op'>::</span><span class='const'>RoutingContext</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_arg0'>arg0</span><span class='period'>.</span><span class='id identifier rubyid_j_del'>j_del</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling handle(arg0)</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_cookie_http_only_flag-instance_method">
+  
+    - (<tt>self</tt>) <strong>set_cookie_http_only_flag</strong>(httpOnly = nil) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Sets whether the 'HttpOnly' flag should be set for the session cookie. When set this flag instructs browsers to
+ prevent Javascript access to the the cookie. Used as a line of defence against the most common XSS attacks.
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>httpOnly</span>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>true to set the HttpOnly flag on the cookie</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+78
+79
+80
+81
+82
+83
+84</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 78</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_cookie_http_only_flag'>set_cookie_http_only_flag</span><span class='lparen'>(</span><span class='id identifier rubyid_httpOnly'>httpOnly</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_httpOnly'>httpOnly</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_httpOnly'>httpOnly</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:setCookieHttpOnlyFlag</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_boolean'>boolean</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_httpOnly'>httpOnly</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>self</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling set_cookie_http_only_flag(httpOnly)</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_cookie_secure_flag-instance_method">
+  
+    - (<tt>self</tt>) <strong>set_cookie_secure_flag</strong>(secure = nil) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Sets whether the 'secure' flag should be set for the session cookie. When set this flag instructs browsers to only
+ send the cookie over HTTPS. Note that this will probably stop your sessions working if used without HTTPS (e.g. in development).
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>secure</span>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>true to set the secure flag on the cookie</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+67
+68
+69
+70
+71
+72
+73</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 67</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_cookie_secure_flag'>set_cookie_secure_flag</span><span class='lparen'>(</span><span class='id identifier rubyid_secure'>secure</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_secure'>secure</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_secure'>secure</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:setCookieSecureFlag</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_boolean'>boolean</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_secure'>secure</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>self</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling set_cookie_secure_flag(secure)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -513,7 +745,7 @@
 62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 56</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_nag_https'>set_nag_https</span><span class='lparen'>(</span><span class='id identifier rubyid_nag'>nag</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_nag'>nag</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_nag'>nag</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -597,16 +829,16 @@
       <pre class="lines">
 
 
-66
-67
-68
-69
-70
-71
-72</pre>
+88
+89
+90
+91
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 66</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 88</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_session_cookie_name'>set_session_cookie_name</span><span class='lparen'>(</span><span class='id identifier rubyid_sessionCookieName'>sessionCookieName</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_sessionCookieName'>sessionCookieName</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -699,7 +931,7 @@
 51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 45</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/session_handler.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_session_timeout'>set_session_timeout</span><span class='lparen'>(</span><span class='id identifier rubyid_timeout'>timeout</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_timeout'>timeout</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -718,9 +950,9 @@
 </div>
 
     <div id="footer">
-  Generated on Fri Jun 26 13:38:34 2015 by
+  Generated on Wed Oct  7 11:24:23 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-1.9.3).
+  0.8.7.6 (ruby-2.2.2).
 </div>
 
   </body>

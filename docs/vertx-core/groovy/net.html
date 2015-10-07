@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Writing TCP servers and clients &amp;middot; Vert.x</title>
+  <title>Writing TCP servers and clients - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -163,7 +163,7 @@
 <div class="sect2">
 <h3 id="_configuring_a_tcp_server">Configuring a TCP server</h3>
 <div class="paragraph">
-<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../cheatsheet/NetServerOptions.html">NetServerOptions</a></code>
+<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code>
 instance when creating it:</p>
 </div>
 <div class="listingblock">
@@ -509,7 +509,7 @@ them in a round-robin fashion to any of the connect handlers.</p>
 <div class="sect2">
 <h3 id="_configuring_a_tcp_client">Configuring a TCP client</h3>
 <div class="paragraph">
-<p>If you don&#8217;t want the default, a client can be configured by passing in a <code><a href="../cheatsheet/NetClientOptions.html">NetClientOptions</a></code>
+<p>If you don&#8217;t want the default, a client can be configured by passing in a <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code>
 instance when creating it:</p>
 </div>
 <div class="listingblock">
@@ -549,8 +549,8 @@ client.connect(4321, "localhost", { res -&gt;
 <h3 id="_configuring_connection_attempts">Configuring connection attempts</h3>
 <div class="paragraph">
 <p>A client can be configured to automatically retry connecting to the server in the event that it cannot connect.
-This is configured with <code><a href="../cheatsheet/NetClientOptions.html#reconnectInterval">reconnectInterval</a></code> and
-<code><a href="../cheatsheet/NetClientOptions.html#reconnectAttempts">reconnectAttempts</a></code>.</p>
+This is configured with <code><a href="../dataobjects.html#NetClientOptions#setReconnectInterval(long)">reconnectInterval</a></code> and
+<code><a href="../dataobjects.html#NetClientOptions#setReconnectAttempts(int)">reconnectAttempts</a></code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -585,13 +585,13 @@ def client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="paragraph">
 <p>The APIs of the servers and clients are identical whether or not SSL/TLS is used, and it&#8217;s enabled by configuring
-the <code><a href="../cheatsheet/NetClientOptions.html">NetClientOptions</a></code> or <code><a href="../cheatsheet/NetServerOptions.html">NetServerOptions</a></code> instances used
+the <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> or <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code> instances used
 to create the servers or clients.</p>
 </div>
 <div class="sect3">
 <h4 id="_enabling_ssl_tls_on_the_server">Enabling SSL/TLS on the server</h4>
 <div class="paragraph">
-<p>SSL/TLS is enabled with  <code><a href="../cheatsheet/NetServerOptions.html#ssl">ssl</a></code>.</p>
+<p>SSL/TLS is enabled with  <code><a href="../dataobjects.html#NetServerOptions#setSsl(boolean)">ssl</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>By default it is disabled.</p>
@@ -731,9 +731,10 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
+def options = [
   ssl:true,
-  clientAuthRequired:true,
+  clientAuth:ClientAuth.REQUIRED,
   trustStoreOptions:[
     path:"/path/to/your/truststore.jks",
     password:"password-of-your-truststore"
@@ -747,10 +748,11 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
+def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
 def options = [
   ssl:true,
-  clientAuthRequired:true,
+  clientAuth:ClientAuth.REQUIRED,
   trustStoreOptions:[
     value:myTrustStoreAsABuffer,
     password:"password-of-your-truststore"
@@ -765,9 +767,10 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
+def options = [
   ssl:true,
-  clientAuthRequired:true,
+  clientAuth:ClientAuth.REQUIRED,
   pfxTrustOptions:[
     path:"/path/to/your/truststore.pfx",
     password:"password-of-your-truststore"
@@ -781,10 +784,11 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
+def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
 def options = [
   ssl:true,
-  clientAuthRequired:true,
+  clientAuth:ClientAuth.REQUIRED,
   pfxTrustOptions:[
     value:myTrustStoreAsABuffer,
     password:"password-of-your-truststore"
@@ -798,9 +802,10 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
+def options = [
   ssl:true,
-  clientAuthRequired:true,
+  clientAuth:ClientAuth.REQUIRED,
   pemTrustOptions:[
     certPaths:[
       "/path/to/your/server-ca.pem"
@@ -815,10 +820,11 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
+def myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx")
 def options = [
   ssl:true,
-  clientAuthRequired:true,
+  clientAuth:ClientAuth.REQUIRED,
   pemTrustOptions:[
     certValues:[
       myCaAsABuffer
@@ -841,7 +847,7 @@ def server = vertx.createNetServer(options)</code></pre>
 <div class="sect3">
 <h4 id="_client_trust_configuration">Client trust configuration</h4>
 <div class="paragraph">
-<p>If the <code>trustALl</code> is set to true on the client, then the client will
+<p>If the <code><a href="../dataobjects.html#ClientOptionsBase#setTrustAll(boolean)">trustALl</a></code> is set to true on the client, then the client will
 trust all server certificates. The connection will still be encrypted but this mode is vulnerable to 'man in the middle' attacks. I.e. you can&#8217;t
 be sure who you are connecting to. Use this with caution. Default value is false.</p>
 </div>
@@ -855,7 +861,7 @@ def client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If <code>trustAll</code> is not set then a client trust store must be
+<p>If <code><a href="../dataobjects.html#ClientOptionsBase#setTrustAll(boolean)">trustAll</a></code> is not set then a client trust store must be
 configured and should contain the certificates of the servers that the client trusts.</p>
 </div>
 <div class="paragraph">
@@ -866,8 +872,8 @@ configured and should contain the certificates of the servers that the client tr
 </div>
 <div class="paragraph">
 <p>It is just a standard Java key store, the same as the key stores on the server side. The client
-trust store location is set by using the function <code><a href="../cheatsheet/JksOptions.html#path">path</a></code> on the
-<code><a href="../cheatsheet/JksOptions.html">jks options</a></code>. If a server presents a certificate during connection which is not
+trust store location is set by using the function <code><a href="../dataobjects.html#JksOptions#setPath(java.lang.String)">path</a></code> on the
+<code><a href="../dataobjects.html#JksOptions">jks options</a></code>. If a server presents a certificate during connection which is not
 in the client trust store, the connection attempt will not succeed.</p>
 </div>
 <div class="listingblock">
@@ -973,8 +979,8 @@ connecting. The client can be configured in several ways:</p>
 <div class="paragraph">
 <p>The first method is by specifying the location of a Java key-store which contains the key and certificate.
 Again it&#8217;s just a regular Java key store. The client keystore location is set by using the function
-<code><a href="../cheatsheet/JksOptions.html#path">path</a></code> on the
-<code><a href="../cheatsheet/JksOptions.html">jks options</a></code>.</p>
+<code><a href="../dataobjects.html#JksOptions#setPath(java.lang.String)">path</a></code> on the
+<code><a href="../dataobjects.html#JksOptions">jks options</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1079,7 +1085,7 @@ def client = vertx.createNetClient(options)</code></pre>
 <h4 id="_revoking_certificate_authorities">Revoking certificate authorities</h4>
 <div class="paragraph">
 <p>Trust can be configured to use a certificate revocation list (CRL) for revoked certificates that should no
-longer be trusted. The <code><a href="../cheatsheet/NetClientOptions.html#crlPath">crlPath</a></code> configures
+longer be trusted. The <code><a href="../dataobjects.html#NetClientOptions#addCrlPath(java.lang.String)">crlPath</a></code> configures
 the crl list to use:</p>
 </div>
 <div class="listingblock">
@@ -1133,7 +1139,7 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Cipher suite can be specified on the <code><a href="../cheatsheet/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../cheatsheet/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
+<p>Cipher suite can be specified on the <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code> or <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
 </div>
@@ -1146,7 +1152,7 @@ def server = vertx.createNetServer(options)</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

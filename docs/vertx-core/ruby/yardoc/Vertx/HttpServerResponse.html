@@ -235,6 +235,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#closed%3F-instance_method" title="#closed? (instance method)">- (true, false) <strong>closed?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>@return has the underlying TCP connection corresponding to the request already been closed?.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#drain_handler-instance_method" title="#drain_handler (instance method)">- (self) <strong>drain_handler</strong> { ... }</a>
     
 
@@ -477,7 +499,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#send_file-instance_method" title="#send_file (instance method)">- (self) <strong>send_file</strong>(filename = nil) { ... }</a>
+      <a href="#send_file-instance_method" title="#send_file (instance method)">- (self) <strong>send_file</strong>(filename = nil, offset = nil, length = nil) { ... }</a>
     
 
     
@@ -491,7 +513,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Like <span class='object_link'><a href="#send_file-instance_method" title="Vertx::HttpServerResponse#send_file (method)">#send_file</a></span> but providing a handler which will be notified once the file has been completely  written to the wire.</div></span>
+    <span class="summary_desc"><div class='inline'>Like <span class='object_link'><a href="#send_file-instance_method" title="Vertx::HttpServerResponse#send_file (method)">#send_file</a></span> but providing a handler which will be notified once the file has been  completely written to the wire.</div></span>
   
 </li>
 
@@ -631,6 +653,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#write_continue-instance_method" title="#write_continue (instance method)">- (self) <strong>write_continue</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Used to write an interim 100 Continue response to signify that the client should send the rest of the request.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#write_queue_full%3F-instance_method" title="#write_queue_full? (instance method)">- (true, false) <strong>write_queue_full?</strong> </a>
     
 
@@ -739,16 +783,16 @@
       <pre class="lines">
 
 
-295
-296
-297
-298
-299
-300
-301</pre>
+324
+325
+326
+327
+328
+329
+330</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 295</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 324</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_body_end_handler'>body_end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -812,15 +856,15 @@
       <pre class="lines">
 
 
+154
 155
 156
 157
 158
-159
-160</pre>
+159</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 155</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 154</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_chunked?'>chunked?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -870,15 +914,15 @@
       <pre class="lines">
 
 
-255
-256
-257
-258
-259
-260</pre>
+278
+279
+280
+281
+282
+283</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 255</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 278</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close'>close</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -958,16 +1002,16 @@
       <pre class="lines">
 
 
+208
 209
 210
 211
 212
 213
-214
-215</pre>
+214</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 209</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 208</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close_handler'>close_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -975,6 +1019,77 @@
     <span class='kw'>return</span> <span class='kw'>self</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling close_handler()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="closed?-instance_method">
+  
+    - (<tt>true</tt>, <tt>false</tt>) <strong>closed?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    @return has the underlying TCP connection corresponding to the request already been closed?
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+294
+295
+296
+297
+298
+299</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 294</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_closed?'>closed?</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:closed</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling closed?()</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1044,16 +1159,16 @@
       <pre class="lines">
 
 
+87
 88
 89
 90
 91
 92
-93
-94</pre>
+93</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 88</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_drain_handler'>drain_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1231,21 +1346,21 @@
       <pre class="lines">
 
 
-226
-227
-228
-229
-230
-231
-232
-233
-234
 235
 236
-237</pre>
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 226</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 235</span>
 
 <span class='kw'>def</span> <span class='kw'>end</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_1'>param_1</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1314,15 +1429,15 @@
       <pre class="lines">
 
 
-263
-264
-265
-266
-267
-268</pre>
+286
+287
+288
+289
+290
+291</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 263</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 286</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ended?'>ended?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1398,20 +1513,20 @@
       <pre class="lines">
 
 
+47
 48
 49
 50
 51
 52
-53
-54</pre>
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 48</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exception_handler'>exception_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:exceptionHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:exceptionHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_from_throwable'>from_throwable</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='kw'>self</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling exception_handler()</span><span class='tstring_end'>&quot;</span></span>
@@ -1471,15 +1586,15 @@
       <pre class="lines">
 
 
+96
 97
 98
 99
 100
-101
-102</pre>
+101</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 97</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_status_code'>get_status_code</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1543,15 +1658,15 @@
       <pre class="lines">
 
 
+116
 117
 118
 119
 120
-121
-122</pre>
+121</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 117</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_status_message'>get_status_message</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1614,15 +1729,15 @@
       <pre class="lines">
 
 
-271
-272
-273
-274
-275
-276</pre>
+302
+303
+304
+305
+306
+307</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 271</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 302</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_head_written?'>head_written?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1685,6 +1800,7 @@
       <pre class="lines">
 
 
+162
 163
 164
 165
@@ -1692,11 +1808,10 @@
 167
 168
 169
-170
-171</pre>
+170</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 163</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 162</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_headers'>headers</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1725,8 +1840,6 @@
   <div class="discussion">
     Provide a handler that will be called just before the headers are written to the wire.<p>
  This provides a hook allowing you to add any more headers or do any more operations before this occurs.
- The handler will be passed a future, when you've completed the work you want to do you should complete (or fail)
- the future. This can be done after the handler has returned.
 
   </div>
 </div>
@@ -1781,20 +1894,20 @@
       <pre class="lines">
 
 
-283
-284
-285
-286
-287
-288
-289</pre>
+312
+313
+314
+315
+316
+317
+318</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 283</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 312</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_headers_end_handler'>headers_end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:headersEndHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Future</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:headersEndHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='kw'>yield</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='kw'>self</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling headers_end_handler()</span><span class='tstring_end'>&quot;</span></span>
@@ -1890,16 +2003,16 @@
       <pre class="lines">
 
 
+175
 176
 177
 178
 179
 180
-181
-182</pre>
+181</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 176</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put_header'>put_header</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1999,16 +2112,16 @@
       <pre class="lines">
 
 
+197
 198
 199
 200
 201
 202
-203
-204</pre>
+203</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 198</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 197</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put_trailer'>put_trailer</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2025,7 +2138,7 @@
       <div class="method_details ">
   <h3 class="signature " id="send_file-instance_method">
   
-    - (<tt>self</tt>) <strong>send_file</strong>(filename = nil) { ... }
+    - (<tt>self</tt>) <strong>send_file</strong>(filename = nil, offset = nil, length = nil) { ... }
   
 
   
@@ -2033,8 +2146,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Like <span class='object_link'><a href="#send_file-instance_method" title="Vertx::HttpServerResponse#send_file (method)">#send_file</a></span> but providing a handler which will be notified once the file has been completely
- written to the wire.
+    Like <span class='object_link'><a href="#send_file-instance_method" title="Vertx::HttpServerResponse#send_file (method)">#send_file</a></span> but providing a handler which will be notified once the file has been
+ completely written to the wire.
 
   </div>
 </div>
@@ -2055,6 +2168,38 @@
       
         &mdash;
         <div class='inline'>path to the file to serve</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>offset</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>the offset to serve from</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>length</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>the length to serve to</div>
       
     </li>
   
@@ -2109,29 +2254,53 @@
       <pre class="lines">
 
 
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252</pre>
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 243</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 254</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_send_file'>send_file</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_send_file'>send_file</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_offset'>offset</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_length'>length</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_offset'>offset</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='kw'>nil</span>
     <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:sendFile</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='kw'>self</span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_offset'>offset</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='kw'>nil</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:sendFile</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_long'>long</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span><span class='id identifier rubyid_offset'>offset</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>self</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_offset'>offset</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='kw'>nil</span>
     <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:sendFile</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='kw'>self</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_offset'>offset</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_length'>length</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:sendFile</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_long'>long</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_long'>long</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span><span class='id identifier rubyid_offset'>offset</span><span class='comma'>,</span><span class='id identifier rubyid_length'>length</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>self</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_offset'>offset</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='kw'>nil</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:sendFile</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_long'>long</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span><span class='id identifier rubyid_offset'>offset</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>self</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_offset'>offset</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_length'>length</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:sendFile</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_long'>long</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_long'>long</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span><span class='id identifier rubyid_offset'>offset</span><span class='comma'>,</span><span class='id identifier rubyid_length'>length</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>self</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling send_file(filename)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling send_file(filename,offset,length)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2215,16 +2384,16 @@
       <pre class="lines">
 
 
+145
 146
 147
 148
 149
 150
-151
-152</pre>
+151</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 146</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 145</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_chunked'>set_chunked</span><span class='lparen'>(</span><span class='id identifier rubyid_chunked'>chunked</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_chunked'>chunked</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_chunked'>chunked</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2306,16 +2475,16 @@
       <pre class="lines">
 
 
+106
 107
 108
 109
 110
 111
-112
-113</pre>
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 107</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 106</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_status_code'>set_status_code</span><span class='lparen'>(</span><span class='id identifier rubyid_statusCode'>statusCode</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_statusCode'>statusCode</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2396,16 +2565,16 @@
       <pre class="lines">
 
 
+125
 126
 127
 128
 129
 130
-131
-132</pre>
+131</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 126</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 125</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_status_message'>set_status_message</span><span class='lparen'>(</span><span class='id identifier rubyid_statusMessage'>statusMessage</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_statusMessage'>statusMessage</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2486,16 +2655,16 @@
       <pre class="lines">
 
 
+78
 79
 80
 81
 82
 83
-84
-85</pre>
+84</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 79</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 78</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_write_queue_max_size'>set_write_queue_max_size</span><span class='lparen'>(</span><span class='id identifier rubyid_maxSize'>maxSize</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_maxSize'>maxSize</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2559,6 +2728,7 @@
       <pre class="lines">
 
 
+184
 185
 186
 187
@@ -2566,11 +2736,10 @@
 189
 190
 191
-192
-193</pre>
+192</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 185</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 184</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_trailers'>trailers</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2757,6 +2926,7 @@
       <pre class="lines">
 
 
+63
 64
 65
 66
@@ -2768,11 +2938,10 @@
 72
 73
 74
-75
-76</pre>
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 64</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 63</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2786,6 +2955,80 @@
     <span class='kw'>return</span> <span class='kw'>self</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling write(param_1,param_2)</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="write_continue-instance_method">
+  
+    - (<tt>self</tt>) <strong>write_continue</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Used to write an interim 100 Continue response to signify that the client should send the rest of the request.
+ Must only be used if the request contains an "Expect:100-Continue" header
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+218
+219
+220
+221
+222
+223
+224</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 218</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_write_continue'>write_continue</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:writeContinue</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>self</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling write_continue()</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2845,15 +3088,15 @@
       <pre class="lines">
 
 
+39
 40
 41
 42
 43
-44
-45</pre>
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 40</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-lang-ruby/src/main/resources/vertx/http_server_response.rb', line 39</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_queue_full?'>write_queue_full?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2871,9 +3114,9 @@
 </div>
 
     <div id="footer">
-  Generated on Fri Jun 26 13:34:17 2015 by
+  Generated on Wed Oct  7 11:17:34 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-1.9.3).
+  0.8.7.6 (ruby-2.2.2).
 </div>
 
   </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Vert.x Auth - Authentication and Authorisation &amp;middot; Vert.x</title>
+  <title>Vert.x Auth - Authentication and Authorisation - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -112,11 +112,42 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Vert.x component provides interfaces for authentication and authorisation that can be used from your Vert.x
-applications and can be backed by different providers.</p>
+<p>This Vert.x component provides interfaces for authentication and authorisation that can be used from
+your Vert.x applications and can be backed by different providers.</p>
 </div>
 <div class="paragraph">
 <p>Vert.x auth is also used by vertx-web to handle its authentication and authorisation.</p>
+</div>
+<div class="paragraph">
+<p>To use this project, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-auth-common&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-auth-common:3.1.0</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -276,7 +307,7 @@ to make your user implementation. This contains the caching logic so you don&#82
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

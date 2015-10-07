@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Vert.x Mail client (SMTP client implementation) &amp;middot; Vert.x</title>
+  <title>Vert.x Mail client (SMTP client implementation) - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -125,6 +125,37 @@
 support for TLS and SSL and is completely asynchronous. The client supports
 connection pooling to keep connections open to be reused.</p>
 </div>
+<div class="paragraph">
+<p>To use this project, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-mail-client&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mail-client:3.1.0</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -150,6 +181,15 @@ if it is shared, the same connection pool will be used for all clients using the
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailConfig config = new MailConfig();
 MailClient mailClient = MailClient.createShared(vertx, config, "exampleclient");</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The first call to MailClient.createShared will actually create the pool with the specified config.
+Subsequent calls will return a new client instance that uses the same pool, so the configuration won&#8217;t be used.</p>
+</div>
+<div class="paragraph">
+<p>If you leave out the pool identifier, a default pool will be created. Note that the clients are
+shared in the scope of a vertx instance only (so two different vertx will have different pools with the
+same identifier).</p>
 </div>
 <div class="paragraph">
 <p>The unshared client can be created the same way leaving out the identifier.</p>
@@ -409,7 +449,7 @@ what you are doing, this may generate invalid messages.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

@@ -318,15 +318,15 @@
       <pre class="lines">
 
 
-21
 22
 23
 24
 25
-26</pre>
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 21</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_non_shared'>create_non_shared</span><span class='lparen'>(</span><span class='id identifier rubyid_vertx'>vertx</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_config'>config</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_vertx'>vertx</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -445,17 +445,17 @@
       <pre class="lines">
 
 
-33
 34
 35
 36
 37
 38
 39
-40</pre>
+40
+41</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 33</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_shared'>create_shared</span><span class='lparen'>(</span><span class='id identifier rubyid_vertx'>vertx</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_config'>config</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_dataSourceName'>dataSourceName</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_vertx'>vertx</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_dataSourceName'>dataSourceName</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -513,15 +513,15 @@
       <pre class="lines">
 
 
-54
 55
 56
 57
 58
-59</pre>
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 54</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close'>close</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -601,16 +601,16 @@
       <pre class="lines">
 
 
-45
 46
 47
 48
 49
 50
-51</pre>
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 45</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-jdbc-client/src/main/resources/vertx-jdbc/jdbc_client.rb', line 46</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_connection'>get_connection</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -629,9 +629,9 @@
 </div>
 
     <div id="footer">
-  Generated on Fri Jun 26 13:39:46 2015 by
+  Generated on Wed Oct  7 11:31:08 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-1.9.3).
+  0.8.7.6 (ruby-2.2.2).
 </div>
 
   </body>

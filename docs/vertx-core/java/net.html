@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Writing TCP servers and clients &amp;middot; Vert.x</title>
+  <title>Writing TCP servers and clients - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -708,7 +708,7 @@ utility which ships with the JDK.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
     setSsl(true).
-    setClientAuthRequired(true).
+    setClientAuth(ClientAuth.REQUIRED).
     setTrustStoreOptions(
         new JksOptions().
             setPath("/path/to/your/truststore.jks").
@@ -725,7 +725,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 NetServerOptions options = new NetServerOptions().
     setSsl(true).
-    setClientAuthRequired(true).
+    setClientAuth(ClientAuth.REQUIRED).
     setTrustStoreOptions(
         new JksOptions().
             setValue(myTrustStoreAsABuffer).
@@ -742,7 +742,7 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
     setSsl(true).
-    setClientAuthRequired(true).
+    setClientAuth(ClientAuth.REQUIRED).
     setPfxTrustOptions(
         new PfxOptions().
             setPath("/path/to/your/truststore.pfx").
@@ -759,7 +759,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 NetServerOptions options = new NetServerOptions().
     setSsl(true).
-    setClientAuthRequired(true).
+    setClientAuth(ClientAuth.REQUIRED).
     setPfxTrustOptions(
         new PfxOptions().
             setValue(myTrustStoreAsABuffer).
@@ -775,7 +775,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
     setSsl(true).
-    setClientAuthRequired(true).
+    setClientAuth(ClientAuth.REQUIRED).
     setPemTrustOptions(
         new PemTrustOptions().
             addCertPath("/path/to/your/server-ca.pem")
@@ -791,7 +791,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
 NetServerOptions options = new NetServerOptions().
     setSsl(true).
-    setClientAuthRequired(true).
+    setClientAuth(ClientAuth.REQUIRED).
     setPemTrustOptions(
         new PemTrustOptions().
             addCertValue(myCaAsABuffer)
@@ -1091,7 +1091,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

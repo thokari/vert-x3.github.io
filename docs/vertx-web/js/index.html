@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Vert.x-Web &amp;middot; Vert.x</title>
+  <title>Vert.x-Web - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -82,6 +82,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
+<li><a href="#_using_vert_x_web">Using Vert.x Web</a></li>
 <li><a href="#_re_cap_on_vert_x_core_http_servers">Re-cap on Vert.x core HTTP servers</a></li>
 <li><a href="#_basic_vert_x_web_concepts">Basic Vert.x-Web concepts</a></li>
 <li><a href="#_handling_requests_and_calling_the_next_handler">Handling requests and calling the next handler</a></li>
@@ -98,7 +99,9 @@
 <li><a href="#_combining_routing_criteria">Combining routing criteria</a></li>
 <li><a href="#_enabling_and_disabling_routes">Enabling and disabling routes</a></li>
 <li><a href="#_context_data">Context data</a></li>
+<li><a href="#_reroute">Reroute</a></li>
 <li><a href="#_sub_routers">Sub-routers</a></li>
+<li><a href="#_localization">Localization</a></li>
 <li><a href="#_default_404_handling">Default 404 Handling</a></li>
 <li><a href="#_error_handling">Error handling</a></li>
 <li><a href="#_request_body_handling">Request body handling</a>
@@ -171,6 +174,8 @@
 <li><a href="#_handling_event_bus_bridge_events">Handling event bus bridge events</a></li>
 </ul>
 </li>
+<li><a href="#_csrf_cross_site_request_forgery">CSRF Cross Site Request Forgery</a></li>
+<li><a href="#_virtualhost_handler">VirtualHost Handler</a></li>
 </ul>
         </div>
       </div>
@@ -178,6 +183,7 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
+<li><a href="#_using_vert_x_web">Using Vert.x Web</a></li>
 <li><a href="#_re_cap_on_vert_x_core_http_servers">Re-cap on Vert.x core HTTP servers</a></li>
 <li><a href="#_basic_vert_x_web_concepts">Basic Vert.x-Web concepts</a></li>
 <li><a href="#_handling_requests_and_calling_the_next_handler">Handling requests and calling the next handler</a></li>
@@ -194,7 +200,9 @@
 <li><a href="#_combining_routing_criteria">Combining routing criteria</a></li>
 <li><a href="#_enabling_and_disabling_routes">Enabling and disabling routes</a></li>
 <li><a href="#_context_data">Context data</a></li>
+<li><a href="#_reroute">Reroute</a></li>
 <li><a href="#_sub_routers">Sub-routers</a></li>
+<li><a href="#_localization">Localization</a></li>
 <li><a href="#_default_404_handling">Default 404 Handling</a></li>
 <li><a href="#_error_handling">Error handling</a></li>
 <li><a href="#_request_body_handling">Request body handling</a>
@@ -267,6 +275,8 @@
 <li><a href="#_handling_event_bus_bridge_events">Handling event bus bridge events</a></li>
 </ul>
 </li>
+<li><a href="#_csrf_cross_site_request_forgery">CSRF Cross Site Request Forgery</a></li>
+<li><a href="#_virtualhost_handler">VirtualHost Handler</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -398,6 +408,12 @@ the type of app you prefer, not Vert.x-Web.</p>
 <li>
 <p>Event-bus bridge</p>
 </li>
+<li>
+<p>CSRF Cross Site Request Forgery</p>
+</li>
+<li>
+<p>VirtualHost</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -406,6 +422,42 @@ over time.</p>
 </div>
 <div class="paragraph">
 <p>We&#8217;ll discuss all these features in this manual.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_vert_x_web">Using Vert.x Web</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To use vert.x web, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-web:3.1.0</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1269,8 +1321,42 @@ router.get("/some/path/other").handler(function (routingContext) {
 });</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reroute">Reroute</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Alternatively you can access the entire context data map with <code><a href="jsdoc/routing_context-RoutingContext.html#data">data</a></code>.</p>
+<p>Until now all routing mechanism allow you to handle your requests in a sequential way, however there might be times
+where you will want to go back. Since the context does not expose any information about the previous or next handler,
+mostly because this information is dynamic there is a way to restart the whole routing from the start of the current
+Router.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">router.get("/some/path").handler(function (routingContext) {
+
+  routingContext.put("foo", "bar");
+  routingContext.next();
+
+});
+
+router.get("/some/path/B").handler(function (routingContext) {
+  routingContext.response().end();
+});
+
+router.get("/some/path").handler(function (routingContext) {
+  routingContext.reroute("/some/path/B");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So from the code you can see that if a request arrives at <code>/some/path</code> if first add a value to the context, then
+moves to the next handler that re routes the request to <code>/some/path/B</code> which terminates the request.</p>
+</div>
+<div class="paragraph">
+<p>You can reroute based on a new path or based on a new path and method. Note however that rerouting based on method
+might introduce security issues since for example a usually safe GET request can become a DELETE.</p>
 </div>
 </div>
 </div>
@@ -1351,6 +1437,35 @@ mainRouter.route(".*\\.templ").handler(myTemplateHandler);</code></pre>
 </div>
 <div class="paragraph">
 <p>This means the REST API is now accessible via paths like: <code>/productsAPI/products/product1234</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_localization">Localization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x Web parses the <code>Accept-Language</code> header and provides some helper methods to identify which is the preferred
+locale for a client or the sorted list of preferred locales by quality.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var route = router.get("/localized").handler(function (rc) {
+  // although it might seem strange by running a loop with a switch we
+  // make sure that the locale order of preference is preserved when
+  // replying in the users language.
+  Array.prototype.forEach.call(rc.acceptableLocales(), function(locale) {
+    return
+  });
+  // we do not know the user language so lets just inform that back:
+  rc.response().end("Sorry we don't speak: " + rc.preferredLocale());
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The main method <code><a href="jsdoc/routing_context-RoutingContext.html#acceptableLocales">acceptableLocales</a></code> will return the ordered list of locales the
+user understands, if you&#8217;re only interested in the user prefered locale then the helper:
+<code><a href="jsdoc/routing_context-RoutingContext.html#preferredLocale">preferredLocale</a></code> will return the 1st element of the list or <code>null</code> if no
+locale was provided by the user.</p>
 </div>
 </div>
 </div>
@@ -1445,6 +1560,12 @@ route3.failureHandler(function (failureRoutingContext) {
 });</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>For the eventuality that an error occurs when running the error handler related usage of not allowed characters in
+status message header, then the original status message will be changed to the default message from the error code.
+This is a tradeoff to keep the semantics of the HTTP protocol working instead of abruptly creash and close the socket
+without properly completing the protocol.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1456,6 +1577,10 @@ file uploads.</p>
 </div>
 <div class="paragraph">
 <p>You should make sure a body handler is on a matching route for any requests that require this functionality.</p>
+</div>
+<div class="paragraph">
+<p>The usage of this handler requires that it is installed as soon as possible in the router since it needs
+to install handlers to consume the HTTP request body and this must be done before executing any async call.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1768,7 +1893,7 @@ from the session store and set on the routing context before it gets to your app
 <div class="sect2">
 <h3 id="_using_the_session">Using the session</h3>
 <div class="paragraph">
-<p>In your handlers you an access the session instance with <code><a href="jsdoc/routing_context-RoutingContext.html#session">session</a></code>.</p>
+<p>In your handlers you can access the session instance with <code><a href="jsdoc/routing_context-RoutingContext.html#session">session</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You put data into the session with <code><a href="jsdoc/session-Session.html#put">put</a></code>,
@@ -2208,6 +2333,12 @@ static resources into a jar file (or fatjar) and distribute them like that.</p>
 <p>When Vert.x finds a resource on the classpath for the first time it extracts it and caches it in a temporary directory
 on disk so it doesn&#8217;t have to do this each time.</p>
 </div>
+<div class="paragraph">
+<p>The handler will handle range aware requests. When a client makes a request to a static resource, the handler will
+notify that it can handle range aware request by stating the unit on the <code>Accept-Ranges</code> header. Further requests
+that contain the <code>Range</code> header with the correct unit and start and end indexes will then receive partial responses
+with the correct <code>Content-Range</code> header.</p>
+</div>
 <div class="sect2">
 <h3 id="_configuring_caching">Configuring caching</h3>
 <div class="paragraph">
@@ -2333,9 +2464,6 @@ router.route().handler(function (routingContext) {
 });</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>TODO more CORS docs</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -2361,14 +2489,16 @@ This handler calls the template engine for you based on the path in the HTTP req
 <p>The handler will return the results of rendering with a content type of <code>text/html</code> by default. This can also be configured.</p>
 </div>
 <div class="paragraph">
-<p>When you create the template handler you pass in an instance of the template engine you want.</p>
+<p>When you create the template handler you pass in an instance of the template engine you want. Template engines are
+not embedded in vertx-web so, you need to configure your project to access them. Configuration is provided for
+each template engine.</p>
 </div>
 <div class="paragraph">
-<p>Here are some examples</p>
+<p>Here are some examples:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HandlebarsTemplateEngine = require("vertx-web-js/handlebars_template_engine");
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var HandlebarsTemplateEngine = require("vertx-web-js/handlebars_template_engine");
 var TemplateHandler = require("vertx-web-js/template_handler");
 
 var engine = HandlebarsTemplateEngine.create();
@@ -2385,7 +2515,12 @@ router.getWithRegex(".+\\.hbs").handler(handler.handle);</code></pre>
 <div class="sect2">
 <h3 id="_mvel_template_engine">MVEL template engine</h3>
 <div class="paragraph">
-<p>When using the <code><a href="jsdoc/mvel_template_engine-MVELTemplateEngine.html">MVEL template engine</a></code>, it will by default look for
+<p>To use MVEL, you need to add the following <em>dependency</em> to your project:
+<code>io.vertx:vertx-web-templ-mvel:3.1.0</code>. Create an instance of the MVEL template engine using:
+<code>io.vertx.ext.web.templ.MVELTemplateEngine#create()</code></p>
+</div>
+<div class="paragraph">
+<p>When using the MVEL template engine, it will by default look for
 templates with the <code>.templ</code> extension if no extension is specified in the file name.</p>
 </div>
 <div class="paragraph">
@@ -2413,7 +2548,12 @@ MVEL templates.</p>
 <div class="sect2">
 <h3 id="_jade_template_engine">Jade template engine</h3>
 <div class="paragraph">
-<p>When using the <code><a href="jsdoc/jade_template_engine-JadeTemplateEngine.html">Jade template engine</a></code>, it will by default look for
+<p>To use the Jade template engine, you need to add the following <em>dependency</em> to your project:
+<code>io.vertx:vertx-web-templ-jade:3.1.0</code>. Create an instance of the Jade template engine using:
+<code>io.vertx.ext.web.templ.JadeTemplateEngine#create()</code>.</p>
+</div>
+<div class="paragraph">
+<p>When using the Jade template engine, it will by default look for
 templates with the <code>.jade</code> extension if no extension is specified in the file name.</p>
 </div>
 <div class="paragraph">
@@ -2441,7 +2581,12 @@ Jade templates.</p>
 <div class="sect2">
 <h3 id="_handlebars_template_engine">Handlebars template engine</h3>
 <div class="paragraph">
-<p>When using the <code><a href="jsdoc/handlebars_template_engine-HandlebarsTemplateEngine.html">Handlebars template engine</a></code>, it will by default look for
+<p>To use Handlebars, you need to add the following <em>dependency</em> to your project:
+<code>io.vertx:vertx-web-templ-handlebars:3.1.0</code>. Create an instance of the Handlebars template engine
+using: <code>io.vertx.ext.web.templ.HandlebarsTemplateEngine#create()</code>.</p>
+</div>
+<div class="paragraph">
+<p>When using the Handlebars template engine, it will by default look for
 templates with the <code>.hbs</code> extension if no extension is specified in the file name.</p>
 </div>
 <div class="paragraph">
@@ -2457,10 +2602,8 @@ add it the context data in a handler before the template handler. For example:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HandlebarsTemplateEngine = require("vertx-web-js/handlebars_template_engine");
-var TemplateHandler = require("vertx-web-js/template_handler");
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var TemplateHandler = require("vertx-web-js/template_handler");
 
-var engine = HandlebarsTemplateEngine.create();
 var handler = TemplateHandler.create(engine);
 
 router.get("/dynamic").handler(function (routingContext) {
@@ -2482,7 +2625,12 @@ handlebars templates.</p>
 <div class="sect2">
 <h3 id="_thymeleaf_template_engine">Thymeleaf template engine</h3>
 <div class="paragraph">
-<p>When using the <code><a href="jsdoc/thymeleaf_template_engine-ThymeleafTemplateEngine.html">Thymeleaf template engine</a></code>, it will by default look for
+<p>To use Thymeleaf, you need to add the following <em>dependency</em> to your project:
+<code>io.vertx:vertx-web-templ-thymeleaf:3.1.0</code>. Create an instance of the Thymeleaf template engine
+using: <code>io.vertx.ext.web.templ.ThymeleafTemplateEngine#create()</code>.</p>
+</div>
+<div class="paragraph">
+<p>When using the Thymeleaf template engine, it will by default look for
 templates with the <code>.html</code> extension if no extension is specified in the file name.</p>
 </div>
 <div class="paragraph">
@@ -2532,6 +2680,9 @@ failure handler for any paths that you want covered.</p>
 </div>
 <div class="paragraph">
 <p>By default requests are logged to the Vert.x logger which can be configured to use JUL logging, log4j or SLF4J.</p>
+</div>
+<div class="paragraph">
+<p>See <code><a href="../enums.html#LoggerFormat">LoggerFormat</a></code>.</p>
 </div>
 </div>
 </div>
@@ -2612,7 +2763,7 @@ using SockJS in your Vert.x-Web applications.</p>
 <div class="paragraph">
 <p>You should create one handler per SockJS application using <code><a href="jsdoc/sock_js_handler-SockJSHandler.html#create">SockJSHandler.create</a></code>.
 You can also specify configuration options when creating the instance. The configuration options are described with
-an instance of <code><a href="../cheatsheet/SockJSHandlerOptions.html">SockJSHandlerOptions</a></code>.</p>
+an instance of <code><a href="../dataobjects.html#SockJSHandlerOptions">SockJSHandlerOptions</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2627,7 +2778,7 @@ var options = {
 
 var sockJSHandler = SockJSHandler.create(vertx, options);
 
-router.route("/myapp").handler(sockJSHandler.handle);</code></pre>
+router.route("/myapp/*").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 </div>
@@ -2665,7 +2816,7 @@ sockJSHandler.socketHandler(function (sockJSSocket) {
   sockJSSocket.handler(sockJSSocket.write);
 });
 
-router.route("/myapp").handler(sockJSHandler.handle);</code></pre>
+router.route("/myapp/*").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 </div>
@@ -2707,7 +2858,7 @@ sock.close();</pre>
 <div class="sect2">
 <h3 id="_configuring_the_sockjs_handler">Configuring the SockJS handler</h3>
 <div class="paragraph">
-<p>The handler can be configured with various options using <code><a href="../cheatsheet/SockJSHandlerOptions.html">SockJSHandlerOptions</a></code>.</p>
+<p>The handler can be configured with various options using <code><a href="../dataobjects.html#SockJSHandlerOptions">SockJSHandlerOptions</a></code>.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -2771,7 +2922,7 @@ client side JavaScript running in browsers.</p>
 be connected to the same server as long as the servers are connected.</p>
 </div>
 <div class="paragraph">
-<p>This is done by providing a simple client side JavaScript library called <code>vertxbus.js</code> which provides an API
+<p>This is done by providing a simple client side JavaScript library called <code>vertx-eventbus.js</code> which provides an API
 very similar to the server-side Vert.x event-bus API, which allows you to send and publish messages to the event bus
 and register handlers to receive messages.</p>
 </div>
@@ -2804,17 +2955,17 @@ router.route("/eventbus/*").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In client side JavaScript you use the 'vertxbus.js` library to create connections to the event bus and to send
+<p>In client side JavaScript you use the 'vertx-eventbus.js` library to create connections to the event bus and to send
 and receive messages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>&lt;script src="http://cdn.sockjs.org/sockjs-0.3.4.min.js"&gt;&lt;/script&gt;
-&lt;script src='vertxbus.js'&gt;&lt;/script&gt;
+&lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
 
 &lt;script&gt;
 
-var eb = new vertx.EventBus('http://localhost:8080/eventbus');
+var eb = new EventBus('http://localhost:8080/eventbus');
 
 eb.onopen = function() {
 
@@ -2836,7 +2987,7 @@ eb.onopen = function() {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>var eb = new vertx.EventBus('http://localhost:8080/eventbus');</pre>
+<pre>var eb = new EventBus('http://localhost:8080/eventbus');</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2845,6 +2996,47 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="paragraph">
 <p>You can&#8217;t actually do anything with the connection until it is opened. When it is open the <code>onopen</code> handler will be called.</p>
+</div>
+<div class="paragraph">
+<p>You can retrieve the client library using a dependency manager:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;classifier&gt;client&lt;/classifier&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-web:3.1.0:client</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The library is also available on <a href="https://www.npmjs.com/package/vertx3-eventbus-client">NPM</a> and on
+<a href="https://github.com/vert-x3/vertx-bus-bower">Bower</a></p>
+</div>
+<div class="paragraph">
+<p>Notice that the API has changed between the 3.0.0 and 3.1.0 version. Please check the changelog. The previous client
+is still compatible and can still be used, but the new client offers more feature and is closer to the vert.x
+event bus API.</p>
 </div>
 <div class="sect2">
 <h3 id="_securing_the_bridge">Securing the Bridge</h3>
@@ -2875,24 +3067,24 @@ bridge what messages are ok for it to pass through. (There is an exception for r
 </div>
 <div class="paragraph">
 <p>You can specify which <em>matches</em> you want to allow for inbound and outbound traffic using the
-<code><a href="../cheatsheet/BridgeOptions.html">BridgeOptions</a></code> that you pass in when calling bridge.</p>
+<code><a href="../dataobjects.html#BridgeOptions">BridgeOptions</a></code> that you pass in when calling bridge.</p>
 </div>
 <div class="paragraph">
-<p>Each match is a <code><a href="../cheatsheet/PermittedOptions.html">PermittedOptions</a></code> object:</p>
+<p>Each match is a <code><a href="../dataobjects.html#PermittedOptions">PermittedOptions</a></code> object:</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><code><a href="../cheatsheet/PermittedOptions.html#address">address</a></code></dt>
+<dt class="hdlist1"><code><a href="../dataobjects.html#PermittedOptions#setAddress">address</a></code></dt>
 <dd>
 <p>This represents the exact address the message is being sent to. If you want to allow messages based on
 an exact address you use this field.</p>
 </dd>
-<dt class="hdlist1"><code><a href="../cheatsheet/PermittedOptions.html#addressRegex">addressRegex</a></code></dt>
+<dt class="hdlist1"><code><a href="../dataobjects.html#PermittedOptions#setAddressRegex">addressRegex</a></code></dt>
 <dd>
 <p>This is a regular expression that will be matched against the address. If you want to allow messages
 based on a regular expression you use this field. If the <code>address</code> field is specified this field will be ignored.</p>
 </dd>
-<dt class="hdlist1"><code><a href="../cheatsheet/PermittedOptions.html#match">match</a></code></dt>
+<dt class="hdlist1"><code><a href="../dataobjects.html#PermittedOptions#setMatch">match</a></code></dt>
 <dd>
 <p>This allows you to allow messages based on their structure. Any fields in the match must exist in the
 message with the same values for them to be allowed. This currently only works with JSON messages.</p>
@@ -3001,7 +3193,7 @@ required for the match.</p>
 </div>
 <div class="paragraph">
 <p>To declare that a specific authority for the logged-in user is required in order to access allow the messages you use the
-<code><a href="../cheatsheet/PermittedOptions.html#requiredAuthority">requiredAuthority</a></code> field.</p>
+<code><a href="../dataobjects.html#PermittedOptions#setRequiredAuthority">requiredAuthority</a></code> field.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -3140,7 +3332,6 @@ authorisation or metrics.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Router = require("vertx-web-js/router");
 var SockJSHandler = require("vertx-web-js/sock_js_handler");
-var BridgeEvent = require("vertx-web-js/bridge_event");
 
 var router = Router.router(vertx);
 
@@ -3157,7 +3348,7 @@ var options = {
 };
 
 sockJSHandler.bridge(options, function (be) {
-  if (be.type() === BridgeEvent.Type.PUBLISH || be.type() === BridgeEvent.Type.RECEIVE) {
+  if (be.type() === 'PUBLISH' || be.type() === 'RECEIVE') {
     if (be.rawMessage().body == "armadillos") {
       // Reject it
       be.complete(false);
@@ -3178,7 +3369,6 @@ also add headers to the message, here&#8217;s an example:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Router = require("vertx-web-js/router");
 var SockJSHandler = require("vertx-web-js/sock_js_handler");
-var BridgeEvent = require("vertx-web-js/bridge_event");
 
 var router = Router.router(vertx);
 
@@ -3195,7 +3385,7 @@ var options = {
 };
 
 sockJSHandler.bridge(options, function (be) {
-  if (be.type() === BridgeEvent.Type.PUBLISH || be.type() === BridgeEvent.Type.SEND) {
+  if (be.type() === 'PUBLISH' || be.type() === 'SEND') {
     // Add some headers
     var headers = {
       "header1" : "val",
@@ -3212,6 +3402,54 @@ router.route("/eventbus").handler(sockJSHandler.handle);</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_csrf_cross_site_request_forgery">CSRF Cross Site Request Forgery</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>CSRF or sometimes also known as XSRF is a technique by which an unauthorized site can gain your user&#8217;s private data.
+Vert.x-Web includes a handler <code><a href="jsdoc/csrf_handler-CSRFHandler.html">CSRFHandler</a></code> that you can use to prevent cross site
+request forgery requests.</p>
+</div>
+<div class="paragraph">
+<p>On each get request under this handler a cookie is added to the response with a unique token. Clients are then
+expected to return this token back in a header. Since cookies are sent it is required that the cookie handler is also
+present on the router.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CookieHandler = require("vertx-web-js/cookie_handler");
+var CSRFHandler = require("vertx-web-js/csrf_handler");
+
+router.route().handler(CookieHandler.create().handle);
+router.route().handler(CSRFHandler.create("abracadabra").handle);
+router.route().handler(function (rc) {
+
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_virtualhost_handler">VirtualHost Handler</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Virtual Host Handler will verify the request hostname and if it matches it will send the request to the
+registered handler, otherwise will continue inside the normal handlers chain.</p>
+</div>
+<div class="paragraph">
+<p>Request are checked against the <code>Host</code> header to a match and patterns allow the usage of <code><strong></code> wildcards, as for
+example <code></strong>.vertx.io</code> or fully domain names as <code>www.vertx.io</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var VirtualHostHandler = require("vertx-web-js/virtual_host_handler");
+router.route().handler(VirtualHostHandler.create("*.vertx.io", function (routingContext) {
+  // do something if the request is for *.vertx.io
+}).handle);</code></pre>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -3219,7 +3457,7 @@ router.route("/eventbus").handler(sockJSHandler.handle);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

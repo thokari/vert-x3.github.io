@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>io.vertx.groovy.ext.web.handler (io.vertx:vertx-web:3.0.0)</title>
+<title>io.vertx.groovy.ext.web.handler (io.vertx:vertx-web:3.1.0)</title>
 <meta name="keywords" content="io.vertx.groovy.ext.web.handler package">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel ="stylesheet" TYPE="text/css" HREF="../../../../../../stylesheet.css" title="Style">
@@ -11,7 +11,7 @@
 <script type="text/javascript">
 function windowTitle()
 {
-    parent.document.title="io.vertx.groovy.ext.web.handler (io.vertx:vertx-web:3.0.0)";
+    parent.document.title="io.vertx.groovy.ext.web.handler (io.vertx:vertx-web:3.1.0)";
 }
 </script>
 <noscript>
@@ -118,7 +118,15 @@ function windowTitle()
                                     BodyHandler
                                 </a></strong>
                             </td>
-                            <td>A handler which gathers the entire request body and sets it on the <a href='../../../../../../io/vertx/groovy/ext/web/RoutingContext.html' title='RoutingContext'>RoutingContext</a>.</td>
+                            <td>A handler which gathers the entire request body and sets it on the .</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="CSRFHandler.html" title="class in io/vertx/groovy/ext/web/handler">
+                                    CSRFHandler
+                                </a></strong>
+                            </td>
+                            <td>This handler adds a CSRF token to requests which mutate state. </td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -126,7 +134,7 @@ function windowTitle()
                                     CookieHandler
                                 </a></strong>
                             </td>
-                            <td>A handler which decodes cookies from the request, makes them available in the <a href='../../../../../../io/vertx/groovy/ext/web/RoutingContext.html' title='RoutingContext'>RoutingContext</a>
+                            <td>A handler which decodes cookies from the request, makes them available in the 
  and writes them back in the response.</td>
                         </tr>
 <tr class="altColor">
@@ -237,6 +245,14 @@ function windowTitle()
                             <td>This handler should be used if you want to store the User object in the Session so it's available between
  different requests, without you having re-authenticate each time.</td>
                         </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="VirtualHostHandler.html" title="class in io/vertx/groovy/ext/web/handler">
+                                    VirtualHostHandler
+                                </a></strong>
+                            </td>
+                            <td>Handler that will filter requests based on the request Host name.</td>
+                        </tr>
 
                     </tbody>
                 </table>
@@ -275,7 +291,7 @@ function windowTitle()
         </ul>
     </div>
 
-    <div class="aboutLanguage"><em>io.vertx:vertx-web:3.0.0</em></div>
+    <div class="aboutLanguage"><em>io.vertx:vertx-web:3.1.0</em></div>
     <a name="skip-navbar_bottom">
         <!--   -->
     </a></div>

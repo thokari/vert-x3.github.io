@@ -43,6 +43,8 @@
 
 /** @module vertx-js/context */
 var utils = require('vertx-js/util/utils');
+var Vertx = require('vertx-js/vertx');
+var Future = require('vertx-js/future');
 
 var io = Packages.io;
 var JsonObject = io.vertx.core.json.JsonObject;
@@ -67,7 +69,49 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
       j_context["runOnContext(io.vertx.core.Handler)"](action);
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Safely execute some blocking code.
+   &lt;p>
+   Executes the blocking code in the handler &lt;code>blockingCodeHandler&lt;/code> using a thread from the worker pool.
+   &lt;p>
+   When the code is complete the handler &lt;code>resultHandler&lt;/code> will be called with the result on the original context
+   (e.g. on the original event loop of the caller).
+   &lt;p>
+   A &lt;code>Future&lt;/code> instance is passed into &lt;code>blockingCodeHandler&lt;/code>. When the blocking code successfully completes,
+   the handler should call the {@link Future#complete} or {@link Future#complete} method, or the {@link Future#fail}
+   method if it failed.
+
+   @public
+   @param blockingCodeHandler {function} handler representing the blocking code to run 
+   @param ordered {boolean} if true then if executeBlocking is called several times on the same context, the executions for that context will be executed serially, not in parallel. if false then they will be no ordering guarantees 
+   @param resultHandler {function} handler that will be called when the blocking code is complete 
+   */
+  this.executeBlocking = function() {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'function' && typeof __args[1] === 'function') {
+      j_context["executeBlocking(io.vertx.core.Handler,io.vertx.core.Handler)"](function(jVal) {
+      __args[0](utils.convReturnVertxGen(jVal, Future));
+    }, function(ar) {
+      if (ar.succeeded()) {
+        __args[1](utils.convReturnTypeUnknown(ar.result()), null);
+      } else {
+        __args[1](null, ar.cause());
+      }
+    });
+    }  else if (__args.length === 3 && typeof __args[0] === 'function' && typeof __args[1] ==='boolean' && typeof __args[2] === 'function') {
+      j_context["executeBlocking(io.vertx.core.Handler,boolean,io.vertx.core.Handler)"](function(jVal) {
+      __args[0](utils.convReturnVertxGen(jVal, Future));
+    }, __args[1], function(ar) {
+      if (ar.succeeded()) {
+        __args[2](utils.convReturnTypeUnknown(ar.result()), null);
+      } else {
+        __args[2](null, ar.cause());
+      }
+    });
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -81,7 +125,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return j_context["deploymentID()"]();
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -96,7 +140,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return utils.convReturnJson(j_context["config()"]());
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -110,7 +154,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return j_context["processArgs()"]();
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -128,7 +172,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return j_context["isEventLoopContext()"]();
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -146,7 +190,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return j_context["isWorkerContext()"]();
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -160,7 +204,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return j_context["isMultiThreadedWorkerContext()"]();
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -174,7 +218,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
       return utils.convReturnTypeUnknown(j_context["get(java.lang.String)"](key));
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -190,7 +234,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 2 && typeof __args[0] === 'string' && true) {
       j_context["put(java.lang.String,java.lang.Object)"](key, utils.convParamTypeUnknown(value));
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -204,7 +248,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'string') {
       return j_context["remove(java.lang.String)"](key);
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -218,7 +262,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return utils.convReturnVertxGen(j_context["owner()"](), Vertx);
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
@@ -233,7 +277,7 @@ var Context = function(j_val) {
     var __args = arguments;
     if (__args.length === 0) {
       return j_context["getInstanceCount()"]();
-    } else utils.invalidArgs();
+    } else throw new TypeError('function invoked with invalid arguments');
   };
 
   // A reference to the underlying Java delegate
@@ -256,7 +300,7 @@ Context.isOnWorkerThread = function() {
   var __args = arguments;
   if (__args.length === 0) {
     return JContext["isOnWorkerThread()"]();
-  } else utils.invalidArgs();
+  } else throw new TypeError('function invoked with invalid arguments');
 };
 
 /**
@@ -273,7 +317,7 @@ Context.isOnEventLoopThread = function() {
   var __args = arguments;
   if (__args.length === 0) {
     return JContext["isOnEventLoopThread()"]();
-  } else utils.invalidArgs();
+  } else throw new TypeError('function invoked with invalid arguments');
 };
 
 /**
@@ -287,7 +331,7 @@ Context.isOnVertxThread = function() {
   var __args = arguments;
   if (__args.length === 0) {
     return JContext["isOnVertxThread()"]();
-  } else utils.invalidArgs();
+  } else throw new TypeError('function invoked with invalid arguments');
 };
 
 // We export the Constructor function
@@ -301,13 +345,13 @@ module.exports = Context;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="async_file.html">vertx-js/async_file</a></li><li><a href="async_map.html">vertx-js/async_map</a></li><li><a href="buffer.html">vertx-js/buffer</a></li><li><a href="context.html">vertx-js/context</a></li><li><a href="counter.html">vertx-js/counter</a></li><li><a href="datagram_packet.html">vertx-js/datagram_packet</a></li><li><a href="datagram_socket.html">vertx-js/datagram_socket</a></li><li><a href="dns_client.html">vertx-js/dns_client</a></li><li><a href="event_bus.html">vertx-js/event_bus</a></li><li><a href="file_props.html">vertx-js/file_props</a></li><li><a href="file_system.html">vertx-js/file_system</a></li><li><a href="file_system_props.html">vertx-js/file_system_props</a></li><li><a href="future.html">vertx-js/future</a></li><li><a href="http_client.html">vertx-js/http_client</a></li><li><a href="http_client_request.html">vertx-js/http_client_request</a></li><li><a href="http_client_response.html">vertx-js/http_client_response</a></li><li><a href="http_server.html">vertx-js/http_server</a></li><li><a href="http_server_file_upload.html">vertx-js/http_server_file_upload</a></li><li><a href="http_server_request.html">vertx-js/http_server_request</a></li><li><a href="http_server_request_stream.html">vertx-js/http_server_request_stream</a></li><li><a href="http_server_response.html">vertx-js/http_server_response</a></li><li><a href="local_map.html">vertx-js/local_map</a></li><li><a href="lock.html">vertx-js/lock</a></li><li><a href="measured.html">vertx-js/measured</a></li><li><a href="message.html">vertx-js/message</a></li><li><a href="message_consumer.html">vertx-js/message_consumer</a></li><li><a href="message_producer.html">vertx-js/message_producer</a></li><li><a href="multi_map.html">vertx-js/multi_map</a></li><li><a href="mx_record.html">vertx-js/mx_record</a></li><li><a href="net_client.html">vertx-js/net_client</a></li><li><a href="net_server.html">vertx-js/net_server</a></li><li><a href="net_socket.html">vertx-js/net_socket</a></li><li><a href="net_socket_stream.html">vertx-js/net_socket_stream</a></li><li><a href="packet_writestream.html">vertx-js/packet_writestream</a></li><li><a href="pump.html">vertx-js/pump</a></li><li><a href="read_stream.html">vertx-js/read_stream</a></li><li><a href="record_parser.html">vertx-js/record_parser</a></li><li><a href="server_web_socket.html">vertx-js/server_web_socket</a></li><li><a href="server_web_socket_stream.html">vertx-js/server_web_socket_stream</a></li><li><a href="shared_data.html">vertx-js/shared_data</a></li><li><a href="socket_address.html">vertx-js/socket_address</a></li><li><a href="srv_record.html">vertx-js/srv_record</a></li><li><a href="stream_base.html">vertx-js/stream_base</a></li><li><a href="timeout_stream.html">vertx-js/timeout_stream</a></li><li><a href="vertx.html">vertx-js/vertx</a></li><li><a href="web_socket.html">vertx-js/web_socket</a></li><li><a href="web_socket_base.html">vertx-js/web_socket_base</a></li><li><a href="web_socket_frame.html">vertx-js/web_socket_frame</a></li><li><a href="web_socket_stream.html">vertx-js/web_socket_stream</a></li><li><a href="write_stream.html">vertx-js/write_stream</a></li></ul><h3>Classes</h3><ul><li><a href="async_file-AsyncFile.html">AsyncFile</a></li><li><a href="async_map-AsyncMap.html">AsyncMap</a></li><li><a href="buffer-Buffer.html">Buffer</a></li><li><a href="context-Context.html">Context</a></li><li><a href="counter-Counter.html">Counter</a></li><li><a href="datagram_packet-DatagramPacket.html">DatagramPacket</a></li><li><a href="datagram_socket-DatagramSocket.html">DatagramSocket</a></li><li><a href="dns_client-DnsClient.html">DnsClient</a></li><li><a href="event_bus-EventBus.html">EventBus</a></li><li><a href="file_props-FileProps.html">FileProps</a></li><li><a href="file_system_props-FileSystemProps.html">FileSystemProps</a></li><li><a href="file_system-FileSystem.html">FileSystem</a></li><li><a href="future-Future.html">Future</a></li><li><a href="http_client_request-HttpClientRequest.html">HttpClientRequest</a></li><li><a href="http_client_response-HttpClientResponse.html">HttpClientResponse</a></li><li><a href="http_client-HttpClient.html">HttpClient</a></li><li><a href="http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></li><li><a href="http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></li><li><a href="http_server_request-HttpServerRequest.html">HttpServerRequest</a></li><li><a href="http_server_response-HttpServerResponse.html">HttpServerResponse</a></li><li><a href="http_server-HttpServer.html">HttpServer</a></li><li><a href="local_map-LocalMap.html">LocalMap</a></li><li><a href="lock-Lock.html">Lock</a></li><li><a href="measured-Measured.html">Measured</a></li><li><a href="message_consumer-MessageConsumer.html">MessageConsumer</a></li><li><a href="message_producer-MessageProducer.html">MessageProducer</a></li><li><a href="message-Message.html">Message</a></li><li><a href="multi_map-MultiMap.html">MultiMap</a></li><li><a href="mx_record-MxRecord.html">MxRecord</a></li><li><a href="net_client-NetClient.html">NetClient</a></li><li><a href="net_server-NetServer.html">NetServer</a></li><li><a href="net_socket_stream-NetSocketStream.html">NetSocketStream</a></li><li><a href="net_socket-NetSocket.html">NetSocket</a></li><li><a href="packet_writestream-PacketWritestream.html">PacketWritestream</a></li><li><a href="pump-Pump.html">Pump</a></li><li><a href="read_stream-ReadStream.html">ReadStream</a></li><li><a href="record_parser-RecordParser.html">RecordParser</a></li><li><a href="server_web_socket_stream-ServerWebSocketStream.html">ServerWebSocketStream</a></li><li><a href="server_web_socket-ServerWebSocket.html">ServerWebSocket</a></li><li><a href="shared_data-SharedData.html">SharedData</a></li><li><a href="socket_address-SocketAddress.html">SocketAddress</a></li><li><a href="srv_record-SrvRecord.html">SrvRecord</a></li><li><a href="stream_base-StreamBase.html">StreamBase</a></li><li><a href="timeout_stream-TimeoutStream.html">TimeoutStream</a></li><li><a href="vertx-Vertx.html">Vertx</a></li><li><a href="web_socket_base-WebSocketBase.html">WebSocketBase</a></li><li><a href="web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></li><li><a href="web_socket_stream-WebSocketStream.html">WebSocketStream</a></li><li><a href="web_socket-WebSocket.html">WebSocket</a></li><li><a href="write_stream-WriteStream.html">WriteStream</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="async_file.html">vertx-js/async_file</a></li><li><a href="async_map.html">vertx-js/async_map</a></li><li><a href="buffer.html">vertx-js/buffer</a></li><li><a href="cli.html">vertx-js/cli</a></li><li><a href="command_line.html">vertx-js/command_line</a></li><li><a href="context.html">vertx-js/context</a></li><li><a href="counter.html">vertx-js/counter</a></li><li><a href="datagram_packet.html">vertx-js/datagram_packet</a></li><li><a href="datagram_socket.html">vertx-js/datagram_socket</a></li><li><a href="dns_client.html">vertx-js/dns_client</a></li><li><a href="event_bus.html">vertx-js/event_bus</a></li><li><a href="file_props.html">vertx-js/file_props</a></li><li><a href="file_system.html">vertx-js/file_system</a></li><li><a href="file_system_props.html">vertx-js/file_system_props</a></li><li><a href="future.html">vertx-js/future</a></li><li><a href="http_client.html">vertx-js/http_client</a></li><li><a href="http_client_request.html">vertx-js/http_client_request</a></li><li><a href="http_client_response.html">vertx-js/http_client_response</a></li><li><a href="http_server.html">vertx-js/http_server</a></li><li><a href="http_server_file_upload.html">vertx-js/http_server_file_upload</a></li><li><a href="http_server_request.html">vertx-js/http_server_request</a></li><li><a href="http_server_request_stream.html">vertx-js/http_server_request_stream</a></li><li><a href="http_server_response.html">vertx-js/http_server_response</a></li><li><a href="local_map.html">vertx-js/local_map</a></li><li><a href="lock.html">vertx-js/lock</a></li><li><a href="measured.html">vertx-js/measured</a></li><li><a href="message.html">vertx-js/message</a></li><li><a href="message_consumer.html">vertx-js/message_consumer</a></li><li><a href="message_producer.html">vertx-js/message_producer</a></li><li><a href="multi_map.html">vertx-js/multi_map</a></li><li><a href="mx_record.html">vertx-js/mx_record</a></li><li><a href="net_client.html">vertx-js/net_client</a></li><li><a href="net_server.html">vertx-js/net_server</a></li><li><a href="net_socket.html">vertx-js/net_socket</a></li><li><a href="net_socket_stream.html">vertx-js/net_socket_stream</a></li><li><a href="packet_writestream.html">vertx-js/packet_writestream</a></li><li><a href="pump.html">vertx-js/pump</a></li><li><a href="read_stream.html">vertx-js/read_stream</a></li><li><a href="record_parser.html">vertx-js/record_parser</a></li><li><a href="server_web_socket.html">vertx-js/server_web_socket</a></li><li><a href="server_web_socket_stream.html">vertx-js/server_web_socket_stream</a></li><li><a href="shared_data.html">vertx-js/shared_data</a></li><li><a href="socket_address.html">vertx-js/socket_address</a></li><li><a href="srv_record.html">vertx-js/srv_record</a></li><li><a href="stream_base.html">vertx-js/stream_base</a></li><li><a href="timeout_stream.html">vertx-js/timeout_stream</a></li><li><a href="vertx.html">vertx-js/vertx</a></li><li><a href="web_socket.html">vertx-js/web_socket</a></li><li><a href="web_socket_base.html">vertx-js/web_socket_base</a></li><li><a href="web_socket_frame.html">vertx-js/web_socket_frame</a></li><li><a href="web_socket_stream.html">vertx-js/web_socket_stream</a></li><li><a href="write_stream.html">vertx-js/write_stream</a></li></ul><h3>Classes</h3><ul><li><a href="async_file-AsyncFile.html">AsyncFile</a></li><li><a href="async_map-AsyncMap.html">AsyncMap</a></li><li><a href="buffer-Buffer.html">Buffer</a></li><li><a href="cli-CLI.html">CLI</a></li><li><a href="command_line-CommandLine.html">CommandLine</a></li><li><a href="context-Context.html">Context</a></li><li><a href="counter-Counter.html">Counter</a></li><li><a href="datagram_packet-DatagramPacket.html">DatagramPacket</a></li><li><a href="datagram_socket-DatagramSocket.html">DatagramSocket</a></li><li><a href="dns_client-DnsClient.html">DnsClient</a></li><li><a href="event_bus-EventBus.html">EventBus</a></li><li><a href="file_props-FileProps.html">FileProps</a></li><li><a href="file_system_props-FileSystemProps.html">FileSystemProps</a></li><li><a href="file_system-FileSystem.html">FileSystem</a></li><li><a href="future-Future.html">Future</a></li><li><a href="http_client_request-HttpClientRequest.html">HttpClientRequest</a></li><li><a href="http_client_response-HttpClientResponse.html">HttpClientResponse</a></li><li><a href="http_client-HttpClient.html">HttpClient</a></li><li><a href="http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></li><li><a href="http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></li><li><a href="http_server_request-HttpServerRequest.html">HttpServerRequest</a></li><li><a href="http_server_response-HttpServerResponse.html">HttpServerResponse</a></li><li><a href="http_server-HttpServer.html">HttpServer</a></li><li><a href="local_map-LocalMap.html">LocalMap</a></li><li><a href="lock-Lock.html">Lock</a></li><li><a href="measured-Measured.html">Measured</a></li><li><a href="message_consumer-MessageConsumer.html">MessageConsumer</a></li><li><a href="message_producer-MessageProducer.html">MessageProducer</a></li><li><a href="message-Message.html">Message</a></li><li><a href="multi_map-MultiMap.html">MultiMap</a></li><li><a href="mx_record-MxRecord.html">MxRecord</a></li><li><a href="net_client-NetClient.html">NetClient</a></li><li><a href="net_server-NetServer.html">NetServer</a></li><li><a href="net_socket_stream-NetSocketStream.html">NetSocketStream</a></li><li><a href="net_socket-NetSocket.html">NetSocket</a></li><li><a href="packet_writestream-PacketWritestream.html">PacketWritestream</a></li><li><a href="pump-Pump.html">Pump</a></li><li><a href="read_stream-ReadStream.html">ReadStream</a></li><li><a href="record_parser-RecordParser.html">RecordParser</a></li><li><a href="server_web_socket_stream-ServerWebSocketStream.html">ServerWebSocketStream</a></li><li><a href="server_web_socket-ServerWebSocket.html">ServerWebSocket</a></li><li><a href="shared_data-SharedData.html">SharedData</a></li><li><a href="socket_address-SocketAddress.html">SocketAddress</a></li><li><a href="srv_record-SrvRecord.html">SrvRecord</a></li><li><a href="stream_base-StreamBase.html">StreamBase</a></li><li><a href="timeout_stream-TimeoutStream.html">TimeoutStream</a></li><li><a href="vertx-Vertx.html">Vertx</a></li><li><a href="web_socket_base-WebSocketBase.html">WebSocketBase</a></li><li><a href="web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></li><li><a href="web_socket_stream-WebSocketStream.html">WebSocketStream</a></li><li><a href="web_socket-WebSocket.html">WebSocket</a></li><li><a href="write_stream-WriteStream.html">WriteStream</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Fri Jun 26 2015 13:34:32 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed Oct 07 2015 11:16:22 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

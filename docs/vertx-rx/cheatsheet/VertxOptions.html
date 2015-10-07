@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>VertxOptions &amp;middot; Vert.x</title>
+  <title>VertxOptions - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -113,19 +113,9 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="eventLoopPoolSize"></a><code>eventLoopPoolSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the number of event loop threads to be used by the Vert.x instance.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="workerPoolSize"></a><code>workerPoolSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum number of worker threads to be used by the Vert.x instance.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clustered"></a><code>clustered</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether or not the Vert.x instance will be clustered.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="blockedThreadCheckInterval"></a><code>blockedThreadCheckInterval</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the value of blocked thread check period, in ms.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clusterHost"></a><code>clusterHost</code></p></td>
@@ -133,39 +123,43 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the hostname to be used for clustering.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clusterPort"></a><code>clusterPort</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the port to be used for clustering.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clusterPingInterval"></a><code>clusterPingInterval</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of cluster ping interval, in ms.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clusterPingReplyInterval"></a><code>clusterPingReplyInterval</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of cluster ping reply interval, in ms.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="blockedThreadCheckInterval"></a><code>blockedThreadCheckInterval</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the value of blocked thread check period, in ms.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clusterPort"></a><code>clusterPort</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the port to be used for clustering.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxEventLoopExecuteTime"></a><code>maxEventLoopExecuteTime</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the value of max event loop execute time, in ns.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clusterPublicHost"></a><code>clusterPublicHost</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the public facing hostname to be used for clustering.
+ Sometimes, e.g. when running on certain clouds, the local address the server listens on for clustering is not the same
+ address that other nodes connect to it at, as the OS / cloud infrastructure does some kind of proxying.
+ If this is the case you can specify a public hostname which is different from the hostname the server listens at.
+ The default value is null which means use the same as the cluster hostname.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWorkerExecuteTime"></a><code>maxWorkerExecuteTime</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the value of max worker execute time, in ns.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clusterPublicPort"></a><code>clusterPublicPort</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See link for an explanation.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="internalBlockingPoolSize"></a><code>internalBlockingPoolSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of internal blocking pool size</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clustered"></a><code>clustered</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether or not the Vert.x instance will be clustered.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="eventLoopPoolSize"></a><code>eventLoopPoolSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the number of event loop threads to be used by the Vert.x instance.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="haEnabled"></a><code>haEnabled</code></p></td>
@@ -173,14 +167,24 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether HA will be enabled on the Vert.x instance.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="quorumSize"></a><code>quorumSize</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the quorum size to be used when HA is enabled.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="haGroup"></a><code>haGroup</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the HA group to be used when HA is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="internalBlockingPoolSize"></a><code>internalBlockingPoolSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of internal blocking pool size</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxEventLoopExecuteTime"></a><code>maxEventLoopExecuteTime</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the value of max event loop execute time, in ns.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWorkerExecuteTime"></a><code>maxWorkerExecuteTime</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the value of max worker execute time, in ns.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="metricsOptions"></a><code>metricsOptions</code></p></td>
@@ -188,9 +192,19 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the metrics options</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="quorumSize"></a><code>quorumSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the quorum size to be used when HA is enabled.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="warningExceptionTime"></a><code>warningExceptionTime</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the threshold value above this, the blocked warning contains a stack trace.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="workerPoolSize"></a><code>workerPoolSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum number of worker threads to be used by the Vert.x instance.</p></td>
 </tr>
 </tbody>
 </table>
@@ -203,7 +217,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

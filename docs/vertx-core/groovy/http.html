@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Writing HTTP servers and clients &amp;middot; Vert.x</title>
+  <title>Writing HTTP servers and clients - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -153,7 +153,7 @@
 <div class="sect2">
 <h3 id="_configuring_an_http_server">Configuring an HTTP server</h3>
 <div class="paragraph">
-<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../cheatsheet/HttpServerOptions.html">HttpServerOptions</a></code>
+<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../dataobjects.html#HttpServerOptions">HttpServerOptions</a></code>
 instance when creating it:</p>
 </div>
 <div class="listingblock">
@@ -687,7 +687,7 @@ response.end("hello world!")</code></pre>
 </div>
 <div class="paragraph">
 <p>Keep-alive connections are not automatically closed by Vert.x by default. If you want keep-alive connections to be
-closed after an idle time, then you configure <code><a href="../cheatsheet/HttpServerOptions.html#idleTimeout">idleTimeout</a></code>.</p>
+closed after an idle time, then you configure <code><a href="../dataobjects.html#HttpServerOptions#setIdleTimeout(int)">idleTimeout</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -830,6 +830,51 @@ Vert.x Web.
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>When there is a need to serve just a segment of a file, say starting from a given byte, you can achieve this by doing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.createHttpServer().requestHandler({ request -&gt;
+  def offset = 0
+  try {
+    offset = java.lang.Long.parseLong(request.getParam("start"))
+  } catch(Exception e) {
+    // error handling...
+  }
+
+
+  def end = java.lang.Long.MAX_VALUE
+  try {
+    end = java.lang.Long.parseLong(request.getParam("end"))
+  } catch(Exception e) {
+    // error handling...
+  }
+
+
+  request.response().sendFile("web/mybigfile.txt", offset, end)
+}).listen(8080)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You are not required to supply the length if you want to send a file starting from an offset until the end, in this
+case you can just do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.createHttpServer().requestHandler({ request -&gt;
+  def offset = 0
+  try {
+    offset = java.lang.Long.parseLong(request.getParam("start"))
+  } catch(Exception e) {
+    // error handling...
+  }
+
+
+  request.response().sendFile("web/mybigfile.txt", offset)
+}).listen(8080)</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_pumping_responses">Pumping responses</h4>
@@ -878,7 +923,7 @@ vertx.createHttpServer().requestHandler({ request -&gt;
 <p>This allows to handle Client that support HTTP Compression and those that not support it at the same time.</p>
 </div>
 <div class="paragraph">
-<p>To enable compression use can configure it with <code><a href="../cheatsheet/HttpServerOptions.html#compressionSupported">compressionSupported</a></code>.</p>
+<p>To enable compression use can configure it with <code><a href="../dataobjects.html#HttpServerOptions#setCompressionSupported(boolean)">compressionSupported</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>By default compression is not enabled.</p>
@@ -1486,6 +1531,17 @@ request.continueHandler({ v -&gt;
 })</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>On the server side a Vert.x http server can be configured to automatically send back 100 Continue interim responses
+when it receives an <code>Expect: 100-Continue</code> header.
+This is done by setting the option <code><a href="../dataobjects.html#HttpServerOptions#setHandle100ContinueAutomatically(boolean)">handle100ContinueAutomatically</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
+<code>false</code> (the default), then you can inspect the headers and call <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#writeContinue()">writeContinue</a></code>
+if you wish the client to continue sending the body or you can reject the request by sending back a failure status code
+if you don&#8217;t want it to send the body. For example:</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1524,7 +1580,7 @@ will result in the following header added:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>To enable compression set <code><a href="../cheatsheet/HttpClientOptions.html#tryUseCompression">tryUseCompression</a></code> on the options
+<p>To enable compression set <code><a href="../dataobjects.html#HttpClientOptions#setTryUseCompression(boolean)">tryUseCompression</a></code> on the options
 used when creating the client.</p>
 </div>
 <div class="paragraph">
@@ -1541,26 +1597,27 @@ connections when you&#8217;re making multiple requests to the same server.</p>
 <p>The http client supports pooling of connections, allowing you to reuse connections between requests.</p>
 </div>
 <div class="paragraph">
-<p>For pooling to work, keep alive must be true using <code><a href="../cheatsheet/HttpClientOptions.html#keepAlive">keepAlive</a></code>
+<p>For pooling to work, keep alive must be true using <code><a href="../dataobjects.html#HttpClientOptions#setKeepAlive(boolean)">keepAlive</a></code>
 on the options used when configuring the client. The default value is true.</p>
 </div>
 <div class="paragraph">
-<p>When keep alive is enabled. Vert.x will add a <code>Connection: Keep-Alive</code> header to each HTTP request sent.</p>
+<p>When keep alive is enabled. Vert.x will add a <code>Connection: Keep-Alive</code> header to each HTTP/1.0 request sent.
+When keep alive is disabled. Vert.x will add a <code>Connection: Close</code> header to each HTTP/1.1 request sent to signal
+that the connection will be closed after completion of the response.</p>
 </div>
 <div class="paragraph">
-<p>The maximum number of connections to pool <strong>for each server</strong> is configured using <code><a href="../cheatsheet/HttpClientOptions.html#maxPoolSize">maxPoolSize</a></code></p>
+<p>The maximum number of connections to pool <strong>for each server</strong> is configured using <code><a href="../dataobjects.html#HttpClientOptions#setMaxPoolSize(int)">maxPoolSize</a></code></p>
 </div>
 <div class="paragraph">
 <p>When making a request with pooling enabled, Vert.x will create a new connection if there are less than the maximum number of
 connections already created for that server, otherwise it will add the request to a queue.</p>
 </div>
 <div class="paragraph">
-<p>When a response returns, if there are pending requests for the server, then the connection will be reused, otherwise
-it will be closed.</p>
+<p>Keep alive connections will not be closed by the client automatically. To close them you can close the client instance.</p>
 </div>
 <div class="paragraph">
-<p>This gives the benefits of keep alive when the client is loaded but means we don&#8217;t keep connections hanging around
-unnecessarily when there would be no benefits anyway.</p>
+<p>Alternatively you can set idle timeout using <code><a href="../dataobjects.html#HttpClientOptions#setIdleTimeout(int)">idleTimeout</a></code> - any
+connections not used within this timeout will be closed. Please note the idle timeout value is in seconds not milliseconds.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1573,15 +1630,11 @@ unnecessarily when there would be no benefits anyway.</p>
 returned. Pipe-lining is not appropriate for all requests.</p>
 </div>
 <div class="paragraph">
-<p>To enable pipe-lining, it must be enabled using <code><a href="../cheatsheet/HttpClientOptions.html#pipelining">pipelining</a></code>.
+<p>To enable pipe-lining, it must be enabled using <code><a href="../dataobjects.html#HttpClientOptions#setPipelining(boolean)">pipelining</a></code>.
 By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
-</div>
-<div class="paragraph">
-<p>When pipe-line responses return at the client, the connection will be automatically closed when all in-flight
-responses have returned and there are no outstanding pending requests to write.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1764,7 +1817,7 @@ websocket.writeBinaryMessage(buffer)</code></pre>
 </div>
 <div class="paragraph">
 <p>If the WebSocket message is larger than the maximum websocket frame size as configured with
-<code><a href="../cheatsheet/HttpClientOptions.html#maxWebsocketFrameSize">maxWebsocketFrameSize</a></code>
+<code><a href="../dataobjects.html#HttpClientOptions#setMaxWebsocketFrameSize(int)">maxWebsocketFrameSize</a></code>
 then Vert.x will split it into multiple WebSocket frames before sending it on the wire.</p>
 </div>
 </div>
@@ -1877,7 +1930,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

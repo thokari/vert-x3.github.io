@@ -1,0 +1,6 @@
+io.vertx.groovy.ext.shell
+io.vertx.groovy.ext.shell.cli
+io.vertx.groovy.ext.shell.command
+io.vertx.groovy.ext.shell.io
+io.vertx.groovy.ext.shell.process
+io.vertx.groovy.ext.shell.registry

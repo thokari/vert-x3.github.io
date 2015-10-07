@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: command_registry.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: command_registry.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+/** @module vertx-shell-js/command_registry */
+var utils = require('vertx-js/util/utils');
+var CommandRegistration = require('vertx-shell-js/command_registration');
+var Command = require('vertx-shell-js/command');
+var Completion = require('vertx-shell-js/completion');
+var Vertx = require('vertx-js/vertx');
+var CliToken = require('vertx-shell-js/cli_token');
+var Process = require('vertx-shell-js/process');
+
+var io = Packages.io;
+var JsonObject = io.vertx.core.json.JsonObject;
+var JCommandRegistry = io.vertx.ext.shell.registry.CommandRegistry;
+
+/**
+ A registry that contains the commands known by a shell.
+
+ @class
+*/
+var CommandRegistry = function(j_val) {
+
+  var j_commandRegistry = j_val;
+  var that = this;
+
+  /**
+   @return the current command registrations
+
+   @public
+
+   @return {Array.&lt;CommandRegistration>}
+   */
+  this.registrations = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return utils.convReturnListSetVertxGen(j_commandRegistry["registrations()"](), CommandRegistration);
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Try to create a process from the command line tokens.
+
+   @public
+   @param line {Array.&lt;CliToken>} the command line tokens 
+   @param handler {function} the handler to be notified about process creation 
+   */
+  this.createProcess = function() {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
+      j_commandRegistry["createProcess(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
+      if (ar.succeeded()) {
+        __args[1](utils.convReturnVertxGen(ar.result(), Process), null);
+      } else {
+        __args[1](null, ar.cause());
+      }
+    });
+    }  else if (__args.length === 2 && typeof __args[0] === 'object' && __args[0] instanceof Array && typeof __args[1] === 'function') {
+      j_commandRegistry["createProcess(java.util.List,io.vertx.core.Handler)"](utils.convParamListVertxGen(__args[0]), function(ar) {
+      if (ar.succeeded()) {
+        __args[1](utils.convReturnVertxGen(ar.result(), Process), null);
+      } else {
+        __args[1](null, ar.cause());
+      }
+    });
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Perform completion, the completion argument will be notified of the completion progress.
+
+   @public
+   @param completion {Completion} the completion object 
+   */
+  this.complete = function(completion) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
+      j_commandRegistry["complete(io.vertx.ext.shell.cli.Completion)"](completion._jdel);
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+
+   @public
+   @param command {Command} 
+   @param doneHandler {function} 
+   */
+  this.registerCommand = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
+      j_commandRegistry["registerCommand(io.vertx.ext.shell.command.Command)"](__args[0]._jdel);
+    }  else if (__args.length === 2 && typeof __args[0] === 'object' && __args[0]._jdel && typeof __args[1] === 'function') {
+      j_commandRegistry["registerCommand(io.vertx.ext.shell.command.Command,io.vertx.core.Handler)"](__args[0]._jdel, function(ar) {
+      if (ar.succeeded()) {
+        __args[1](utils.convReturnVertxGen(ar.result(), CommandRegistration), null);
+      } else {
+        __args[1](null, ar.cause());
+      }
+    });
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+
+   @public
+   @param commandName {string} 
+   @param doneHandler {function} 
+   */
+  this.unregisterCommand = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_commandRegistry["unregisterCommand(java.lang.String)"](__args[0]);
+    }  else if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
+      j_commandRegistry["unregisterCommand(java.lang.String,io.vertx.core.Handler)"](__args[0], function(ar) {
+      if (ar.succeeded()) {
+        __args[1](null, null);
+      } else {
+        __args[1](null, ar.cause());
+      }
+    });
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  // A reference to the underlying Java delegate
+  // NOTE! This is an internal API and must not be used in user code.
+  // If you rely on this property your code is likely to break if we change it / remove it without warning.
+  this._jdel = j_commandRegistry;
+};
+
+/**
+ Get the registry for the Vert.x instance
+
+ @memberof module:vertx-shell-js/command_registry
+ @param vertx {Vertx} the vertx instance 
+ @return {CommandRegistry} the registry
+ */
+CommandRegistry.get = function(vertx) {
+  var __args = arguments;
+  if (__args.length === 1 && typeof __args[0] === 'object' && __args[0]._jdel) {
+    return utils.convReturnVertxGen(JCommandRegistry["get(io.vertx.core.Vertx)"](vertx._jdel), CommandRegistry);
+  } else throw new TypeError('function invoked with invalid arguments');
+};
+
+// We export the Constructor function
+module.exports = CommandRegistry;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="cli_token.html">vertx-shell-js/cli_token</a></li><li><a href="command.html">vertx-shell-js/command</a></li><li><a href="command_builder.html">vertx-shell-js/command_builder</a></li><li><a href="command_process.html">vertx-shell-js/command_process</a></li><li><a href="command_registration.html">vertx-shell-js/command_registration</a></li><li><a href="command_registry.html">vertx-shell-js/command_registry</a></li><li><a href="completion.html">vertx-shell-js/completion</a></li><li><a href="process.html">vertx-shell-js/process</a></li><li><a href="process_context.html">vertx-shell-js/process_context</a></li><li><a href="session.html">vertx-shell-js/session</a></li><li><a href="shell_service.html">vertx-shell-js/shell_service</a></li><li><a href="stream.html">vertx-shell-js/stream</a></li><li><a href="tty.html">vertx-shell-js/tty</a></li></ul><h3>Classes</h3><ul><li><a href="cli_token-CliToken.html">CliToken</a></li><li><a href="command_builder-CommandBuilder.html">CommandBuilder</a></li><li><a href="command_process-CommandProcess.html">CommandProcess</a></li><li><a href="command_registration-CommandRegistration.html">CommandRegistration</a></li><li><a href="command_registry-CommandRegistry.html">CommandRegistry</a></li><li><a href="command-Command.html">Command</a></li><li><a href="completion-Completion.html">Completion</a></li><li><a href="process_context-ProcessContext.html">ProcessContext</a></li><li><a href="process-Process.html">Process</a></li><li><a href="session-Session.html">Session</a></li><li><a href="shell_service-ShellService.html">ShellService</a></li><li><a href="stream-Stream.html">Stream</a></li><li><a href="tty-Tty.html">Tty</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Wed Oct 07 2015 11:50:04 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

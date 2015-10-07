@@ -94,7 +94,7 @@
   
   
     <dt class="r2 last">Defined in:</dt>
-    <dd class="r2 last">/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb</dd>
+    <dd class="r2 last">/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb</dd>
   
 </dl>
 <div class="clear"></div>
@@ -109,7 +109,7 @@
  The same instance is passed to any matching request or failure handlers during the routing of the request or
  failure.
  <p>
- The context provides access to the Vertx::HttpServerRequest and Vertx::HttpServerResponse
+ The context provides access to the  and 
  and allows you to maintain arbitrary data that lives for the lifetime of the context. Contexts are discarded once they
  have been routed to the handler for the request.
  <p>
@@ -135,6 +135,28 @@
     </h2>
 
     <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#acceptable_locales-instance_method" title="#acceptable_locales (instance method)">- (Array&lt;::VertxWeb::Locale&gt;) <strong>acceptable_locales</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Returns the locales for the current request.</div></span>
+  
+</li>
+
       
         <li class="public ">
   <span class="summary_signature">
@@ -293,7 +315,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#fail-instance_method" title="#fail (instance method)">- (void) <strong>fail</strong>(statusCode = nil) </a>
+      <a href="#fail-instance_method" title="#fail (instance method)">- (void) <strong>fail</strong>(param_1 = nil) </a>
     
 
     
@@ -307,7 +329,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Fail the context with the specified status code.</div></span>
+    <span class="summary_desc"><div class='inline'>Fail the context with the specified throwable.</div></span>
   
 </li>
 
@@ -417,7 +439,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>@return Get the entire HTTP request body as a Vertx::Buffer.</div></span>
+    <span class="summary_desc"><div class='inline'>@return Get the entire HTTP request body as a .</div></span>
   
 </li>
 
@@ -439,7 +461,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>@return Get the entire HTTP request body as a => Object}.</div></span>
+    <span class="summary_desc"><div class='inline'>@return Get the entire HTTP request body as a .</div></span>
   
 </li>
 
@@ -557,6 +579,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#preferred_locale-instance_method" title="#preferred_locale (instance method)">- (::VertxWeb::Locale) <strong>preferred_locale</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Helper to return the user preferred locale.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#put-instance_method" title="#put (instance method)">- (self) <strong>put</strong>(key = nil, obj = nil) </a>
     
 
@@ -660,6 +704,28 @@
 
   
     <span class="summary_desc"><div class='inline'>@return the HTTP request object.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#reroute-instance_method" title="#reroute (instance method)">- (void) <strong>reroute</strong>(param_1 = nil, param_2 = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Restarts the current router with a new method and path.</div></span>
   
 </li>
 
@@ -872,7 +938,92 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="add_body_end_handler-instance_method">
+  <h3 class="signature first" id="acceptable_locales-instance_method">
+  
+    - (<tt>Array&lt;<span class='object_link'><a href="Locale.html" title="VertxWeb::Locale (class)">::VertxWeb::Locale</a></span>&gt;</tt>) <strong>acceptable_locales</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Returns the locales for the current request. The locales are determined from the `accept-languages` header and
+ sorted on quality.
+
+ When 2 or more entries have the same quality then the order used to return the best match is based on the lowest
+ index on the original list. For example if a user has en-US and en-GB with same quality and this order the best
+ match will be en-US because it was declared as first entry by the client.
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Locale.html" title="VertxWeb::Locale (class)">::VertxWeb::Locale</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the best matched locale for the request</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+396
+397
+398
+399
+400
+401
+402
+403
+404</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 396</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_acceptable_locales'>acceptable_locales</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>if</span> <span class='ivar'>@cached_acceptable_locales</span> <span class='op'>!=</span> <span class='kw'>nil</span>
+      <span class='kw'>return</span> <span class='ivar'>@cached_acceptable_locales</span>
+    <span class='kw'>end</span>
+    <span class='kw'>return</span> <span class='ivar'>@cached_acceptable_locales</span> <span class='op'>=</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:acceptableLocales</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_elt'>elt</span><span class='op'>|</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='id identifier rubyid_elt'>elt</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>VertxWeb</span><span class='op'>::</span><span class='const'>Locale</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling acceptable_locales()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="add_body_end_handler-instance_method">
   
     - (<tt>Fixnum</tt>) <strong>add_body_end_handler</strong> { ... }
   
@@ -941,15 +1092,15 @@
       <pre class="lines">
 
 
-301
-302
-303
-304
 305
-306</pre>
+306
+307
+308
+309
+310</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 301</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 305</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_body_end_handler'>add_body_end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1033,16 +1184,16 @@
       <pre class="lines">
 
 
-162
-163
-164
-165
-166
-167
-168</pre>
+168
+169
+170
+171
+172
+173
+174</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 162</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 168</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_cookie'>add_cookie</span><span class='lparen'>(</span><span class='id identifier rubyid_cookie'>cookie</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_cookie'>cookie</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1069,8 +1220,6 @@
   <div class="discussion">
     Add a handler that will be called just before headers are written to the response. This gives you a hook where
  you can write any extra headers before the response has been written when it will be too late.
- The handler will be passed a future, when you've completed the work you want to do you should complete (or fail)
- the future. This can be done after the handler has returned.
 
   </div>
 </div>
@@ -1128,19 +1277,19 @@
       <pre class="lines">
 
 
-282
-283
-284
-285
 286
-287</pre>
+287
+288
+289
+290
+291</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 282</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 286</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_headers_end_handler'>add_headers_end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:addHeadersEndHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Future</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:addHeadersEndHandler</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='kw'>yield</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling add_headers_end_handler()</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
@@ -1187,15 +1336,15 @@
       <pre class="lines">
 
 
-354
-355
-356
-357
 358
-359</pre>
+359
+360
+361
+362
+363</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 354</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 358</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clear_user'>clear_user</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1259,15 +1408,15 @@
       <pre class="lines">
 
 
-182
-183
-184
-185
-186
-187</pre>
+188
+189
+190
+191
+192
+193</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 182</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 188</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cookie_count'>cookie_count</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1331,15 +1480,15 @@
       <pre class="lines">
 
 
-191
-192
-193
-194
-195
-196</pre>
+197
+198
+199
+200
+201
+202</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 191</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 197</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cookies'>cookies</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1402,15 +1551,15 @@
       <pre class="lines">
 
 
-124
-125
-126
-127
-128
-129</pre>
+130
+131
+132
+133
+134
+135</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 124</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 130</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_current_route'>current_route</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1426,7 +1575,11 @@
       <div class="method_details ">
   <h3 class="signature " id="fail-instance_method">
   
-    - (<tt>void</tt>) <strong>fail</strong>(statusCode = nil) 
+    
+      <span class="overload">- (<tt>void</tt>) <strong>fail</strong>(statusCode) </span>
+    
+      <span class="overload">- (<tt>void</tt>) <strong>fail</strong>(throwable) </span>
+    
   
 
   
@@ -1434,10 +1587,24 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>Fail the context with the specified status code.
+    <p class="note returns_void">This method returns an undefined value.</p>Fail the context with the specified throwable.
  <p>
  This will cause the router to route the context to any matching failure handlers for the request. If no failure handlers
- match a default failure response will be sent.
+ match a default failure response with status code 500 will be sent.
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">- (<tt>void</tt>) <strong>fail</strong>(statusCode) </span>
+        <div class="docstring">
+  <div class="discussion">
+    
 
   </div>
 </div>
@@ -1453,8 +1620,6 @@
         <span class='type'>(<tt>Fixnum</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
       
         &mdash;
         <div class='inline'>the HTTP status code</div>
@@ -1462,6 +1627,45 @@
     </li>
   
 </ul>
+
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">- (<tt>void</tt>) <strong>fail</strong>(throwable) </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>throwable</span>
+      
+      
+        <span class='type'>(<tt>Exception</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>a throwable representing the failure</div>
+      
+    </li>
+  
+</ul>
+
+
+</div>
+      </li>
+    
+  </ul>
 
 <p class="tag_title">Raises:</p>
 <ul class="raise">
@@ -1483,21 +1687,25 @@
       <pre class="lines">
 
 
-79
-80
-81
-82
 83
-84</pre>
+84
+85
+86
+87
+88
+89
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 79</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 83</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='id identifier rubyid_statusCode'>statusCode</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_statusCode'>statusCode</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:fail</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_int'>int</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_statusCode'>statusCode</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_fail'>fail</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:fail</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_int'>int</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Exception</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:fail</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>JavaLang</span><span class='op'>::</span><span class='const'>Throwable</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_to_throwable'>to_throwable</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling fail(statusCode)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling fail(param_1)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1554,15 +1762,15 @@
       <pre class="lines">
 
 
-318
-319
-320
-321
 322
-323</pre>
+323
+324
+325
+326
+327</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 318</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 322</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_failed?'>failed?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1626,15 +1834,15 @@
       <pre class="lines">
 
 
-230
-231
-232
-233
-234
-235</pre>
+236
+237
+238
+239
+240
+241</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 230</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_file_uploads'>file_uploads</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1720,15 +1928,15 @@
       <pre class="lines">
 
 
-99
-100
-101
-102
-103
-104</pre>
+105
+106
+107
+108
+109
+110</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 99</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 105</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1795,15 +2003,15 @@
       <pre class="lines">
 
 
-270
-271
-272
-273
-274
-275</pre>
+276
+277
+278
+279
+280
+281</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 270</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 276</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_acceptable_content_type'>get_acceptable_content_type</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1827,7 +2035,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return Get the entire HTTP request body as a Vertx::Buffer. The context must have first been routed to a
+    @return Get the entire HTTP request body as a . The context must have first been routed to a
  <span class='object_link'><a href="BodyHandler.html" title="VertxWeb::BodyHandler (class)">BodyHandler</a></span> for this to be populated.
 
   </div>
@@ -1867,15 +2075,15 @@
       <pre class="lines">
 
 
-221
-222
-223
-224
-225
-226</pre>
+227
+228
+229
+230
+231
+232</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 221</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 227</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_body'>get_body</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1899,7 +2107,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return Get the entire HTTP request body as a => Object}. The context must have first been routed to a
+    @return Get the entire HTTP request body as a . The context must have first been routed to a
  <span class='object_link'><a href="BodyHandler.html" title="VertxWeb::BodyHandler (class)">BodyHandler</a></span> for this to be populated.
 
   </div>
@@ -1939,15 +2147,15 @@
       <pre class="lines">
 
 
-212
-213
-214
-215
-216
-217</pre>
+218
+219
+220
+221
+222
+223</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 212</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 218</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_body_as_json'>get_body_as_json</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2034,17 +2242,17 @@
       <pre class="lines">
 
 
-201
-202
-203
-204
-205
-206
 207
-208</pre>
+208
+209
+210
+211
+212
+213
+214</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 201</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 207</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_body_as_string'>get_body_as_string</span><span class='lparen'>(</span><span class='id identifier rubyid_encoding'>encoding</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2133,15 +2341,15 @@
       <pre class="lines">
 
 
-152
-153
-154
-155
-156
-157</pre>
+158
+159
+160
+161
+162
+163</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 152</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 158</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_cookie'>get_cookie</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2205,15 +2413,15 @@
       <pre class="lines">
 
 
-116
-117
-118
-119
-120
-121</pre>
+122
+123
+124
+125
+126
+127</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 116</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 122</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mount_point'>mount_point</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2268,15 +2476,15 @@
       <pre class="lines">
 
 
-67
 68
 69
 70
 71
-72</pre>
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 67</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='kw'>next</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2309,7 +2517,7 @@
  The normalised path will also not contain any `..` character sequences to prevent resources being accessed outside
  of the permitted area.
  <p>
- It's recommended to always use the normalised path as opposed to Vertx::HttpServerRequest#path
+ It's recommended to always use the normalised path as opposed to 
  if accessing server resources requested by a client.
 
   </div>
@@ -2352,21 +2560,96 @@
       <pre class="lines">
 
 
-142
-143
-144
-145
-146
-147</pre>
+148
+149
+150
+151
+152
+153</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 142</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 148</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_normalised_path'>normalised_path</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
     <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:normalisedPath</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling normalised_path()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="preferred_locale-instance_method">
+  
+    - (<tt><span class='object_link'><a href="Locale.html" title="VertxWeb::Locale (class)">::VertxWeb::Locale</a></span></tt>) <strong>preferred_locale</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Helper to return the user preferred locale. It is the same action as returning the first element of the acceptable
+ locales.
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Locale.html" title="VertxWeb::Locale (class)">::VertxWeb::Locale</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the users preferred locale.</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+408
+409
+410
+411
+412
+413</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 408</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_preferred_locale'>preferred_locale</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:preferredLocale</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>VertxWeb</span><span class='op'>::</span><span class='const'>Locale</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling preferred_locale()</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2459,16 +2742,16 @@
       <pre class="lines">
 
 
-89
-90
-91
-92
-93
-94
-95</pre>
+95
+96
+97
+98
+99
+100
+101</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 89</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 95</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put'>put</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_obj'>obj</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>  <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Array</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>NilClass</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>||</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Float</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2555,15 +2838,15 @@
       <pre class="lines">
 
 
-310
-311
-312
-313
 314
-315</pre>
+315
+316
+317
+318
+319</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 310</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 314</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_body_end_handler?'>remove_body_end_handler?</span><span class='lparen'>(</span><span class='id identifier rubyid_handlerID'>handlerID</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_handlerID'>handlerID</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2650,15 +2933,15 @@
       <pre class="lines">
 
 
-173
-174
-175
-176
-177
-178</pre>
+179
+180
+181
+182
+183
+184</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 173</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 179</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_cookie'>remove_cookie</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2744,15 +3027,15 @@
       <pre class="lines">
 
 
-291
-292
-293
-294
 295
-296</pre>
+296
+297
+298
+299
+300</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 291</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 295</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_headers_end_handler?'>remove_headers_end_handler?</span><span class='lparen'>(</span><span class='id identifier rubyid_handlerID'>handlerID</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_handlerID'>handlerID</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2815,7 +3098,6 @@
       <pre class="lines">
 
 
-40
 41
 42
 43
@@ -2823,10 +3105,11 @@
 45
 46
 47
-48</pre>
+48
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 40</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_request'>request</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2836,6 +3119,158 @@
     <span class='kw'>return</span> <span class='ivar'>@cached_request</span> <span class='op'>=</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:request</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>HttpServerRequest</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling request()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="reroute-instance_method">
+  
+    
+      <span class="overload">- (<tt>void</tt>) <strong>reroute</strong>(path) </span>
+    
+      <span class="overload">- (<tt>void</tt>) <strong>reroute</strong>(method, path) </span>
+    
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>Restarts the current router with a new method and path. All path parameters are then parsed and available on the
+ params list.
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">- (<tt>void</tt>) <strong>reroute</strong>(path) </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>path</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the new http path.</div>
+      
+    </li>
+  
+</ul>
+
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">- (<tt>void</tt>) <strong>reroute</strong>(method, path) </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>method</span>
+      
+      
+        <span class='type'>(<tt>:OPTIONS</tt>, <tt>:GET</tt>, <tt>:HEAD</tt>, <tt>:POST</tt>, <tt>:PUT</tt>, <tt>:DELETE</tt>, <tt>:TRACE</tt>, <tt>:CONNECT</tt>, <tt>:PATCH</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the new http request</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>path</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the new http path.</div>
+      
+    </li>
+  
+</ul>
+
+
+</div>
+      </li>
+    
+  </ul>
+
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+381
+382
+383
+384
+385
+386
+387
+388</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 381</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_reroute'>reroute</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:reroute</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Symbol</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:reroute</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCoreHttp</span><span class='op'>::</span><span class='const'>HttpMethod</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCoreHttp</span><span class='op'>::</span><span class='const'>HttpMethod</span><span class='period'>.</span><span class='id identifier rubyid_valueOf'>valueOf</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='rparen'>)</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling reroute(param_1,param_2)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2892,7 +3327,6 @@
       <pre class="lines">
 
 
-51
 52
 53
 54
@@ -2900,10 +3334,11 @@
 56
 57
 58
-59</pre>
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 51</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_response'>response</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2974,15 +3409,15 @@
       <pre class="lines">
 
 
-240
-241
-242
-243
-244
-245</pre>
+246
+247
+248
+249
+250
+251</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 240</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 246</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_session'>session</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3052,15 +3487,15 @@
       <pre class="lines">
 
 
-363
-364
-365
-366
 367
-368</pre>
+368
+369
+370
+371
+372</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 363</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 367</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_acceptable_content_type'>set_acceptable_content_type</span><span class='lparen'>(</span><span class='id identifier rubyid_contentType'>contentType</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_contentType'>contentType</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3130,15 +3565,15 @@
       <pre class="lines">
 
 
-327
-328
-329
-330
 331
-332</pre>
+332
+333
+334
+335
+336</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 327</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 331</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_body'>set_body</span><span class='lparen'>(</span><span class='id identifier rubyid_body'>body</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_body'>body</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3208,15 +3643,15 @@
       <pre class="lines">
 
 
-336
-337
-338
-339
 340
-341</pre>
+341
+342
+343
+344
+345</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 336</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 340</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_session'>set_session</span><span class='lparen'>(</span><span class='id identifier rubyid_session'>session</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_session'>session</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3286,15 +3721,15 @@
       <pre class="lines">
 
 
-345
-346
-347
-348
 349
-350</pre>
+350
+351
+352
+353
+354</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 345</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 349</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_user'>set_user</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3362,18 +3797,18 @@
       <pre class="lines">
 
 
-258
-259
-260
-261
-262
-263
 264
 265
-266</pre>
+266
+267
+268
+269
+270
+271
+272</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 258</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 264</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status_code'>status_code</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3442,15 +3877,15 @@
       <pre class="lines">
 
 
-248
-249
-250
-251
-252
-253</pre>
+254
+255
+256
+257
+258
+259</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 248</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 254</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_user'>user</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3513,15 +3948,15 @@
       <pre class="lines">
 
 
-107
-108
-109
-110
-111
-112</pre>
+113
+114
+115
+116
+117
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 107</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-web/vertx-web/src/main/resources/vertx-web/routing_context.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_vertx'>vertx</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3539,9 +3974,9 @@
 </div>
 
     <div id="footer">
-  Generated on Fri Jun 26 13:38:34 2015 by
+  Generated on Wed Oct  7 11:24:23 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-1.9.3).
+  0.8.7.6 (ruby-2.2.2).
 </div>
 
   </body>

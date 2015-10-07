@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>The Event Bus &amp;middot; Vert.x</title>
+  <title>The Event Bus - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -395,6 +395,12 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 </div>
 </div>
 <div class="sect3">
+<h4 id="_message_ordering">Message ordering</h4>
+<div class="paragraph">
+<p>Vert.x will deliver messages to any particular handler in the same order they were sent from any particular sender.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_the_message_object">The Message object</h4>
 <div class="paragraph">
 <p>The object you receive in a message handler is a <code><a href="groovydoc/io/vertx/groovy/core/eventbus/Message.html">Message</a></code>.</p>
@@ -456,7 +462,7 @@ consisting of multiple rounds.</p>
 <div class="sect3">
 <h4 id="_sending_with_timeouts">Sending with timeouts</h4>
 <div class="paragraph">
-<p>When sending a message with a reply handler you can specify a timeout in the <code><a href="../cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code>.</p>
+<p>When sending a message with a reply handler you can specify a timeout in the <code><a href="../dataobjects.html#DeliveryOptions">DeliveryOptions</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If a reply is not received within that time, the reply handler will be called with a failure.</p>
@@ -551,7 +557,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Vert.x-redis &amp;middot; Vert.x</title>
+  <title>Vert.x-redis - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -82,6 +82,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
+<li><a href="#_using_vert_x_redis">Using Vert.x-Redis</a></li>
 <li><a href="#_connecting_to_redis">Connecting to Redis</a></li>
 <li><a href="#_running_commands">Running commands</a></li>
 <li><a href="#_pub_sub_mode">Pub/Sub mode</a></li>
@@ -95,6 +96,7 @@
 </ul>
 </li>
 <li><a href="#_server_info">Server Info</a></li>
+<li><a href="#_eval_and_evalsha">Eval and Evalsha</a></li>
 </ul>
         </div>
       </div>
@@ -102,6 +104,7 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
+<li><a href="#_using_vert_x_redis">Using Vert.x-Redis</a></li>
 <li><a href="#_connecting_to_redis">Connecting to Redis</a></li>
 <li><a href="#_running_commands">Running commands</a></li>
 <li><a href="#_pub_sub_mode">Pub/Sub mode</a></li>
@@ -115,6 +118,7 @@
 </ul>
 </li>
 <li><a href="#_server_info">Server Info</a></li>
+<li><a href="#_eval_and_evalsha">Eval and Evalsha</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -134,7 +138,7 @@ your network.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Cluster - Commands related to cluster management, note that using most of these commands you will need a redis server with version &lt;=3.0.0</p>
+<p>Cluster - Commands related to cluster management, note that using most of these commands you will need a redis server with version &gt;=3.0.0</p>
 </li>
 <li>
 <p>Connection - Commands that allow you to switch DBs, connect, disconnect and authenticate to a server.</p>
@@ -177,10 +181,46 @@ your network.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_using_vert_x_redis">Using Vert.x-Redis</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To use the Vert.x Redis client, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-redis-client&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-redis-client:3.1.0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_connecting_to_redis">Connecting to Redis</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In order to connect to Redis there is a config required. This config is provided in the form of <code>JsonObject</code>
+<p>In order to connect to Redis there is a config required. This config is provided in the form of <code><a href="../dataobjects.html#RedisOptions">RedisOptions</a></code>
 containing the following values:</p>
 </div>
 <div class="ulist">
@@ -193,6 +233,12 @@ containing the following values:</p>
 </li>
 <li>
 <p><code>encoding</code>: default is <code>UTF-8</code></p>
+</li>
+<li>
+<p><code>tcpKeepAlive</code>: default <code>true</code></p>
+</li>
+<li>
+<p><code>tcpNoDelay</code>: default <code>true</code></p>
 </li>
 </ul>
 </div>
@@ -208,6 +254,26 @@ def config = [
 
 def redis = RedisClient.create(vertx, config)</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The client attempts to reconnect to the server on connection errors, for this reason if you are connecting to a server
+that requires authentication and/or you are not using the default database you must provide the authentication
+password and/or database id to the config object, the properties names are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>auth</code></p>
+</li>
+<li>
+<p><code>select</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you do not do this and manually call the <code><a href="groovydoc/io/vertx/groovy/redis/RedisClient.html#auth(java.lang.String,%20io.vertx.core.Handler)">auth</a></code>
+or <code><a href="groovydoc/io/vertx/groovy/redis/RedisClient.html#select(int,%20io.vertx.core.Handler)">select</a></code> then the client will not know how to recover
+the connection in case of socket error.</p>
 </div>
 </div>
 </div>
@@ -262,7 +328,7 @@ vertx.eventBus().consumer("redis.sub.channel1", { received -&gt;
 
 def redis = RedisClient.create(vertx, [:])
 
-redis.subscribe(["channel1"], { res -&gt;
+redis.subscribe("channel1", { res -&gt;
   if (res.succeeded()) {
     // so something...
   }
@@ -394,6 +460,26 @@ at the top level object.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_eval_and_evalsha">Eval and Evalsha</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Eval and Evalsha commands are special due to its return value can be any type. Vert.x is built on top of Java and the
+language adheres to strong typing so returning any type turns to be problematic since we want to avoid having <code>Object</code>
+type being used. The reason to avoid the type <code>Object</code> is that we also are polyglot and the conversion between
+languages would become rather complicated and hard to implement. For all these reasons the commands eval and evalsha
+will always return a JsonArray, even for example for scripts such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>return 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case the return value will be a json array with the value 10 on index 0.</p>
+</div>
+</div>
+</div>
 
         
 
@@ -401,7 +487,7 @@ at the top level object.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

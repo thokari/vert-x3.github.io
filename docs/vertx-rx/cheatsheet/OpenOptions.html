@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>OpenOptions &amp;middot; Vert.x</title>
+  <title>OpenOptions - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -113,21 +113,6 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="perms"></a><code>perms</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the permissions string</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="read"></a><code>read</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file is to be opened for reading</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="write"></a><code>write</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file is to be opened for writing</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="create"></a><code>create</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file should be created if it does not already exist.</p></td>
@@ -143,9 +128,19 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file should be deleted when it's closed, or the JVM is shutdown.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="truncateExisting"></a><code>truncateExisting</code></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="dsync"></a><code>dsync</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file should be truncated to zero length on opening if it exists and is opened for write</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether every write to the file's content  ill be written synchronously to the underlying hardware.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="perms"></a><code>perms</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the permissions string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="read"></a><code>read</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file is to be opened for reading</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sparse"></a><code>sparse</code></p></td>
@@ -158,9 +153,14 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether every write to the file's content and meta-data will be written synchronously to the underlying hardware.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="dSync"></a><code>dSync</code></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="truncateExisting"></a><code>truncateExisting</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether every write to the file's content  ill be written synchronously to the underlying hardware.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file should be truncated to zero length on opening if it exists and is opened for write</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="write"></a><code>write</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the file is to be opened for writing</p></td>
 </tr>
 </tbody>
 </table>
@@ -173,7 +173,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

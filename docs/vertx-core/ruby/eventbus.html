@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>The Event Bus &amp;middot; Vert.x</title>
+  <title>The Event Bus - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -371,7 +371,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="paragraph">
 <p>This can be specified by providing a <code>headers</code> object
-inside the <code><a href="../../vertx-core/cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code> object when sending or publishing:</p>
+inside the <code><a href="../../vertx-core/dataobjects.html#DeliveryOptions">DeliveryOptions</a></code> object when sending or publishing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -393,6 +393,12 @@ eb.consumer("news.uk.sport") { |message|
  puts message.headers().get("some-header")
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_message_ordering">Message ordering</h4>
+<div class="paragraph">
+<p>Vert.x will deliver messages to any particular handler in the same order they were sent from any particular sender.</p>
 </div>
 </div>
 <div class="sect3">
@@ -457,7 +463,7 @@ consisting of multiple rounds.</p>
 <div class="sect3">
 <h4 id="_sending_with_timeouts">Sending with timeouts</h4>
 <div class="paragraph">
-<p>When sending a message with a reply handler you can specify a timeout in the <code><a href="../cheatsheet/DeliveryOptions.html">DeliveryOptions</a></code>.</p>
+<p>When sending a message with a reply handler you can specify a timeout in the <code><a href="../dataobjects.html#DeliveryOptions">DeliveryOptions</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If a reply is not received within that time, the reply handler will be called with a failure.</p>
@@ -553,7 +559,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Datagram sockets (UDP) &amp;middot; Vert.x</title>
+  <title>Datagram sockets (UDP) - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -405,35 +405,35 @@ socket.block_multicast_group("230.0.0.1", "10.0.0.2") { |asyncResult_err,asyncRe
 <h4 id="_datagramsocket_properties">DatagramSocket properties</h4>
 <div class="paragraph">
 <p>When creating a <code><a href="yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code> there are multiple properties you can set to
-change it&#8217;s behaviour with the <code><a href="../cheatsheet/DatagramSocketOptions.html">DatagramSocketOptions</a></code> object. Those are listed here:</p>
+change it&#8217;s behaviour with the <code><a href="../dataobjects.html#DatagramSocketOptions">DatagramSocketOptions</a></code> object. Those are listed here:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../cheatsheet/DatagramSocketOptions.html#sendBufferSize">sendBufferSize</a></code> Sets the send buffer size in bytes.</p>
+<p><code><a href="../dataobjects.html#DatagramSocketOptions#set_send_buffer_size-instance_method">sendBufferSize</a></code> Sets the send buffer size in bytes.</p>
 </li>
 <li>
-<p><code><a href="../cheatsheet/DatagramSocketOptions.html#receiveBufferSize">receiveBufferSize</a></code> Sets the TCP receive buffer size
+<p><code><a href="../dataobjects.html#DatagramSocketOptions#set_receive_buffer_size-instance_method">receiveBufferSize</a></code> Sets the TCP receive buffer size
 in bytes.</p>
 </li>
 <li>
-<p><code><a href="../cheatsheet/DatagramSocketOptions.html#reuseAddress">reuseAddress</a></code> If true then addresses in TIME_WAIT
+<p><code><a href="../dataobjects.html#DatagramSocketOptions#set_reuse_address-instance_method">reuseAddress</a></code> If true then addresses in TIME_WAIT
 state can be reused after they have been closed.</p>
 </li>
 <li>
-<p><code><a href="../cheatsheet/DatagramSocketOptions.html#trafficClass">trafficClass</a></code></p>
+<p><code><a href="../dataobjects.html#DatagramSocketOptions#set_traffic_class-instance_method">trafficClass</a></code></p>
 </li>
 <li>
-<p><code><a href="../cheatsheet/DatagramSocketOptions.html#broadcast">broadcast</a></code> Sets or clears the SO_BROADCAST socket
+<p><code><a href="../dataobjects.html#DatagramSocketOptions#set_broadcast-instance_method">broadcast</a></code> Sets or clears the SO_BROADCAST socket
 option. When this option is set, Datagram (UDP) packets may be sent to a local interface&#8217;s broadcast address.</p>
 </li>
 <li>
-<p><code><a href="../cheatsheet/DatagramSocketOptions.html#multicastNetworkInterface">multicastNetworkInterface</a></code> Sets or clears
+<p><code><a href="../dataobjects.html#DatagramSocketOptions#set_multicast_network_interface-instance_method">multicastNetworkInterface</a></code> Sets or clears
 the IP_MULTICAST_LOOP socket option. When this option is set, multicast packets will also be received on the
 local interface.</p>
 </li>
 <li>
-<p><code><a href="../cheatsheet/DatagramSocketOptions.html#multicastTimeToLive">multicastTimeToLive</a></code> Sets the IP_MULTICAST_TTL socket
+<p><code><a href="../dataobjects.html#DatagramSocketOptions#set_multicast_time_to_live-instance_method">multicastTimeToLive</a></code> Sets the IP_MULTICAST_TTL socket
 option. TTL stands for "Time to Live," but in this context it specifies the number of IP hops that a packet is
 allowed to go through, specifically for multicast traffic. Each router or gateway that forwards a packet decrements
 the TTL. If the TTL is decremented to 0 by a router, it will not be forwarded.</p>
@@ -466,7 +466,7 @@ the socket and release all resources</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

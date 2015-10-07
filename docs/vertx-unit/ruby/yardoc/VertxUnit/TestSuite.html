@@ -377,15 +377,15 @@
       <pre class="lines">
 
 
-30
 31
 32
 33
 34
-35</pre>
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 30</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -470,16 +470,16 @@
       <pre class="lines">
 
 
-59
 60
 61
 62
 63
 64
-65</pre>
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 59</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_after'>after</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -559,16 +559,16 @@
       <pre class="lines">
 
 
-69
 70
 71
 72
 73
 74
-75</pre>
+75
+76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 69</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_after_each'>after_each</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -648,16 +648,16 @@
       <pre class="lines">
 
 
-39
 40
 41
 42
 43
 44
-45</pre>
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 39</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_before'>before</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -737,16 +737,16 @@
       <pre class="lines">
 
 
-49
 50
 51
 52
 53
 54
-55</pre>
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 49</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_before_each'>before_each</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -783,7 +783,7 @@
 
  The test suite will be executed on the event loop provided by the <code>vertx</code> argument when
  Hash#set_use_event_loop is not set to <code>false</code>. The returned
- <span class='object_link'><a href="TestCompletion.html" title="VertxUnit::TestCompletion (class)">VertxUnit::TestCompletion</a></span> object can be used to get a completion callback.
+ <span class='object_link'><a href="Completion.html" title="VertxUnit::Completion (class)">Completion</a></span> object can be used to get a completion callback.
 
   </div>
 </div>
@@ -944,7 +944,6 @@
       <pre class="lines">
 
 
-101
 102
 103
 104
@@ -955,10 +954,11 @@
 109
 110
 111
-112</pre>
+112
+113</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 101</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_run'>run</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_1'>param_1</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1063,16 +1063,16 @@
       <pre class="lines">
 
 
-80
 81
 82
 83
 84
 85
-86</pre>
+86
+87</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 80</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-aggregator/modules/vertx-unit/src/main/resources/vertx-unit/test_suite.rb', line 81</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_test'>test</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1091,9 +1091,9 @@
 </div>
 
     <div id="footer">
-  Generated on Fri Jun 26 13:43:27 2015 by
+  Generated on Wed Oct  7 11:39:47 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-1.9.3).
+  0.8.7.6 (ruby-2.2.2).
 </div>
 
   </body>

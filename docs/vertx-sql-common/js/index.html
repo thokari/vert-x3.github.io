@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Vert.x Common SQL interface &amp;middot; Vert.x</title>
+  <title>Vert.x Common SQL interface - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -124,8 +124,39 @@
 <p>The common SQL interface is used to interact with Vert.x SQL services.</p>
 </div>
 <div class="paragraph">
-<p>You obtain a connection to the database via the service interface for the specific SQL service that you are using
-(e.g. JDBC/MySQL/PostgreSQL).</p>
+<p>You obtain a connection to the database via the service interface for the specific SQL service that
+you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
+</div>
+<div class="paragraph">
+<p>To use this project, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-sql-common&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-sql-common:3.1.0</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -169,7 +200,7 @@ execute in its own transaction.</p>
 <p>The query string is raw SQL that is passed through without changes to the actual database.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with the results, represented by <code><a href="../cheatsheet/ResultSet.html">ResultSet</a></code> when the query has
+<p>The handler will be called with the results, represented by <code><a href="../dataobjects.html#ResultSet">ResultSet</a></code> when the query has
 been run.</p>
 </div>
 <div class="listingblock">
@@ -185,11 +216,11 @@ been run.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../cheatsheet/ResultSet.html">ResultSet</a></code> instance represents the results of a query.</p>
+<p>The <code><a href="../dataobjects.html#ResultSet">ResultSet</a></code> instance represents the results of a query.</p>
 </div>
 <div class="paragraph">
-<p>The list of column names are available with <code><a href="../cheatsheet/ResultSet.html#columnNames">getColumnNames</a></code>, and the actual results
-available with <code><a href="../cheatsheet/ResultSet.html#results">getResults</a></code></p>
+<p>The list of column names are available with <code><a href="../dataobjects.html#ResultSet#getColumnNames">getColumnNames</a></code>, and the actual results
+available with <code><a href="../dataobjects.html#ResultSet#getResults">getResults</a></code></p>
 </div>
 <div class="paragraph">
 <p>The results are a list of <code>JsonArray</code> instances, one for each row of the results.</p>
@@ -211,9 +242,9 @@ Array.prototype.forEach.call(results, function(row) {
 </div>
 </div>
 <div class="paragraph">
-<p>You can also retrieve the rows as a list of Json object instances with <code><a href="../cheatsheet/ResultSet.html#rows">getRows</a></code> -
+<p>You can also retrieve the rows as a list of Json object instances with <code><a href="../dataobjects.html#ResultSet#getRows">getRows</a></code> -
 this can give you a somewhat simpler API to work with, but please be aware that SQL results can contain duplicate
-column names - if that&#8217;s the case you should use <code><a href="../cheatsheet/ResultSet.html#results">getResults</a></code> instead.</p>
+column names - if that&#8217;s the case you should use <code><a href="../dataobjects.html#ResultSet#getResults">getResults</a></code> instead.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example of iterating through the results as Json object instances:</p>
@@ -272,12 +303,12 @@ connection.queryWithParams(query, params, function (res, res_err) {
 <p>The update string is raw SQL that is passed through without changes to the actual database.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with the results, represented by <code><a href="../cheatsheet/UpdateResult.html">UpdateResult</a></code> when the update has
+<p>The handler will be called with the results, represented by <code><a href="../dataobjects.html#UpdateResult">UpdateResult</a></code> when the update has
 been run.</p>
 </div>
 <div class="paragraph">
-<p>The update result holds the number of rows updated with <code><a href="../cheatsheet/UpdateResult.html#updated">getUpdated</a></code>, and
-if the update generated keys, they are available with <code><a href="../cheatsheet/UpdateResult.html#keys">getKeys</a></code>.</p>
+<p>The update result holds the number of rows updated with <code><a href="../dataobjects.html#UpdateResult#getUpdated">getUpdated</a></code>, and
+if the update generated keys, they are available with <code><a href="../dataobjects.html#UpdateResult#getKeys">getKeys</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -398,7 +429,7 @@ connection.commit(function (res, res_err) {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

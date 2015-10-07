@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Vert.x Reactive Streams Integration &amp;middot; Vert.x</title>
+  <title>Vert.x Reactive Streams Integration - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -82,6 +82,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
+<li><a href="#_using_vert_x_reactive_streams">Using Vert.x Reactive Streams</a></li>
 <li><a href="#_reactive_read_stream">Reactive Read Stream</a></li>
 <li><a href="#_reactive_write_stream">Reactive Write Stream</a></li>
 </ul>
@@ -91,6 +92,7 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
+<li><a href="#_using_vert_x_reactive_streams">Using Vert.x Reactive Streams</a></li>
 <li><a href="#_reactive_read_stream">Reactive Read Stream</a></li>
 <li><a href="#_reactive_write_stream">Reactive Write Stream</a></li>
 </ul>
@@ -113,6 +115,42 @@ Please see the Vert.x core manual for more information on Vert.x streams.</p>
 <p>This library provides implementations of read stream and write stream which also act as reactive streams publishers
 and subscribers. This allows us to treat any reactive streams publisher or subscriber and deal with it like any other
 Vert.x read or write stream.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_vert_x_reactive_streams">Using Vert.x Reactive Streams</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To use Vert.x Reactive Streams, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-reactive-streams&lt;/artifactId&gt;
+  &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-reactive-streams:3.1.0</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -186,7 +224,7 @@ pump.start();</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>

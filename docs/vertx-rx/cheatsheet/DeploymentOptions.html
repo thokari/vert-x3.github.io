@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>DeploymentOptions &amp;middot; Vert.x</title>
+  <title>DeploymentOptions - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -114,24 +114,9 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="worker"></a><code>worker</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the verticle(s) should be deployed as a worker verticle</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="multiThreaded"></a><code>multiThreaded</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the verticle(s) should be deployed as a multi-threaded worker verticle</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="isolationGroup"></a><code>isolationGroup</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the isolation group that will be used when deploying the verticle(s)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ha"></a><code>ha</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the verticle(s) will be deployed as HA.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="config"></a><code>config</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Json object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the JSON configuration that will be passed to the verticle(s) when it's deployed</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="extraClasspath"></a><code>extraClasspath</code></p></td>
@@ -141,14 +126,34 @@
  Ignored if no isolation group is set.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ha"></a><code>ha</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the verticle(s) will be deployed as HA.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="instances"></a><code>instances</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the number of instances that should be deployed.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="isolatedClasses"></a><code>isolatedClasses</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the isolated class names.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="isolationGroup"></a><code>isolationGroup</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the isolation group that will be used when deploying the verticle(s)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="multiThreaded"></a><code>multiThreaded</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the verticle(s) should be deployed as a multi-threaded worker verticle</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="worker"></a><code>worker</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the verticle(s) should be deployed as a worker verticle</p></td>
 </tr>
 </tbody>
 </table>
@@ -161,7 +166,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-06-26 13:50:28 CEST
+                Last updated 2015-10-07 13:12:22 CEST
               
               
             </div>
