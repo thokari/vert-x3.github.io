@@ -8,6 +8,49 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x 3.1.0 is released !</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;I’m pleased to announce the release of Vert.x 3.1!&lt;/p&gt;
+&lt;p&gt;Some of the highlights of this release include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-sync/java/&quot;&gt;Vertx-sync&lt;/a&gt; is a set of utilities that allow you to perform asynchronous
+operations and receive events in a synchronous way, but without blocking kernel threads.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-stomp/java/&quot;&gt;Vertx-stomp&lt;/a&gt; is an implementation of a STOMP server and client.
+You can use the STOMP server with other clients and use the STOMP client with other servers.
+The server and the client supports the version 1.0, 1.1 and 1.2 of the STOMP protocol.
+The STOMP server can also be used as a bridge with the
+vert.x event bus.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-shell/java/&quot;&gt;Vertx-shell&lt;/a&gt; is a command line interface for the Vert.x runtime available from
+regular terminals using different protocols.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Re-implementation of the Starter class and related functionality. And now redeploy is back!&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Full release notes can be found here:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.1-Release-Notes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.1-Release-Notes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Breaking changes here:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.1.0---Breaking-changes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.1.0---Breaking-changes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;NPM for the event-bus client here:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-eventbus-client&quot;&gt;https://www.npmjs.com/package/vertx3-eventbus-client&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Many thanks to all the committers and community whose contributions made this possible.&lt;/p&gt;
+&lt;p&gt;A special thanks to the full-time team - Clement, Julien and Paulo who put in a lot of work to get this out :)&lt;/p&gt;
+&lt;p&gt;Next stop is Vert.x 3.2 which we hope to have out before Christmas.&lt;/p&gt;
+&lt;p&gt;The artifacts have been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%223.1.0%22&quot;&gt;Maven Central&lt;/a&gt;
+ and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.1.0/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Thu, 08 Oct 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x-3-1-0-is-released</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-1-0-is-released</guid>
+          <author>
+            <name>purplefox</name>
+            <uri>http://github.com/purplefox</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Contract Driven REST Services with Vert.x3</title>
           <description>
       &lt;article&gt;&lt;p&gt;We see a new trend in development where we are shifting from developing applications to develop APIs. More and more we see services being offered as REST APIs that we are allowed to consume and we already see this trend from the big names in the industry, e.g.: &lt;a href=&quot;https://developers.facebook.com/&quot;&gt;Facebook&lt;/a&gt;, &lt;a href=&quot;https://www.mediawiki.org/wiki/API:Main_page&quot;&gt;Wikipedia&lt;/a&gt;, &lt;a href=&quot;https://developer.amazon.com/public/apis&quot;&gt;Amazon&lt;/a&gt;, &lt;a href=&quot;https://dev.twitter.com/overview/documentation&quot;&gt;Twitter&lt;/a&gt;, &lt;a href=&quot;https://developers.google.com/apis-explorer/#p/&quot;&gt;Google&lt;/a&gt; and &lt;a href=&quot;https://www.reddit.com/dev/api&quot;&gt;Reddit&lt;/a&gt; they all offer APIs.&lt;/p&gt;
