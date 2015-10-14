@@ -63,25 +63,26 @@ regular terminals using different protocols.&lt;/p&gt;
 &lt;p&gt;I’ll now go over building a simple Hello World API, document it and test it. For this example I’ll choose RAML since it feels more natural to the way we code with Vert.x Web.&lt;/p&gt;
 &lt;h2 id=&quot;define-the-hello-world-api&quot;&gt;Define the Hello World API&lt;/h2&gt;
 &lt;p&gt;We need a contract and as with any other development we need some specification, You can learn about RAML in its &lt;a href=&quot;http://raml.org&quot;&gt;website&lt;/a&gt; and quickly see how easy it is to get started. So we start with the following specification:&lt;/p&gt;
-&lt;h2 id=&quot;-pre-code-raml-span-class-hljs-number-0-8-span-&quot;&gt;&lt;pre&gt;&lt;code&gt;#%RAML &lt;span class=&quot;hljs-number&quot;&gt;0.8&lt;/span&gt;&lt;/h2&gt;
-&lt;p&gt;&lt;span class=&quot;hljs-string&quot;&gt;title:&lt;/span&gt; Hello world REST API
+&lt;pre&gt;&lt;code&gt;#%RAML &lt;span class=&quot;hljs-number&quot;&gt;0.8&lt;/span&gt;
+&lt;span class=&quot;hljs-string&quot;&gt;title:&lt;/span&gt; Hello world REST API
 &lt;span class=&quot;hljs-string&quot;&gt;baseUri:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;http:&lt;/span&gt;&lt;span class=&quot;hljs-comment&quot;&gt;//localhost:8080/&lt;/span&gt;
-&lt;span class=&quot;hljs-string&quot;&gt;version:&lt;/span&gt; v1&lt;/p&gt;
-&lt;p&gt;/&lt;span class=&quot;hljs-string&quot;&gt;hello:&lt;/span&gt;
+&lt;span class=&quot;hljs-string&quot;&gt;version:&lt;/span&gt; v1
+/&lt;span class=&quot;hljs-string&quot;&gt;hello:&lt;/span&gt;
 &lt;span class=&quot;hljs-label&quot;&gt;  get:&lt;/span&gt;
 &lt;span class=&quot;hljs-label&quot;&gt;    responses:&lt;/span&gt;
 &lt;span class=&quot;hljs-label&quot;&gt;      200:&lt;/span&gt;
 &lt;span class=&quot;hljs-label&quot;&gt;        body:&lt;/span&gt;
           application/&lt;span class=&quot;hljs-string&quot;&gt;json:&lt;/span&gt;
 &lt;span class=&quot;hljs-label&quot;&gt;            schema:&lt;/span&gt; |
-              { &lt;span class=&quot;hljs-string&quot;&gt;“$schema”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“&lt;a href=&quot;http://json-schema.org/schema&quot;&gt;http://json-schema.org/schema&lt;/a&gt;“&lt;/span&gt;,
-                &lt;span class=&quot;hljs-string&quot;&gt;“type”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“object”&lt;/span&gt;,
-                &lt;span class=&quot;hljs-string&quot;&gt;“description”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“Hello World Greeting”&lt;/span&gt;,
-                &lt;span class=&quot;hljs-string&quot;&gt;“properties”&lt;/span&gt;: {
-                  &lt;span class=&quot;hljs-string&quot;&gt;“greeting”&lt;/span&gt;:  { &lt;span class=&quot;hljs-string&quot;&gt;“type”&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;“string”&lt;/span&gt; }
+              { &lt;span class=&quot;hljs-string&quot;&gt;&quot;$schema&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;http://json-schema.org/schema&quot;&lt;/span&gt;,
+                &lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;object&quot;&lt;/span&gt;,
+                &lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello World Greeting&quot;&lt;/span&gt;,
+                &lt;span class=&quot;hljs-string&quot;&gt;&quot;properties&quot;&lt;/span&gt;: {
+                  &lt;span class=&quot;hljs-string&quot;&gt;&quot;greeting&quot;&lt;/span&gt;:  { &lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;string&quot;&lt;/span&gt; }
                 },
-                &lt;span class=&quot;hljs-string&quot;&gt;“required”&lt;/span&gt;: [ &lt;span class=&quot;hljs-string&quot;&gt;“greeting”&lt;/span&gt; ]
-              }&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+                &lt;span class=&quot;hljs-string&quot;&gt;&quot;required&quot;&lt;/span&gt;: [ &lt;span class=&quot;hljs-string&quot;&gt;&quot;greeting&quot;&lt;/span&gt; ]
+              }&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;So if you didn’t understood why I named RAML as a top down documentation tool, I think it becomes clear now. So there are some basic definition on the top of the file like, &lt;code&gt;title&lt;/code&gt;, &lt;code&gt;baseUri&lt;/code&gt; and &lt;code&gt;version&lt;/code&gt; which should be self explanatory.&lt;/p&gt;
 &lt;p&gt;And then we start with the API documentation, so we specify that at the &lt;code&gt;URL&lt;/code&gt; &lt;code&gt;/hello&lt;/code&gt; using the HTTP verb &lt;code&gt;GET&lt;/code&gt; you are expected to get a response with status code &lt;code&gt;200&lt;/code&gt; and the body of the response should have content type &lt;code&gt;application/json&lt;/code&gt;. This is a very minimal document, one could go over and specify the &lt;a href=&quot;http://json-schema.org/&quot;&gt;&lt;code&gt;json schema&lt;/code&gt;&lt;/a&gt; for the response, input values, etc…, however lets just keep it simple for this example.&lt;/p&gt;
 &lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;IDE ? &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; if you do not like to write yaml in your editor you can always use the &lt;a href=&quot;http://raml.org/projects.html&quot;&gt;API Designer&lt;/a&gt; which gives you instant feedback on your API document and provides a testing platform&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;.&lt;/p&gt;
