@@ -8,6 +8,228 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Using the asynchronous SQL client</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Finally, back… This post is the fifth post of the introduction to vert.x blog series, after a not-that-small break. In this post we are going to see how we can use JDBC in a vert.x application, and this, using the asynchronous API provided by the &lt;a href=&quot;http://vertx.io/docs/vertx-jdbc-client/java/&quot;&gt;vertx-jdbc-client&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;previously-in-the-introduction-to-vert-x-series&quot;&gt;Previously in the introduction to vert.x series&lt;/h2&gt;
+&lt;p&gt;As it was quite some time since the last post, let’s start by refreshing our mind about the four previous posts:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/my-first-vert-x-3-application/&quot;&gt;first post&lt;/a&gt; has described how to build a vert.x application with Maven and execute unit tests.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/vert-x-application-configuration/&quot;&gt;second post&lt;/a&gt; has described how this application can become configurable.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;(http://vertx.io/blog/some-rest-with-vert-x/&quot;&gt;third post&lt;/a&gt; has introduced &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/&quot;&gt;vertx-web&lt;/a&gt;, and a small collection management application has been developed. This application offers a REST API used by a HTML/JavaScript frontend.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/unit-and-integration-tests/&quot;&gt;previous post&lt;/a&gt; has presented how you can run integration tests to ensure the behavior of your application.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In this post, back to code. The current application uses an in-memory map to store the products. It’s time to use a database. In this post we are going to use &lt;a href=&quot;http://hsqldb.org/&quot;&gt;HSQL&lt;/a&gt;, but you can use any database providing a JDBC driver. Interactions with the database will be asynchronous and made using the &lt;a href=&quot;http://vertx.io/docs/vertx-jdbc-client/java/&quot;&gt;vertx-jdbc-client&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The code of this post are available on this Github &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app&quot;&gt;project&lt;/a&gt;, in the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-5&quot;&gt;post-5 branch&lt;/a&gt; branch.&lt;/p&gt;
+&lt;h2 id=&quot;asynchronous-&quot;&gt;Asynchronous?&lt;/h2&gt;
+&lt;p&gt;One of the vert.x characteristics is being asynchronous. With an asynchronous API, you don’t wait for a result, but you are notified when this result is ready. Just to illustrate this, let’s take a very simple example.&lt;/p&gt;
+&lt;p&gt;Let’s imagine an &lt;code&gt;add&lt;/code&gt; method. Traditionally, you would use it like this: &lt;code&gt;int r = add(1, 1)&lt;/code&gt;. This is a synchronous API as you are waiting for the result. An asynchronous version of this API would be: &lt;code&gt;add(1, 1, r -&gt; { /* do something with the result */ })&lt;/code&gt;. In this version, you pass a &lt;code&gt;Handler&lt;/code&gt; called when the result has been computed. The method does not return anything, and could be implemented as:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; a, &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; b, Handler&lt;Integer&gt; resultHandler)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; r = a + b;
+    resultHandler.handle(r);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Just to avoid misconceptions, asynchronous API are not about threads. As we can see in the &lt;code&gt;add&lt;/code&gt; example, there are no threads involved.&lt;/p&gt;
+&lt;h2 id=&quot;jdbc-yes-but-asynchronous&quot;&gt;JDBC yes, but asynchronous&lt;/h2&gt;
+&lt;p&gt;So, now that we have seen some basics about asynchronous API, let’s have a look to the vertx-jdbc-client. This component lets us interact with a database through a JDBC driver. These interactions are asynchronous, so when you were doing:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;String&lt;/span&gt; sql &lt;span class=&quot;hljs-subst&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT * FROM Products&quot;&lt;/span&gt;;
+&lt;span class=&quot;hljs-keyword&quot;&gt;ResultSet&lt;/span&gt; rs &lt;span class=&quot;hljs-subst&quot;&gt;=&lt;/span&gt; stmt&lt;span class=&quot;hljs-built_in&quot;&gt;.&lt;/span&gt;executeQuery(sql);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;it will be:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;connection.query(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT * FROM Products&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; -&gt; {
+        // &lt;span class=&quot;hljs-keyword&quot;&gt;do&lt;/span&gt; something &lt;span class=&quot;hljs-keyword&quot;&gt;with&lt;/span&gt; the &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This model is more efficient as it avoids waiting for the result. You are notified when the result is available.&lt;/p&gt;
+&lt;p&gt;Let’s now modify our application to use a database to store our products.&lt;/p&gt;
+&lt;h2 id=&quot;some-maven-dependencies&quot;&gt;Some maven dependencies&lt;/h2&gt;
+&lt;p&gt;The first things we need to do it to declare two new Maven dependencies in our &lt;code&gt;pom.xml&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-jdbc-client&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.1.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;org.hsqldb&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;hsqldb&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;2.3.3&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first dependency provides the vertx-jdbc-client, while the second one provide the HSQL JDBC driver. If you want to use another database, change this dependency. You will also need to change the JDBC url and JDBC driver class name later.&lt;/p&gt;
+&lt;h2 id=&quot;initializing-the-jdbc-client&quot;&gt;Initializing the JDBC client&lt;/h2&gt;
+&lt;p&gt;Now that we have added these dependencies, it’s time to create our JDBC client:&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;MyFirstVerticle&lt;/code&gt; class, declare a new field &lt;code&gt;JDBCClient jdbc;&lt;/code&gt;, and add the following line at the beginning of the &lt;code&gt;start&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-setting&quot;&gt;jdbc = &lt;span class=&quot;hljs-value&quot;&gt;JDBCClient.createShared(vertx, config(), &lt;span class=&quot;hljs-string&quot;&gt;&quot;My-Whisky-Collection&quot;&lt;/span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This creates an instance of JDBC client, configured with the configuration provided to the verticle. To work correctly this configuration needs to provide:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;url&lt;/em&gt; - the JDBC url such as &lt;code&gt;jdbc:hsqldb:mem:db?shutdown=true&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;driver_class&lt;/em&gt; - the JDBC driver class such as &lt;code&gt;org.hsqldb.jdbcDriver&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ok, we have the client, we need a connection to the database. This is achieved using the &lt;code&gt;jdbc.getConnection&lt;/code&gt; that take a &lt;code&gt;Handler&lt;AsyncResult&lt;SQLConnection&gt;&gt;&lt;/code&gt; as parameter. Let’s have a deeper look to this type. It’s a &lt;code&gt;Handler&lt;/code&gt;, so it is called when the result is ready. This result is an instance of &lt;code&gt;AsyncResult&lt;SQLConnection&gt;&lt;/code&gt;. &lt;code&gt;AsyncResult&lt;/code&gt; is a structure provided by vert.x that lets us know if the operation was completed successfully or failed. In case of success, it provides the result, here an instance of &lt;code&gt;SQLConnection&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;When you receive an instance of &lt;code&gt;AsyncResult&lt;/code&gt;, your code generally looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.failed()) {
+  &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.err.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;The operation has failed...: &quot;&lt;/span&gt;
+      + ar.cause().getMessage());
+} &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+  // &lt;span class=&quot;hljs-type&quot;&gt;Use&lt;/span&gt; the &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;:
+  &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; = ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
+ }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, let’s go back to our &lt;code&gt;SQLConnection&lt;/code&gt;. We need to retrieve it, and then start the rest of the application. This changes how we start the application, as it will become asynchronous. So, if we divide our startup sequence into small chunks it would be something like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;startBackend(
+ &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-params&quot;&gt;(connection)&lt;/span&gt; -&gt;&lt;/span&gt; createSomeData(connection,
+     &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-params&quot;&gt;(nothing)&lt;/span&gt; -&gt;&lt;/span&gt; startWebApp(
+         &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-params&quot;&gt;(http)&lt;/span&gt; -&gt;&lt;/span&gt; completeStartup(http, fut)
+     ), fut
+ ), fut);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;with:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;startBackend&lt;/code&gt; - retrieves a &lt;code&gt;SQLConnection&lt;/code&gt; and then calls the next step&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;createSomeData&lt;/code&gt; - initializes the database and inserts some data. When done, it calls the next step&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;startWebApp&lt;/code&gt; - starts our web application&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;completeStartup&lt;/code&gt; - finalizes our start sequence&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;fut&lt;/code&gt; is the completion future passed by vert.x that let us report when we are started, or if an issue has been encountered while starting.&lt;/p&gt;
+&lt;p&gt;Let’s have a look to &lt;code&gt;startBackend&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;private &lt;span class=&quot;hljs-type&quot;&gt;void&lt;/span&gt; startBackend(&lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt;&gt;&gt; next, &lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt; fut) {
+    jdbc.getConnection(ar -&gt; {
+      &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.failed()) {
+        fut.fail(ar.cause());
+      } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+        next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.succeededFuture(ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;()));
+      }
+    });
+  }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This method retrieves a &lt;code&gt;SQLConnection&lt;/code&gt;, check whether this operation succeeded. If so, it calls the next step. In case of failure, it reports it.&lt;/p&gt;
+&lt;p&gt;The other methods follow the same pattern: 1) check if the last operation has succeeded, 2) do the task, 3) call the next step.&lt;/p&gt;
+&lt;h3 id=&quot;a-bit-of-sql-&quot;&gt;A bit of SQL…&lt;/h3&gt;
+&lt;p&gt;Our client is ready, let’s now write some SQL statements. Let’s start by the &lt;code&gt;createSomeData&lt;/code&gt; method that is part of the startup sequence:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;private &lt;span class=&quot;hljs-type&quot;&gt;void&lt;/span&gt; createSomeData(&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt;&gt; &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;,
+    &lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;&gt; next, &lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt; fut) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;.failed()) {
+      fut.fail(&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;.cause());
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+      &lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt; connection = &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
+      connection.execute(
+          &lt;span class=&quot;hljs-string&quot;&gt;&quot;CREATE TABLE IF NOT EXISTS Whisky (id INTEGER IDENTITY, name varchar(100), &quot;&lt;/span&gt; +
+          &lt;span class=&quot;hljs-string&quot;&gt;&quot;origin varchar(100))&quot;&lt;/span&gt;,
+          ar -&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.failed()) {
+              fut.fail(ar.cause());
+              &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
+            }
+            connection.query(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT * FROM Whisky&quot;&lt;/span&gt;, select -&gt; {
+              &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (select.failed()) {
+                fut.fail(ar.cause());
+                &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
+              }
+              &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (select.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;().getNumRows() == &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;) {
+                insert(
+                    new &lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Bowmore 15 Years Laimrig&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Islay&quot;&lt;/span&gt;),
+                    connection,
+                    (v) -&gt; insert(new &lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Talisker 57° North&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Island&quot;&lt;/span&gt;),
+                        connection,
+                        (r) -&gt; next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;succeededFuture())));
+              } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+                next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;succeededFuture());
+              }
+            });
+          });
+    }
+  }&lt;/code&gt;&lt;/pre&gt;
+This method checks that the `SQLConnection` is available and then start executing some SQL statements. First, it creates the tables if there are not there yet. As you can see, the method called is structured as follows:
+
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;connection.execute(
+    SQL statement,
+    &lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;handler&lt;/span&gt; called &lt;span class=&quot;hljs-keyword&quot;&gt;when&lt;/span&gt; the statement has been executed
+)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The handler receives an &lt;code&gt;AsyncResult&lt;Void&gt;&lt;/code&gt;, &lt;em&gt;i.e.&lt;/em&gt; a notification of the completion without an actual result.&lt;/p&gt;
+&lt;p&gt;In the code of this handler, we check whether or not the statement has been executed correctly, and if so we check to see if the table already contains some data, if not, it inserts data using the &lt;code&gt;insert&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;private &lt;span class=&quot;hljs-type&quot;&gt;void&lt;/span&gt; insert(&lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt; whisky, &lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt; connection, &lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;&gt;&gt; next) {
+  &lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt; sql = &lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO Whisky (name, origin) VALUES ?, ?&quot;&lt;/span&gt;;
+  connection.updateWithParams(sql,
+      new &lt;span class=&quot;hljs-type&quot;&gt;JsonArray&lt;/span&gt;().add(whisky.getName()).add(whisky.getOrigin()),
+      (ar) -&gt; {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.failed()) {
+          next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.failedFuture(ar.cause()));
+          &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
+        }
+        &lt;span class=&quot;hljs-type&quot;&gt;UpdateResult&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; = ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
+        // &lt;span class=&quot;hljs-type&quot;&gt;Build&lt;/span&gt; a new whisky instance &lt;span class=&quot;hljs-keyword&quot;&gt;with&lt;/span&gt; the generated id.
+        &lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt; w = new &lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;(&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;.getKeys().getInteger(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;), whisky.getName(), whisky.getOrigin());
+        next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.succeededFuture(w));
+      });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This method uses the &lt;code&gt;updateWithParams&lt;/code&gt; method with an &lt;em&gt;INSERT&lt;/em&gt; statement, and pass values. This approach avoids SQL injection. Once the the statement has been executed, we creates a new &lt;code&gt;Whisky&lt;/code&gt; object with the created (auto-generated) id.&lt;/p&gt;
+&lt;h2 id=&quot;some-rest-with-a-pinch-of-sql&quot;&gt;Some REST with a pinch of SQL&lt;/h2&gt;
+&lt;p&gt;The method described  above is part of our start sequence. But what about the method invoked by our REST API. Let’s have a look to the &lt;code&gt;getAll&lt;/code&gt; method. This method is called by the web frontend to retrieve all stored products:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;private &lt;span class=&quot;hljs-type&quot;&gt;void&lt;/span&gt; getAll(&lt;span class=&quot;hljs-type&quot;&gt;RoutingContext&lt;/span&gt; routingContext) {
+    jdbc.getConnection(ar -&gt; {
+      &lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt; connection = ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
+      connection.query(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT * FROM Whisky&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; -&gt; {
+        &lt;span class=&quot;hljs-type&quot;&gt;List&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;&gt; whiskies = &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;().getRows().stream().map(&lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;::new).collect(&lt;span class=&quot;hljs-type&quot;&gt;Collectors&lt;/span&gt;.toList());
+        routingContext.response()
+            .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;)
+            .&lt;span class=&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;(&lt;span class=&quot;hljs-type&quot;&gt;Json&lt;/span&gt;.encodePrettily(whiskies));
+      });
+    });
+  }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This method gets a &lt;code&gt;SQLConnection&lt;/code&gt;, and then issue a query. Once the result has been retrieved it writes the HTTP response as before. The &lt;code&gt;getOne&lt;/code&gt;, &lt;code&gt;deleteOne&lt;/code&gt;, &lt;code&gt;updateOne&lt;/code&gt; and &lt;code&gt;addOne&lt;/code&gt; methods follow the same pattern.&lt;/p&gt;
+&lt;p&gt;Let’s have a look to the result provided to the handler passed to the &lt;code&gt;query&lt;/code&gt; method. It gets a &lt;code&gt;ResultSet&lt;/code&gt;, which contains the query result. Each row is a &lt;code&gt;JsonObject&lt;/code&gt;, so if your data object has a constructor taking a &lt;code&gt;JsonObject&lt;/code&gt; as unique argument, creating there objects is straightforward.&lt;/p&gt;
+&lt;h2 id=&quot;test-test-and-test-again&quot;&gt;Test, test, and test again&lt;/h2&gt;
+&lt;p&gt;We need to slightly update our tests to configure the &lt;code&gt;JDBCClient&lt;/code&gt;. In the &lt;code&gt;MyFirstVertilceTest&lt;/code&gt; class, change the &lt;code&gt;DeploymentOption&lt;/code&gt; object created in the &lt;code&gt;setUp&lt;/code&gt; method to be:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;DeploymentOptions &lt;span class=&quot;hljs-keyword&quot;&gt;options&lt;/span&gt; = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; DeploymentOptions()
+        .setConfig(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()
+            .&lt;span class=&quot;hljs-keyword&quot;&gt;put&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, port)
+            .&lt;span class=&quot;hljs-keyword&quot;&gt;put&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;url&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;jdbc:hsqldb:mem:test?shutdown=true&quot;&lt;/span&gt;)
+            .&lt;span class=&quot;hljs-keyword&quot;&gt;put&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;driver_class&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;org.hsqldb.jdbcDriver&quot;&lt;/span&gt;)
+        );&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In addition to the &lt;code&gt;http.port&lt;/code&gt;, we also put the JDBC url and the class of the JDBC driver. We use an in-memory database for tests.&lt;/p&gt;
+&lt;p&gt;The same modification needs to be done in the &lt;code&gt;src/test/resources/my-it-config.json&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-variable&quot;&gt;${http.port}&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;url&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;jdbc:hsqldb:mem:it-test?shutdown=true&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;driver_class&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;org.hsqldb.jdbcDriver&quot;&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;src/main/conf/my-application-conf.json&lt;/code&gt; file also needs to be updated, not for the tests, but to run the application:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;{
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;http.port&lt;/span&gt;&quot; : &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-number&quot;&gt;8082&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;url&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;jdbc:hsqldb:file:db/whiskies&quot;&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;driver_class&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;org.hsqldb.jdbcDriver&quot;&lt;/span&gt;
+&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The JDBC url is a bit different in this last file, as we store the database on the file system.&lt;/p&gt;
+&lt;h2 id=&quot;show-time-&quot;&gt;Show time!&lt;/h2&gt;
+&lt;p&gt;Let’s now build our application:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;mvn clean package&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;As we didn’t change the API (neither the public java one nor the REST), test should run smoothly.&lt;/p&gt;
+&lt;p&gt;Then launch the application with:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar -conf src/main/conf/my-application-conf.json&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Open your browser to &lt;code&gt;http://localhost:8082/assets/index.html&lt;/code&gt;, and you should see the application using the database. This time the products are stored in a database persisted on the file system. So, if we stop and restart the application, the data is restored.&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;In this post, we saw how you can use JDBC database with vert.x, and thus without too much burden. You may have been surprised by the asynchronous development model, but once you start using it, it’s hard to come back.&lt;/p&gt;
+&lt;p&gt;Next time, let’s see how the same application can use mongoDB instead of HSQL.&lt;/p&gt;
+&lt;p&gt;Stay tuned, and happy coding !&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 19 Oct 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/using-the-asynchronous-sql-client</link>
+          <guid isPermaLink="true">http://vertx.io/blog/using-the-asynchronous-sql-client</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x 3.1.0 is released !</title>
           <description>
       &lt;article&gt;&lt;p&gt;I’m pleased to announce the release of Vert.x 3.1!&lt;/p&gt;
