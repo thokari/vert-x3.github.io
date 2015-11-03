@@ -1077,7 +1077,7 @@ and stop them afterward --&gt;&lt;/span&gt;
                 &lt;span class=&quot;hljs-attribute&quot;&gt;dir&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;${project.build.directory}&quot;&lt;/span&gt;
                 &lt;span class=&quot;hljs-attribute&quot;&gt;spawn&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;false&quot;&lt;/span&gt;&gt;&lt;/span&gt;
             &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;-c&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
-            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;ps ax | grep -i &#39;${project.artifactId}&#39; | awk &#39;NR==1{print $1}&#39; | xargs kill -SIGTERM&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;arg&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;ps ax | grep -Ei &#39;[\-]DtestPort=${http.port}\s+\-jar\s+${project.artifactId}&#39; | awk &#39;NR==1{print $1}&#39; | xargs kill -SIGTERM&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
           &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;exec&lt;/span&gt;&gt;&lt;/span&gt;
         &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;target&lt;/span&gt;&gt;&lt;/span&gt;
       &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
@@ -1160,6 +1160,7 @@ kill your_process_id -SIGTERM&lt;/code&gt;&lt;/pre&gt;
 }&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The methods annotated with &lt;code&gt;@BeforeClass&lt;/code&gt; and &lt;code&gt;@AfterClass&lt;/code&gt; are invoked once before / after all tests of the class. Here, we just retrieve the http port (passed as a system property) and we configure REST Assured.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Am I ready to serve ? &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; You may need to wait in the &lt;code&gt;configureRestAssured&lt;/code&gt; method that the HTTP server has been started. We recommend the &lt;a href=&quot;https://github.com/jayway/awaitility&quot;&gt;awaitility&lt;/a&gt; test framework to check that the request can be served. It would fail the test if the server does not start.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
 &lt;p&gt;It’s now time to implement a real test. Let’s check we can retrieve an individual product:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
 &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;checkThatWeCanRetrieveIndividualProduct&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
@@ -1198,7 +1199,7 @@ kill your_process_id -SIGTERM&lt;/code&gt;&lt;/pre&gt;
       .body(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;, equalTo(whisky.getId()));
   &lt;span class=&quot;hljs-comment&quot;&gt;// Delete the bottle&lt;/span&gt;
   delete(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then().assertThat().statusCode(&lt;span class=&quot;hljs-number&quot;&gt;204&lt;/span&gt;);
-  &lt;span class=&quot;hljs-comment&quot;&gt;// Check that the resrouce is not available anymore&lt;/span&gt;
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Check that the resource is not available anymore&lt;/span&gt;
   get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api/whiskies/&quot;&lt;/span&gt; + whisky.getId()).then()
       .assertThat()
       .statusCode(&lt;span class=&quot;hljs-number&quot;&gt;404&lt;/span&gt;);

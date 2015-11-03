@@ -127,7 +127,7 @@ and stop them afterward --&gt;</span>
                 <span class=hljs-attribute>dir</span>=<span class=hljs-value>"${project.build.directory}"</span>
                 <span class=hljs-attribute>spawn</span>=<span class=hljs-value>"false"</span>&gt;</span>
             <span class=hljs-tag>&lt;<span class=hljs-title>arg</span> <span class=hljs-attribute>value</span>=<span class=hljs-value>"-c"</span>/&gt;</span>
-            <span class=hljs-tag>&lt;<span class=hljs-title>arg</span> <span class=hljs-attribute>value</span>=<span class=hljs-value>"ps ax | grep -i '${project.artifactId}' | awk 'NR==1{print $1}' | xargs kill -SIGTERM"</span>/&gt;</span>
+            <span class=hljs-tag>&lt;<span class=hljs-title>arg</span> <span class=hljs-attribute>value</span>=<span class=hljs-value>"ps ax | grep -Ei '[\-]DtestPort=${http.port}\s+\-jar\s+${project.artifactId}' | awk 'NR==1{print $1}' | xargs kill -SIGTERM"</span>/&gt;</span>
           <span class=hljs-tag>&lt;/<span class=hljs-title>exec</span>&gt;</span>
         <span class=hljs-tag>&lt;/<span class=hljs-title>target</span>&gt;</span>
       <span class=hljs-tag>&lt;/<span class=hljs-title>configuration</span>&gt;</span>
@@ -181,7 +181,7 @@ kill your_process_id -SIGTERM</code></pre><p><div class="admonition-block note">
   <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-keyword>static</span> <span class=hljs-keyword>void</span> <span class=hljs-title>unconfigureRestAssured</span><span class=hljs-params>()</span> </span>{
     RestAssured.reset();
   }
-}</code></pre><p>The methods annotated with <code>@BeforeClass</code> and <code>@AfterClass</code> are invoked once before / after all tests of the class. Here, we just retrieve the http port (passed as a system property) and we configure REST Assured.</p><p>It’s now time to implement a real test. Let’s check we can retrieve an individual product:</p><pre><code class="hljs java"><span class=hljs-annotation>@Test</span>
+}</code></pre><p>The methods annotated with <code>@BeforeClass</code> and <code>@AfterClass</code> are invoked once before / after all tests of the class. Here, we just retrieve the http port (passed as a system property) and we configure REST Assured.</p><p><div class="admonition-block note"><table><tbody><tr><td class=admonition-icon><i class="admonition-icon fa fa-comment"></i></td><td class=content><span class=title>Am I ready to serve ?</span><br><span class=content>You may need to wait in the <code>configureRestAssured</code> method that the HTTP server has been started. We recommend the <a href=https://github.com/jayway/awaitility>awaitility</a> test framework to check that the request can be served. It would fail the test if the server does not start.</span></td></tr></tbody></table></div></p><p>It’s now time to implement a real test. Let’s check we can retrieve an individual product:</p><pre><code class="hljs java"><span class=hljs-annotation>@Test</span>
 <span class=hljs-function><span class=hljs-keyword>public</span> <span class=hljs-keyword>void</span> <span class=hljs-title>checkThatWeCanRetrieveIndividualProduct</span><span class=hljs-params>()</span> </span>{
   <span class=hljs-comment>// Get the list of bottles, ensure it's a success and extract the first id.</span>
   <span class=hljs-keyword>final</span> <span class=hljs-keyword>int</span> id = get(<span class=hljs-string>"/api/whiskies"</span>).then()
@@ -213,7 +213,7 @@ kill your_process_id -SIGTERM</code></pre><p><div class="admonition-block note">
       .body(<span class=hljs-string>"id"</span>, equalTo(whisky.getId()));
   <span class=hljs-comment>// Delete the bottle</span>
   delete(<span class=hljs-string>"/api/whiskies/"</span> + whisky.getId()).then().assertThat().statusCode(<span class=hljs-number>204</span>);
-  <span class=hljs-comment>// Check that the resrouce is not available anymore</span>
+  <span class=hljs-comment>// Check that the resource is not available anymore</span>
   get(<span class=hljs-string>"/api/whiskies/"</span> + whisky.getId()).then()
       .assertThat()
       .statusCode(<span class=hljs-number>404</span>);
