@@ -1692,7 +1692,7 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;First, let’s create a project. In this post, we use Apache Maven, but you can use Gradle or the build process tool you prefer. You could use the Maven jar archetype to create the structure, but basically, you just need a directory with:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;a &lt;code&gt;src/main/java&lt;/code&gt; directory&lt;/li&gt;
-&lt;li&gt;a &lt;code&gt;src/main/test&lt;/code&gt; directory&lt;/li&gt;
+&lt;li&gt;a &lt;code&gt;src/test/java&lt;/code&gt; directory&lt;/li&gt;
 &lt;li&gt;a &lt;code&gt;pom.xml&lt;/code&gt; file&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;So, you would get something like:&lt;/p&gt;
