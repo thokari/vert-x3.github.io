@@ -49,11 +49,13 @@
           ar -&gt; {
             <span class=hljs-keyword>if</span> (ar.failed()) {
               fut.fail(ar.cause());
+              connection.close();
               <span class=hljs-keyword>return</span>;
             }
             connection.query(<span class=hljs-string>"SELECT * FROM Whisky"</span>, select -&gt; {
               <span class=hljs-keyword>if</span> (select.failed()) {
                 fut.fail(ar.cause());
+                connection.close();
                 <span class=hljs-keyword>return</span>;
               }
               <span class=hljs-keyword>if</span> (select.<span class=hljs-literal>result</span>().getNumRows() == <span class=hljs-number>0</span>) {
@@ -62,9 +64,13 @@
                     connection,
                     (v) -&gt; insert(new <span class=hljs-type>Whisky</span>(<span class=hljs-string>"Talisker 57° North"</span>, <span class=hljs-string>"Scotland, Island"</span>),
                         connection,
-                        (r) -&gt; next.handle(<span class=hljs-type>Future</span>.&lt;<span class=hljs-type>Void</span>&gt;succeededFuture())));
+                        (r) -&gt; {
+                          next.handle(<span class=hljs-type>Future</span>.&lt;<span class=hljs-type>Void</span>&gt;succeededFuture());
+                          connection.close();
+                        }));                                                    
               } <span class=hljs-keyword>else</span> {
                 next.handle(<span class=hljs-type>Future</span>.&lt;<span class=hljs-type>Void</span>&gt;succeededFuture());
+                connection.close();
               }
             });
           });
@@ -72,7 +78,7 @@
   }</code></pre>This method checks that the `SQLConnection` is available and then start executing some SQL statements. First, it creates the tables if there are not there yet. As you can see, the method called is structured as follows:<pre><code class=hljs>connection.execute(
     SQL statement,
     <span class=hljs-operator><span class=hljs-keyword>handler</span> called <span class=hljs-keyword>when</span> the statement has been executed
-)</span></code></pre><p>The handler receives an <code>AsyncResult&lt;Void&gt;</code>, <em>i.e.</em> a notification of the completion without an actual result.</p><p>In the code of this handler, we check whether or not the statement has been executed correctly, and if so we check to see if the table already contains some data, if not, it inserts data using the <code>insert</code> method:</p><pre><code class=hljs>private <span class=hljs-type>void</span> insert(<span class=hljs-type>Whisky</span> whisky, <span class=hljs-type>SQLConnection</span> connection, <span class=hljs-type>Handler</span>&lt;<span class=hljs-type>AsyncResult</span>&lt;<span class=hljs-type>Whisky</span>&gt;&gt; next) {
+)</span></code></pre><p>The handler receives an <code>AsyncResult&lt;Void&gt;</code>, <em>i.e.</em> a notification of the completion without an actual result.</p><p><div class="admonition-block note"><table><tbody><tr><td class=admonition-icon><i class="admonition-icon fa fa-comment"></i></td><td class=content><span class=title>Closing connection</span><br><span class=content>Don’t forget to close the SQL connection when you are done. The connection will be given back to the connection pool and be reused.</span></td></tr></tbody></table></div></p><p>In the code of this handler, we check whether or not the statement has been executed correctly, and if so we check to see if the table already contains some data, if not, it inserts data using the <code>insert</code> method:</p><pre><code class=hljs>private <span class=hljs-type>void</span> insert(<span class=hljs-type>Whisky</span> whisky, <span class=hljs-type>SQLConnection</span> connection, <span class=hljs-type>Handler</span>&lt;<span class=hljs-type>AsyncResult</span>&lt;<span class=hljs-type>Whisky</span>&gt;&gt; next) {
   <span class=hljs-type>String</span> sql = <span class=hljs-string>"INSERT INTO Whisky (name, origin) VALUES ?, ?"</span>;
   connection.updateWithParams(sql,
       new <span class=hljs-type>JsonArray</span>().add(whisky.getName()).add(whisky.getOrigin()),
@@ -86,7 +92,7 @@
         <span class=hljs-type>Whisky</span> w = new <span class=hljs-type>Whisky</span>(<span class=hljs-literal>result</span>.getKeys().getInteger(<span class=hljs-number>0</span>), whisky.getName(), whisky.getOrigin());
         next.handle(<span class=hljs-type>Future</span>.succeededFuture(w));
       });
-}</code></pre><p>This method uses the <code>updateWithParams</code> method with an <em>INSERT</em> statement, and pass values. This approach avoids SQL injection. Once the the statement has been executed, we creates a new <code>Whisky</code> object with the created (auto-generated) id.</p><h2 id=some-rest-with-a-pinch-of-sql>Some REST with a pinch of SQL</h2><p>The method described above is part of our start sequence. But what about the method invoked by our REST API. Let’s have a look to the <code>getAll</code> method. This method is called by the web frontend to retrieve all stored products:</p><pre><code class=hljs>private <span class=hljs-type>void</span> getAll(<span class=hljs-type>RoutingContext</span> routingContext) {
+}</code></pre><p>This method uses the <code>updateWithParams</code> method with an <em>INSERT</em> statement, and pass values. This approach avoids SQL injection. Once the the statement has been executed, we creates a new <code>Whisky</code> object with the created (auto-generated) id.</p><h2 id=some-rest-with-a-pinch-of-sql>Some REST with a pinch of SQL</h2><p>The method described above is part of our start sequence. But what about the method invoked by our REST API. Let’s have a look to the <code>getAll</code> method. This method is called by the web front-end to retrieve all stored products:</p><pre><code class=hljs>private <span class=hljs-type>void</span> getAll(<span class=hljs-type>RoutingContext</span> routingContext) {
     jdbc.getConnection(ar -&gt; {
       <span class=hljs-type>SQLConnection</span> connection = ar.<span class=hljs-literal>result</span>();
       connection.query(<span class=hljs-string>"SELECT * FROM Whisky"</span>, <span class=hljs-literal>result</span> -&gt; {
@@ -94,9 +100,10 @@
         routingContext.response()
             .putHeader(<span class=hljs-string>"content-type"</span>, <span class=hljs-string>"application/json; charset=utf-8"</span>)
             .<span class=hljs-keyword>end</span>(<span class=hljs-type>Json</span>.encodePrettily(whiskies));
+        connection.close(); // <span class=hljs-type>Close</span> the connection        
       });
     });
-  }</code></pre><p>This method gets a <code>SQLConnection</code>, and then issue a query. Once the result has been retrieved it writes the HTTP response as before. The <code>getOne</code>, <code>deleteOne</code>, <code>updateOne</code> and <code>addOne</code> methods follow the same pattern.</p><p>Let’s have a look to the result provided to the handler passed to the <code>query</code> method. It gets a <code>ResultSet</code>, which contains the query result. Each row is a <code>JsonObject</code>, so if your data object has a constructor taking a <code>JsonObject</code> as unique argument, creating there objects is straightforward.</p><h2 id=test-test-and-test-again>Test, test, and test again</h2><p>We need to slightly update our tests to configure the <code>JDBCClient</code>. In the <code>MyFirstVertilceTest</code> class, change the <code>DeploymentOption</code> object created in the <code>setUp</code> method to be:</p><pre><code class=hljs>DeploymentOptions <span class=hljs-keyword>options</span> = <span class=hljs-keyword>new</span> DeploymentOptions()
+  }</code></pre><p>This method gets a <code>SQLConnection</code>, and then issue a query. Once the result has been retrieved it writes the HTTP response as before. The <code>getOne</code>, <code>deleteOne</code>, <code>updateOne</code> and <code>addOne</code> methods follow the same pattern. Notice that the connection can be closed after the response has been written.</p><p>Let’s have a look to the result provided to the handler passed to the <code>query</code> method. It gets a <code>ResultSet</code>, which contains the query result. Each row is a <code>JsonObject</code>, so if your data object has a constructor taking a <code>JsonObject</code> as unique argument, creating there objects is straightforward.</p><h2 id=test-test-and-test-again>Test, test, and test again</h2><p>We need to slightly update our tests to configure the <code>JDBCClient</code>. In the <code>MyFirstVertilceTest</code> class, change the <code>DeploymentOption</code> object created in the <code>setUp</code> method to be:</p><pre><code class=hljs>DeploymentOptions <span class=hljs-keyword>options</span> = <span class=hljs-keyword>new</span> DeploymentOptions()
         .setConfig(<span class=hljs-keyword>new</span> JsonObject()
             .<span class=hljs-keyword>put</span>(<span class=hljs-string>"http.port"</span>, port)
             .<span class=hljs-keyword>put</span>(<span class=hljs-string>"url"</span>, <span class=hljs-string>"jdbc:hsqldb:mem:test?shutdown=true"</span>)

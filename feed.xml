@@ -119,11 +119,13 @@
           ar -&gt; {
             &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.failed()) {
               fut.fail(ar.cause());
+              connection.close();
               &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
             }
             connection.query(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT * FROM Whisky&quot;&lt;/span&gt;, select -&gt; {
               &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (select.failed()) {
                 fut.fail(ar.cause());
+                connection.close();
                 &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
               }
               &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (select.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;().getNumRows() == &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;) {
@@ -132,9 +134,13 @@
                     connection,
                     (v) -&gt; insert(new &lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Talisker 57° North&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Island&quot;&lt;/span&gt;),
                         connection,
-                        (r) -&gt; next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;succeededFuture())));
+                        (r) -&gt; {
+                          next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;succeededFuture());
+                          connection.close();
+                        }));                                                    
               } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
                 next.handle(&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;.&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;succeededFuture());
+                connection.close();
               }
             });
           });
@@ -148,6 +154,7 @@ This method checks that the `SQLConnection` is available and then start executin
 )&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The handler receives an &lt;code&gt;AsyncResult&lt;Void&gt;&lt;/code&gt;, &lt;em&gt;i.e.&lt;/em&gt; a notification of the completion without an actual result.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Closing connection&lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; Don’t forget to close the SQL connection when you are done. The connection will be given back to the connection pool and be reused.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
 &lt;p&gt;In the code of this handler, we check whether or not the statement has been executed correctly, and if so we check to see if the table already contains some data, if not, it inserts data using the &lt;code&gt;insert&lt;/code&gt; method:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;private &lt;span class=&quot;hljs-type&quot;&gt;void&lt;/span&gt; insert(&lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt; whisky, &lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt; connection, &lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Whisky&lt;/span&gt;&gt;&gt; next) {
   &lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt; sql = &lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO Whisky (name, origin) VALUES ?, ?&quot;&lt;/span&gt;;
@@ -167,7 +174,7 @@ This method checks that the `SQLConnection` is available and then start executin
 
 &lt;p&gt;This method uses the &lt;code&gt;updateWithParams&lt;/code&gt; method with an &lt;em&gt;INSERT&lt;/em&gt; statement, and pass values. This approach avoids SQL injection. Once the the statement has been executed, we creates a new &lt;code&gt;Whisky&lt;/code&gt; object with the created (auto-generated) id.&lt;/p&gt;
 &lt;h2 id=&quot;some-rest-with-a-pinch-of-sql&quot;&gt;Some REST with a pinch of SQL&lt;/h2&gt;
-&lt;p&gt;The method described  above is part of our start sequence. But what about the method invoked by our REST API. Let’s have a look to the &lt;code&gt;getAll&lt;/code&gt; method. This method is called by the web frontend to retrieve all stored products:&lt;/p&gt;
+&lt;p&gt;The method described  above is part of our start sequence. But what about the method invoked by our REST API. Let’s have a look to the &lt;code&gt;getAll&lt;/code&gt; method. This method is called by the web front-end to retrieve all stored products:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;private &lt;span class=&quot;hljs-type&quot;&gt;void&lt;/span&gt; getAll(&lt;span class=&quot;hljs-type&quot;&gt;RoutingContext&lt;/span&gt; routingContext) {
     jdbc.getConnection(ar -&gt; {
       &lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt; connection = ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
@@ -176,11 +183,12 @@ This method checks that the `SQLConnection` is available and then start executin
         routingContext.response()
             .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;)
             .&lt;span class=&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;(&lt;span class=&quot;hljs-type&quot;&gt;Json&lt;/span&gt;.encodePrettily(whiskies));
+        connection.close(); // &lt;span class=&quot;hljs-type&quot;&gt;Close&lt;/span&gt; the connection        
       });
     });
   }&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This method gets a &lt;code&gt;SQLConnection&lt;/code&gt;, and then issue a query. Once the result has been retrieved it writes the HTTP response as before. The &lt;code&gt;getOne&lt;/code&gt;, &lt;code&gt;deleteOne&lt;/code&gt;, &lt;code&gt;updateOne&lt;/code&gt; and &lt;code&gt;addOne&lt;/code&gt; methods follow the same pattern.&lt;/p&gt;
+&lt;p&gt;This method gets a &lt;code&gt;SQLConnection&lt;/code&gt;, and then issue a query. Once the result has been retrieved it writes the HTTP response as before. The &lt;code&gt;getOne&lt;/code&gt;, &lt;code&gt;deleteOne&lt;/code&gt;, &lt;code&gt;updateOne&lt;/code&gt; and &lt;code&gt;addOne&lt;/code&gt; methods follow the same pattern. Notice that the connection can be closed after the response has been written.&lt;/p&gt;
 &lt;p&gt;Let’s have a look to the result provided to the handler passed to the &lt;code&gt;query&lt;/code&gt; method. It gets a &lt;code&gt;ResultSet&lt;/code&gt;, which contains the query result. Each row is a &lt;code&gt;JsonObject&lt;/code&gt;, so if your data object has a constructor taking a &lt;code&gt;JsonObject&lt;/code&gt; as unique argument, creating there objects is straightforward.&lt;/p&gt;
 &lt;h2 id=&quot;test-test-and-test-again&quot;&gt;Test, test, and test again&lt;/h2&gt;
 &lt;p&gt;We need to slightly update our tests to configure the &lt;code&gt;JDBCClient&lt;/code&gt;. In the &lt;code&gt;MyFirstVertilceTest&lt;/code&gt; class, change the &lt;code&gt;DeploymentOption&lt;/code&gt; object created in the &lt;code&gt;setUp&lt;/code&gt; method to be:&lt;/p&gt;
