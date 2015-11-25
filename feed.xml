@@ -8,6 +8,92 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x ES6 back to the future</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;On &lt;a href=&quot;http://backtothefuture.wikia.com/wiki/2015&quot;&gt;October 21th, 2015&lt;/a&gt; we all rejoiced with the return from the past of
+Marty McFly with his flying car and so on, however in the Vert.x world we were quite sad that the JavaScript support we
+have was still using a technology released in &lt;a href=&quot;https://en.wikipedia.org/wiki/ECMAScript#Versions&quot;&gt;December 2009&lt;/a&gt;. The
+support for ES5 is not something that we Vert.x team controls but something that is inherited from running on top of
+&lt;a href=&quot;http://openjdk.java.net/projects/nashorn/&quot;&gt;Nashorn&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;With all these nostalgic thoughts on my mind I’ve decided to bring us back to the future and by future I mean, lets
+ start using a modern JavaScript, or more correctly, lets start using &lt;a href=&quot;http://es6-features.org/&quot;&gt;ECMAScript 6&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It turned out to be quite simple to achieve this so I’ll pick the hello world example and write it in ES6 just to show
+how you can port your code to ES6 and still use the current Vert.x APIs. Note that Vert.x internals still are ES5 and
+have not been touched or modified to support any of ES6 features.&lt;/p&gt;
+&lt;h2 id=&quot;main&quot;&gt;main&lt;/h2&gt;
+&lt;p&gt;Traditionally your &lt;code&gt;main.js&lt;/code&gt; file would reside in the root of your module (this is where &lt;code&gt;NPM&lt;/code&gt; will look for it by
+default); however as we are going to transpile to &lt;code&gt;ES5&lt;/code&gt; you’ll want to put your index file in &lt;code&gt;/src/main.js&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;However, because we are transpiling to &lt;code&gt;ES5&lt;/code&gt;, your &lt;code&gt;package.json&lt;/code&gt;‘s main block should point to the transpiled &lt;code&gt;index.js&lt;/code&gt;
+file in the &lt;code&gt;/lib&lt;/code&gt; directory.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-es6&quot;&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;version&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.1&quot;&lt;/span&gt;&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;private&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;&lt;/span&gt;,
+
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;main&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;lib/main.js&quot;&lt;/span&gt;&lt;/span&gt;,
+
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;scripts&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;build&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;rm -Rf lib &amp;&amp; ./node_modules/.bin/babel --out-dir lib src&quot;&lt;/span&gt;&lt;/span&gt;,
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;start&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;./node_modules/.bin/vertx run lib/main.js&quot;&lt;/span&gt;
+  &lt;/span&gt;}&lt;/span&gt;,
+
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;dependencies&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;vertx3-full&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;3.1.0&quot;&lt;/span&gt;&lt;/span&gt;,
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;babel-cli&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;6.2.0&quot;&lt;/span&gt;&lt;/span&gt;,
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;babel-preset-es2015&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;6.1.18&quot;&lt;/span&gt;
+  &lt;/span&gt;}
+&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, the main idea is to invoke the transpiler (Babel) when we are building our project, and run it using the
+generated files. This is slightly equivalent to a compilation process you would have using compiled language.&lt;/p&gt;
+&lt;h2 id=&quot;-npmignore&quot;&gt;.npmignore&lt;/h2&gt;
+&lt;p&gt;If you’re planning to deploy your package to npm either local or private you should be aware that npm will exclude
+anything listed on your &lt;code&gt;.gitignore&lt;/code&gt; since we should ignore the generated code from git it need to inform npm to ignore
+that rule and keep the &lt;code&gt;lib&lt;/code&gt; directory. The &lt;code&gt;.gitignore&lt;/code&gt; should be something like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;/&lt;span class=&quot;hljs-keyword&quot;&gt;lib&lt;/span&gt;
+/node_modules&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the &lt;code&gt;.npmignore&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;/.gitignore&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;hello-fat-arrows-and-let-keywords&quot;&gt;Hello fat arrows and let keywords&lt;/h2&gt;
+&lt;p&gt;So all the heavy work has been done, in order to create our hello world we just need to code some &lt;code&gt;ES6&lt;/code&gt; in our
+&lt;code&gt;src/main.js&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; Router = &lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-web-js/router&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; server = vertx.createHttpServer();
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; router = Router.router(vertx);
+
+router.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;).handler((ctx) =&gt; {
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;let&lt;/span&gt; response = ctx.response();
+    response.putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;text/plain&quot;&lt;/span&gt;);
+
+    response.end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello ES6 World!&quot;&lt;/span&gt;);
+});
+
+server.requestHandler(router.accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see we’re using fat arrows instead of writing a function closure and scoped variables using &lt;code&gt;let&lt;/code&gt; keyword. If
+you now compile your project:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;npm &lt;span class=&quot;hljs-command&quot;&gt;run&lt;/span&gt; build&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then start it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;npm&lt;/span&gt; start&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You have your first back to the future &lt;code&gt;ES6&lt;/code&gt; verticle!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Wed, 25 Nov 2015 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/vert-x-es6-back-to-the-future</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-es6-back-to-the-future</guid>
+          <author>
+            <name>pmlopes</name>
+            <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Using the asynchronous SQL client</title>
           <description>
       &lt;article&gt;&lt;p&gt;Finally, back… This post is the fifth post of the introduction to vert.x blog series, after a not-that-small break. In this post we are going to see how we can use JDBC in a vert.x application, and this, using the asynchronous API provided by the &lt;a href=&quot;http://vertx.io/docs/vertx-jdbc-client/java/&quot;&gt;vertx-jdbc-client&lt;/a&gt;.&lt;/p&gt;
@@ -64,7 +150,7 @@
 &lt;p&gt;This creates an instance of JDBC client, configured with the configuration provided to the verticle. To work correctly this configuration needs to provide:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;em&gt;url&lt;/em&gt; - the JDBC url such as &lt;code&gt;jdbc:hsqldb:mem:db?shutdown=true&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;driver_class&lt;/em&gt; - the JDBC driver class such as &lt;code&gt;org.hsqldb.jdbcDriver&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;_driver&lt;em&gt;class&lt;/em&gt; - the JDBC driver class such as &lt;code&gt;org.hsqldb.jdbcDriver&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Ok, we have the client, we need a connection to the database. This is achieved using the &lt;code&gt;jdbc.getConnection&lt;/code&gt; that take a &lt;code&gt;Handler&lt;AsyncResult&lt;SQLConnection&gt;&gt;&lt;/code&gt; as parameter. Let’s have a deeper look to this type. It’s a &lt;code&gt;Handler&lt;/code&gt;, so it is called when the result is ready. This result is an instance of &lt;code&gt;AsyncResult&lt;SQLConnection&gt;&lt;/code&gt;. &lt;code&gt;AsyncResult&lt;/code&gt; is a structure provided by vert.x that lets us know if the operation was completed successfully or failed. In case of success, it provides the result, here an instance of &lt;code&gt;SQLConnection&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;When you receive an instance of &lt;code&gt;AsyncResult&lt;/code&gt;, your code generally looks like:&lt;/p&gt;
