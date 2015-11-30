@@ -8,6 +8,259 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Combine vert.x and mongo to build a giant</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;This blog post is part of the &lt;em&gt;introduction to vert.x&lt;/em&gt; series. Last time, we have seen how we can use the &lt;code&gt;vertx-jdbc-client&lt;/code&gt; to connect to a database using a JDBC driver. In this post, we are going to replace this JDBC client by the &lt;code&gt;vertx-mongo-client&lt;/code&gt;, and thus connect to a Mongo database.&lt;/p&gt;
+&lt;p&gt;You don’t understand the title, check the &lt;a href=&quot;https://www.mongodb.org&quot;&gt;mongoDB&lt;/a&gt; website.&lt;/p&gt;
+&lt;p&gt;But before going further, let’s recap.&lt;/p&gt;
+&lt;h2 id=&quot;previously-in-introduction-to-vert-x-&quot;&gt;Previously in  ‘introduction to vert.x’&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/my-first-vert-x-3-application/&quot;&gt;first post&lt;/a&gt; has described how to build a vert.x application with Maven and execute unit tests.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/vert-x-application-configuration/&quot;&gt;second post&lt;/a&gt; has described how this application can become configurable.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/some-rest-with-vert-x/&quot;&gt;third post&lt;/a&gt; has introduced &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/&quot;&gt;vertx-web&lt;/a&gt;, and a small collection management application has been developed. This application offers a REST API used by a HTML/JavaScript frontend.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/unit-and-integration-tests/&quot;&gt;fourth post&lt;/a&gt; has presented how you can run integration tests to ensure the behavior of your application.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/using-the-asynchronous-sql-client/&quot;&gt;last post&lt;/a&gt; has presented how you can interact with a JDBC database using the vertx-jdbc-client.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This post shows another client that lets you use MongoDB in a vert.x application. This client provides an vert.x API to access asynchronously to the Mongo database. We won’t compare whether or not JDBC is superior to Mongo, they have both pros and cons, and you should use the one that meet your requirements. Vert.x lets you choose, that’s the point.&lt;/p&gt;
+&lt;p&gt;The vertx-mongo-client documentation is available &lt;a href=&quot;http://vertx.io/docs/vertx-mongo-client/java/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The code developed in this blog post is available in the branch &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-6&quot;&gt;post-6&lt;/a&gt;. Our starting point is the code from the &lt;a href=&quot;https://github.com/cescoffier/my-vertx-first-app/tree/post-5&quot;&gt;post-5 branch&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;asynchronous-data-access&quot;&gt;Asynchronous data access&lt;/h2&gt;
+&lt;p&gt;One of the vert.x characteristics is being asynchronous. With an asynchronous API, you don’t wait for a result, but you are notified when this result is ready. Thanks to vert.x, this notification happens in the same thread (understand event loop) as the initial request:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/intro-series/async-data.png&quot; alt=&quot;Asynchronous data access&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Your code (on the left) is going to invoke the mongo client and pass a callback that will be invoked when the result is available. The invocation to the mongo client is non blocking and returns immediately. The client is dealing with the mongo database and when the result has been computed / retrieved, it invokes the callback in the same event loop as the request.&lt;/p&gt;
+&lt;p&gt;This model is particularly powerful as it avoids the synchronization pitfalls. Indeed, your code is only called by a single thread, no need to synchronize anything.&lt;/p&gt;
+&lt;h2 id=&quot;as-with-every-maven-project-&quot;&gt;As with every Maven project….&lt;/h2&gt;
+&lt;p&gt;… we need to update the &lt;code&gt;pom.xml&lt;/code&gt; file first.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;pom.xml&lt;/code&gt; file, replace the &lt;code&gt;vertx-jdbc-client&lt;/code&gt; by the &lt;code&gt;vertx-mongo-client&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-mongo-client&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.1.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;  
+
+&lt;p&gt;Unlike JDBC where we were instantiating a database on the fly, here we need to explicitly starts a MongoDB server. In order to launch a Mongo server in our test, we are going to add another dependency:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;de.flapdoodle.embed&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;de.flapdoodle.embed.mongo&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.50.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This dependency will be used in our unit tests, as it lets us start a mongo server programmatically. For our integration tests, we are going to use a Maven plugin starting and stopping the mongo server before and after our integration tests. Add this plugin to the &lt;code&gt;&lt;plugins/&gt;&lt;/code&gt; section of your &lt;code&gt;pom.xml&lt;/code&gt; file.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;com.github.joelittlejohn.embedmongo&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;embedmongo-maven-plugin&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;0.2.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;start&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+              &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;start&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+              &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;port&lt;/span&gt;&gt;&lt;/span&gt;37017&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;port&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;configuration&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;stop&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+              &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;stop&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goal&lt;/span&gt;&gt;&lt;/span&gt;
+            &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;goals&lt;/span&gt;&gt;&lt;/span&gt;
+          &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;execution&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;executions&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;plugin&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;  
+
+&lt;p&gt;Notice the port we use here (37017), we will use this port later.&lt;/p&gt;
+&lt;h2 id=&quot;enough-xml-for-today&quot;&gt;Enough XML for today&lt;/h2&gt;
+&lt;p&gt;Now that we have updated our &lt;code&gt;pom.xml&lt;/code&gt; file, it’s time to change our verticle. The first thing to do is to replace the jdbc client by the mongo client:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;mongo = MongoClient.createShared(vertx, config());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This client is configured with the configuration given to the verticle (more on this below).&lt;/p&gt;
+&lt;p&gt;Once done, we need to change how we start the application. With the mongo client, no need to acquire a connection, it handles this internally. So our startup sequence is a bit more simple:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;createSomeData(
+        (nothing) -&gt; startWebApp(
+            (http) -&gt; completeStartup(http, fut)
+        ), fut);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As in the previous post, we need to insert some predefined data if the database is empty:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;createSomeData&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Handler&lt;AsyncResult&lt;Void&gt;&gt; next, Future&lt;Void&gt; fut)&lt;/span&gt; &lt;/span&gt;{
+    Whisky bowmore = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Whisky(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Bowmore 15 Years Laimrig&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Islay&quot;&lt;/span&gt;);
+    Whisky talisker = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Whisky(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Talisker 57° North&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Scotland, Island&quot;&lt;/span&gt;);
+    System.out.println(bowmore.toJson());
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Do we have data in the collection ?&lt;/span&gt;
+    mongo.count(COLLECTION, &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject(), count -&gt; {
+      &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (count.succeeded()) {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (count.result() == &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;) {
+          &lt;span class=&quot;hljs-comment&quot;&gt;// no whiskies, insert data&lt;/span&gt;
+          mongo.insert(COLLECTION, bowmore.toJson(), ar -&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.failed()) {
+              fut.fail(ar.cause());
+            } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+              mongo.insert(COLLECTION, talisker.toJson(), ar2 -&gt; {
+                &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar2.failed()) {
+                  fut.failed();
+                } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+                  next.handle(Future.&lt;Void&gt;succeededFuture());
+                }
+              });
+            }
+          });
+        } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+          next.handle(Future.&lt;Void&gt;succeededFuture());
+        }
+      } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+        &lt;span class=&quot;hljs-comment&quot;&gt;// report the error&lt;/span&gt;
+        fut.fail(count.cause());
+      }
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To detect whether or not the database already contains some data, we retrieve the number of &lt;em&gt;documents&lt;/em&gt; from the &lt;code&gt;whiskies&lt;/code&gt; collection. This is done with : &lt;code&gt;mongo.count(COLLECTION, new JsonObject(), count -&gt; {})&lt;/code&gt;. The second parameter is the query. In our case, we want to count all documents. This is done using &lt;code&gt;new JsonObject()&lt;/code&gt; that would create a query accepting all documents from the collection (it’s equivalent to a &lt;code&gt;SELECT * FROM ...&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Also notice the &lt;code&gt;insert&lt;/code&gt; calls. Documents are passed as JSON object, so to insert an object, just serialize it to JSON and use &lt;code&gt;mongo.insert(COLLECTION, json, completion handler)&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;mongo-ize-the-rest-handlers&quot;&gt;Mongo-ize the REST handlers&lt;/h2&gt;
+&lt;p&gt;Now that the application boot sequence has been migrated to mongo, it’s time to update the code handling the REST requests.&lt;/p&gt;
+&lt;p&gt;Let’s start by the &lt;code&gt;getAll&lt;/code&gt; method that returns all stored products. To implement this, we use the &lt;code&gt;find&lt;/code&gt; method. As we saw for the &lt;code&gt;count&lt;/code&gt; method, we pass an empty json object to describe a query accepting all documents:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;getAll&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext routingContext)&lt;/span&gt; &lt;/span&gt;{
+    mongo.find(COLLECTION, &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject(), results -&gt; {
+      List&lt;JsonObject&gt; objects = results.result();
+      List&lt;Whisky&gt; whiskies = objects.stream().map(Whisky::&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt;).collect(Collectors.toList());
+      routingContext.response()
+          .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;)
+          .end(Json.encodePrettily(whiskies));
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The query results are passed as a list of JSON objects. From this list we can create our product instances, and fill the HTTP response with this set.&lt;/p&gt;
+&lt;p&gt;To delete a specific document we need to select the document using its &lt;code&gt;id&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;deleteOne&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext routingContext)&lt;/span&gt; &lt;/span&gt;{
+    String id = routingContext.request().getParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (id == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;) {
+      routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;).end();
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+      mongo.removeOne(COLLECTION, &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;_id&quot;&lt;/span&gt;, id),
+          ar -&gt; routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;204&lt;/span&gt;).end());
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;new JsonObject().put(&quot;_id&quot;, id)&lt;/code&gt; describes a query selecting a single document (selected by its unique &lt;code&gt;id&lt;/code&gt;, so it’s the equivalent to &lt;code&gt;SELECT * WHERE id=...&lt;/code&gt;). Notice the &lt;code&gt;_id&lt;/code&gt; which is a mongo trick to select a document by id.&lt;/p&gt;
+&lt;p&gt;Updating a document is a less trivial:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;updateOne&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext routingContext)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; String id = routingContext.request().getParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;);
+    JsonObject json = routingContext.getBodyAsJson();
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (id == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt; || json == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;) {
+      routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;).end();
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+      mongo.update(COLLECTION,
+          &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;_id&quot;&lt;/span&gt;, id), &lt;span class=&quot;hljs-comment&quot;&gt;// Select a unique document&lt;/span&gt;
+          &lt;span class=&quot;hljs-comment&quot;&gt;// The update syntax: {$set, the json object containing the fields to update}&lt;/span&gt;
+          &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()
+              .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;$set&quot;&lt;/span&gt;, json),
+          v -&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (v.failed()) {
+              routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;404&lt;/span&gt;).end();
+            } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+              routingContext.response()
+                  .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;)
+                  .end(Json.encodePrettily(
+                  &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Whisky(id, json.getString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;),
+                    json.getString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;origin&quot;&lt;/span&gt;))));
+            }
+          });
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As we can see, the &lt;code&gt;update&lt;/code&gt; method takes two JSON objects as parameter:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The first one denotes the query (here we select a single document using its id).&lt;/li&gt;
+&lt;li&gt;The second object expresses the change to apply to the selected document. It uses a mongo syntax. In our case, we update the document using the &lt;code&gt;$set&lt;/code&gt; operator.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Replace document &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; In this code we update the document and replace only a set of fields. You can also replace the whole document using &lt;code&gt;mongo.replace(...)&lt;/code&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;I definitely recommend to have a look to the MongoDB documentation, especially:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.mongodb.org/manual/tutorial/query-documents/&quot; title=&quot;MongoDB Query Documentation&quot;&gt;Query syntax documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.mongodb.org/manual/tutorial/modify-documents/&quot; title=&quot;MongoDB Update Documentation&quot;&gt;Update syntax documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;time-for-configuration&quot;&gt;Time for configuration&lt;/h2&gt;
+&lt;p&gt;Well, the code is migrated, but we still need to update the configuration. With JDBC we passed the JDBC url and the driver class in the configuration. With mongo, we need to configure the &lt;code&gt;connection_string&lt;/code&gt; - the &lt;code&gt;mongo://&lt;/code&gt; url on which the application is connected, and &lt;code&gt;db_name&lt;/code&gt; - a name for the data source.&lt;/p&gt;
+&lt;p&gt;Let’s start by the unit test. Edit the &lt;code&gt;MyFirstVerticleTest&lt;/code&gt; file and add the following code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; MongodProcess MONGO;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; MONGO_PORT = &lt;span class=&quot;hljs-number&quot;&gt;12345&lt;/span&gt;;
+    &lt;span class=&quot;hljs-annotation&quot;&gt;@BeforeClass&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; IOException &lt;/span&gt;{
+      MongodStarter starter = MongodStarter.getDefaultInstance();
+      IMongodConfig mongodConfig = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MongodConfigBuilder()
+          .version(Version.Main.PRODUCTION)
+          .net(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Net(MONGO_PORT, Network.localhostIsIPv6()))
+          .build();
+      MongodExecutable mongodExecutable =
+            starter.prepare(mongodConfig);
+     MONGO = mongodExecutable.start();
+    }
+
+    &lt;span class=&quot;hljs-annotation&quot;&gt;@AfterClass&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;shutdown&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{  MONGO.stop(); }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before our tests, we start (programmatically) a mongo database on the port 12345. When all our tests have been executed, we shutdown the database.&lt;/p&gt;
+&lt;p&gt;So now that the mongo server is managed, we need to to give the right configuration to our verticle. Update the &lt;code&gt;DeploymentOption&lt;/code&gt; instance with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;DeploymentOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; DeploymentOptions()
+        .setConfig(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()
+            .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;, port)
+            .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;db_name&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;whiskies-test&quot;&lt;/span&gt;)
+            .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;connection_string&quot;&lt;/span&gt;,
+                &lt;span class=&quot;hljs-string&quot;&gt;&quot;mongodb://localhost:&quot;&lt;/span&gt; + MONGO_PORT)
+    );&lt;/code&gt;&lt;/pre&gt;  
+
+&lt;p&gt;That’s all for the unit tests.&lt;/p&gt;
+&lt;p&gt;For the integration-test, we are using an externalized json file. Edit the &lt;code&gt;src/test/resources/my-it-config.json&lt;/code&gt; with the following content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;{
+      &lt;span class=&quot;hljs-string&quot;&gt;&quot;http.port&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-variable&quot;&gt;${http.port}&lt;/span&gt;,
+      &lt;span class=&quot;hljs-string&quot;&gt;&quot;db_name&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;whiskies-it&quot;&lt;/span&gt;,
+      &lt;span class=&quot;hljs-string&quot;&gt;&quot;connection_string&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;mongodb://localhost:37017&quot;&lt;/span&gt;
+    }&lt;/code&gt;&lt;/pre&gt;  
+
+&lt;p&gt;Notice the port we are using for the mongo server. This port was configured in the &lt;code&gt;pom.xml&lt;/code&gt; file.&lt;/p&gt;
+&lt;p&gt;Last but not least, we still have a configuration file to edit: the configuration you use to launch the application in &lt;code&gt;production&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;{
+      &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;http.port&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-number&quot;&gt;8082&lt;/span&gt;&lt;/span&gt;,
+      &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;db_name&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;whiskies&quot;&lt;/span&gt;&lt;/span&gt;,
+      &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;connection_string&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;mongodb://localhost:27017&quot;&lt;/span&gt;
+    &lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here you would need to edit the &lt;code&gt;localhost:27017&lt;/code&gt; with the right url for your mongo server.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Some changes in the integration tests &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; Because mongo document id are String and not integer, we have to slightly change document selection in the integration test.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h2 id=&quot;time-for-a-run&quot;&gt;Time for a run&lt;/h2&gt;
+&lt;p&gt;It’s time to package and run the application and check that everything works as expected. Let’s package the application using:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean &lt;span class=&quot;hljs-built_in&quot;&gt;verify&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then to launch it, start your mongo server and launch:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar \
+  -conf src/main/conf/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt;-conf.json&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you are, like me, using docker / docker-machine for almost everything, edit the configuration file to refer to the right host (localhost for docker, the docker-machine ip if you use docker-machine) and then launch:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;docker &lt;span class=&quot;hljs-command&quot;&gt;run&lt;/span&gt; -d -p &lt;span class=&quot;hljs-number&quot;&gt;27017&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;27017&lt;/span&gt; mongo
+java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar \
+  -conf src/main/conf/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt;-conf.json
+&lt;span class=&quot;hljs-comment&quot;&gt;# or&lt;/span&gt;
+java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;-app-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;-SNAPSHOT-fat.jar \
+  -conf src/main/conf/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt;-conf-docker-machine.json&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/blog/intro-series/whisky-mongo.png&quot; alt=&quot;The application live and running&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;that-s-all-folks-&quot;&gt;That’s all folks !&lt;/h2&gt;
+&lt;p&gt;We are reaching the end of this post. We saw how you can use the vert-mongo-client to access asynchronously data stored inside a mongo database as well as inserting/updating this data. Now you have the choice between JDBC or Mongo. In addition, vert.x provides a client for Redis.&lt;/p&gt;
+&lt;p&gt;Next time, we will see how the verticle class can be split in two verticles in order to better organize your code. The interaction between the two verticles will uses &lt;em&gt;services&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Stay tuned  &amp; Happy coding !&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 30 Nov 2015 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/combine-vert-x-and-mongo-to-build-a-giant</link>
+          <guid isPermaLink="true">http://vertx.io/blog/combine-vert-x-and-mongo-to-build-a-giant</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x ES6 back to the future</title>
           <description>
       &lt;article&gt;&lt;p&gt;On &lt;a href=&quot;http://backtothefuture.wikia.com/wiki/2015&quot;&gt;October 21th, 2015&lt;/a&gt; we all rejoiced with the return from the past of
