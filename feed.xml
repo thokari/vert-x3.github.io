@@ -15,11 +15,11 @@
 &lt;p&gt;But before going further, let’s recap.&lt;/p&gt;
 &lt;h2 id=&quot;previously-in-introduction-to-vert-x-&quot;&gt;Previously in  ‘introduction to vert.x’&lt;/h2&gt;
 &lt;ol&gt;
-&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/my-first-vert-x-3-application/&quot;&gt;first post&lt;/a&gt; has described how to build a vert.x application with Maven and execute unit tests.&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/vert-x-application-configuration/&quot;&gt;second post&lt;/a&gt; has described how this application can become configurable.&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/some-rest-with-vert-x/&quot;&gt;third post&lt;/a&gt; has introduced &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/&quot;&gt;vertx-web&lt;/a&gt;, and a small collection management application has been developed. This application offers a REST API used by a HTML/JavaScript frontend.&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/unit-and-integration-tests/&quot;&gt;fourth post&lt;/a&gt; has presented how you can run integration tests to ensure the behavior of your application.&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;{ site\_url }blog/using-the-asynchronous-sql-client/&quot;&gt;last post&lt;/a&gt; has presented how you can interact with a JDBC database using the vertx-jdbc-client.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/my-first-vert-x-3-application/&quot;&gt;first post&lt;/a&gt; has described how to build a vert.x application with Maven and execute unit tests.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/vert-x-application-configuration/&quot;&gt;second post&lt;/a&gt; has described how this application can become configurable.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/some-rest-with-vert-x/&quot;&gt;third post&lt;/a&gt; has introduced &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/&quot;&gt;vertx-web&lt;/a&gt;, and a small collection management application has been developed. This application offers a REST API used by a HTML/JavaScript frontend.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/unit-and-integration-tests/&quot;&gt;fourth post&lt;/a&gt; has presented how you can run integration tests to ensure the behavior of your application.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;http://vertx.io/blog/using-the-asynchronous-sql-client/&quot;&gt;last post&lt;/a&gt; has presented how you can interact with a JDBC database using the vertx-jdbc-client.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;This post shows another client that lets you use MongoDB in a vert.x application. This client provides an vert.x API to access asynchronously to the Mongo database. We won’t compare whether or not JDBC is superior to Mongo, they have both pros and cons, and you should use the one that meet your requirements. Vert.x lets you choose, that’s the point.&lt;/p&gt;
 &lt;p&gt;The vertx-mongo-client documentation is available &lt;a href=&quot;http://vertx.io/docs/vertx-mongo-client/java/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
