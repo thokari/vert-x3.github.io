@@ -19,9 +19,11 @@
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-hawkular-metrics/java/&quot;&gt;vertx-hawkular-metric&lt;/a&gt;: an implementation of the vert.x metrics for &lt;a href=&quot;http://www.hawkular.org/&quot;&gt;Hawkular&lt;/a&gt;. In addition, it lets you report your own metrics to hawkular.&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-jgroups/java/&quot;&gt;vertx-jgroups&lt;/a&gt;: an alternative implementation of the vert.x cluster manager using &lt;a href=&quot;http://jgroups.org/&quot;&gt;JGroups&lt;/a&gt;.&lt;/p&gt;
-&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;A new &lt;a href=&quot;http://vertx.io/docs/vertx-stack-manager/stack-manager/&quot;&gt;stack manager&lt;/a&gt; to configure the vert.x distribution with the content you want.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-shell/java/&quot;&gt;vertx-shell&lt;/a&gt; is now an official component.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-jgroups/java/&quot;&gt;vertx-jgroups&lt;/a&gt;: an alternative implementation of the vert.x cluster manager using &lt;a href=&quot;http://jgroups.org/&quot;&gt;JGroups&lt;/a&gt;. This component is a technical preview.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The release also contains many bug fixes and a ton of improvements. Full release notes can be found here:&lt;/p&gt;
