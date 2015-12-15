@@ -173,9 +173,9 @@
 <h2 id="_features">Features</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A fairly simple API to retrieve metrics via the <code><a href="../../vertx-core/js/jsdoc/measured-Measured.html">Measured</a></code>
-interface which is implemented by various Vert.x components like <code><a href="../../vertx-core/js/jsdoc/http_server-HttpServer.html">HttpServer</a></code>,
-<code><a href="../../vertx-core/js/jsdoc/net_server-NetServer.html">NetServer</a></code>, and even <code><a href="../../vertx-core/js/jsdoc/vertx-Vertx.html">Vertx</a></code> itself.</p>
+<p>A fairly simple API to retrieve metrics via the <code><a href="../../jsdoc/measured-Measured.html">Measured</a></code>
+interface which is implemented by various Vert.x components like <code><a href="../../jsdoc/http_server-HttpServer.html">HttpServer</a></code>,
+<code><a href="../../jsdoc/net_server-NetServer.html">NetServer</a></code>, and even <code><a href="../../jsdoc/vertx-Vertx.html">Vertx</a></code> itself.</p>
 </div>
 <div class="paragraph">
 <p>Confiugrable JMX reporting based on Dropwizard implementation, exposing Vert.x as JMX MBeans.</p>
@@ -200,7 +200,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -213,7 +213,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-dropwizard-metrics:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-dropwizard-metrics:3.2.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -281,7 +281,7 @@ option allows to reconfigure the metrics from a property file.</p>
 an API for retrieving metrics (because some metrics collectors just do reporting and nothing more).</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/metrics_service-MetricsService.html">MetricsService</a></code> provides an API in front of the Dropwizard Registry to get
+<p>The <code><a href="../../jsdoc/metrics_service-MetricsService.html">MetricsService</a></code> provides an API in front of the Dropwizard Registry to get
 metrics data snapshots.</p>
 </div>
 <div class="sect2">
@@ -324,8 +324,8 @@ Array.prototype.forEach.call(metricsNames, function(metricsName) {
 <div class="sect2">
 <h3 id="_retrieving_metrics">Retrieving metrics</h3>
 <div class="paragraph">
-<p>Once enabled, the <code><a href="jsdoc/metrics_service-MetricsService.html">MetricsService</a></code> allows to retrieve metrics snapshots from any
-<code><a href="../../vertx-core/js/jsdoc/measured-Measured.html">Measured</a></code> object which provides a map of the metric name to the data,
+<p>Once enabled, the <code><a href="../../jsdoc/metrics_service-MetricsService.html">MetricsService</a></code> allows to retrieve metrics snapshots from any
+<code><a href="../../jsdoc/measured-Measured.html">Measured</a></code> object which provides a map of the metric name to the data,
 represented by a <code>JsonObject</code>. So for example if we were to print out all metrics
 for a particular Vert.x instance:</p>
 </div>
@@ -355,7 +355,7 @@ consult the implementation documentation like <a href="https://github.com/vert-x
 without having to know the details of the naming scheme of every metric (something which is left to the implementers of the SPI).</p>
 </div>
 <div class="paragraph">
-<p>Since <code><a href="../../vertx-core/js/jsdoc/http_server-HttpServer.html">HttpServer</a></code> implements <code><a href="../../vertx-core/js/jsdoc/measured-Measured.html">Measured</a></code>, you can easily grab all metrics
+<p>Since <code><a href="../../jsdoc/http_server-HttpServer.html">HttpServer</a></code> implements <code><a href="../../jsdoc/measured-Measured.html">Measured</a></code>, you can easily grab all metrics
 that are specific for that particular http server.</p>
 </div>
 <div class="listingblock">
@@ -939,15 +939,18 @@ so you can retrieve this registry and use according to your needs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">VertxOptions options = new VertxOptions().setMetricsOptions(
-  new MetricsServiceOptions().setEnabled(true).setRegistryName("the_name")
-);
-Vertx vertx = Vertx.vertxt(options);
-
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var options = {
+  "metricsOptions" : {
+    "enabled" : true,
+    "registryName" : "my-registry"
+  }
+};
+var vertx = Vertx.vertx(options);
 // Get the registry
-MetricRegistry registry = SharedMetricRegistries.getOrCreate("the_name");
-
-// Do whatever you need with the registry</code></pre>
+var registry = Java.type("com.codahale.metrics.SharedMetricRegistries").getOrCreate("my-registry");
+// Do whatever you need with the registry
+}</code></pre>
 </div>
 </div>
 </div>
@@ -959,7 +962,7 @@ MetricRegistry registry = SharedMetricRegistries.getOrCreate("the_name");
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

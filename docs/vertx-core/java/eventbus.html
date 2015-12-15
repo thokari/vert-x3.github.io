@@ -402,16 +402,16 @@ eventBus.send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></p
 </div>
 </div>
 <div class="sect3">
-<h4 id="_replying_to_messages">Replying to messages</h4>
+<h4 id="_acknowledging_messages_sending_replies">Acknowledging messages / sending replies</h4>
 <div class="paragraph">
-<p>Sometimes after you send a message you want to receive a reply from the recipient.
-This is known as the <strong>request-response pattern</strong>.</p>
+<p>When using <code><a href="../../apidocs/io/vertx/core/eventbus/EventBus.html#send-java.lang.String-java.lang.Object-">send</a></code> the event bus attempts to deliver the message to a
+<code><a href="../../apidocs/io/vertx/core/eventbus/MessageConsumer.html">MessageConsumer</a></code> registered with the event bus.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can specify a reply handler when sending the message.</p>
+<p>In some cases it&#8217;s useful for the sender to know when the consumer has received the message and "processed" it.</p>
 </div>
 <div class="paragraph">
-<p>When the receiver receives the message they can reply to it by calling <code><a href="../../apidocs/io/vertx/core/eventbus/Message.html#reply-java.lang.Object-">reply</a></code>.</p>
+<p>To acknowledge that the message has been processed the consumer can reply to the message by calling <code><a href="../../apidocs/io/vertx/core/eventbus/Message.html#reply-java.lang.Object-">reply</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When this happens it causes a reply to be sent back to the sender and the reply handler is invoked with the reply.</p>
@@ -444,8 +444,30 @@ consumer.handler(message -&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>The replies themselves can also be replied to so you can create a dialog between two different parties
-consisting of multiple rounds.</p>
+<p>The reply can contain a message body which can contain useful information.</p>
+</div>
+<div class="paragraph">
+<p>What the "processing" actually means is application defined and depends entirely on what the message consumer does
+and is not something that the Vert.x event bus itself knows or cares about.</p>
+</div>
+<div class="paragraph">
+<p>Some examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A simple message consumer which implements a service which returns the time of the day would acknowledge with a message
+containing the time of day in the reply body</p>
+</li>
+<li>
+<p>A message consumer which implements a persistent queue, might acknowledge with <code>true</code> if the message was successfully
+persisted in storage, or <code>false</code> if not.</p>
+</li>
+<li>
+<p>A message consumer which processes an order might acknowledge with <code>true</code> when the order has been successfully processed
+so it can be deleted from the database</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -576,7 +598,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

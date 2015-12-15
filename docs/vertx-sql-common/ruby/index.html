@@ -92,6 +92,7 @@
 <li><a href="#_prepared_statement_queries">Prepared statement queries</a></li>
 <li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
 <li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
+<li><a href="#_callable_statements">Callable statements</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
@@ -112,6 +113,7 @@
 <li><a href="#_prepared_statement_queries">Prepared statement queries</a></li>
 <li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
 <li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
+<li><a href="#_callable_statements">Callable statements</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
@@ -144,7 +146,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-sql-common&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -157,7 +159,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-sql-common:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-sql-common:3.2.0</code></pre>
 </div>
 </div>
 </div>
@@ -166,7 +168,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <h2 id="_the_sql_connection">The SQL Connection</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A connection to the database is represented by <code><a href="yardoc/VertxSql/SQLConnection.html">SQLConnection</a></code>.</p>
+<p>A connection to the database is represented by <code><a href="../../yardoc/VertxSql/SQLConnection.html">SQLConnection</a></code>.</p>
 </div>
 <div class="sect2">
 <h3 id="_auto_commit">Auto-commit</h3>
@@ -176,7 +178,7 @@ execute in its own transaction.</p>
 </div>
 <div class="paragraph">
 <p>If you wish to perform multiple operations in a single transaction you should set auto commit to false with
-<code><a href="yardoc/VertxSql/SQLConnection.html#set_auto_commit-instance_method">setAutoCommit</a></code>.</p>
+<code><a href="../../yardoc/VertxSql/SQLConnection.html#set_auto_commit-instance_method">setAutoCommit</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When the operation is complete, the handler will be called:</p>
@@ -196,7 +198,7 @@ execute in its own transaction.</p>
 <div class="sect2">
 <h3 id="_executing_queries">Executing queries</h3>
 <div class="paragraph">
-<p>To execute a query use <code><a href="yardoc/VertxSql/SQLConnection.html#query-instance_method">query</a></code></p>
+<p>To execute a query use <code><a href="../../yardoc/VertxSql/SQLConnection.html#query-instance_method">query</a></code></p>
 </div>
 <div class="paragraph">
 <p>The query string is raw SQL that is passed through without changes to the actual database.</p>
@@ -270,7 +272,7 @@ end</code></pre>
 <h3 id="_prepared_statement_queries">Prepared statement queries</h3>
 <div class="paragraph">
 <p>To execute a prepared statement query you can use
-<code><a href="yardoc/VertxSql/SQLConnection.html#query_with_params-instance_method">queryWithParams</a></code>.</p>
+<code><a href="../../yardoc/VertxSql/SQLConnection.html#query_with_params-instance_method">queryWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This takes the query, containing the parameter place holders, and a <code><a href="unavailable">JsonArray</a></code> or parameter
@@ -299,7 +301,7 @@ connection.query_with_params(query, params) { |res_err,res|
 <div class="sect2">
 <h3 id="_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</h3>
 <div class="paragraph">
-<p>To execute an operation which updates the database use <code><a href="yardoc/VertxSql/SQLConnection.html#update-instance_method">update</a></code>.</p>
+<p>To execute an operation which updates the database use <code><a href="../../yardoc/VertxSql/SQLConnection.html#update-instance_method">update</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The update string is raw SQL that is passed through without changes to the actual database.</p>
@@ -333,7 +335,7 @@ end</code></pre>
 <h3 id="_prepared_statement_updates">Prepared statement updates</h3>
 <div class="paragraph">
 <p>To execute a prepared statement update you can use
-<code><a href="yardoc/VertxSql/SQLConnection.html#update_with_params-instance_method">updateWithParams</a></code>.</p>
+<code><a href="../../yardoc/VertxSql/SQLConnection.html#update_with_params-instance_method">updateWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This takes the update, containing the parameter place holders, and a <code><a href="unavailable">JsonArray</a></code> or parameter
@@ -364,10 +366,107 @@ connection.update_with_params(update, params) { |res_err,res|
 </div>
 </div>
 <div class="sect2">
+<h3 id="_callable_statements">Callable statements</h3>
+<div class="paragraph">
+<p>To execute a callable statement (either SQL functions or SQL procedures) you can use
+<code><a href="../../yardoc/VertxSql/SQLConnection.html#call_with_params-instance_method">callWithParams</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>This takes the callable statement using the standard JDBC format <code>{ call func_proc_name() }</code>, optionally including
+parameter place holders e.g.: <code>{ call func_proc_name(?, ?) }</code>, a <code><a href="unavailable">JsonArray</a></code> containing the
+parameter values and finally a <code><a href="unavailable">JsonArray</a></code> containing the
+output types e.g.: <code>[null, 'VARCHAR']</code>.</p>
+</div>
+<div class="paragraph">
+<p>A SQL function returns some output using the <code>return</code> keyword, and in this case one can call it like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Assume that there is a SQL function like this:
+#
+# create function one_hour_ago() returns timestamp
+#    return now() - 1 hour;
+
+# note that you do not need to declare the output for functions
+func = "{ call one_hour_ago() }"
+
+connection.call(func) { |res_err,res|
+
+  if (res_err == nil)
+    result = res
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When working with Procedures you and still return values from your procedures via its arguments, in the case you do
+not return anything the usage is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Assume that there is a SQL procedure like this:
+#
+# create procedure new_customer(firstname varchar(50), lastname varchar(50))
+#   modifies sql data
+#   insert into customers values (default, firstname, lastname, current_timestamp);
+
+func = "{ call new_customer(?, ?) }"
+
+connection.call_with_params(func, [
+  "John",
+  "Doe"
+], nil) { |res_err,res|
+
+  if (res_err == nil)
+    # Success!
+  else
+    # Failed!
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However you can also return values like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the index of the arguments matches the index of the <code>?</code> and that the output parameters expect to be a
+String describing the type you want to receive.</p>
+</div>
+<div class="paragraph">
+<p>To avoid ambiguation the implementations are expected to follow the following rules:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When a place holder in the <code>IN</code> array is <code>NOT NULL</code> it will be taken</p>
+</li>
+<li>
+<p>When the <code>IN</code> value is NULL a check is performed on the OUT</p>
+</li>
+<li>
+<p>When the <code>OUT</code> value is not null it will be registered as a output parameter</p>
+</li>
+<li>
+<p>When the <code>OUT</code> is also null it is expected that the IN value is the <code>NULL</code> value.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The registered <code>OUT</code> parameters will be available as an array in the result set under the output property.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_executing_other_operations">Executing other operations</h3>
 <div class="paragraph">
 <p>To execute any other database operation, e.g. a <code>CREATE TABLE</code> you can use
-<code><a href="yardoc/VertxSql/SQLConnection.html#execute-instance_method">execute</a></code>.</p>
+<code><a href="../../yardoc/VertxSql/SQLConnection.html#execute-instance_method">execute</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The string is passed through without changes to the actual database. The handler is called when the operation
@@ -390,12 +489,12 @@ connection.execute(sql) { |execute_err,execute|
 <div class="sect2">
 <h3 id="_using_transactions">Using transactions</h3>
 <div class="paragraph">
-<p>To use transactions first set auto-commit to false with <code><a href="yardoc/VertxSql/SQLConnection.html#set_auto_commit-instance_method">setAutoCommit</a></code>.</p>
+<p>To use transactions first set auto-commit to false with <code><a href="../../yardoc/VertxSql/SQLConnection.html#set_auto_commit-instance_method">setAutoCommit</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You then do your transactional operations and when you want to commit or rollback use
-<code><a href="yardoc/VertxSql/SQLConnection.html#commit-instance_method">commit</a></code> or
-<code><a href="yardoc/VertxSql/SQLConnection.html#rollback-instance_method">rollback</a></code>.</p>
+<code><a href="../../yardoc/VertxSql/SQLConnection.html#commit-instance_method">commit</a></code> or
+<code><a href="../../yardoc/VertxSql/SQLConnection.html#rollback-instance_method">rollback</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Once the commit/rollback is complete the handler will be called and the next transaction will be automatically started.</p>
@@ -419,7 +518,7 @@ connection.commit() { |res_err,res|
 <div class="sect2">
 <h3 id="_closing_connections">Closing connections</h3>
 <div class="paragraph">
-<p>When you&#8217;ve done with the connection you should return it to the pool with <code><a href="yardoc/VertxSql/SQLConnection.html#close-instance_method">close</a></code>.</p>
+<p>When you&#8217;ve done with the connection you should return it to the pool with <code><a href="../../yardoc/VertxSql/SQLConnection.html#close-instance_method">close</a></code>.</p>
 </div>
 </div>
 </div>
@@ -431,7 +530,7 @@ connection.commit() { |res_err,res|
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

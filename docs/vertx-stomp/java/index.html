@@ -94,8 +94,23 @@
 <li><a href="#_type_of_destinations">Type of destinations</a></li>
 <li><a href="#_providing_your_own_type_of_destination">Providing your own type of destination</a></li>
 <li><a href="#_acknowledgment">Acknowledgment</a></li>
+<li><a href="#_customizing_the_stomp_server">Customizing the STOMP server</a></li>
 </ul>
 </li>
+<li><a href="#_stomp_client">STOMP client</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_a_stomp_client">Creating a STOMP client</a></li>
+<li><a href="#_closing_a_stomp_client">Closing a STOMP client</a></li>
+<li><a href="#_handling_errors">Handling errors</a></li>
+<li><a href="#_configuration_2">Configuration</a></li>
+<li><a href="#_subscribing_to_destinations">Subscribing to destinations</a></li>
+<li><a href="#_sending_messages">Sending messages</a></li>
+<li><a href="#_acknowledgements">Acknowledgements</a></li>
+<li><a href="#_transactions">Transactions</a></li>
+<li><a href="#_receipt">Receipt</a></li>
+</ul>
+</li>
+<li><a href="#_using_the_stomp_server_as_a_bridge_to_the_vert_x_event_bus">Using the STOMP server as a bridge to the vert.x Event Bus</a></li>
 </ul>
         </div>
       </div>
@@ -113,8 +128,23 @@
 <li><a href="#_type_of_destinations">Type of destinations</a></li>
 <li><a href="#_providing_your_own_type_of_destination">Providing your own type of destination</a></li>
 <li><a href="#_acknowledgment">Acknowledgment</a></li>
+<li><a href="#_customizing_the_stomp_server">Customizing the STOMP server</a></li>
 </ul>
 </li>
+<li><a href="#_stomp_client">STOMP client</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_a_stomp_client">Creating a STOMP client</a></li>
+<li><a href="#_closing_a_stomp_client">Closing a STOMP client</a></li>
+<li><a href="#_handling_errors">Handling errors</a></li>
+<li><a href="#_configuration_2">Configuration</a></li>
+<li><a href="#_subscribing_to_destinations">Subscribing to destinations</a></li>
+<li><a href="#_sending_messages">Sending messages</a></li>
+<li><a href="#_acknowledgements">Acknowledgements</a></li>
+<li><a href="#_transactions">Transactions</a></li>
+<li><a href="#_receipt">Receipt</a></li>
+</ul>
+</li>
+<li><a href="#_using_the_stomp_server_as_a_bridge_to_the_vert_x_event_bus">Using the STOMP server as a bridge to the vert.x Event Bus</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -154,7 +184,7 @@ descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-stomp&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -167,7 +197,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-stomp:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-stomp:3.2.0'</code></pre>
 </div>
 </div>
 </div>
@@ -409,8 +439,442 @@ returning your own <code><a href="../../apidocs/io/vertx/ext/stomp/Destination.h
 providing your own <code><a href="../../apidocs/io/vertx/ext/stomp/Destination.html">Destination</a></code> implementation.</p>
 </div>
 <div class="paragraph">
-<p>The custom destination should call the
-<code><a href="../../apidocs/io/vertx/ext/stomp/StompServerHandler.html#onAck-io.vertx.ext.stomp.StompServerConnection-io.vertx.ext.stomp.Frame-java.util.List-">onAck</a></code></p>
+<p>The custom destination should call the</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/ext/stomp/StompServerHandler.html#onAck-io.vertx.ext.stomp.StompServerConnection-io.vertx.ext.stomp.Frame-java.util.List-">onAck</a></code>
+and
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompServerHandler.html#onNack-io.vertx.ext.stomp.StompServerConnection-io.vertx.ext.stomp.Frame-java.util.List-">onNack</a></code>
+method in order to let the <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerHandler.html">StompServerHandler</a></code> customizes the behavior:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+    .handler(StompServerHandler.create(vertx)
+        .onAckHandler(acknowledgement -&gt; {
+          // Action to execute when the frames (one in `client-individual` mode, several
+          // in `client` mode are acknowledged.
+        })
+        .onNackHandler(acknowledgement -&gt; {
+          // Action to execute when the frames (1 in `client-individual` mode, several in
+          // `client` mode are not acknowledged.
+        }))
+    .listen();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_customizing_the_stomp_server">Customizing the STOMP server</h3>
+<div class="paragraph">
+<p>In addition to the handlers seen above, you can configure almost all aspects of the STOMP server, such as the
+actions made when specific frames are received, the <code>ping</code> to sent to the client (to implement the heartbeat).
+Here are some examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+    .handler(StompServerHandler.create(vertx)
+            .closeHandler(connection -&gt; {
+              // client connection closed
+            })
+            .beginHandler(frame -&gt; {
+              // transaction starts
+            })
+            .commitHandler(frame -&gt; {
+                  // transaction committed
+                }
+            )
+        //...
+    ).listen();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Be aware that changing the default behavior may break the compliance with the STOMP specification. So, please look
+at the default implementations.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stomp_client">STOMP client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>STOMP clients connect to STOMP server and can send and receive frames.</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_stomp_client">Creating a STOMP client</h3>
+<div class="paragraph">
+<p>You create a <code><a href="../../apidocs/io/vertx/ext/stomp/StompClient.html">StompClient</a></code> instance with default options as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous snippet creates a STOMP client connecting to "0.0.0.0:61613". Once connected, you get a
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html">StompClientConnection</a></code> that let you interact with the server. You can
+configure the host and port as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(61613, "0.0.0.0", ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively you can also configure the host and port in the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_closing_a_stomp_client">Closing a STOMP client</h3>
+<div class="paragraph">
+<p>You can close a STOMP client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });
+
+client.close();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, this way would not notify the server of the disconnection. To cleanly close the connection, you should
+use the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html#disconnect--">disconnect</a></code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+
+        connection.disconnect();
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the heartbeat is enabled and if the client did not detect server activity after the configured timeout, the
+connection is automatically closed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_handling_errors">Handling errors</h3>
+<div class="paragraph">
+<p>On the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html">StompClientConnection</a></code>, you can register an error handler receiving <code>ERROR</code>
+frames sent by the server. Notice that the server closes the connection with the client after having sent such frame:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        connection.errorHandler(frame -&gt; System.out.println("ERROR frame received : " + frame));
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client can also be notified when a connection drop has been detected. Connection failures are detected using the
+STOMP heartbeat mechanism. When the server has not sent a message in the heartbeat time window, the connection is
+closed and the <code>connectionDroppedHandler</code> is called (if set). To configure a <code>connectionDroppedHandler</code>, call
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html#connectionDroppedHandler-io.vertx.core.Handler-">connectionDroppedHandler</a></code>. The handler can
+for instance tries to reconnect to the server.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_2">Configuration</h3>
+<div class="paragraph">
+<p>You can configure various aspect by passing a
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code> when creating the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClient.html">StompClient</a></code>. As the
+STOMP client relies on a <code><a href="../../apidocs/io/vertx/core/net/NetClient.html">NetClient</a></code>, you can configure the underlying Net Client from
+the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code>. Alternatively, you can pass the <code><a href="../../apidocs/io/vertx/core/net/NetClient.html">NetClient</a></code>
+you want to use in the
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClient.html#connect-io.vertx.core.net.NetClient-io.vertx.core.Handler-">connect</a></code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(netClient, ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        connection.errorHandler(frame -&gt; System.out.println("ERROR frame received : " + frame));
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code> let you configure:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the host and port ot the STOMP server</p>
+</li>
+<li>
+<p>the login and passcode to connect to the server</p>
+</li>
+<li>
+<p>whether or not the <code>content-length</code> header should be added to the frame if not set explicitly. (enabled by default)</p>
+</li>
+<li>
+<p>whether or not the <code>STOMP</code> command should be used instead of the <code>CONNECT</code> command (disabled by default)</p>
+</li>
+<li>
+<p>whether or not the <code>host</code> header should be ignored in the <code>CONNECT</code> frame (disabled by default)</p>
+</li>
+<li>
+<p>the heartbeat configuration (1000, 1000 by default)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_subscribing_to_destinations">Subscribing to destinations</h3>
+<div class="paragraph">
+<p>To subscribe to a destination, use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        connection.subscribe("/queue",
+            frame -&gt; System.out.println("Just received a frame from /queue : " + frame));
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To unsubscribe, use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        connection.subscribe("/queue",
+            frame -&gt; System.out.println("Just received a frame from /queue : " + frame));
+
+        // ....
+
+        connection.unsubscribe("/queue");
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sending_messages">Sending messages</h3>
+<div class="paragraph">
+<p>To send a message, use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
+        headers.put("header1", "value1");
+        connection.send("/queue", headers, Buffer.buffer("Hello"));
+        // No headers:
+        connection.send("/queue", Buffer.buffer("World"));
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Java and Groovy, you can use the <code><a href="../../apidocs/io/vertx/ext/stomp/utils/Headers.html">Headers</a></code> class to ease the header creation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_acknowledgements">Acknowledgements</h3>
+<div class="paragraph">
+<p>Clients can send <code>ACK</code> and <code>NACK</code> frames:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        connection.subscribe("/queue", frame -&gt; {
+          connection.ack(frame.getAck());
+          // OR
+          connection.nack(frame.getAck());
+        });
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_transactions">Transactions</h3>
+<div class="paragraph">
+<p>Clients can also create transactions. <code>ACK</code>, <code>NACK</code> and <code>SEND</code> frames sent in the transaction will be delivery
+only when the transaction is committed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
+        headers.put("transaction", "my-transaction");
+        connection.beginTX("my-transaction");
+        connection.send("/queue", headers, Buffer.buffer("Hello"));
+        connection.send("/queue", headers, Buffer.buffer("World"));
+        connection.send("/queue", headers, Buffer.buffer("!!!"));
+        connection.commit("my-transaction");
+        // OR
+        connection.abort("my-transaction");
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_receipt">Receipt</h3>
+<div class="paragraph">
+<p>Each sent commands can have a <em>receipt</em> handler, notified when the server has processed the message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+
+        connection.send("/queue", Buffer.buffer("Hello"),
+            frame -&gt; {
+              System.out.println("Message processed by the server");
+            }
+        );
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_the_stomp_server_as_a_bridge_to_the_vert_x_event_bus">Using the STOMP server as a bridge to the vert.x Event Bus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The STOMP server can be used as a bridge to the vert.x Event Bus. The bridge is bi-directional meaning the STOMP
+frames are translated to Event Bus messages and Event Bus messages are translated to STOMP frames.</p>
+</div>
+<div class="paragraph">
+<p>To enable the bridge you need to configure the inbound and outbound addresses. Inbound addresses are STOMP
+destination that are transferred to the event bus. The STOMP destination is used as the event bus address. Outbound
+addresses are event bus addresses that are transferred to STOMP.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+    .handler(StompServerHandler.create(vertx)
+        .bridge(new BridgeOptions()
+            .addInboundPermitted(new PermittedOptions().setAddress("/toBus"))
+            .addOutboundPermitted(new PermittedOptions().setAddress("/toStomp"))
+        )
+    )
+    .listen();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, the bridge use a publish/subscribe delivery (topic). You can configure it to use a point to point
+delivery where only one STOMP client or Event Bus consumer is invoked:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+    .handler(StompServerHandler.create(vertx)
+            .bridge(new BridgeOptions()
+                    .addInboundPermitted(new PermittedOptions().setAddress("/toBus"))
+                    .addOutboundPermitted(new PermittedOptions().setAddress("/toStomp"))
+                    .setPointToPoint(true)
+            )
+    )
+    .listen();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The permitted options can also be expressed as a "regex" or with a <em>match</em>. A <em>match</em> is a structure that the
+message payload must meet. For instance, in the next examples, the payload must contains the field "foo" set to
+"bar". Structure match only supports JSON object.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+    .handler(StompServerHandler.create(vertx)
+        .bridge(new BridgeOptions()
+            .addInboundPermitted(new PermittedOptions().setAddress("/toBus")
+                .setMatch(new JsonObject().put("foo", "bar")))
+            .addOutboundPermitted(new PermittedOptions().setAddress("/toStomp"))
+            .setPointToPoint(true)
+        )
+    )
+    .listen();</code></pre>
 </div>
 </div>
 </div>
@@ -422,7 +886,7 @@ providing your own <code><a href="../../apidocs/io/vertx/ext/stomp/Destination.h
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

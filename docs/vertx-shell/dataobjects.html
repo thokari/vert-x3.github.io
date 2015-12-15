@@ -84,11 +84,11 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
-<li><a href="#ShiroAuthOptions">ShiroAuthOptions</a></li>
-<li><a href="#AuthOptions">AuthOptions</a></li>
+<li><a href="#TelnetTermOptions">TelnetTermOptions</a></li>
+<li><a href="#HttpTermOptions">HttpTermOptions</a></li>
+<li><a href="#ShellServerOptions">ShellServerOptions</a></li>
+<li><a href="#SSHTermOptions">SSHTermOptions</a></li>
 <li><a href="#ShellServiceOptions">ShellServiceOptions</a></li>
-<li><a href="#SSHOptions">SSHOptions</a></li>
-<li><a href="#TelnetOptions">TelnetOptions</a></li>
 </ul>
         </div>
       </div>
@@ -96,161 +96,17 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
-<li><a href="#ShiroAuthOptions">ShiroAuthOptions</a></li>
-<li><a href="#AuthOptions">AuthOptions</a></li>
+<li><a href="#TelnetTermOptions">TelnetTermOptions</a></li>
+<li><a href="#HttpTermOptions">HttpTermOptions</a></li>
+<li><a href="#ShellServerOptions">ShellServerOptions</a></li>
+<li><a href="#SSHTermOptions">SSHTermOptions</a></li>
 <li><a href="#ShellServiceOptions">ShellServiceOptions</a></li>
-<li><a href="#SSHOptions">SSHOptions</a></li>
-<li><a href="#TelnetOptions">TelnetOptions</a></li>
 </ul>
         </div>
         <div class="sect1">
-<h2 id="ShiroAuthOptions">ShiroAuthOptions</h2>
+<h2 id="TelnetTermOptions">TelnetTermOptions</h2>
 <div class="sectionbody">
- Shiro auth configuration options, see Vert.x Auth Shiro component and/or Apache Shiro project.
-
- note: this will be moved to vertx-auth project after 3.1
-<hr>
-<table class="tableblock frame-topbot grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="config"></a><code>config</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Json object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the Shiro auth config.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="type"></a><code>type</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="enums.html#ShiroAuthRealmType">ShiroAuthRealmType</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the Shiro auth options type.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="AuthOptions">AuthOptions</h2>
-<div class="sectionbody">
- A common base object for authentication options.
-
- note: this will be moved to vertx-auth project after 3.1
-<hr>
-<table class="tableblock frame-topbot grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="ShellServiceOptions">ShellServiceOptions</h2>
-<div class="sectionbody">
- The configurations options for the shell service, the shell connectors can be configured
- with link and link.
-<hr>
-<table class="tableblock frame-topbot grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sshOptions"></a><code>sshOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#SSHOptions">SSHOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the SSH options, if the option is null, SSH will not be started.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="telnetOptions"></a><code>telnetOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#TelnetOptions">TelnetOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the Telnet options, if the option is null, Telnet will not be started.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="welcomeMessage"></a><code>welcomeMessage</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the shell welcome message, i.e the message displayed in the user console when he connects to the shell.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="SSHOptions">SSHOptions</h2>
-<div class="sectionbody">
- The SSH shell configuration options.
-<hr>
-<table class="tableblock frame-topbot grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="host"></a><code>host</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the host</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyPairOptions"></a><code>keyPairOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#JksOptions">JksOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key pair options in jks format, aka Java keystore.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemKeyPairOptions"></a><code>pemKeyPairOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PemKeyCertOptions">PemKeyCertOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key pair store options in pem format.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxKeyPairOptions"></a><code>pfxKeyPairOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PfxOptions">PfxOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key pair options in pfx format.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="port"></a><code>port</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the port</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="shiroAuthOptions"></a><code>shiroAuthOptions</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#ShiroAuthOptions">ShiroAuthOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the auth options as a Shiro auth.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="TelnetOptions">TelnetOptions</h2>
-<div class="sectionbody">
- Telnet options configuration, extends link.
+ Telnet terminal options configuration, extends link.
 <hr>
 <table class="tableblock frame-topbot grid-all spread">
 <colgroup>
@@ -268,6 +124,11 @@
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="acceptBacklog"></a><code>acceptBacklog</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="charset"></a><code>charset</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the charset to use when binary mode is active, see link and link.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clientAuth"></a><code>clientAuth</code></p></td>
@@ -305,9 +166,26 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="inBinary"></a><code>inBinary</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the telnet connection to negociate binary data format when receiving from the client, the default value is true. This
+ allows to send data in 8 bit format and thus charset like UTF-8.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="intputrc"></a><code>intputrc</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path of the <i>inputrc</i> config.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyStoreOptions"></a><code>keyStoreOptions</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#JksOptions">JksOptions</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="outBinary"></a><code>outBinary</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the telnet connection to negociate binary data format when sending to the client, the default value is true. This
+ allows to send data in 8 bit format and thus charset like UTF-8.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemKeyCertOptions"></a><code>pemKeyCertOptions</code></p></td>
@@ -388,6 +266,361 @@
 </table>
 </div>
 </div>
+<div class="sect1">
+<h2 id="HttpTermOptions">HttpTermOptions</h2>
+<div class="sectionbody">
+ The web term configuration options.
+<hr>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="acceptBacklog"></a><code>acceptBacklog</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="authOptions"></a><code>authOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#AuthOptions">AuthOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@return the auth options</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="charset"></a><code>charset</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the charset used for encoding / decoding text data from/to SockJS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clientAuth"></a><code>clientAuth</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="enums.html#ClientAuth">ClientAuth</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="clientAuthRequired"></a><code>clientAuthRequired</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="compressionSupported"></a><code>compressionSupported</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="crlPaths"></a><code>crlPaths</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="crlValues"></a><code>crlValues</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="enabledCipherSuites"></a><code>enabledCipherSuites</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="handle100ContinueAutomatically"></a><code>handle100ContinueAutomatically</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="host"></a><code>host</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="idleTimeout"></a><code>idleTimeout</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="intputrc"></a><code>intputrc</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path of the <i>inputrc</i> config.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyStoreOptions"></a><code>keyStoreOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#JksOptions">JksOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxChunkSize"></a><code>maxChunkSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWebsocketFrameSize"></a><code>maxWebsocketFrameSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemKeyCertOptions"></a><code>pemKeyCertOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PemKeyCertOptions">PemKeyCertOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemTrustOptions"></a><code>pemTrustOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PemTrustOptions">PemTrustOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxKeyCertOptions"></a><code>pfxKeyCertOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PfxOptions">PfxOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxTrustOptions"></a><code>pfxTrustOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PfxOptions">PfxOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="port"></a><code>port</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="receiveBufferSize"></a><code>receiveBufferSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="reuseAddress"></a><code>reuseAddress</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sendBufferSize"></a><code>sendBufferSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="shellHtmlResource"></a><code>shellHtmlResource</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set <code>shell.html</code> resource to use.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="soLinger"></a><code>soLinger</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sockJSHandlerOptions"></a><code>sockJSHandlerOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#SockJSHandlerOptions">SockJSHandlerOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The SockJS handler options.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sockJSPath"></a><code>sockJSPath</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Configure the SockJS path, the default value is <code>/term/*</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ssl"></a><code>ssl</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpKeepAlive"></a><code>tcpKeepAlive</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpNoDelay"></a><code>tcpNoDelay</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="termJsResource"></a><code>termJsResource</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set <code>term.js</code> resource to use.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trafficClass"></a><code>trafficClass</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="trustStoreOptions"></a><code>trustStoreOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#JksOptions">JksOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="usePooledBuffers"></a><code>usePooledBuffers</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="vertsShellJsResource"></a><code>vertsShellJsResource</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set <code>vertxshell.js</code> resource to use.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="websocketSubProtocols"></a><code>websocketSubProtocols</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ShellServerOptions">ShellServerOptions</h2>
+<div class="sectionbody">
+ The configurations options for the shell server.
+<hr>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="reaperInterval"></a><code>reaperInterval</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the repear interval, i.e the period at which session eviction is performed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sessionTimeout"></a><code>sessionTimeout</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the session timeout.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="welcomeMessage"></a><code>welcomeMessage</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the shell welcome message, i.e the message displayed in the user console when he connects to the shell.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="SSHTermOptions">SSHTermOptions</h2>
+<div class="sectionbody">
+ The SSH term configuration options.
+<hr>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="authOptions"></a><code>authOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#AuthOptions">AuthOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@return the auth options</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="defaultCharset"></a><code>defaultCharset</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the default charset to use when the client does not specifies one.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="host"></a><code>host</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the host</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="intputrc"></a><code>intputrc</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path of the <i>inputrc</i> config.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyPairOptions"></a><code>keyPairOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#JksOptions">JksOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key pair options in jks format, aka Java keystore.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pemKeyPairOptions"></a><code>pemKeyPairOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PemKeyCertOptions">PemKeyCertOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key pair store options in pem format.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="pfxKeyPairOptions"></a><code>pfxKeyPairOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#PfxOptions">PfxOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key pair options in pfx format.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="port"></a><code>port</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the port</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ShellServiceOptions">ShellServiceOptions</h2>
+<div class="sectionbody">
+ The configurations options for the shell service, the shell connectors can be configured
+ with ,  and .
+<hr>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="httpOptions"></a><code>httpOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#HttpTermOptions">HttpTermOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="reaperInterval"></a><code>reaperInterval</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the repear interval, i.e the period at which session eviction is performed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sessionTimeout"></a><code>sessionTimeout</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the session timeout.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sshOptions"></a><code>sshOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#SSHTermOptions">SSHTermOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the SSH options, if the option is null, SSH will not be started.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="telnetOptions"></a><code>telnetOptions</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#TelnetTermOptions">TelnetTermOptions</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the Telnet options, if the option is null, Telnet will not be started.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="welcomeMessage"></a><code>welcomeMessage</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the shell welcome message, i.e the message displayed in the user console when he connects to the shell.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
         
 
@@ -395,7 +628,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

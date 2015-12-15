@@ -99,16 +99,8 @@
 <li><a href="#_updating_documents">Updating documents</a></li>
 <li><a href="#_replacing_documents">Replacing documents</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
-<li><a href="#_finding_a_single_document">Finding a single document</a></li>
-<li><a href="#_removing_documents">Removing documents</a></li>
-<li><a href="#_removing_a_single_document">Removing a single document</a></li>
-<li><a href="#_counting_documents">Counting documents</a></li>
-<li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
-<li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
-<li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
 </ul>
 </li>
-<li><a href="#_configuring_the_client">Configuring the client</a></li>
 </ul>
         </div>
       </div>
@@ -131,16 +123,8 @@
 <li><a href="#_updating_documents">Updating documents</a></li>
 <li><a href="#_replacing_documents">Replacing documents</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
-<li><a href="#_finding_a_single_document">Finding a single document</a></li>
-<li><a href="#_removing_documents">Removing documents</a></li>
-<li><a href="#_removing_a_single_document">Removing a single document</a></li>
-<li><a href="#_counting_documents">Counting documents</a></li>
-<li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
-<li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
-<li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
 </ul>
 </li>
-<li><a href="#_configuring_the_client">Configuring the client</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -169,6 +153,10 @@ as it natively handles JSON (BSON) documents.</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>This client is based on the
+&lt;a href="http://mongodb.github.io/mongo-java-driver/3.2/driver-async/getting-started/"&gt;MongoDB Async Driver&lt;/a&gt;.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -189,7 +177,7 @@ as it natively handles JSON (BSON) documents.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -202,7 +190,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mongo-client:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.2.0'</code></pre>
 </div>
 </div>
 </div>
@@ -233,7 +221,7 @@ var client = MongoClient.createShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The first call to <code><a href="jsdoc/mongo_client-MongoClient.html#createShared">MongoClient.createShared</a></code>
+<p>The first call to <code><a href="../../jsdoc/mongo_client-MongoClient.html#createShared">MongoClient.createShared</a></code>
 will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="paragraph">
@@ -257,7 +245,7 @@ var client = MongoClient.createShared(vertx, config, "MyPoolName");</code></pre>
 share the same pool.</p>
 </div>
 <div class="paragraph">
-<p>The first call to <code><a href="jsdoc/mongo_client-MongoClient.html#createShared">MongoClient.createShared</a></code>
+<p>The first call to <code><a href="../../jsdoc/mongo_client-MongoClient.html#createShared">MongoClient.createShared</a></code>
 will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="paragraph">
@@ -275,7 +263,7 @@ interacting with different databases.</p>
 However, it&#8217;s possible you want to create a client instance that doesn&#8217;t share its pool with any other client.</p>
 </div>
 <div class="paragraph">
-<p>In that case you can use <code><a href="jsdoc/mongo_client-MongoClient.html#createNonShared">MongoClient.createNonShared</a></code>.</p>
+<p>In that case you can use <code><a href="../../jsdoc/mongo_client-MongoClient.html#createNonShared">MongoClient.createNonShared</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -285,7 +273,7 @@ var client = MongoClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This is equivalent to calling <code><a href="jsdoc/mongo_client-MongoClient.html#createShared">MongoClient.createShared</a></code>
+<p>This is equivalent to calling <code><a href="../../jsdoc/mongo_client-MongoClient.html#createShared">MongoClient.createShared</a></code>
 with a unique pool name each time.</p>
 </div>
 </div>
@@ -295,12 +283,12 @@ with a unique pool name each time.</p>
 <h2 id="_using_the_api">Using the API</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The client API is represented by <code><a href="jsdoc/mongo_client-MongoClient.html">MongoClient</a></code>.</p>
+<p>The client API is represented by <code><a href="../../jsdoc/mongo_client-MongoClient.html">MongoClient</a></code>.</p>
 </div>
 <div class="sect2">
 <h3 id="_saving_documents">Saving documents</h3>
 <div class="paragraph">
-<p>To save a document you use <code><a href="jsdoc/mongo_client-MongoClient.html#save">save</a></code>.</p>
+<p>To save a document you use <code><a href="../../jsdoc/mongo_client-MongoClient.html#save">save</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If the document has no <code>_id</code> field, it is inserted, otherwise, it is _upserted_. Upserted means it is inserted
@@ -363,7 +351,7 @@ mongoClient.save("books", document, function (res, res_err) {
 <div class="sect2">
 <h3 id="_inserting_documents">Inserting documents</h3>
 <div class="paragraph">
-<p>To insert a document you use <code><a href="jsdoc/mongo_client-MongoClient.html#insert">insert</a></code>.</p>
+<p>To insert a document you use <code><a href="../../jsdoc/mongo_client-MongoClient.html#insert">insert</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If the document is inserted and has no id, then the id field generated will be returned to the result handler.</p>
@@ -420,7 +408,7 @@ mongoClient.insert("books", document, function (res, res_err) {
 <div class="sect2">
 <h3 id="_updating_documents">Updating documents</h3>
 <div class="paragraph">
-<p>To update a documents you use <code><a href="jsdoc/mongo_client-MongoClient.html#update">update</a></code>.</p>
+<p>To update a documents you use <code><a href="../../jsdoc/mongo_client-MongoClient.html#update">update</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This updates one or multiple documents in a collection. The json object that is passed in the <code>update</code>
@@ -462,7 +450,7 @@ mongoClient.update("books", query, update, function (res, res_err) {
 </div>
 </div>
 <div class="paragraph">
-<p>To specify if the update should upsert or update multiple documents, use <code><a href="jsdoc/mongo_client-MongoClient.html#updateWithOptions">updateWithOptions</a></code>
+<p>To specify if the update should upsert or update multiple documents, use <code><a href="../../jsdoc/mongo_client-MongoClient.html#updateWithOptions">updateWithOptions</a></code>
 and pass in an instance of <code><a href="../dataobjects.html#UpdateOptions">UpdateOptions</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -520,7 +508,7 @@ mongoClient.updateWithOptions("books", query, update, options, function (res, re
 <div class="sect2">
 <h3 id="_replacing_documents">Replacing documents</h3>
 <div class="paragraph">
-<p>To replace documents you use <code><a href="jsdoc/mongo_client-MongoClient.html#replace">replace</a></code>.</p>
+<p>To replace documents you use <code><a href="../../jsdoc/mongo_client-MongoClient.html#replace">replace</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This is similar to the update operation, however it does not take any update operators like <code>update</code>.
@@ -559,7 +547,7 @@ mongoClient.replace("books", query, replace, function (res, res_err) {
 <div class="sect2">
 <h3 id="_finding_documents">Finding documents</h3>
 <div class="paragraph">
-<p>To find documents you use <code><a href="jsdoc/mongo_client-MongoClient.html#find">find</a></code>.</p>
+<p>To find documents you use <code><a href="../../jsdoc/mongo_client-MongoClient.html#find">find</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The <code>query</code> parameter is used to match the documents in the collection.</p>
@@ -625,7 +613,7 @@ mongoClient.find("books", query, function (res, res_err) {
 <p>The matching documents are returned as a list of json objects in the result handler.</p>
 </div>
 <div class="paragraph">
-<p>To specify things like what fields to return, how many results to return, etc use <code><a href="jsdoc/mongo_client-MongoClient.html#findWithOptions">findWithOptions</a></code>
+<p>To specify things like what fields to return, how many results to return, etc use <code><a href="../../jsdoc/mongo_client-MongoClient.html#findWithOptions">findWithOptions</a></code>
 and pass in the an instance of <code><a href="../dataobjects.html#FindOptions">FindOptions</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -648,595 +636,691 @@ and pass in the an instance of <code><a href="../dataobjects.html#FindOptions">F
 <dt class="hdlist1"><code>skip</code></dt>
 <dd>
 <p>The number of documents to skip before returning the results. Defaults to <code>0</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>----</p>
+</li>
+</ul>
+</div>
 </dd>
 </dl>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_finding_a_single_document">Finding a single document</h3>
 <div class="paragraph">
-<p>To find a single document you use <code><a href="jsdoc/mongo_client-MongoClient.html#findOne">findOne</a></code>.</p>
-</div>
-<div class="paragraph">
-<p>This works just like <code><a href="jsdoc/mongo_client-MongoClient.html#find">find</a></code> but it returns just the first matching document.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_removing_documents">Removing documents</h3>
-<div class="paragraph">
-<p>To remove documents use <code><a href="jsdoc/mongo_client-MongoClient.html#remove">remove</a></code>.</p>
-</div>
-<div class="paragraph">
-<p>The <code>query</code> parameter is used to match the documents in the collection to determine which ones to remove.</p>
-</div>
-<div class="paragraph">
-<p>Here&#8217;s an example of removing all Tolkien books:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var query = {
+<p>var query = {
   "author" : "J. R. R. Tolkien"
-};
-
-mongoClient.remove("books", query, function (res, res_err) {
-
-  if (res_err == null) {
-
-    console.log("Never much liked Tolkien stuff!");
-
-  } else {
-
-    res_err.printStackTrace();
-
-  }
-});</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_removing_a_single_document">Removing a single document</h3>
-<div class="paragraph">
-<p>To remove a single document you use <code><a href="jsdoc/mongo_client-MongoClient.html#removeOne">removeOne</a></code>.</p>
+};</p>
 </div>
 <div class="paragraph">
-<p>This works just like <code><a href="jsdoc/mongo_client-MongoClient.html#remove">remove</a></code> but it removes just the first matching document.</p>
+<p>mongoClient.findBatch("book", query, function (res, res_err) {
+  if (res_err == null) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>console.log(JSON.stringify(res));</pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_counting_documents">Counting documents</h3>
-<div class="paragraph">
-<p>To count documents use <code><a href="jsdoc/mongo_client-MongoClient.html#count">count</a></code>.</p>
+<div class="literalblock">
+<div class="content">
+<pre>} else {</pre>
 </div>
-<div class="paragraph">
-<p>Here&#8217;s an example that counts the number of Tolkien books. The number is passed to the result handler.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>res_err.printStackTrace();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  }
+});</pre>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var query = {
+<pre>The matching documents are returned unitary in the result handler.
+
+=== Finding a single document
+
+To find a single document you use `link:../../jsdoc/mongo_client-MongoClient.html#findOne[findOne]`.
+
+This works just like `link:../../jsdoc/mongo_client-MongoClient.html#find[find]` but it returns just the first matching document.
+
+=== Removing documents
+
+To remove documents use `link:../../jsdoc/mongo_client-MongoClient.html#remove[remove]`.
+
+The `query` parameter is used to match the documents in the collection to determine which ones to remove.
+
+Here's an example of removing all Tolkien books:
+
+[source,js]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>var query = {
   "author" : "J. R. R. Tolkien"
-};
-
-mongoClient.count("books", query, function (res, res_err) {
-
-  if (res_err == null) {
-
-    var num = res;
-
-  } else {
-
-    res_err.printStackTrace();
-
-  }
-});</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_managing_mongodb_collections">Managing MongoDB collections</h3>
-<div class="paragraph">
-<p>All MongoDB documents are stored in collections.</p>
+};</p>
 </div>
 <div class="paragraph">
-<p>To get a list of all collections you can use <code><a href="jsdoc/mongo_client-MongoClient.html#getCollections">getCollections</a></code></p>
+<p>mongoClient.remove("books", query, function (res, res_err) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>console.log("Never much liked Tolkien stuff!");</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>res_err.printStackTrace();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  }
+});</pre>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">mongoClient.getCollections(function (res, res_err) {
+<pre>=== Removing a single document
 
-  if (res_err == null) {
+To remove a single document you use `link:../../jsdoc/mongo_client-MongoClient.html#removeOne[removeOne]`.
 
-    var collections = res;
+This works just like `link:../../jsdoc/mongo_client-MongoClient.html#remove[remove]` but it removes just the first matching document.
 
-  } else {
+=== Counting documents
 
-    res_err.printStackTrace();
+To count documents use `link:../../jsdoc/mongo_client-MongoClient.html#count[count]`.
 
-  }
-});</code></pre>
+Here's an example that counts the number of Tolkien books. The number is passed to the result handler.
+
+[source,js]</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To create a new collection you can use <code><a href="jsdoc/mongo_client-MongoClient.html#createCollection">createCollection</a></code></p>
+<p>var query = {
+  "author" : "J. R. R. Tolkien"
+};</p>
+</div>
+<div class="paragraph">
+<p>mongoClient.count("books", query, function (res, res_err) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>var num = res;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>res_err.printStackTrace();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  }
+});</pre>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">mongoClient.createCollection("mynewcollectionr", function (res, res_err) {
+<pre>=== Managing MongoDB collections
 
-  if (res_err == null) {
+All MongoDB documents are stored in collections.
 
-    // Created ok!
+To get a list of all collections you can use `link:../../jsdoc/mongo_client-MongoClient.html#getCollections[getCollections]`
 
-  } else {
-
-    res_err.printStackTrace();
-
-  }
-});</code></pre>
+[source,js]</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To drop a collection you can use <code><a href="jsdoc/mongo_client-MongoClient.html#dropCollection">dropCollection</a></code></p>
+<p>mongoClient.getCollections(function (res, res_err) {</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Dropping a collection will delete all documents within it!
-</td>
-</tr>
-</table>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>var collections = res;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>res_err.printStackTrace();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  }
+});</pre>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">mongoClient.dropCollection("mynewcollectionr", function (res, res_err) {
+<pre>To create a new collection you can use `link:../../jsdoc/mongo_client-MongoClient.html#createCollection[createCollection]`
 
-  if (res_err == null) {
-
-    // Dropped ok!
-
-  } else {
-
-    res_err.printStackTrace();
-
-  }
-});</code></pre>
+[source,js]</pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_running_other_mongodb_commands">Running other MongoDB commands</h3>
-<div class="paragraph">
-<p>You can run arbitrary MongoDB commands with <code><a href="jsdoc/mongo_client-MongoClient.html#runCommand">runCommand</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>Commands can be used to run more advanced mongoDB features, such as using MapReduce.
-For more information see the mongo docs for supported <a href="http://docs.mongodb.org/manual/reference/command">Commands</a>.</p>
+<p>mongoClient.createCollection("mynewcollectionr", function (res, res_err) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Created ok!</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>res_err.printStackTrace();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  }
+});</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>To drop a collection you can use `link:../../jsdoc/mongo_client-MongoClient.html#dropCollection[dropCollection]`
+
+NOTE: Dropping a collection will delete all documents within it!
+
+[source,js]</pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example of running an aggregate command. Note that the command name must be specified as a parameter
+<p>mongoClient.dropCollection("mynewcollectionr", function (res, res_err) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Dropped ok!</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>res_err.printStackTrace();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  }
+});</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>=== Running other MongoDB commands
+
+You can run arbitrary MongoDB commands with `link:../../jsdoc/mongo_client-MongoClient.html#runCommand[runCommand]`.
+
+Commands can be used to run more advanced mongoDB features, such as using MapReduce.
+For more information see the mongo docs for supported http://docs.mongodb.org/manual/reference/command[Commands].
+
+Here's an example of running an aggregate command. Note that the command name must be specified as a parameter
 and also be contained in the JSON that represents the command. This is because JSON is not ordered but BSON is
 ordered and MongoDB expects the first BSON entry to be the name of the command. In order for us to know which
-of the entries in the JSON is the command name it must be specified as a parameter.</p>
+of the entries in the JSON is the command name it must be specified as a parameter.
+
+[source,js]</pre>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var command = {
+</div>
+<div class="paragraph">
+<p>var command = {
   "aggregate" : "collection_name",
   "pipeline" : [
   ]
-};
-
-mongoClient.runCommand("aggregate", command, function (res, res_err) {
+};</p>
+</div>
+<div class="paragraph">
+<p>mongoClient.runCommand("aggregate", command, function (res, res_err) {
   if (res_err == null) {
     var resArr = res.result;
     // etc
   } else {
     res_err.printStackTrace();
   }
-});</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_mongodb_extended_json_support">MongoDB Extended JSON support</h3>
-<div class="paragraph">
-<p>For now, only date, oid and binary types are supported (cf <a href="http://docs.mongodb.org/manual/reference/mongodb-extended-json" class="bare">http://docs.mongodb.org/manual/reference/mongodb-extended-json</a> )</p>
-</div>
-<div class="paragraph">
-<p>Here&#8217;s an example of inserting a document with a date field</p>
+});</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var document = {
+<pre>=== MongoDB Extended JSON support
+
+For now, only date, oid and binary types are supported (cf http://docs.mongodb.org/manual/reference/mongodb-extended-json )
+
+Here's an example of inserting a document with a date field
+
+[source,js]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>var document = {
   "title" : "The Hobbit",
   "publicationDate" : {
     "$date" : "1937-09-21T00:00:00+00:00"
   }
-};
-
-mongoService.save("publishedBooks", document, function (res, res_err) {
-
-  if (res_err == null) {
-
-    var id = res;
-
-    mongoService.findOne("publishedBooks", {
-      "_id" : id
-    }, null, function (res2, res2_err) {
-      if (res2_err == null) {
-
-        console.log("To retrieve ISO-8601 date : " + res2.publicationDate.$date);
-
-      } else {
-        res2_err.printStackTrace();
-      }
-    });
-
-  } else {
-    res_err.printStackTrace();
+};</p>
+</div>
+<div class="paragraph">
+<p>mongoService.save("publishedBooks", document, function (res, res_err) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>var id = res;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mongoService.findOne("publishedBooks", {
+  "_id" : id
+}, null, function (res2, res2_err) {
+  if (res2_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>console.log("To retrieve ISO-8601 date : " + res2.publicationDate.$date);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  } else {
+    res2_err.printStackTrace();
   }
-
-});</code></pre>
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {
+  res_err.printStackTrace();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example (in Java) of inserting a document with a binary field and reading it back</p>
+<p>});</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">byte[] binaryObject = new byte[40];
+<pre>Here's an example (in Java) of inserting a document with a binary field and reading it back
 
-JsonObject document = new JsonObject()
+[source,js]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>byte[] binaryObject = new byte[40];</p>
+</div>
+<div class="paragraph">
+<p>JsonObject document = new JsonObject()
         .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));
-
-mongoService.save("smartPeople", document, res -&gt; {
-
-  if (res.succeeded()) {
-
-    String id = res.result();
-
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if(res2.succeeded()) {
-
-        byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
-        //This could now be de-serialized into an object in real life
-      } else {
-        res2.cause().printStackTrace();
-      }
-    });
-
+        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));</p>
+</div>
+<div class="paragraph">
+<p>mongoService.save("smartPeople", document, res &#8594; {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res.succeeded()) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>String id = res.result();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
+  if(res2.succeeded()) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
+    //This could now be de-serialized into an object in real life
   } else {
-    res.cause().printStackTrace();
+    res2.cause().printStackTrace();
   }
-
-});</code></pre>
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {
+  res.cause().printStackTrace();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example of inserting a base 64 encoded string, typing it as binary a binary field, and reading it back</p>
+<p>});</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">//This could be a the byte contents of a pdf file, etc converted to base 64
-var base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=";
+<pre>Here's an example of inserting a base 64 encoded string, typing it as binary a binary field, and reading it back
 
-var document = {
+[source,js]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>var base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=";</p>
+</div>
+<div class="paragraph">
+<p>var document = {
   "name" : "Alan Turing",
   "binaryStuff" : {
     "$binary" : base64EncodedString
   }
-};
-
-mongoService.save("smartPeople", document, function (res, res_err) {
-
-  if (res_err == null) {
-
-    var id = res;
-
-    mongoService.findOne("smartPeople", {
-      "_id" : id
-    }, null, function (res2, res2_err) {
-      if (res2_err == null) {
-
-        var reconstitutedBase64EncodedString = res2.binaryStuff.$binary;
-        //This could now converted back to bytes from the base 64 string
-      } else {
-        res2_err.printStackTrace();
-      }
-    });
-
+};</p>
+</div>
+<div class="paragraph">
+<p>mongoService.save("smartPeople", document, function (res, res_err) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>var id = res;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mongoService.findOne("smartPeople", {
+  "_id" : id
+}, null, function (res2, res2_err) {
+  if (res2_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    var reconstitutedBase64EncodedString = res2.binaryStuff.$binary;
+    //This could now converted back to bytes from the base 64 string
   } else {
-    res_err.printStackTrace();
+    res2_err.printStackTrace();
   }
-
-});</code></pre>
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {
+  res_err.printStackTrace();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example of inserting an object ID and reading it back</p>
+<p>});</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var individualId = new (Java.type("org.bson.types.ObjectId"))().toHexString();
+<pre>Here's an example of inserting an object ID and reading it back
 
-var document = {
+[source,js]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>var individualId = new (Java.type("org.bson.types.ObjectId"))().toHexString();</p>
+</div>
+<div class="paragraph">
+<p>var document = {
   "name" : "Stephen Hawking",
   "individualId" : {
     "$oid" : individualId
   }
-};
-
-mongoService.save("smartPeople", document, function (res, res_err) {
-
-  if (res_err == null) {
-
-    var id = res;
-
-    mongoService.findOne("smartPeople", {
-      "_id" : id
-    }, null, function (res2, res2_err) {
-      if (res2_err == null) {
-        var reconstitutedIndividualId = res2.individualId.$oid;
-      } else {
-        res2_err.printStackTrace();
-      }
-    });
-
+};</p>
+</div>
+<div class="paragraph">
+<p>mongoService.save("smartPeople", document, function (res, res_err) {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (res_err == null) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>var id = res;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mongoService.findOne("smartPeople", {
+  "_id" : id
+}, null, function (res2, res2_err) {
+  if (res2_err == null) {
+    var reconstitutedIndividualId = res2.individualId.$oid;
   } else {
-    res_err.printStackTrace();
+    res2_err.printStackTrace();
   }
-
-});</code></pre>
+});</pre>
 </div>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>} else {
+  res_err.printStackTrace();
+}</pre>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_configuring_the_client">Configuring the client</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The client is configured with a json object.</p>
 </div>
 <div class="paragraph">
-<p>The following configuration is supported by the mongo client:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><code>db_name</code></dt>
-<dd>
-<p>Name of the database in the mongoDB instance to use. Defaults to <code>default_db</code></p>
-</dd>
-<dt class="hdlist1"><code>useObjectId</code></dt>
-<dd>
-<p>Toggle this option to support persisting and retrieving ObjectId&#8217;s as strings. If <code>true', hex-strings will
-be saved as native Mongodb ObjectId types in the document collection. This will allow the sorting of documents based on creation
-time. You can also derive the creation time from the hex-string using ObjectId::getDate(). Set to `false' for other types of your choosing.
-If set to false, or left to default, hex strings will be generated as the document _id if the _id is omitted from the document.
-Defaults to `false</code>.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>The mongo client tries to support most options that are allowed by the driver. There are two ways to configure mongo
-for use by the driver, either by a connection string or by separate configuration options.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-If the connection string is used the mongo client will ignore any driver configuration options.
-</td>
-</tr>
-</table>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><code>connection_string</code></dt>
-<dd>
-<p>The connection string the driver uses to create the client. E.g. <code>mongodb://localhost:27017</code>.
-For more information on the format of the connection string please consult the driver documentation.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p><strong>Specific driver configuration options</strong></p>
+<p>});</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>{
+<pre>Here's an example of getting disting value
+
+[source,js]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Code not translatable</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Here's an example of getting distinct value in batch mode
+
+[source,js]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Code not translatable</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>== Configuring the client
+
+The client is configured with a json object.
+
+The following configuration is supported by the mongo client:
+
+
+`db_name`:: Name of the database in the mongoDB instance to use. Defaults to `default_db`
+`useObjectId`:: Toggle this option to support persisting and retrieving ObjectId's as strings. If `true', hex-strings will
+be saved as native Mongodb ObjectId types in the document collection. This will allow the sorting of documents based on creation
+time. You can also derive the creation time from the hex-string using ObjectId::getDate(). Set to `false' for other types of your choosing.
+If set to false, or left to default, hex strings will be generated as the document _id if the _id is omitted from the document.
+Defaults to `false`.
+
+The mongo client tries to support most options that are allowed by the driver. There are two ways to configure mongo
+for use by the driver, either by a connection string or by separate configuration options.
+
+NOTE: If the connection string is used the mongo client will ignore any driver configuration options.
+
+`connection_string`:: The connection string the driver uses to create the client. E.g. `mongodb://localhost:27017`.
+For more information on the format of the connection string please consult the driver documentation.
+
+*Specific driver configuration options*</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>{
   // Single Cluster Settings
   "host" : "17.0.0.1", // string
-  "port" : 27017,      // int
-
-  // Multiple Cluster Settings
-  "hosts" : [
-    {
-      "host" : "cluster1", // string
-      "port" : 27000       // int
-    },
-    {
-      "host" : "cluster2", // string
-      "port" : 28000       // int
-    },
-    ...
-  ],
-  "replicaSet" :  "foo"    // string
-
-  // Connection Pool Settings
-  "maxPoolSize" : 50,                // int
-  "minPoolSize" : 25,                // int
-  "maxIdleTimeMS" : 300000,          // long
-  "maxLifeTimeMS" : 3600000,         // long
-  "waitQueueMultiple"  : 10,         // int
-  "waitQueueTimeoutMS" : 10000,      // long
-  "maintenanceFrequencyMS" : 2000,   // long
-  "maintenanceInitialDelayMS" : 500, // long
-
-  // Credentials / Auth
-  "username"   : "john",     // string
-  "password"   : "passw0rd", // string
-  "authSource" : "some.db"   // string
-  // Auth mechanism
-  "authMechanism"     : "GSSAPI",        // string
-  "gssapiServiceName" : "myservicename", // string
-
-  // Socket Settings
-  "connectTimeoutMS" : 300000, // int
-  "socketTimeoutMS"  : 100000, // int
-  "sendBufferSize"    : 8192,  // int
-  "receiveBufferSize" : 8192,  // int
-  "keepAlive" : true           // boolean
-
-  // Heartbeat socket settings
-  "heartbeat.socket" : {
-  "connectTimeoutMS" : 300000, // int
-  "socketTimeoutMS"  : 100000, // int
-  "sendBufferSize"    : 8192,  // int
-  "receiveBufferSize" : 8192,  // int
-  "keepAlive" : true           // boolean
-  }
-
-  // Server Settings
+  "port" : 27017,      // int</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Multiple Cluster Settings
+"hosts" : [
+  {
+    "host" : "cluster1", // string
+    "port" : 27000       // int
+  },
+  {
+    "host" : "cluster2", // string
+    "port" : 28000       // int
+  },
+  ...
+],
+"replicaSet" :  "foo"    // string</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Connection Pool Settings
+"maxPoolSize" : 50,                // int
+"minPoolSize" : 25,                // int
+"maxIdleTimeMS" : 300000,          // long
+"maxLifeTimeMS" : 3600000,         // long
+"waitQueueMultiple"  : 10,         // int
+"waitQueueTimeoutMS" : 10000,      // long
+"maintenanceFrequencyMS" : 2000,   // long
+"maintenanceInitialDelayMS" : 500, // long</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Credentials / Auth
+"username"   : "john",     // string
+"password"   : "passw0rd", // string
+"authSource" : "some.db"   // string
+// Auth mechanism
+"authMechanism"     : "GSSAPI",        // string
+"gssapiServiceName" : "myservicename", // string</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Socket Settings
+"connectTimeoutMS" : 300000, // int
+"socketTimeoutMS"  : 100000, // int
+"sendBufferSize"    : 8192,  // int
+"receiveBufferSize" : 8192,  // int
+"keepAlive" : true           // boolean</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Heartbeat socket settings
+"heartbeat.socket" : {
+"connectTimeoutMS" : 300000, // int
+"socketTimeoutMS"  : 100000, // int
+"sendBufferSize"    : 8192,  // int
+"receiveBufferSize" : 8192,  // int
+"keepAlive" : true           // boolean
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  // Server Settings
   "heartbeatFrequencyMS" :    1000 // long
   "minHeartbeatFrequencyMS" : 500 // long
 }</pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>Driver option descriptions</strong></p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><code>host</code></dt>
-<dd>
-<p>The host the mongoDB instance is running. Defaults to <code>127.0.0.1</code>. This is ignored if <code>hosts</code> is specified</p>
-</dd>
-<dt class="hdlist1"><code>port</code></dt>
-<dd>
-<p>The port the mongoDB instance is listening on. Defaults to <code>27017</code>. This is ignored if <code>hosts</code> is specified</p>
-</dd>
-<dt class="hdlist1"><code>hosts</code></dt>
-<dd>
-<p>An array representing the hosts and ports to support a mongoDB cluster (sharding / replication)</p>
-</dd>
-<dt class="hdlist1"><code>host</code></dt>
-<dd>
-<p>A host in the cluster</p>
-</dd>
-<dt class="hdlist1"><code>port</code></dt>
-<dd>
-<p>The port a host in the cluster is listening on</p>
-</dd>
-<dt class="hdlist1"><code>replicaSet</code></dt>
-<dd>
-<p>The name of the replica set, if the mongoDB instance is a member of a replica set</p>
-</dd>
-<dt class="hdlist1"><code>maxPoolSize</code></dt>
-<dd>
-<p>The maximum number of connections in the connection pool. The default value is <code>100</code></p>
-</dd>
-<dt class="hdlist1"><code>minPoolSize</code></dt>
-<dd>
-<p>The minimum number of connections in the connection pool. The default value is <code>0</code></p>
-</dd>
-<dt class="hdlist1"><code>maxIdleTimeMS</code></dt>
-<dd>
-<p>The maximum idle time of a pooled connection. The default value is <code>0</code> which means there is no limit</p>
-</dd>
-<dt class="hdlist1"><code>maxLifeTimeMS</code></dt>
-<dd>
-<p>The maximum time a pooled connection can live for. The default value is <code>0</code> which means there is no limit</p>
-</dd>
-<dt class="hdlist1"><code>waitQueueMultiple</code></dt>
-<dd>
-<p>The maximum number of waiters for a connection to become available from the pool. Default value is <code>500</code></p>
-</dd>
-<dt class="hdlist1"><code>waitQueueTimeoutMS</code></dt>
-<dd>
-<p>The maximum time that a thread may wait for a connection to become available. Default value is <code>120000</code> (2 minutes)</p>
-</dd>
-<dt class="hdlist1"><code>maintenanceFrequencyMS</code></dt>
-<dd>
-<p>The time period between runs of the maintenance job. Default is <code>0</code>.</p>
-</dd>
-<dt class="hdlist1"><code>maintenanceInitialDelayMS</code></dt>
-<dd>
-<p>The period of time to wait before running the first maintenance job on the connection pool. Default is <code>0</code>.</p>
-</dd>
-<dt class="hdlist1"><code>username</code></dt>
-<dd>
-<p>The username to authenticate. Default is <code>null</code> (meaning no authentication required)</p>
-</dd>
-<dt class="hdlist1"><code>password</code></dt>
-<dd>
-<p>The password to use to authenticate.</p>
-</dd>
-<dt class="hdlist1"><code>authSource</code></dt>
-<dd>
-<p>The database name associated with the user&#8217;s credentials. Default value is <code>admin</code></p>
-</dd>
-<dt class="hdlist1"><code>authMechanism</code></dt>
-<dd>
-<p>The authentication mechanism to use. See [Authentication](<a href="http://docs.mongodb.org/manual/core/authentication/" class="bare">http://docs.mongodb.org/manual/core/authentication/</a>) for more details.</p>
-</dd>
-<dt class="hdlist1"><code>gssapiServiceName</code></dt>
-<dd>
-<p>The Kerberos service name if <code>GSSAPI</code> is specified as the <code>authMechanism</code>.</p>
-</dd>
-<dt class="hdlist1"><code>connectTimeoutMS</code></dt>
-<dd>
-<p>The time in milliseconds to attempt a connection before timing out. Default is <code>10000</code> (10 seconds)</p>
-</dd>
-<dt class="hdlist1"><code>socketTimeoutMS</code></dt>
-<dd>
-<p>The time in milliseconds to attempt a send or receive on a socket before the attempt times out. Default is <code>0</code> meaning there is no timeout</p>
-</dd>
-<dt class="hdlist1"><code>sendBufferSize</code></dt>
-<dd>
-<p>Sets the send buffer size (SO_SNDBUF) for the socket. Default is <code>0</code>, meaning it will use the OS default for this option.</p>
-</dd>
-<dt class="hdlist1"><code>receiveBufferSize</code></dt>
-<dd>
-<p>Sets the receive buffer size (SO_RCVBUF) for the socket. Default is <code>0</code>, meaning it will use the OS default for this option.</p>
-</dd>
-<dt class="hdlist1"><code>keepAlive</code></dt>
-<dd>
-<p>Sets the keep alive (SO_KEEPALIVE) for the socket. Default is <code>false</code></p>
-</dd>
-<dt class="hdlist1"><code>heartbeat.socket</code></dt>
-<dd>
-<p>Configures the socket settings for the cluster monitor of the MongoDB java driver.</p>
-</dd>
-<dt class="hdlist1"><code>heartbeatFrequencyMS</code></dt>
-<dd>
-<p>The frequency that the cluster monitor attempts to reach each server. Default is <code>5000</code> (5 seconds)</p>
-</dd>
-<dt class="hdlist1"><code>minHeartbeatFrequencyMS</code></dt>
-<dd>
-<p>The minimum heartbeat frequency. The default value is <code>1000</code> (1 second)</p>
-</dd>
-</dl>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Most of the default values listed above use the default values of the MongoDB Java Driver.
+<div class="listingblock">
+<div class="content">
+<pre>*Driver option descriptions*
+
+`host`:: The host the mongoDB instance is running. Defaults to `127.0.0.1`. This is ignored if `hosts` is specified
+`port`:: The port the mongoDB instance is listening on. Defaults to `27017`. This is ignored if `hosts` is specified
+`hosts`:: An array representing the hosts and ports to support a mongoDB cluster (sharding / replication)
+`host`:: A host in the cluster
+`port`:: The port a host in the cluster is listening on
+`replicaSet`:: The name of the replica set, if the mongoDB instance is a member of a replica set
+`maxPoolSize`:: The maximum number of connections in the connection pool. The default value is `100`
+`minPoolSize`:: The minimum number of connections in the connection pool. The default value is `0`
+`maxIdleTimeMS`:: The maximum idle time of a pooled connection. The default value is `0` which means there is no limit
+`maxLifeTimeMS`:: The maximum time a pooled connection can live for. The default value is `0` which means there is no limit
+`waitQueueMultiple`:: The maximum number of waiters for a connection to become available from the pool. Default value is `500`
+`waitQueueTimeoutMS`:: The maximum time that a thread may wait for a connection to become available. Default value is `120000` (2 minutes)
+`maintenanceFrequencyMS`:: The time period between runs of the maintenance job. Default is `0`.
+`maintenanceInitialDelayMS`:: The period of time to wait before running the first maintenance job on the connection pool. Default is `0`.
+`username`:: The username to authenticate. Default is `null` (meaning no authentication required)
+`password`:: The password to use to authenticate.
+`authSource`:: The database name associated with the user's credentials. Default value is the `db_name` value.
+`authMechanism`:: The authentication mechanism to use. See [Authentication](http://docs.mongodb.org/manual/core/authentication/) for more details.
+`gssapiServiceName`:: The Kerberos service name if `GSSAPI` is specified as the `authMechanism`.
+`connectTimeoutMS`:: The time in milliseconds to attempt a connection before timing out. Default is `10000` (10 seconds)
+`socketTimeoutMS`:: The time in milliseconds to attempt a send or receive on a socket before the attempt times out. Default is `0` meaning there is no timeout
+`sendBufferSize`:: Sets the send buffer size (SO_SNDBUF) for the socket. Default is `0`, meaning it will use the OS default for this option.
+`receiveBufferSize`:: Sets the receive buffer size (SO_RCVBUF) for the socket. Default is `0`, meaning it will use the OS default for this option.
+`keepAlive`:: Sets the keep alive (SO_KEEPALIVE) for the socket. Default is `false`
+`heartbeat.socket`:: Configures the socket settings for the cluster monitor of the MongoDB java driver.
+`heartbeatFrequencyMS`:: The frequency that the cluster monitor attempts to reach each server. Default is `5000` (5 seconds)
+`minHeartbeatFrequencyMS`:: The minimum heartbeat frequency. The default value is `1000` (1 second)
+
+NOTE: Most of the default values listed above use the default values of the MongoDB Java Driver.
 Please consult the driver documentation for up to date information.
-</td>
-</tr>
-</table>
+&lt;a href="mailto:nscavell@redhat.com"&gt;Nick Scavelli&lt;/a&gt;&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1247,7 +1331,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

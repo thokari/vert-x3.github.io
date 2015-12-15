@@ -110,7 +110,7 @@ meaning that the only get String values.</p>
 <div class="paragraph">
 <p>Instead of
 <code><a href="../dataobjects.html#Option">Option</a></code> and <code><a href="../dataobjects.html#Argument">Argument</a></code>, use <code>TypedOption</code>
-and <code>TypedArgument</code> in the <code><a href="groovydoc/io/vertx/groovy/core/cli/CLI.html">CLI</a></code> definition:</p>
+and <code>TypedArgument</code> in the <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html">CLI</a></code> definition:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -178,6 +178,9 @@ this converter:</p>
 <div class="paragraph">
 <p>For booleans, the boolean values are evaluated to <code>true</code>: <code>on</code>, <code>yes</code>, <code>1</code>, <code>true</code>.</p>
 </div>
+<div class="paragraph">
+<p>If one of your option as an <code>enum</code> as type, it computes the set of choices automatically.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_using_annotations">Using annotations</h3>
@@ -214,7 +217,7 @@ public class AnnotatedCli {
 </div>
 </div>
 <div class="paragraph">
-<p>Once annotated, you can define the <code><a href="groovydoc/io/vertx/groovy/core/cli/CLI.html">CLI</a></code> and inject the values using:</p>
+<p>Once annotated, you can define the <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html">CLI</a></code> and inject the values using:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -232,7 +235,7 @@ CLIConfigurator.inject(commandLine, instance);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

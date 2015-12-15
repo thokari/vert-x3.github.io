@@ -581,7 +581,7 @@ project descriptor to access the Vert.x Core API:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -594,7 +594,7 @@ project descriptor to access the Vert.x Core API:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-core:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-core:3.2.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2021,16 +2021,16 @@ eventBus.send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></p
 </div>
 </div>
 <div class="sect3">
-<h4 id="_replying_to_messages">Replying to messages</h4>
+<h4 id="_acknowledging_messages_sending_replies">Acknowledging messages / sending replies</h4>
 <div class="paragraph">
-<p>Sometimes after you send a message you want to receive a reply from the recipient.
-This is known as the <strong>request-response pattern</strong>.</p>
+<p>When using <code><a href="../../apidocs/io/vertx/core/eventbus/EventBus.html#send-java.lang.String-java.lang.Object-">send</a></code> the event bus attempts to deliver the message to a
+<code><a href="../../apidocs/io/vertx/core/eventbus/MessageConsumer.html">MessageConsumer</a></code> registered with the event bus.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can specify a reply handler when sending the message.</p>
+<p>In some cases it&#8217;s useful for the sender to know when the consumer has received the message and "processed" it.</p>
 </div>
 <div class="paragraph">
-<p>When the receiver receives the message they can reply to it by calling <code><a href="../../apidocs/io/vertx/core/eventbus/Message.html#reply-java.lang.Object-">reply</a></code>.</p>
+<p>To acknowledge that the message has been processed the consumer can reply to the message by calling <code><a href="../../apidocs/io/vertx/core/eventbus/Message.html#reply-java.lang.Object-">reply</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When this happens it causes a reply to be sent back to the sender and the reply handler is invoked with the reply.</p>
@@ -2063,8 +2063,30 @@ consumer.handler(message -&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>The replies themselves can also be replied to so you can create a dialog between two different parties
-consisting of multiple rounds.</p>
+<p>The reply can contain a message body which can contain useful information.</p>
+</div>
+<div class="paragraph">
+<p>What the "processing" actually means is application defined and depends entirely on what the message consumer does
+and is not something that the Vert.x event bus itself knows or cares about.</p>
+</div>
+<div class="paragraph">
+<p>Some examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A simple message consumer which implements a service which returns the time of the day would acknowledge with a message
+containing the time of day in the reply body</p>
+</li>
+<li>
+<p>A message consumer which implements a persistent queue, might acknowledge with <code>true</code> if the message was successfully
+persisted in storage, or <code>false</code> if not.</p>
+</li>
+<li>
+<p>A message consumer which processes an order might acknowledge with <code>true</code> when the order has been successfully processed
+so it can be deleted from the database</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -2597,8 +2619,13 @@ server.listen(0, "localhost", res -&gt; {
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_connections">Getting notified of incoming connections</h3>
-<div class="paragraph">
-<p>To be notified when a connection is made you need to set a <code><a href="../../apidocs/io/vertx/core/net/NetServer.html#connectHandler-io.vertx.core.Handler-">connectHandler</a></code>:</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">To be notified when a connection is made you need to set a `link:../../apidocs/io/vertx/core/net/NetServer.html#connectHandler-(@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler)-[connectHandler]`:</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2660,9 +2687,14 @@ socket.write("some data", "UTF-16");</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_closed_handler">Closed handler</h3>
-<div class="paragraph">
-<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#closeHandler-io.vertx.core.Handler-">closeHandler</a></code>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">If you want to be notified when a socket is closed, you can set a `link:../../apidocs/io/vertx/core/net/NetSocket.html#closeHandler-(@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler)-[closeHandler]`
 on it:</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2906,8 +2938,9 @@ only apply to creating initial connections.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions();
-options.setReconnectAttempts(10).setReconnectInterval(500);
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
+    setReconnectAttempts(10).
+    setReconnectInterval(500);
 
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -3517,8 +3550,13 @@ server.listen(8080, "myhost.com", res -&gt; {
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_requests">Getting notified of incoming requests</h3>
-<div class="paragraph">
-<p>To be notified when a request arrives you need to set a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-io.vertx.core.Handler-">requestHandler</a></code>:</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">To be notified when a request arrives you need to set a `link:../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-(@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler)-[requestHandler]`:</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3749,9 +3787,14 @@ request.endHandler(v -&gt; {
 });</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>This is such a common case, that Vert.x provides a <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#bodyHandler-io.vertx.core.Handler-">bodyHandler</a></code> to do this
+<div class="dlist">
+<dl>
+<dt class="hdlist1">This is such a common case, that Vert.x provides a `link:../../apidocs/io/vertx/core/http/HttpServerRequest.html#bodyHandler-(@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler)-[bodyHandler]` to do this
 for you. The body handler is called once when all the body has been received:</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3811,7 +3854,7 @@ once the entire body has been read:</p>
 </div>
 <div class="paragraph">
 <p>To receive file uploads you tell Vert.x to expect a multi-part form and set an
-<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#uploadHandler-io.vertx.core.Handler-">uploadHandler</a></code> on the request.</p>
+<code>link:../../apidocs/io/vertx/core/http/HttpServerRequest.html#uploadHandler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[uploadHandler]</code> on the request.</p>
 </div>
 <div class="paragraph">
 <p>This handler will be called once for every
@@ -4768,9 +4811,14 @@ it is ok to send the rest of the body.</p>
 Sending large amounts of data if the request might not be accepted is a waste of bandwidth and ties up the server
 in reading data that it will just discard.</p>
 </div>
-<div class="paragraph">
-<p>Vert.x allows you to set a <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#continueHandler-io.vertx.core.Handler-">continueHandler</a></code> on the
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Vert.x allows you to set a `link:../../apidocs/io/vertx/core/http/HttpClientRequest.html#continueHandler-(@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler)-[continueHandler]` on the
 client request object</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
 <p>This will be called if the server sends back a <code>Status: 100 (Continue)</code> response to signify that it is ok to send
@@ -4986,9 +5034,14 @@ connection between HTTP servers and HTTP clients (typically browsers).</p>
 </div>
 <div class="sect4">
 <h5 id="_websocket_handler">WebSocket handler</h5>
-<div class="paragraph">
-<p>The first way involves providing a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-io.vertx.core.Handler-">websocketHandler</a></code>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">The first way involves providing a `link:../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-(@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler)-[websocketHandler]`
 on the server instance.</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
 <p>When a WebSocket connection is made to the server, the handler will be called, passing in an instance of
@@ -6487,35 +6540,35 @@ client.lookup("nonexisting.vert.xio", ar -&gt; {
 </div>
 <div class="paragraph">
 <p>In previous versions the streams.adoc package was manipulating <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html">Buffer</a></code>
-objects exclusively. From now, streams are not anymore coupled to buffers and work with any kind of objects.</p>
+objects exclusively. From now, streams are not coupled to buffers anymore and they work with any kind of objects.</p>
 </div>
 <div class="paragraph">
-<p>In Vert.x, calls to write item return immediately and writes are internally queued.</p>
+<p>In Vert.x, write calls return immediately, and writes are queued internally.</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s not hard to see that if you write to an object faster than it can actually write the data to
-its underlying resource then the write queue could grow without bound - eventually resulting in
-exhausting available memory.</p>
+its underlying resource, then the write queue can grow unbounded - eventually resulting in
+memory exhaustion.</p>
 </div>
 <div class="paragraph">
-<p>To solve this problem a simple flow control capability is provided by some objects in the Vert.x API.</p>
+<p>To solve this problem a simple flow control (<em>back-pressure</em>) capability is provided by some objects in the Vert.x API.</p>
 </div>
 <div class="paragraph">
-<p>Any flow control aware object that can be written-to implements <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code>,
-and any flow control object that can be read-from is said to implement <code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code>.</p>
+<p>Any flow control aware object that can be <em>written-to</em> implements <code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code>,
+while any flow control object that can be <em>read-from</em> is said to implement <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> and write the data to a <code>WriteStream</code>.</p>
+<p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> then write the data to a <code>WriteStream</code>.</p>
 </div>
 <div class="paragraph">
-<p>A very simple example would be reading from a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code> on a server and writing back to the
-same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>, but you can
-do this between any <code>ReadStream</code> and any <code>WriteStream</code>, including HTTP requests and response,
-async files, WebSockets, etc.</p>
+<p>A very simple example would be reading from a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code> then writing back to the
+same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>. Note that this works
+between any <code>ReadStream</code> and <code>WriteStream</code> compliant object, including HTTP requests, HTTP responses,
+async files I/O, WebSockets, etc.</p>
 </div>
 <div class="paragraph">
-<p>A naive way to do this would be to directly take the data that&#8217;s been read and immediately write it
-to the <code>NetSocket</code>, for example:</p>
+<p>A naive way to do this would be to directly take the data that has been read and immediately write it
+to the <code>NetSocket</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6531,10 +6584,10 @@ server.connectHandler(sock -&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>There&#8217;s a problem with the above example: If data is read from the socket faster than it can be
+<p>There is a problem with the example above: if data is read from the socket faster than it can be
 written back to the socket, it will build up in the write queue of the <code>NetSocket</code>, eventually
 running out of RAM. This might happen, for example if the client at the other end of the socket
-wasn&#8217;t reading very fast, effectively putting back-pressure on the connection.</p>
+wasn&#8217;t reading fast enough, effectively putting back-pressure on the connection.</p>
 </div>
 <div class="paragraph">
 <p>Since <code>NetSocket</code> implements <code>WriteStream</code>, we can check if the <code>WriteStream</code> is full before
@@ -6557,7 +6610,7 @@ server.connectHandler(sock -&gt; {
 </div>
 <div class="paragraph">
 <p>This example won&#8217;t run out of RAM but we&#8217;ll end up losing data if the write queue gets full. What we
-really want to do is pause the <code>NetSocket</code> when the write queue is full. Let&#8217;s do that:</p>
+really want to do is pause the <code>NetSocket</code> when the write queue is full:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6596,15 +6649,20 @@ server.connectHandler(sock -&gt; {
 }).listen();</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>And there we have it. The <code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-io.vertx.core.Handler-">drainHandler</a></code> event handler will
-get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> which
-allows it to read more data.</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">And there we have it. The `link:../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-(@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler)-[drainHandler]` event handler will
+get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> that
+allows more data to be read.</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
-<p>It&#8217;s very common to want to do this when writing Vert.x applications, so we provide a helper class
-called <code><a href="../../apidocs/io/vertx/core/streams/Pump.html">Pump</a></code> which does all this hard work for you. You just feed it the <code>ReadStream</code> and
-the <code>WriteStream</code> and it tell it to start:</p>
+<p>Wanting to do this is quite common while writing Vert.x applications, so we provide a helper class
+called <code><a href="../../apidocs/io/vertx/core/streams/Pump.html">Pump</a></code> that does all of this hard work for you.
+You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> then start it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6617,10 +6675,10 @@ server.connectHandler(sock -&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>Which does exactly the same thing as the more verbose example.</p>
+<p>This does exactly the same thing as the more verbose example.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s look at the methods on <code>ReadStream</code> and <code>WriteStream</code> in more detail:</p>
+<p>Let&#8217;s now look at the methods on <code>ReadStream</code> and <code>WriteStream</code> in more detail:</p>
 </div>
 <div class="sect2">
 <h3 id="_readstream">ReadStream</h3>
@@ -6638,7 +6696,7 @@ server.connectHandler(sock -&gt; {
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html#handler-io.vertx.core.Handler-">handler</a></code>:
+<p><code>link:../../apidocs/io/vertx/core/streams/ReadStream.html#handler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[handler]</code>:
 set a handler which will receive items from the ReadStream.</p>
 </li>
 <li>
@@ -6654,7 +6712,7 @@ resume the handler. The handler will be called if any item arrives.</p>
 Will be called if an exception occurs on the ReadStream.</p>
 </li>
 <li>
-<p><code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html#endHandler-io.vertx.core.Handler-">endHandler</a></code>:
+<p><code>link:../../apidocs/io/vertx/core/streams/ReadStream.html#endHandler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[endHandler]</code>:
 Will be called when end of stream is reached. This might be when EOF is reached if the ReadStream represents a file,
 or when end of request is reached if it&#8217;s an HTTP request, or when the connection is closed if it&#8217;s a TCP socket.</p>
 </li>
@@ -6694,7 +6752,7 @@ returns <code>true</code> if the write queue is considered full.</p>
 Will be called if an exception occurs on the <code>WriteStream</code>.</p>
 </li>
 <li>
-<p><code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-io.vertx.core.Handler-">drainHandler</a></code>:
+<p><code>link:../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[drainHandler]</code>:
 The handler will be called if the <code>WriteStream</code> is considered no longer full.</p>
 </li>
 </ul>
@@ -6725,7 +6783,8 @@ This has the same meaning as <code><a href="../../apidocs/io/vertx/core/streams/
 <p>A pump can be started and stopped multiple times.</p>
 </div>
 <div class="paragraph">
-<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.</p>
+<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.
+&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;</p>
 </div>
 </div>
 </div>
@@ -6834,51 +6893,56 @@ or Eclipse Equinox. The bundle exports <code>io.vertx.core*</code>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Jackson Annotation [2.5.0,3)</p>
+<p>Jackson Annotation [2.6.0,3)</p>
 </li>
 <li>
-<p>Jackson Core [2.5.0,3)</p>
+<p>Jackson Core [2.6.2,3)</p>
 </li>
 <li>
-<p>Jackson Databind [2.5.0,3)</p>
+<p>Jackson Databind [2.6.2,3)</p>
 </li>
 <li>
-<p>Netty Buffer [4.0.27,5)</p>
+<p>Netty Buffer [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec [4.0.27,5)</p>
+<p>Netty Codec [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Socks [4.0.27,5)</p>
+<p>Netty Codec/Socks [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Common [4.0.27,5)</p>
+<p>Netty Codec/Common [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Handler [4.0.27,5)</p>
+<p>Netty Codec/Handler [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Transport [4.0.27,5)</p>
+<p>Netty Codec/Transport [4.0.31,5)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Here is a working deployment on Apache Felix 4.6.1:</p>
+<p>Here is a working deployment on Apache Felix 5.2.0:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>  14|Active     |    1|Jackson-annotations (2.5.3)
-  15|Active     |    1|Jackson-core (2.5.3)
-  16|Active     |    1|jackson-databind (2.5.3)
-  17|Active     |    1|Netty/Buffer (4.0.27.Final)
-  18|Active     |    1|Netty/Codec (4.0.27.Final)
-  19|Active     |    1|Netty/Codec/HTTP (4.0.27.Final)
-  20|Active     |    1|Netty/Codec/Socks (4.0.27.Final)
-  21|Active     |    1|Netty/Common (4.0.27.Final)
-  22|Active     |    1|Netty/Handler (4.0.27.Final)
-  23|Active     |    1|Netty/Transport (4.0.27.Final)
-  25|Active     |    1|Vert.x Core (3.0.0.SNAPSHOT)</code></pre>
+<pre class="prettyprint highlight"><code>14|Active     |    1|Jackson-annotations (2.6.0)
+15|Active     |    1|Jackson-core (2.6.2)
+16|Active     |    1|jackson-databind (2.6.2)
+18|Active     |    1|Netty/Buffer (4.0.31.Final)
+19|Active     |    1|Netty/Codec (4.0.31.Final)
+20|Active     |    1|Netty/Codec/HTTP (4.0.31.Final)
+21|Active     |    1|Netty/Codec/Socks (4.0.31.Final)
+22|Active     |    1|Netty/Common (4.0.31.Final)
+23|Active     |    1|Netty/Handler (4.0.31.Final)
+24|Active     |    1|Netty/Transport (4.0.31.Final)
+25|Active     |    1|Netty/Transport/SCTP (4.0.31.Final)
+26|Active     |    1|Vert.x Core (3.1.0)</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>On Equinox, you may want to disable the <code>ContextFinder</code> with the following framework property:
+<code>eclipse.bundle.setTCCL=false</code></p>
 </div>
 </div>
 </div>
@@ -7305,6 +7369,24 @@ created every time.</p>
 restart. So you can hook your build tool if it updates some runtime artifacts. For instance, you can launch <code>gulp</code>
 or <code>grunt</code> to update your resources.</p>
 </div>
+<div class="paragraph">
+<p>The redeploy feature also supports the following settings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>redeploy-scan-period</code> : the file system check period (in milliseconds), 250ms by default</p>
+</li>
+<li>
+<p><code>redeploy-grace-period</code> : the amount of time (in milliseconds) to wait between 2 re-deployments, 1000ms by default</p>
+</li>
+<li>
+<p><code>redeploy-termination-period</code> : the amount of time to wait after having stopped the application (before
+launching user command). This is useful on Windows, where the process is not killed immediately. The time is given
+in milliseconds. 0 ms by default.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -7387,7 +7469,7 @@ Log4J or SLF4J.</p>
 </div>
 <div class="paragraph">
 <p>To do this you should set a system property called <code>vertx.logger-delegate-factory-class-name</code> with the name of a Java
-class which implements the interface <code><a href="../../apidocs/io/vertx/core/logging/LoggerFactory.html">LoggerFactory</a></code>. We provide pre-built implementations for
+class which implements the interface <code><a href="../../apidocs/io/vertx/core/spi/logging/LogDelegateFactory.html">LogDelegateFactory</a></code>. We provide pre-built implementations for
 Log4J and SLF4J with the class names <code>io.vertx.core.logging.Log4jLogDelegateFactory</code> and <code>io.vertx.core.logging.SLF4JLogDelegateFactory</code>
 respectively. If you want to use these implementations you should also make sure the relevant Log4J or SLF4J jars
 are on your classpath.</p>
@@ -7813,6 +7895,19 @@ the command line:</p>
 not listed in the usage, but can still be used in the user command line (for power-users).</p>
 </div>
 <div class="paragraph">
+<p>If the option value is contrained to a fixed set, you can set the different acceptable choices:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("some-name")
+    .addOption(new Option()
+        .setLongName("color")
+        .setDefaultValue("green")
+        .addChoice("blue").addChoice("red").addChoice("green")
+        .setDescription("a color"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Options can also be instantiated from their JSON form.</p>
 </div>
 </div>
@@ -7823,7 +7918,7 @@ not listed in the usage, but can still be used in the user command line (for pow
 <code>java com.acme.Foo</code>, <code>com.acme.Foo</code> is an argument.</p>
 </div>
 <div class="paragraph">
-<p>Arguments do not have a name, there are identified using a mandatory 0-based index. The first parameter has the
+<p>Arguments do not have a name, there are identified using a 0-based index. The first parameter has the
 index <code>0</code>:</p>
 </div>
 <div class="listingblock">
@@ -7835,6 +7930,22 @@ index <code>0</code>:</p>
         .setArgName("arg1"))
     .addArgument(new Argument()
         .setIndex(1)
+        .setDescription("the second argument")
+        .setArgName("arg2"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t set the argument indexes, it computes it automatically by using the declaration order.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("some-name")
+    // will have the index 0
+    .addArgument(new Argument()
+        .setDescription("the first argument")
+        .setArgName("arg1"))
+    // will have the index 1
+    .addArgument(new Argument()
         .setDescription("the second argument")
         .setArgName("arg2"));</code></pre>
 </div>
@@ -7855,6 +7966,10 @@ index <code>0</code>:</p>
 </li>
 <li>
 <p>have a default value using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setDefaultValue-java.lang.String-">setDefaultValue</a></code></p>
+</li>
+<li>
+<p>receive several values using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setMultiValued-boolean-">setMultiValued</a></code> - only the last argument
+can be multi-valued.</p>
 </li>
 </ul>
 </div>
@@ -7924,6 +8039,10 @@ and arguments have been set as well as the number of values received by each opt
 validation by passing <code>false</code> as second parameter of <code><a href="../../apidocs/io/vertx/core/cli/CLI.html#parse-java.util.List-boolean-">parse</a></code>.
 This is useful if you want to check an argument or option is present even if the parsed command line is invalid.</p>
 </div>
+<div class="paragraph">
+<p>You can check whether or not the
+<code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html">CommandLine</a></code> is valid using <code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html#isValid--">isValid</a></code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_query_interrogation_stage">Query / Interrogation Stage</h3>
@@ -7938,6 +8057,28 @@ method:</p>
 String opt = commandLine.getOptionValue("my-option");
 boolean flag = commandLine.isFlagEnabled("my-flag");
 String arg0 = commandLine.getArgumentValue(0);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One of your option can have been marked as "help". If a user command line enabled a "help" option, the validation
+won&#8217;t failed, but give you the opportunity to check if the user asks for help:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("test")
+    .addOption(
+        new Option().setLongName("help").setShortName("h").setFlag(true).setHelp(true))
+    .addOption(
+        new Option().setLongName("mandatory").setRequired(true));
+
+CommandLine line = cli.parse(Collections.singletonList("-h"));
+
+// The parsing does not fail and let you do:
+if (!line.isValid() &amp;&amp; line.isAskingForHelp()) {
+  StringBuilder builder = new StringBuilder();
+  cli.usage(builder);
+  stream.print(builder.toString());
+}</code></pre>
 </div>
 </div>
 </div>
@@ -8021,6 +8162,9 @@ this converter:</p>
 </div>
 <div class="paragraph">
 <p>For booleans, the boolean values are evaluated to <code>true</code>: <code>on</code>, <code>yes</code>, <code>1</code>, <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>If one of your option as an <code>enum</code> as type, it computes the set of choices automatically.</p>
 </div>
 </div>
 <div class="sect2">
@@ -8131,6 +8275,29 @@ java -jar my-fat-jar.jar hello vert.x</code></pre>
 <p>You can also create a sub-class of <code><a href="../../apidocs/io/vertx/core/Launcher.html">Launcher</a></code> to start your application. The class has been
 designed to be easily extensible.</p>
 </div>
+<div class="paragraph">
+<p>A <code><a href="../../apidocs/io/vertx/core/Launcher.html">Launcher</a></code> sub-class can:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>customize the vert.x configuration in <code><a href="../../apidocs/io/vertx/core/Launcher.html#beforeStartingVertx-io.vertx.core.VertxOptions-">beforeStartingVertx</a></code></p>
+</li>
+<li>
+<p>retrieve the vert.x instance created by the "run" or "bare" command by
+overriding <code><a href="../../apidocs/io/vertx/core/Launcher.html#afterStartingVertx-io.vertx.core.Vertx-">afterStartingVertx</a></code></p>
+</li>
+<li>
+<p>configure the default verticle and command with
+<code><a href="../../apidocs/io/vertx/core/impl/launcher/VertxCommandLauncher.html#getMainVerticle--">getMainVerticle</a></code> and
+<code><a href="../../apidocs/io/vertx/core/impl/launcher/VertxCommandLauncher.html#getDefaultCommand--">getDefaultCommand</a></code></p>
+</li>
+<li>
+<p>add / remove commands using <code><a href="../../apidocs/io/vertx/core/impl/launcher/VertxCommandLauncher.html#register-java.lang.Class-">register</a></code>
+and <code><a href="../../apidocs/io/vertx/core/impl/launcher/VertxCommandLauncher.html#unregister-java.lang.String-">unregister</a></code></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -8141,7 +8308,7 @@ designed to be easily extensible.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

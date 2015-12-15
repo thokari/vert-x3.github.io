@@ -179,12 +179,12 @@ cli = Vertx::CLI.create("copy").set_summary("A command line interface to copy fi
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see, you can create a new <code><a href="yardoc/Vertx/CLI.html">CLI</a></code> using
-<code><a href="yardoc/Vertx/CLI.html#create-class_method">CLI.create</a></code>. The passed string is the name of the CLI. Once created you
+<p>As you can see, you can create a new <code><a href="../../yardoc/Vertx/CLI.html">CLI</a></code> using
+<code><a href="../../yardoc/Vertx/CLI.html#create-class_method">CLI.create</a></code>. The passed string is the name of the CLI. Once created you
 can set the summary and description. The summary is intended to be short (one line), while the description can
 contain more details. Each option and argument are also added on the <code>CLI</code> object using the
-<code><a href="yardoc/Vertx/CLI.html#add_argument-instance_method">addArgument</a></code> and
-<code><a href="yardoc/Vertx/CLI.html#add_option-instance_method">addOption</a></code> methods.</p>
+<code><a href="../../yardoc/Vertx/CLI.html#add_argument-instance_method">addArgument</a></code> and
+<code><a href="../../yardoc/Vertx/CLI.html#add_option-instance_method">addOption</a></code> methods.</p>
 </div>
 <div class="sect3">
 <h4 id="_options">Options</h4>
@@ -249,6 +249,24 @@ cli = Vertx::CLI.create("some-name").add_option({
 not listed in the usage, but can still be used in the user command line (for power-users).</p>
 </div>
 <div class="paragraph">
+<p>If the option value is contrained to a fixed set, you can set the different acceptable choices:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/cli'
+cli = Vertx::CLI.create("some-name").add_option({
+  'longName' =&gt; "color",
+  'defaultValue' =&gt; "green",
+  'choices' =&gt; [
+    "blue",
+    "red",
+    "green"
+  ],
+  'description' =&gt; "a color"
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Options can also be instantiated from their JSON form.</p>
 </div>
 </div>
@@ -259,7 +277,7 @@ not listed in the usage, but can still be used in the user command line (for pow
 <code>java com.acme.Foo</code>, <code>com.acme.Foo</code> is an argument.</p>
 </div>
 <div class="paragraph">
-<p>Arguments do not have a name, there are identified using a mandatory 0-based index. The first parameter has the
+<p>Arguments do not have a name, there are identified using a 0-based index. The first parameter has the
 index <code>0</code>:</p>
 </div>
 <div class="listingblock">
@@ -271,6 +289,21 @@ cli = Vertx::CLI.create("some-name").add_argument({
   'argName' =&gt; "arg1"
 }).add_argument({
   'index' =&gt; 1,
+  'description' =&gt; "the second argument",
+  'argName' =&gt; "arg2"
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t set the argument indexes, it computes it automatically by using the declaration order.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/cli'
+cli = Vertx::CLI.create("some-name").add_argument({
+  'description' =&gt; "the first argument",
+  'argName' =&gt; "arg1"
+}).add_argument({
   'description' =&gt; "the second argument",
   'argName' =&gt; "arg2"
 })</code></pre>
@@ -293,6 +326,10 @@ cli = Vertx::CLI.create("some-name").add_argument({
 <li>
 <p>have a default value using <code><a href="../dataobjects.html#Argument#set_default_value-instance_method">defaultValue</a></code></p>
 </li>
+<li>
+<p>receive several values using <code><a href="../dataobjects.html#Argument#set_multi_valued-instance_method">multiValued</a></code> - only the last argument
+can be multi-valued.</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -302,7 +339,7 @@ cli = Vertx::CLI.create("some-name").add_argument({
 <div class="sect3">
 <h4 id="_usage_generation">Usage generation</h4>
 <div class="paragraph">
-<p>Once your <code><a href="yardoc/Vertx/CLI.html">CLI</a></code> instance is configured, you can generate the <em>usage</em> message:</p>
+<p>Once your <code><a href="../../yardoc/Vertx/CLI.html">CLI</a></code> instance is configured, you can generate the <em>usage</em> message:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -346,7 +383,7 @@ A command line interface to copy files.
 <div class="sect2">
 <h3 id="_parsing_stage">Parsing Stage</h3>
 <div class="paragraph">
-<p>Once your <code><a href="yardoc/Vertx/CLI.html">CLI</a></code> instance is configured, you can parse the user command line to evaluate
+<p>Once your <code><a href="../../yardoc/Vertx/CLI.html">CLI</a></code> instance is configured, you can parse the user command line to evaluate
 each option and argument:</p>
 </div>
 <div class="listingblock">
@@ -355,18 +392,22 @@ each option and argument:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="yardoc/Vertx/CLI.html#parse-instance_method">parse</a></code> method returns a <code><a href="yardoc/Vertx/CommandLine.html">CommandLine</a></code>
+<p>The <code><a href="../../yardoc/Vertx/CLI.html#parse-instance_method">parse</a></code> method returns a <code><a href="../../yardoc/Vertx/CommandLine.html">CommandLine</a></code>
 object containing the values. By default, it validates the user command line and checks that each mandatory options
 and arguments have been set as well as the number of values received by each option. You can disable the
-validation by passing <code>false</code> as second parameter of <code><a href="yardoc/Vertx/CLI.html#parse-instance_method">parse</a></code>.
+validation by passing <code>false</code> as second parameter of <code><a href="../../yardoc/Vertx/CLI.html#parse-instance_method">parse</a></code>.
 This is useful if you want to check an argument or option is present even if the parsed command line is invalid.</p>
+</div>
+<div class="paragraph">
+<p>You can check whether or not the
+<code><a href="../../yardoc/Vertx/CommandLine.html">CommandLine</a></code> is valid using <code><a href="../../yardoc/Vertx/CommandLine.html#is_valid-instance_method">isValid</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_query_interrogation_stage">Query / Interrogation Stage</h3>
 <div class="paragraph">
 <p>Once parsed, you can retrieve the values of the options and arguments from the
-<code><a href="yardoc/Vertx/CommandLine.html">CommandLine</a></code> object returned by the <code><a href="yardoc/Vertx/CLI.html#parse-instance_method">parse</a></code>
+<code><a href="../../yardoc/Vertx/CommandLine.html">CommandLine</a></code> object returned by the <code><a href="../../yardoc/Vertx/CLI.html#parse-instance_method">parse</a></code>
 method:</p>
 </div>
 <div class="listingblock">
@@ -377,6 +418,33 @@ flag = commandLine.flag_enabled?("my-flag")
 arg0 = commandLine.get_argument_value(0)</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>One of your option can have been marked as "help". If a user command line enabled a "help" option, the validation
+won&#8217;t failed, but give you the opportunity to check if the user asks for help:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/cli'
+cli = Vertx::CLI.create("test").add_option({
+  'longName' =&gt; "help",
+  'shortName' =&gt; "h",
+  'flag' =&gt; true,
+  'help' =&gt; true
+}).add_option({
+  'longName' =&gt; "mandatory",
+  'required' =&gt; true
+})
+
+line = cli.parse(Java::JavaUtil::Collections.singleton_list("-h"))
+
+# The parsing does not fail and let you do:
+if (!line.valid?() &amp;&amp; line.asking_for_help?())
+  builder = Java::JavaLang::StringBuilder.new()
+  cli.usage(builder)
+  stream.print(builder.to_string())
+end</code></pre>
+</div>
+</div>
 </div>
 
         
@@ -385,7 +453,7 @@ arg0 = commandLine.get_argument_value(0)</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

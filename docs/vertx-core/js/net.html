@@ -180,7 +180,7 @@ var server = vertx.createNetServer(options);</code></pre>
 <div class="sect2">
 <h3 id="_start_the_server_listening">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="jsdoc/net_server-NetServer.html#listen">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../jsdoc/net_server-NetServer.html#listen">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -232,7 +232,7 @@ server.listen(1234, "localhost", function (res, res_err) {
 <p>If <code>0</code> is used as the listening port, the server will find an unused random port to listen on.</p>
 </div>
 <div class="paragraph">
-<p>To find out the real port the server is listening on you can call <code><a href="jsdoc/net_server-NetServer.html#actualPort">actualPort</a></code>.</p>
+<p>To find out the real port the server is listening on you can call <code><a href="../../jsdoc/net_server-NetServer.html#actualPort">actualPort</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -250,7 +250,7 @@ server.listen(0, "localhost", function (res, res_err) {
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_connections">Getting notified of incoming connections</h3>
 <div class="paragraph">
-<p>To be notified when a connection is made you need to set a <code><a href="jsdoc/net_server-NetServer.html#connectHandler">connectHandler</a></code>:</p>
+<p>To be notified when a connection is made you need to set a <code><a href="../../jsdoc/net_server-NetServer.html#connectHandler">connectHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -261,7 +261,7 @@ server.connectHandler(function (socket) {
 </div>
 </div>
 <div class="paragraph">
-<p>When a connection is made the handler will be called with an instance of <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code>.</p>
+<p>When a connection is made the handler will be called with an instance of <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This is a socket-like interface to the actual connection, and allows you to read and write data as well as do various
@@ -271,11 +271,11 @@ other things like close the socket.</p>
 <div class="sect2">
 <h3 id="_reading_data_from_the_socket">Reading data from the socket</h3>
 <div class="paragraph">
-<p>To read data from the socket you set the <code><a href="jsdoc/net_socket-NetSocket.html#handler">handler</a></code> on the
+<p>To read data from the socket you set the <code><a href="../../jsdoc/net_socket-NetSocket.html#handler">handler</a></code> on the
 socket.</p>
 </div>
 <div class="paragraph">
-<p>This handler will be called with an instance of <code><a href="jsdoc/buffer-Buffer.html">Buffer</a></code> every time data is received on
+<p>This handler will be called with an instance of <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code> every time data is received on
 the socket.</p>
 </div>
 <div class="listingblock">
@@ -292,7 +292,7 @@ server.connectHandler(function (socket) {
 <div class="sect2">
 <h3 id="_writing_data_to_a_socket">Writing data to a socket</h3>
 <div class="paragraph">
-<p>You write to a socket using one of <code><a href="jsdoc/net_socket-NetSocket.html#write">write</a></code>.</p>
+<p>You write to a socket using one of <code><a href="../../jsdoc/net_socket-NetSocket.html#write">write</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -316,7 +316,7 @@ socket.write("some data", "UTF-16");</code></pre>
 <div class="sect2">
 <h3 id="_closed_handler">Closed handler</h3>
 <div class="paragraph">
-<p>If you want to be notified when a socket is closed, you can set a <code><a href="jsdoc/net_socket-NetSocket.html#closeHandler">closeHandler</a></code>
+<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../jsdoc/net_socket-NetSocket.html#closeHandler">closeHandler</a></code>
 on it:</p>
 </div>
 <div class="listingblock">
@@ -330,7 +330,7 @@ on it:</p>
 <div class="sect2">
 <h3 id="_handling_exceptions">Handling exceptions</h3>
 <div class="paragraph">
-<p>You can set an <code><a href="jsdoc/net_socket-NetSocket.html#exceptionHandler">exceptionHandler</a></code> to receive any
+<p>You can set an <code><a href="../../jsdoc/net_socket-NetSocket.html#exceptionHandler">exceptionHandler</a></code> to receive any
 exceptions that happen on the socket.</p>
 </div>
 </div>
@@ -345,23 +345,23 @@ it writes them to itself.</p>
 different Vert.x instance by sending the buffer to the address of that handler.</p>
 </div>
 <div class="paragraph">
-<p>The address of the handler is given by <code><a href="jsdoc/net_socket-NetSocket.html#writeHandlerID">writeHandlerID</a></code></p>
+<p>The address of the handler is given by <code><a href="../../jsdoc/net_socket-NetSocket.html#writeHandlerID">writeHandlerID</a></code></p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_local_and_remote_addresses">Local and remote addresses</h3>
 <div class="paragraph">
-<p>The local address of a <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="jsdoc/net_socket-NetSocket.html#localAddress">localAddress</a></code>.</p>
+<p>The local address of a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="../../jsdoc/net_socket-NetSocket.html#localAddress">localAddress</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code>
-can be retrieved using <code><a href="jsdoc/net_socket-NetSocket.html#remoteAddress">remoteAddress</a></code>.</p>
+<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>
+can be retrieved using <code><a href="../../jsdoc/net_socket-NetSocket.html#remoteAddress">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_sending_files">Sending files</h3>
 <div class="paragraph">
-<p>Files can be written to the socket directly using <code><a href="jsdoc/net_socket-NetSocket.html#sendFile">sendFile</a></code>. This can be a very
+<p>Files can be written to the socket directly using <code><a href="../../jsdoc/net_socket-NetSocket.html#sendFile">sendFile</a></code>. This can be a very
 efficient way to send files, as it can be handled by the OS kernel directly where supported by the operating system.</p>
 </div>
 <div class="listingblock">
@@ -373,8 +373,8 @@ efficient way to send files, as it can be handled by the OS kernel directly wher
 <div class="sect2">
 <h3 id="_streaming_sockets">Streaming sockets</h3>
 <div class="paragraph">
-<p>Instances of <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> are also <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and
-<code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
+<p>Instances of <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> are also <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and
+<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
 read and write streams.</p>
 </div>
 <div class="paragraph">
@@ -384,7 +384,7 @@ read and write streams.</p>
 <div class="sect2">
 <h3 id="_upgrading_connections_to_ssl_tls">Upgrading connections to SSL/TLS</h3>
 <div class="paragraph">
-<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="jsdoc/net_socket-NetSocket.html#upgradeToSsl">upgradeToSsl</a></code>.</p>
+<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="../../jsdoc/net_socket-NetSocket.html#upgradeToSsl">upgradeToSsl</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The server or client must be configured for SSL/TLS for this to work correctly. Please see the <a href="#ssl">chapter on SSL/TLS</a>
@@ -394,7 +394,7 @@ for more information.</p>
 <div class="sect2">
 <h3 id="_closing_a_tcp_server">Closing a TCP Server</h3>
 <div class="paragraph">
-<p>Call <code><a href="jsdoc/net_server-NetServer.html#close">close</a></code> to close the server. Closing the server closes any open connections
+<p>Call <code><a href="../../jsdoc/net_server-NetServer.html#close">close</a></code> to close the server. Closing the server closes any open connections
 and releases all server resources.</p>
 </div>
 <div class="paragraph">
@@ -526,9 +526,9 @@ var client = vertx.createNetClient(options);</code></pre>
 <div class="sect2">
 <h3 id="_making_connections">Making connections</h3>
 <div class="paragraph">
-<p>To make a connection to a server you use <code><a href="jsdoc/net_client-NetClient.html#connect">connect</a></code>,
+<p>To make a connection to a server you use <code><a href="../../jsdoc/net_client-NetClient.html#connect">connect</a></code>,
 specifying the port and host of the server and a handler that will be called with a result containing the
-<code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
+<code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -570,8 +570,9 @@ only apply to creating initial connections.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "reconnectAttempts" : 10,
+  "reconnectInterval" : 500
 };
-options.reconnectAttempts = 10.reconnectInterval = 500;
 
 var client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1149,7 +1150,7 @@ var server = vertx.createNetServer(options);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

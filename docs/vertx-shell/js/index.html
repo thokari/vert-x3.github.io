@@ -86,24 +86,36 @@
           <ul class="sectlevel1">
 <li><a href="#_using_vert_x_shell">Using Vert.x Shell</a>
 <ul class="sectlevel2">
-<li><a href="#_deployed_service">Deployed service</a></li>
+<li><a href="#_shell_service">Shell service</a></li>
 <li><a href="#_programmatic_service">Programmatic service</a></li>
 </ul>
 </li>
-<li><a href="#_telnet_configuration">Telnet configuration</a></li>
-<li><a href="#_ssh_configuration">SSH configuration</a></li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_telnet_term_configuration">Telnet term configuration</a></li>
+<li><a href="#_ssh_term_configuration">SSH term configuration</a></li>
+<li><a href="#_http_term_configuration">HTTP term configuration</a></li>
+<li><a href="#_keymap_configuration">Keymap configuration</a></li>
 <li><a href="#_base_commands">Base commands</a></li>
 <li><a href="#_extending_vert_x_shell">Extending Vert.x Shell</a>
 <ul class="sectlevel2">
 <li><a href="#_command_arguments">Command arguments</a></li>
-<li><a href="#_terminal_size">Terminal size</a></li>
+<li><a href="#_terminal_usage">Terminal usage</a></li>
 <li><a href="#_shell_session">Shell session</a></li>
-<li><a href="#_process_i_o">Process I/O</a></li>
 <li><a href="#_process_termination">Process termination</a></li>
 <li><a href="#_process_events">Process events</a></li>
 <li><a href="#_command_completion">Command completion</a></li>
 </ul>
 </li>
+<li><a href="#_shell_server">Shell server</a></li>
+<li><a href="#_terminal_servers">Terminal servers</a>
+<ul class="sectlevel2">
+<li><a href="#_ssh_term">SSH term</a></li>
+<li><a href="#_telnet_term">Telnet term</a></li>
+<li><a href="#_http_term">HTTP term</a></li>
+</ul>
+</li>
+<li><a href="#_command_discovery">Command discovery</a></li>
+<li><a href="#_command_pack">Command pack</a></li>
 </ul>
         </div>
       </div>
@@ -113,24 +125,36 @@
           <ul class="sectlevel1">
 <li><a href="#_using_vert_x_shell">Using Vert.x Shell</a>
 <ul class="sectlevel2">
-<li><a href="#_deployed_service">Deployed service</a></li>
+<li><a href="#_shell_service">Shell service</a></li>
 <li><a href="#_programmatic_service">Programmatic service</a></li>
 </ul>
 </li>
-<li><a href="#_telnet_configuration">Telnet configuration</a></li>
-<li><a href="#_ssh_configuration">SSH configuration</a></li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_telnet_term_configuration">Telnet term configuration</a></li>
+<li><a href="#_ssh_term_configuration">SSH term configuration</a></li>
+<li><a href="#_http_term_configuration">HTTP term configuration</a></li>
+<li><a href="#_keymap_configuration">Keymap configuration</a></li>
 <li><a href="#_base_commands">Base commands</a></li>
 <li><a href="#_extending_vert_x_shell">Extending Vert.x Shell</a>
 <ul class="sectlevel2">
 <li><a href="#_command_arguments">Command arguments</a></li>
-<li><a href="#_terminal_size">Terminal size</a></li>
+<li><a href="#_terminal_usage">Terminal usage</a></li>
 <li><a href="#_shell_session">Shell session</a></li>
-<li><a href="#_process_i_o">Process I/O</a></li>
 <li><a href="#_process_termination">Process termination</a></li>
 <li><a href="#_process_events">Process events</a></li>
 <li><a href="#_command_completion">Command completion</a></li>
 </ul>
 </li>
+<li><a href="#_shell_server">Shell server</a></li>
+<li><a href="#_terminal_servers">Terminal servers</a>
+<ul class="sectlevel2">
+<li><a href="#_ssh_term">SSH term</a></li>
+<li><a href="#_telnet_term">Telnet term</a></li>
+<li><a href="#_http_term">HTTP term</a></li>
+</ul>
+</li>
+<li><a href="#_command_discovery">Command discovery</a></li>
+<li><a href="#_command_pack">Command pack</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -151,18 +175,18 @@ terminals using different protocols.</p>
 <h2 id="_using_vert_x_shell">Using Vert.x Shell</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Vert.x Shell is a Vert.x Service and can be started programmatically via the <code><a href="jsdoc/shell_service-ShellService.html">ShellService</a></code>
+<p>Vert.x Shell is a Vert.x Service and can be started programmatically via the <code><a href="../../jsdoc/shell_service-ShellService.html">ShellService</a></code>
 or deployed as a service.</p>
 </div>
 <div class="sect2">
-<h3 id="_deployed_service">Deployed service</h3>
+<h3 id="_shell_service">Shell service</h3>
 <div class="paragraph">
 <p>The shell can be started as a service directly either from the command line or as a the Vert.x deployment:</p>
 </div>
 <div class="listingblock">
 <div class="title">Starting a shell service available via Telnet</div>
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell:3.2.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -176,7 +200,20 @@ keytool -genkey -keyalg RSA -keystore ssh.jks -keysize 2048 -validity 1095 -dnam
 # create the auth config
 echo user.admin=password &gt; auth.properties
 # start the shell
-vertx run -conf '{"sshOptions":{"port":4000,"keyPairOptions":{"path":"ssh.jks","password":"secret"},"shiroAuthOptions":{"config":{"properties_path":"file:auth.properties"}}}}' maven:io.vertx:vertx-shell:3.1.0</code></pre>
+vertx run -conf '{"sshOptions":{"port":4000,"keyPairOptions":{"path":"ssh.jks","password":"secret"},"authOptions":{"provider":"shiro","config":{"properties_path":"file:auth.properties"}}}}' maven:io.vertx:vertx-shell:3.2.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="title">Starting a shell service available via HTTP</div>
+<div class="content">
+<pre class="prettyprint highlight"><code># create a certificate for the HTTP server
+keytool -genkey -keyalg RSA -keystore keystore.jks -keysize 2048 -validity 1095 -dname CN=localhost -keypass secret -storepass secret
+# create the auth config
+echo user.admin=password &gt; auth.properties
+vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path":"keystore.jks","password":"secret"},"authOptions":{"provider":""shiro,"config":{"properties_path":"file:auth.properties"}}}}' maven:io.vertx:vertx-shell:3.2.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -205,11 +242,40 @@ vertx run -conf '{"sshOptions":{"port":4000,"keyPairOptions":{"path":"ssh.jks","
       "host" : "localhost",
       "port" : 5000,
       "keyPairOptions" : {
-        "path" : "server-keystore.jks",
+        "path" : "src/test/resources/ssh.jks",
         "password" : "wibble"
       },
-      "config" : {
-        "properties_path" : "file:/path/to/my/auth.properties"
+      "authOptions" : {
+        "provider" : "shiro",
+        "config" : {
+          "properties_path" : "file:/path/to/my/auth.properties"
+        }
+      }
+    }
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", {
+  "config" : {
+    "httpOptions" : {
+      "host" : "localhost",
+      "port" : 8080,
+      "ssl" : true,
+      "keyPairOptions" : {
+        "path" : "src/test/resources/server-keystore.jks",
+        "password" : "wibble"
+      },
+      "authOptions" : {
+        "provider" : "shiro",
+        "config" : {
+          "properties_path" : "file:/path/to/my/auth.properties"
+        }
       }
     }
   }
@@ -224,7 +290,7 @@ vertx run -conf '{"sshOptions":{"port":4000,"keyPairOptions":{"path":"ssh.jks","
 </td>
 <td class="content">
 when Vert.x Shell is already on your classpath you can use <code>service:io.vertx.ext.shell</code> instead
-or <code>maven:io.vertx:vertx-shell:3.1.0</code>
+or <code>maven:io.vertx:vertx-shell:3.2.0</code>
 </td>
 </tr>
 </table>
@@ -233,7 +299,7 @@ or <code>maven:io.vertx:vertx-shell:3.1.0</code>
 <div class="sect2">
 <h3 id="_programmatic_service">Programmatic service</h3>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/shell_service-ShellService.html">ShellService</a></code> takes care of starting an instance of Vert.x Shell.</p>
+<p>The <code><a href="../../jsdoc/shell_service-ShellService.html">ShellService</a></code> takes care of starting an instance of Vert.x Shell.</p>
 </div>
 <div class="paragraph">
 <p>Starting a shell service available via SSH:</p>
@@ -249,7 +315,7 @@ var service = ShellService.create(vertx, {
       "path" : "server-keystore.jks",
       "password" : "wibble"
     },
-    "shiroAuthOptions" : {
+    "authOptions" : {
       "type" : 'PROPERTIES',
       "config" : {
         "properties_path" : "file:/path/to/my/auth.properties"
@@ -276,7 +342,7 @@ service.start();</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../dataobjects.html#TelnetOptions">TelnetOptions</a></code> extends the Vert.x Core <code>NetServerOptions</code> as the Telnet server
+<p>The <code><a href="../dataobjects.html#TelnetTermOptions">TelnetTermOptions</a></code> extends the Vert.x Core <code>NetServerOptions</code> as the Telnet server
 implementation is based on a <code>NetServer</code>.</p>
 </div>
 <div class="admonitionblock caution">
@@ -291,32 +357,102 @@ Telnet does not provide any authentication nor encryption at all.
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Starting a shell service available via HTTP:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShellService = require("vertx-shell-js/shell_service");
+var service = ShellService.create(vertx, {
+  "httpOptions" : {
+    "host" : "localhost",
+    "port" : 8080
+  }
+});
+service.start();</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_telnet_configuration">Telnet configuration</h2>
+<h2 id="_authentication">Authentication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The telnet connector is configured by <code><a href="../dataobjects.html#ShellServiceOptions#setTelnetOptions">telnetOptions</a></code>,
-the <code><a href="../dataobjects.html#TelnetOptions">TelnetOptions</a></code> extends the <code><a href="../../vertx-core/dataobjects.html#NetServerOptions">NetServerOptions</a></code> so they
+<p>The SSH and HTTP connectors provide both authentication built on top of <em>vertx-auth</em> with the following supported
+providers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>shiro</em> : provides <code>.properties</code> and <em>LDAP</em> backend as seen in the ShellService presentation</p>
+</li>
+<li>
+<p><em>jdbc</em> : JDBC backend</p>
+</li>
+<li>
+<p><em>mongo</em> : MongoDB backend</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These options can be created directly using directly <code><a href="../../vertx-auth-common/dataobjects.html#AuthOptions">AuthOptions</a></code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../../vertx-auth-shiro/dataobjects.html#ShiroAuthOptions">ShiroAuthOptions</a></code> for Shiro</p>
+</li>
+<li>
+<p><code><a href="../../vertx-auth-jdbc/dataobjects.html#JDBCAuthOptions">JDBCAuthOptions</a></code> for JDBC</p>
+</li>
+<li>
+<p><code><a href="../../vertx-auth-mongo/dataobjects.html#MongoAuthOptions">MongoAuthOptions</a></code> for Mongo</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As for external service configuration in Json, the <code>authOptions</code> uses the <code>provider</code> property to distinguish:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{
+  ...
+  "authOptions": {
+    "provider":"shiro",
+    "config": {
+      "properties_path":"file:auth.properties"
+    }
+  }
+  ...
+}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_telnet_term_configuration">Telnet term configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Telnet terms are configured by <code><a href="../dataobjects.html#ShellServiceOptions#setTelnetOptions">telnetOptions</a></code>,
+the <code><a href="../dataobjects.html#TelnetTermOptions">TelnetTermOptions</a></code> extends the <code><a href="../../vertx-core/dataobjects.html#NetServerOptions">NetServerOptions</a></code> so they
 have the exact same configuration.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_ssh_configuration">SSH configuration</h2>
+<h2 id="_ssh_term_configuration">SSH term configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The SSH connector is configured by <code><a href="../dataobjects.html#ShellServiceOptions#setSSHOptions">SSHOptions</a></code>:</p>
+<p>SSH terms are configured by <code><a href="../dataobjects.html#ShellServiceOptions#setSSHOptions">SSHOptions</a></code>:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../dataobjects.html#SSHOptions#setPort">port</a></code>: port</p>
+<p><code><a href="../dataobjects.html#SSHTermOptions#setPort">port</a></code>: port</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#SSHOptions#setHost">host</a></code>: host</p>
+<p><code><a href="../dataobjects.html#SSHTermOptions#setHost">host</a></code>: host</p>
 </li>
 </ul>
 </div>
@@ -327,7 +463,7 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../dataobjects.html#SSHOptions#setShiroAuthOptions">shiroAuthOptions</a></code>: configures user authentication</p>
+<p><code><a href="../dataobjects.html#SSHTermOptions#setAuthOptions">authOptions</a></code>: configures user authentication</p>
 </li>
 </ul>
 </div>
@@ -337,15 +473,318 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../dataobjects.html#SSHOptions#setKeyPairOptions">keyPairOptions</a></code>: set <code>.jks</code> key pair store</p>
+<p><code><a href="../dataobjects.html#SSHTermOptions#setKeyPairOptions">keyPairOptions</a></code>: set <code>.jks</code> key pair store</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#SSHOptions#setPfxKeyPairOptions">pfxKeyPairOptions</a></code>: set <code>.pfx</code> key pair store</p>
+<p><code><a href="../dataobjects.html#SSHTermOptions#setPfxKeyPairOptions">pfxKeyPairOptions</a></code>: set <code>.pfx</code> key pair store</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#SSHOptions#setPemKeyPairOptions">pemKeyPairOptions</a></code>: set <code>.pem</code> key pair store</p>
+<p><code><a href="../dataobjects.html#SSHTermOptions#setPemKeyPairOptions">pemKeyPairOptions</a></code>: set <code>.pem</code> key pair store</p>
 </li>
 </ul>
+</div>
+<div class="listingblock">
+<div class="title">Deploying the Shell Service on SSH with Mongo authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", {
+  "config" : {
+    "sshOptions" : {
+      "host" : "localhost",
+      "port" : 5000,
+      "keyPairOptions" : {
+        "path" : "src/test/resources/ssh.jks",
+        "password" : "wibble"
+      },
+      "authOptions" : {
+        "provider" : "mongo",
+        "config" : {
+          "connection_string" : "mongodb://localhost:27018"
+        }
+      }
+    }
+  }
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Running the Shell Service on SSH with Mongo authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShellService = require("vertx-shell-js/shell_service");
+var service = ShellService.create(vertx, {
+  "sSHOptions" : {
+    "host" : "localhost",
+    "port" : 5000,
+    "keyPairOptions" : {
+      "path" : "server-keystore.jks",
+      "password" : "wibble"
+    },
+    "authOptions" : {
+      "config" : {
+        "connection_string" : "mongodb://localhost:27018"
+      }
+    }
+  }
+});
+service.start();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Deploying the Shell Service on SSH with JDBC authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", {
+  "config" : {
+    "sshOptions" : {
+      "host" : "localhost",
+      "port" : 5000,
+      "keyPairOptions" : {
+        "path" : "src/test/resources/ssh.jks",
+        "password" : "wibble"
+      },
+      "authOptions" : {
+        "provider" : "jdbc",
+        "config" : {
+          "url" : "jdbc:hsqldb:mem:test?shutdown=true",
+          "driver_class" : "org.hsqldb.jdbcDriver"
+        }
+      }
+    }
+  }
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Running the Shell Service on SSH with JDBC authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShellService = require("vertx-shell-js/shell_service");
+var service = ShellService.create(vertx, {
+  "sSHOptions" : {
+    "host" : "localhost",
+    "port" : 5000,
+    "keyPairOptions" : {
+      "path" : "server-keystore.jks",
+      "password" : "wibble"
+    },
+    "authOptions" : {
+      "config" : {
+        "url" : "jdbc:hsqldb:mem:test?shutdown=true",
+        "driver_class" : "org.hsqldb.jdbcDriver"
+      }
+    }
+  }
+});
+service.start();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_http_term_configuration">HTTP term configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>HTTP terms are configured by <code><a href="../dataobjects.html#ShellServiceOptions#setHttpOptions">httpOptions</a></code>, the http options
+extends the <code><a href="../../vertx-core/dataobjects.html#HttpServerOptions">HttpServerOptions</a></code> so they expose the exact same configuration.</p>
+</div>
+<div class="paragraph">
+<p>In addition there are extra options for configuring an HTTP term:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../dataobjects.html#HttpTermOptions#setAuthOptions">authOptions</a></code>: configures user authentication</p>
+</li>
+<li>
+<p><code><a href="../dataobjects.html#HttpTermOptions#setSockJSHandlerOptions">sockJSHandlerOptions</a></code>: configures SockJS</p>
+</li>
+<li>
+<p><code><a href="../dataobjects.html#HttpTermOptions#setSockJSPath">sockJSPath</a></code>: the SockJS path in the router</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Deploying the Shell Service on HTTP with Mongo authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", {
+  "config" : {
+    "httpOptions" : {
+      "host" : "localhost",
+      "port" : 8080,
+      "ssl" : true,
+      "keyPairOptions" : {
+        "path" : "src/test/resources/server-keystore.jks",
+        "password" : "wibble"
+      },
+      "authOptions" : {
+        "provider" : "mongo",
+        "config" : {
+          "connection_string" : "mongodb://localhost:27018"
+        }
+      }
+    }
+  }
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Running the Shell Service on HTTP with Mongo authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShellService = require("vertx-shell-js/shell_service");
+var service = ShellService.create(vertx, {
+  "httpOptions" : {
+    "host" : "localhost",
+    "port" : 8080,
+    "authOptions" : {
+      "config" : {
+        "connection_string" : "mongodb://localhost:27018"
+      }
+    }
+  }
+});
+service.start();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Deploying the Shell Service on HTTP with JDBC authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", {
+  "config" : {
+    "httpOptions" : {
+      "host" : "localhost",
+      "port" : 8080,
+      "ssl" : true,
+      "keyPairOptions" : {
+        "path" : "src/test/resources/server-keystore.jks",
+        "password" : "wibble"
+      },
+      "authOptions" : {
+        "provider" : "jdbc",
+        "config" : {
+          "url" : "jdbc:hsqldb:mem:test?shutdown=true",
+          "driver_class" : "org.hsqldb.jdbcDriver"
+        }
+      }
+    }
+  }
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Running the Shell Service on HTTP with JDBC authentication</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShellService = require("vertx-shell-js/shell_service");
+var service = ShellService.create(vertx, {
+  "httpOptions" : {
+    "host" : "localhost",
+    "port" : 8080,
+    "authOptions" : {
+      "config" : {
+        "url" : "jdbc:hsqldb:mem:test?shutdown=true",
+        "driver_class" : "org.hsqldb.jdbcDriver"
+      }
+    }
+  }
+});
+service.start();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_keymap_configuration">Keymap configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The shell uses a default keymap configuration that can be overriden using the <code>inputrc</code> property of the various
+term configuration object:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../dataobjects.html#TelnetTermOptions#setIntputrc">intputrc</a></code></p>
+</li>
+<li>
+<p><code><a href="../dataobjects.html#SSHTermOptions#setIntputrc">intputrc</a></code></p>
+</li>
+<li>
+<p><code><a href="../dataobjects.html#HttpTermOptions#setIntputrc">intputrc</a></code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>inputrc</code> must point to a file available via the classloader or the filesystem.</p>
+</div>
+<div class="paragraph">
+<p>The <code>inputrc</code> only function bindings and the available functions are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>backward-char</em></p>
+</li>
+<li>
+<p><em>forward-char</em></p>
+</li>
+<li>
+<p><em>next-history</em></p>
+</li>
+<li>
+<p><em>previous-history</em></p>
+</li>
+<li>
+<p><em>backward-delete-char</em></p>
+</li>
+<li>
+<p><em>backward-delete-char</em></p>
+</li>
+<li>
+<p><em>backward-word</em></p>
+</li>
+<li>
+<p><em>end-of-line</em></p>
+</li>
+<li>
+<p><em>beginning-of-line</em></p>
+</li>
+<li>
+<p><em>delete-char</em></p>
+</li>
+<li>
+<p><em>delete-char</em></p>
+</li>
+<li>
+<p><em>complete</em></p>
+</li>
+<li>
+<p><em>accept-line</em></p>
+</li>
+<li>
+<p><em>accept-line</em></p>
+</li>
+<li>
+<p><em>kill-line</em></p>
+</li>
+<li>
+<p><em>backward-word</em></p>
+</li>
+<li>
+<p><em>forward-word</em></p>
+</li>
+<li>
+<p><em>backward-kill-word</em></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Extra functions can be added, however this is done by implementing functions of the <code>Term.d</code> project on which
+Vert.x Shell is based, for instance the <a href="https://github.com/termd/termd/blob/c1629623c8a3add4bde7778640bf8cc233a7c98f/src/examples/java/examples/readlinefunction/ReverseFunction.java">reverse function</a>
+can be implemented and then declared in a <code>META-INF/services/io.termd.core.readline.Function</code> to be loaded by the shell.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -432,19 +871,6 @@ or LDAP, see Vert.x Auth for more info:</p>
 </div>
 </li>
 <li>
-<p>Metrics commands (requires Dropwizard metrics setup)</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>metrics-ls: show all available metrics</p>
-</li>
-<li>
-<p>metrics-info: show particular metrics</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
 <p>Various commands</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -491,7 +917,8 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="title">Note</div>
 </td>
 <td class="content">
-this command list should evolve in next releases of Vert.x Shell
+this command list should evolve in next releases of Vert.x Shell. Other Vert.x project may provide commands to extend
+Vert.x Shell, for instance Dropwizard Metrics.
 </td>
 </tr>
 </table>
@@ -505,8 +932,8 @@ this command list should evolve in next releases of Vert.x Shell
 <p>Vert.x Shell can be extended with custom commands in any of the languages supporting code generation.</p>
 </div>
 <div class="paragraph">
-<p>A command is created by the <code><a href="jsdoc/command_builder-CommandBuilder.html#command">CommandBuilder.command</a></code> method: the command process handler is called
-by the shell when the command is executed, this handler can be set with the <code><a href="jsdoc/command_builder-CommandBuilder.html#processHandler">processHandler</a></code>
+<p>A command is created by the <code><a href="../../jsdoc/command_builder-CommandBuilder.html#command">CommandBuilder.command</a></code> method: the command process handler is called
+by the shell when the command is executed, this handler can be set with the <code><a href="../../jsdoc/command_builder-CommandBuilder.html#processHandler">processHandler</a></code>
 method:</p>
 </div>
 <div class="listingblock">
@@ -525,13 +952,17 @@ builder.processHandler(function (process) {
 });
 
 // Register the command
-var registry = CommandRegistry.get(vertx);
-registry.registerCommand(builder.build());</code></pre>
+var registry = CommandRegistry.getShared(vertx);
+registry.registerCommand(builder.build(vertx));</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>After a command is created, it needs to be registed to a <code><a href="jsdoc/command_registry-CommandRegistry.html">CommandRegistry</a></code>. The
+<p>After a command is created, it needs to be registed to a <code><a href="../../jsdoc/command_registry-CommandRegistry.html">CommandRegistry</a></code>. The
 command registry holds all the commands for a Vert.x instance.</p>
+</div>
+<div class="paragraph">
+<p>A command is registered until it is unregistered with the <code><a href="../../jsdoc/command_registry-CommandRegistry.html#unregisterCommand">unregisterCommand</a></code>.
+When a command is registered from a Verticle, this command is unregistered when this verticle is undeployed.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -547,12 +978,12 @@ registry. Keep this in mind if you maintain state in a command.
 </table>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/command_process-CommandProcess.html">CommandProcess</a></code> object can be used for interacting with the shell.</p>
+<p>The <code><a href="../../jsdoc/command_process-CommandProcess.html">CommandProcess</a></code> object can be used for interacting with the shell.</p>
 </div>
 <div class="sect2">
 <h3 id="_command_arguments">Command arguments</h3>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/command_process-CommandProcess.html#args">args</a></code> returns the command arguments:</p>
+<p>The <code><a href="../../jsdoc/command_process-CommandProcess.html#args">args</a></code> returns the command arguments:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -568,7 +999,7 @@ registry. Keep this in mind if you maintain state in a command.
 </div>
 </div>
 <div class="paragraph">
-<p>Besides it is also possible to create commands using <code><a href="../../vertx-core/js/jsdoc/cli-CLI.html">Vert.x CLI</a></code>: it makes easier to
+<p>Besides it is also possible to create commands using <code><a href="../../jsdoc/cli-CLI.html">Vert.x CLI</a></code>: it makes easier to
 write command line argument parsing:</p>
 </div>
 <div class="ulist">
@@ -628,18 +1059,73 @@ command.processHandler(function (process) {
 });</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>When the command executes the <code><a href="../../jsdoc/command_process-CommandProcess.html">process</a></code> is provided for interacting
+with the shell. A <code><a href="../../jsdoc/command_process-CommandProcess.html">CommandProcess</a></code> extends <code><a href="../../jsdoc/tty-Tty.html">Tty</a></code>
+which is used for interacting with the terminal.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_terminal_size">Terminal size</h3>
+<h3 id="_terminal_usage">Terminal usage</h3>
+<div class="sect3">
+<h4 id="_terminal_i_o">terminal I/O</h4>
 <div class="paragraph">
-<p>The current terminal size can be obtained using <code><a href="jsdoc/tty-Tty.html#width">width</a></code> and
-<code><a href="jsdoc/tty-Tty.html#height">height</a></code>.</p>
+<p>The <code><a href="../../jsdoc/tty-Tty.html#stdinHandler">stdinHandler</a></code> handler is used to be notified when the terminal
+receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">command.processHandler(function (process) {
-  process.write("Current terminal size: (" + process.width() + ", " + process.height() + ")").end();
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">tty.stdinHandler(function (data) {
+  console.log("Received " + data);
 });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A command can use the <code><a href="../../jsdoc/tty-Tty.html#write">write</a></code> to write to the standard output.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">tty.write("Hello World");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_terminal_size">Terminal size</h4>
+<div class="paragraph">
+<p>The current terminal size can be obtained using <code><a href="../../jsdoc/tty-Tty.html#width">width</a></code> and
+<code><a href="../../jsdoc/tty-Tty.html#height">height</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">tty.write("Current terminal size: (" + tty.width() + ", " + tty.height() + ")");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_resize_event">Resize event</h4>
+<div class="paragraph">
+<p>When the size of the terminal changes the <code><a href="../../jsdoc/tty-Tty.html#resizehandler">resizehandler</a></code>
+is called, the new terminal size can be obtained with <code><a href="../../jsdoc/tty-Tty.html#width">width</a></code> and
+<code><a href="../../jsdoc/tty-Tty.html#height">height</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">tty.resizehandler(function (v) {
+  console.log("terminal resized : " + tty.width() + " " + tty.height());
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_terminal_type">Terminal type</h4>
+<div class="paragraph">
+<p>The terminal type is useful for sending escape codes to the remote terminal: <code><a href="../../jsdoc/tty-Tty.html#type">type</a></code>
+returns the current terminal type, it can be null if the terminal has not advertised the value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">console.log("terminal type : " + tty.type());</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -647,7 +1133,7 @@ command.processHandler(function (process) {
 <h3 id="_shell_session">Shell session</h3>
 <div class="paragraph">
 <p>The shell is a connected service that naturally maintains a session with the client, this session can be
-used in commands to scope data. A command can get the session with <code><a href="jsdoc/process_context-ProcessContext.html#session">session</a></code>:</p>
+used in commands to scope data. A command can get the session with <code><a href="../../jsdoc/command_process-CommandProcess.html#session">session</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -665,47 +1151,9 @@ used in commands to scope data. A command can get the session with <code><a href
 </div>
 </div>
 <div class="sect2">
-<h3 id="_process_i_o">Process I/O</h3>
-<div class="paragraph">
-<p>A command can set a <code><a href="jsdoc/tty-Tty.html#setStdin">setStdin</a></code> handler
-to be notified when the shell receives data, e.g the user uses his keyboard:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">command.processHandler(function (process) {
-  process.setStdin(function (data) {
-    console.log("Received " + data);
-  });
-});</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A command can use the <code><a href="jsdoc/tty-Tty.html#stdout">stdout</a></code> to write to the standard output.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">command.processHandler(function (process) {
-  process.stdout().write("Hello World");
-  process.end();
-});</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Or it can use the <code><a href="jsdoc/command_process-CommandProcess.html#write">write</a></code> method:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">command.processHandler(function (process) {
-  process.write("Hello World");
-  process.end();
-});</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
 <h3 id="_process_termination">Process termination</h3>
 <div class="paragraph">
-<p>Calling <code><a href="jsdoc/command_process-CommandProcess.html#end">end</a></code> ends the current process. It can be called directly
+<p>Calling <code><a href="../../jsdoc/command_process-CommandProcess.html#end">end</a></code> ends the current process. It can be called directly
 in the invocation of the command handler or any time later:</p>
 </div>
 <div class="listingblock">
@@ -726,14 +1174,14 @@ in the invocation of the command handler or any time later:</p>
 <div class="sect2">
 <h3 id="_process_events">Process events</h3>
 <div class="paragraph">
-<p>A command can subscribe to a few process events, named after the posix signals.</p>
+<p>A command can subscribe to a few process events.</p>
 </div>
 <div class="sect3">
-<h4 id="__code_sigint_code_event"><code>SIGINT</code> event</h4>
+<h4 id="_interrupt_event">Interrupt event</h4>
 <div class="paragraph">
-<p>The <code><a href="todo">SIGINT</a></code> event is fired when the process is interrupted, this event is fired when the user press
-<em>Ctrl+C</em> during the execution of a command. This handler can be used for interrupting commands <em>blocking</em> the CLI and
-gracefully ending the command process:</p>
+<p>The <code><a href="../../jsdoc/command_process-CommandProcess.html#interruptHandler">interruptHandler</a></code> is called when the process
+is interrupted, this event is fired when the user press <em>Ctrl+C</em> during the execution of a command. This handler can
+be used for interrupting commands <em>blocking</em> the CLI and gracefully ending the command process:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -746,7 +1194,7 @@ gracefully ending the command process:</p>
   });
 
   // When user press Ctrl+C: cancel the timer and end the process
-  process.eventHandler('SIGINT', function (event) {
+  process.interruptHandler(function (v) {
     vertx.cancelTimer(periodicId);
     process.end();
   });
@@ -754,20 +1202,20 @@ gracefully ending the command process:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>When no <code>SIGINT</code> handler is registered, pressing <em>Ctrl+C</em> will have no effect on the current process and the event
+<p>When no interrupt handler is registered, pressing <em>Ctrl+C</em> will have no effect on the current process and the event
 will be delayed and will likely be handled by the shell, like printing a new line on the console.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="__code_sigtstp_code_code_sigcont_code_events"><code>SIGTSTP</code>/<code>SIGCONT</code> events</h4>
+<h4 id="_suspend_resume_events">Suspend/resume events</h4>
 <div class="paragraph">
-<p>The <code><a href="todo">SIGTSTP</a></code> event is fired when the process is running and the user press <em>Ctrl+Z</em>: the command
-is <em>suspended</em>:</p>
+<p>The <code><a href="../../jsdoc/command_process-CommandProcess.html#suspendHandler">suspendHandler</a></code> is called when the process
+is running and the user press <em>Ctrl+Z</em>, the command is <em>suspended</em>:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>the command can receive the <code>SIGTSTP</code> event when it has registered an handler for this event</p>
+<p>the command can receive the suspend event when it has registered an handler for this event</p>
 </li>
 <li>
 <p>the command will not receive anymore data from the standard input</p>
@@ -775,18 +1223,22 @@ is <em>suspended</em>:</p>
 <li>
 <p>the shell prompt the user for input</p>
 </li>
+<li>
+<p>the command can receive interrupts event or end events</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The <code><a href="todo">SIGCONT</a></code> event is fired when the process is resumed, usually when the user types <em>fg</em>:</p>
+<p>The <code><a href="../../jsdoc/command_process-CommandProcess.html#resumeHandler">resumeHandler</a></code> is called when the process
+is resumed, usually when the user types <em>fg</em>:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>the command can receive the <code>SIGCONT</code> event when it has registered an handler for this event</p>
+<p>the command can receive the resume event when it has registered an handler for this event</p>
 </li>
 <li>
-<p>the command will receive anymore data from the standard input when it has registered an stdin handler</p>
+<p>the command will receive again data from the standard input when it has registered an stdin handler</p>
 </li>
 </ul>
 </div>
@@ -795,12 +1247,12 @@ is <em>suspended</em>:</p>
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">command.processHandler(function (process) {
 
   // Command is suspended
-  process.eventHandler('SIGTSTP', function (event) {
+  process.suspendHandler(function (v) {
     console.log("Suspended");
   });
 
   // Command is resumed
-  process.eventHandler('SIGCONT', function (event) {
+  process.resumeHandler(function (v) {
     console.log("Resumed");
   });
 });</code></pre>
@@ -808,10 +1260,28 @@ is <em>suspended</em>:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="__code_sigwinch_code_event"><code>SIGWINCH</code> event</h4>
+<h4 id="_end_events">End events</h4>
 <div class="paragraph">
-<p>The <code><a href="todo">SIGWINCH</a></code> event is fired when the size of the terminal changes, the new terminal size can be obtained
-with <code><a href="jsdoc/tty-Tty.html#width">width</a></code> and <code><a href="jsdoc/tty-Tty.html#height">height</a></code>.</p>
+<p>The <code><a href="../../jsdoc/command_process-CommandProcess.html#endHandler">endHandler</a></code> (io.vertx.core.Handler)} is
+called when the process is running or suspended and the command terminates, for instance the shell session is closed,
+the command is <em>terminated</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">command.processHandler(function (process) {
+
+  // Command terminates
+  process.endHandler(function (v) {
+    console.log("Terminated");
+  });
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The end handler is called even when the command invokes <code><a href="../../jsdoc/command_process-CommandProcess.html#end">end</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>This handler is useful for cleaning up resources upon command termination, for instance closing a client or a timer.</p>
 </div>
 </div>
 </div>
@@ -821,20 +1291,393 @@ with <code><a href="jsdoc/tty-Tty.html#width">width</a></code> and <code><a href
 <p>A command can provide a completion handler when it wants to provide contextual command line interface completion.</p>
 </div>
 <div class="paragraph">
-<p>Like the process handler, the <code><a href="jsdoc/command_builder-CommandBuilder.html#completionHandler">completion
+<p>Like the process handler, the <code><a href="../../jsdoc/command_builder-CommandBuilder.html#completionHandler">completion
 handler</a></code> is non blocking because the implementation may use Vert.x services, e.g the file system.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/completion-Completion.html#lineTokens">lineTokens</a></code> returns a list of <code><a href="jsdoc/cli_token-CliToken.html">tokens</a></code>
+<p>The <code><a href="../../jsdoc/completion-Completion.html#lineTokens">lineTokens</a></code> returns a list of <code><a href="../../jsdoc/cli_token-CliToken.html">tokens</a></code>
 from the beginning of the line to the cursor position. The list can be empty if the cursor when the cursor is at the
 beginning of the line.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/completion-Completion.html#rawLine">rawLine</a></code> returns the current completed from the beginning
+<p>The <code><a href="../../jsdoc/completion-Completion.html#rawLine">rawLine</a></code> returns the current completed from the beginning
 of the line to the cursor position, in raw format, i.e without any char escape performed.</p>
 </div>
 <div class="paragraph">
-<p>Completion ends with a call to <code><a href="jsdoc/completion-Completion.html#complete">complete</a></code>.</p>
+<p>Completion ends with a call to <code><a href="../../jsdoc/completion-Completion.html#complete">complete</a></code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_shell_server">Shell server</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Shell service is a convenient facade for starting a preconfigured shell either programmatically or as a Vert.x service.
+When more flexibility is needed, a <code><a href="../../jsdoc/shell_server-ShellServer.html">ShellServer</a></code> can be used instead of the service.</p>
+</div>
+<div class="paragraph">
+<p>For instance the shell http term can be configured to use an existing router instead of starting its own http server.</p>
+</div>
+<div class="paragraph">
+<p>Using a shell server requires explicit configuration but provides full flexiblity, a shell server is setup in a few
+steps:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ShellServer = require("vertx-shell-js/shell_server");
+var Router = require("vertx-web-js/router");
+var TermServer = require("vertx-shell-js/term_server");
+var CommandResolver = require("vertx-shell-js/command_resolver");
+
+var server = ShellServer.create(vertx);
+
+var shellRouter = Router.router(vertx);
+router.mountSubRouter("/shell", shellRouter);
+var httpTermServer = TermServer.createHttpTermServer(vertx, router);
+
+var sshTermServer = TermServer.createSSHTermServer(vertx);
+
+server.registerTermServer(httpTermServer);
+server.registerTermServer(sshTermServer);
+
+server.registerCommandResolver(CommandResolver.baseCommands(vertx));
+
+server.listen();</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>create a the shell server</p>
+</li>
+<li>
+<p>create an HTTP term server mounted on an existing router</p>
+</li>
+<li>
+<p>create an SSH term server</p>
+</li>
+<li>
+<p>register term servers</p>
+</li>
+<li>
+<p>register all base commands</p>
+</li>
+<li>
+<p>finally start the shell server</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Besides, the shell server can also be used for creating in process shell session: it provides a programmatic interactive shell.</p>
+</div>
+<div class="paragraph">
+<p>In process shell session can be created with <code><a href="../../jsdoc/shell_server-ShellServer.html#createShell">createShell</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Create a shell ession
+var shell = shellServer.createShell();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The main use case is running or testing a command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Pty = require("vertx-shell-js/pty");
+
+// Create a shell
+var shell = shellServer.createShell();
+
+// Create a job fo the command
+var job = shell.createJob("my-command 1234");
+
+// Create a pseudo terminal
+var pty = Pty.create();
+pty.stdoutHandler(function (data) {
+  console.log("Command wrote " + data);
+});
+
+// Run the command
+job.setTty(pty.slave());
+job.statusUpdateHandler(function (status) {
+  console.log("Command terminated with status " + status);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/pty-Pty.html">Pty</a></code> pseudo terminal is the main interface for interacting with the command
+when it&#8217;s running:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>uses standard input/output for writing or reading strings</p>
+</li>
+<li>
+<p>resize the terminal</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/job_controller-JobController.html#close">close</a></code> closes the shell, it will terminate all jobs in the current shell
+session.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_terminal_servers">Terminal servers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x Shell also provides bare terminal servers for those who need to write pure terminal applications.</p>
+</div>
+<div class="paragraph">
+<p>A <code><a href="../../jsdoc/term-Term.html">Term</a></code> handler must be set on a term server before starting it. This handler will
+handle each term when the user connects.</p>
+</div>
+<div class="paragraph">
+<p>An <code><a href="../../vertx-auth-common/dataobjects.html#AuthOptions">AuthOptions</a></code> can be set on <code><a href="../dataobjects.html#SSHTermOptions">SSHTermOptions</a></code> and <code><a href="../dataobjects.html#HttpTermOptions">HttpTermOptions</a></code>.
+Alternatively, an <code><a href="../../jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code> can be <code><a href="../../jsdoc/term_server-TermServer.html#authProvider">set</a></code>
+directly on the term server before starting it.</p>
+</div>
+<div class="sect2">
+<h3 id="_ssh_term">SSH term</h3>
+<div class="paragraph">
+<p>The terminal server <code><a href="../../jsdoc/term-Term.html">Term</a></code> handler accepts incoming terminal connections.
+When a remote terminal connects, the <code><a href="../../jsdoc/term-Term.html">Term</a></code> can be used to interact with connected
+terminal.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var TermServer = require("vertx-shell-js/term_server");
+var server = TermServer.createSSHTermServer(vertx, {
+  "port" : 5000,
+  "host" : "localhost"
+});
+server.termHandler(function (term) {
+  term.stdinHandler(function (line) {
+    term.write(line);
+  });
+});
+server.listen();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/term-Term.html">Term</a></code> is also a <code><a href="../../jsdoc/tty-Tty.html">Tty</a></code>, this section explains
+how to use the tty.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_telnet_term">Telnet term</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var TermServer = require("vertx-shell-js/term_server");
+var server = TermServer.createTelnetTermServer(vertx, {
+  "port" : 5000,
+  "host" : "localhost"
+});
+server.termHandler(function (term) {
+  term.stdinHandler(function (line) {
+    term.write(line);
+  });
+});
+server.listen();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_http_term">HTTP term</h3>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/term_server-TermServer.html#createHttpTermServer">TermServer.createHttpTermServer</a></code> method creates an HTTP term server, built
+on top of Vert.x Web using the SockJS protocol.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var TermServer = require("vertx-shell-js/term_server");
+var server = TermServer.createHttpTermServer(vertx, {
+  "port" : 5000,
+  "host" : "localhost"
+});
+server.termHandler(function (term) {
+  term.stdinHandler(function (line) {
+    term.write(line);
+  });
+});
+server.listen();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An HTTP term can start its own HTTP server, or it can reuse an existing Vert.x Web <code><a href="../../jsdoc/router-Router.html">Router</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>The shell can be found at <code>/shell.html</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var TermServer = require("vertx-shell-js/term_server");
+var server = TermServer.createHttpTermServer(vertx, router, {
+  "port" : 5000,
+  "host" : "localhost"
+});
+server.termHandler(function (term) {
+  term.stdinHandler(function (line) {
+    term.write(line);
+  });
+});
+server.listen();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The later option is convenient when the HTTP shell is integrated in an existing HTTP server.</p>
+</div>
+<div class="paragraph">
+<p>The HTTP term server by default is configured for serving:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code>shell.html</code> page</p>
+</li>
+<li>
+<p>the <code><a href="https://github.com/chjj/term.js/">term.js</a></code> client library</p>
+</li>
+<li>
+<p>the <code>vertxshell.js</code> client library</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>vertxshell.js</code> integrates <code>term.js</code> is the client side part of the HTTP term.</p>
+</div>
+<div class="paragraph">
+<p>It integrates <code>term.js</code> with SockJS and needs the URL of the HTTP term server endpoint:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
+  var url = 'http://localhost/shell';
+  new VertxTerm(url, {
+    cols: 80,
+    rows: 24
+   });
+ });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Straight websockets can also be used, if so, the remote term URL should be suffixed with <code>/websocket</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
+  var url = 'ws://localhost/shell/websocket';
+  new VertxTerm(url, {
+    cols: 80,
+    rows: 24
+   });
+ });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For customization purpose these resources can be copied and customized, they are available in the Vert.x Shell
+jar under the <code>io.vertx.ext.shell</code> packages.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_command_discovery">Command discovery</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The command discovery can be used when new commands need to be added to Vert.x without an explicit registration.</p>
+</div>
+<div class="paragraph">
+<p>For example, the <em>Dropwizard</em> metrics service, adds specific metrics command to the shell service on the fly.</p>
+</div>
+<div class="paragraph">
+<p>It can be achieved via the <code>java.util.ServiceLoader</code> of a <code>CommandResolverFactory</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class CustomCommands implements CommandResolverFactory {
+
+  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolverHandler) {
+    resolverHandler.handler(() -&gt; Arrays.asList(myCommand1, myCommand2));
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>resolver</code> method is async, because the resolver may need to wait some condition before commands
+are resolved.</p>
+</div>
+<div class="paragraph">
+<p>The shell service discovery using the service loader mechanism:</p>
+</div>
+<div class="listingblock">
+<div class="title">The service provider file <code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code></div>
+<div class="content">
+<pre class="prettyprint highlight"><code>my.CustomCommands</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is only valid for the <code><a href="../../jsdoc/shell_service-ShellService.html">ShellService</a></code>. <code><a href="../../jsdoc/shell_server-ShellServer.html">ShellServer</a></code>
+don&#8217;t use this mechanism.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_command_pack">Command pack</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A command pack is a jar that provides new Vert.x Shell commands.</p>
+</div>
+<div class="paragraph">
+<p>Such jar just need to be present on the classpath and it is discovered by Vertx. Shell.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package examples.pack;
+
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.ext.shell.command.Command;
+import io.vertx.ext.shell.command.CommandBuilder;
+import io.vertx.ext.shell.command.CommandResolver;
+import io.vertx.ext.shell.spi.CommandResolverFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommandPackExample implements CommandResolverFactory {
+
+  @Override
+  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolveHandler) {
+    List&lt;Command&gt; commands = new ArrayList&lt;&gt;();
+
+    // Add commands
+    commands.add(Command.create(vertx, JavaCommandExample.class));
+
+    // Add another command
+    commands.add(CommandBuilder.command("another-command").processHandler(process -&gt; {
+      // Handle process
+    }).build(vertx));
+
+    // Resolve with the commands
+    resolveHandler.handle(Future.succeededFuture(() -&gt; commands));
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The command pack uses command discovery mechanism, so it needs the descriptor:</p>
+</div>
+<div class="listingblock">
+<div class="title"><code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code> descriptor</div>
+<div class="content">
+<pre class="prettyprint highlight"><code>examples.pack.CommandPackExample</code></pre>
 </div>
 </div>
 </div>
@@ -846,7 +1689,7 @@ of the line to the cursor position, in raw format, i.e without any char escape p
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

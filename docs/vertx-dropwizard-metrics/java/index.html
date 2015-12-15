@@ -200,7 +200,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -213,7 +213,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-dropwizard-metrics:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-dropwizard-metrics:3.2.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -912,14 +912,11 @@ so you can retrieve this registry and use according to your needs.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">VertxOptions options = new VertxOptions().setMetricsOptions(
-  new MetricsServiceOptions().setEnabled(true).setRegistryName("the_name")
+    new DropwizardMetricsOptions().setEnabled(true).setRegistryName("my-registry")
 );
-Vertx vertx = Vertx.vertxt(options);
-
+Vertx vertx = Vertx.vertx(options);
 // Get the registry
-MetricRegistry registry = SharedMetricRegistries.getOrCreate("the_name");
-
-// Do whatever you need with the registry</code></pre>
+MetricRegistry registry = SharedMetricRegistries.getOrCreate("my-registry");}</code></pre>
 </div>
 </div>
 </div>
@@ -931,7 +928,7 @@ MetricRegistry registry = SharedMetricRegistries.getOrCreate("the_name");
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

@@ -123,12 +123,12 @@ asynchronous cluster-wide counters.</p>
 <div class="sect2">
 <h3 id="_local_shared_maps">Local shared maps</h3>
 <div class="paragraph">
-<p><code><a href="yardoc/Vertx/LocalMap.html">Local shared maps</a></code> allow you to share data safely between different event
+<p><code><a href="../../yardoc/Vertx/LocalMap.html">Local shared maps</a></code> allow you to share data safely between different event
 loops (e.g. different verticles) in the same Vert.x instance.</p>
 </div>
 <div class="paragraph">
 <p>Local shared maps only allow certain data types to be used as keys and values. Those types must either be immutable,
-or certain other types that can be copied like <code><a href="yardoc/Vertx/Buffer.html">Buffer</a></code>. In the latter case the key/value
+or certain other types that can be copied like <code><a href="../../yardoc/Vertx/Buffer.html">Buffer</a></code>. In the latter case the key/value
 will be copied before putting it in the map.</p>
 </div>
 <div class="paragraph">
@@ -175,8 +175,8 @@ other node.</p>
 application.</p>
 </div>
 <div class="paragraph">
-<p>You get an instance of <code><a href="yardoc/Vertx/AsyncMap.html">AsyncMap</a></code> with
-<code><a href="yardoc/Vertx/SharedData.html#get_cluster_wide_map-instance_method">getClusterWideMap</a></code>.</p>
+<p>You get an instance of <code><a href="../../yardoc/Vertx/AsyncMap.html">AsyncMap</a></code> with
+<code><a href="../../yardoc/Vertx/SharedData.html#get_cluster_wide_map-instance_method">getClusterWideMap</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Getting the map is asynchronous and the result is returned to you in the handler that you specify. Here&#8217;s an example:</p>
@@ -197,7 +197,7 @@ sd.get_cluster_wide_map("mymap") { |res_err,res|
 <div class="sect3">
 <h4 id="_putting_data_in_a_map">Putting data in a map</h4>
 <div class="paragraph">
-<p>You put data in a map with <code><a href="yardoc/Vertx/AsyncMap.html#put-instance_method">put</a></code>.</p>
+<p>You put data in a map with <code><a href="../../yardoc/Vertx/AsyncMap.html#put-instance_method">put</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The actual put is asynchronous and the handler is notified once it is complete:</p>
@@ -217,7 +217,7 @@ sd.get_cluster_wide_map("mymap") { |res_err,res|
 <div class="sect3">
 <h4 id="_getting_data_from_a_map">Getting data from a map</h4>
 <div class="paragraph">
-<p>You get data from a map with <code><a href="yardoc/Vertx/AsyncMap.html#get-instance_method">get</a></code>.</p>
+<p>You get data from a map with <code><a href="../../yardoc/Vertx/AsyncMap.html#get-instance_method">get</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The actual get is asynchronous and the handler is notified with the result some time later</p>
@@ -240,7 +240,7 @@ sd.get_cluster_wide_map("mymap") { |res_err,res|
 <p>You can also remove entries from an asynchronous map, clear them and get the size.</p>
 </div>
 <div class="paragraph">
-<p>See the <code><a href="yardoc/Vertx/AsyncMap.html">API docs</a></code> for more information.</p>
+<p>See the <code><a href="../../yardoc/Vertx/AsyncMap.html">API docs</a></code> for more information.</p>
 </div>
 </div>
 </div>
@@ -248,7 +248,7 @@ sd.get_cluster_wide_map("mymap") { |res_err,res|
 <div class="sect2">
 <h3 id="_cluster_wide_locks">Cluster-wide locks</h3>
 <div class="paragraph">
-<p><code><a href="yardoc/Vertx/Lock.html">Cluster wide locks</a></code> allow you to obtain exclusive locks across the cluster -
+<p><code><a href="../../yardoc/Vertx/Lock.html">Cluster wide locks</a></code> allow you to obtain exclusive locks across the cluster -
 this is useful when you want to do something or access a resource on only one node of a cluster at any one time.</p>
 </div>
 <div class="paragraph">
@@ -256,17 +256,17 @@ this is useful when you want to do something or access a resource on only one no
 is obtained.</p>
 </div>
 <div class="paragraph">
-<p>To obtain a lock use <code><a href="yardoc/Vertx/SharedData.html#get_lock-instance_method">getLock</a></code>.</p>
+<p>To obtain a lock use <code><a href="../../yardoc/Vertx/SharedData.html#get_lock-instance_method">getLock</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This won&#8217;t block, but when the lock is available, the handler will be called with an instance of <code><a href="yardoc/Vertx/Lock.html">Lock</a></code>,
+<p>This won&#8217;t block, but when the lock is available, the handler will be called with an instance of <code><a href="../../yardoc/Vertx/Lock.html">Lock</a></code>,
 signifying that you now own the lock.</p>
 </div>
 <div class="paragraph">
 <p>While you own the lock no other caller, anywhere on the cluster will be able to obtain the lock.</p>
 </div>
 <div class="paragraph">
-<p>When you&#8217;ve finished with the lock, you call <code><a href="yardoc/Vertx/Lock.html#release-instance_method">release</a></code> to release it, so
+<p>When you&#8217;ve finished with the lock, you call <code><a href="../../yardoc/Vertx/Lock.html#release-instance_method">release</a></code> to release it, so
 another caller can obtain it.</p>
 </div>
 <div class="listingblock">
@@ -312,10 +312,10 @@ with a failure:</p>
 <p>It&#8217;s often useful to maintain an atomic counter across the different nodes of your application.</p>
 </div>
 <div class="paragraph">
-<p>You can do this with <code><a href="yardoc/Vertx/Counter.html">Counter</a></code>.</p>
+<p>You can do this with <code><a href="../../yardoc/Vertx/Counter.html">Counter</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>You obtain an instance with <code><a href="yardoc/Vertx/SharedData.html#get_counter-instance_method">getCounter</a></code>:</p>
+<p>You obtain an instance with <code><a href="../../yardoc/Vertx/SharedData.html#get_counter-instance_method">getCounter</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -333,7 +333,7 @@ with a failure:</p>
 it using the various methods.</p>
 </div>
 <div class="paragraph">
-<p>See the <code><a href="yardoc/Vertx/Counter.html">API docs</a></code> for more information.</p>
+<p>See the <code><a href="../../yardoc/Vertx/Counter.html">API docs</a></code> for more information.</p>
 </div>
 </div>
 </div>
@@ -345,7 +345,7 @@ it using the various methods.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

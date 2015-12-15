@@ -178,6 +178,7 @@
 </li>
 <li><a href="#_csrf_cross_site_request_forgery">CSRF Cross Site Request Forgery</a></li>
 <li><a href="#_virtualhost_handler">VirtualHost Handler</a></li>
+<li><a href="#_oauth2authhandler_handler">OAuth2AuthHandler Handler</a></li>
 </ul>
         </div>
       </div>
@@ -279,6 +280,7 @@
 </li>
 <li><a href="#_csrf_cross_site_request_forgery">CSRF Cross Site Request Forgery</a></li>
 <li><a href="#_virtualhost_handler">VirtualHost Handler</a></li>
+<li><a href="#_oauth2authhandler_handler">OAuth2AuthHandler Handler</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -445,7 +447,7 @@ over time.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -458,7 +460,9 @@ over time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-web:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+  compile 'io.vertx:vertx-web:3.2.0'
+}</code></pre>
 </div>
 </div>
 </div>
@@ -2438,7 +2442,7 @@ router.getWithRegex(".+\\.hbs").handler(handler);</code></pre>
 <h3 id="_mvel_template_engine">MVEL template engine</h3>
 <div class="paragraph">
 <p>To use MVEL, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-mvel:3.1.0</code>. Create an instance of the MVEL template engine using:
+<code>io.vertx:vertx-web-templ-mvel:3.2.0</code>. Create an instance of the MVEL template engine using:
 <code>io.vertx.ext.web.templ.MVELTemplateEngine#create()</code></p>
 </div>
 <div class="paragraph">
@@ -2471,7 +2475,7 @@ MVEL templates.</p>
 <h3 id="_jade_template_engine">Jade template engine</h3>
 <div class="paragraph">
 <p>To use the Jade template engine, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-jade:3.1.0</code>. Create an instance of the Jade template engine using:
+<code>io.vertx:vertx-web-templ-jade:3.2.0</code>. Create an instance of the Jade template engine using:
 <code>io.vertx.ext.web.templ.JadeTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2504,7 +2508,7 @@ Jade templates.</p>
 <h3 id="_handlebars_template_engine">Handlebars template engine</h3>
 <div class="paragraph">
 <p>To use Handlebars, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-handlebars:3.1.0</code>. Create an instance of the Handlebars template engine
+<code>io.vertx:vertx-web-templ-handlebars:3.2.0</code>. Create an instance of the Handlebars template engine
 using: <code>io.vertx.ext.web.templ.HandlebarsTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2546,7 +2550,7 @@ handlebars templates.</p>
 <h3 id="_thymeleaf_template_engine">Thymeleaf template engine</h3>
 <div class="paragraph">
 <p>To use Thymeleaf, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-thymeleaf:3.1.0</code>. Create an instance of the Thymeleaf template engine
+<code>io.vertx:vertx-web-templ-thymeleaf:3.2.0</code>. Create an instance of the Thymeleaf template engine
 using: <code>io.vertx.ext.web.templ.ThymeleafTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2916,7 +2920,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
   &lt;classifier&gt;client&lt;/classifier&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -2930,7 +2934,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-web:3.1.0:client</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-web:3.2.0:client</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3257,6 +3261,25 @@ request forgery requests.</p>
 expected to return this token back in a header. Since cookies are sent it is required that the cookie handler is also
 present on the router.</p>
 </div>
+<div class="paragraph">
+<p>When developing non single page applications that rely on the User-Agent to perform the <code>POST</code> action, Headers cannot
+be specified on HTML Forms. In order to solve this problem the header value will also be checked if and only if no
+header was present in the Form attributes under the same name as the header, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">---
+&lt;form action="/submit" method="POST"&gt;
+&lt;input type="hidden" name="X-XSRF-TOKEN" value="abracadabra"&gt;
+&lt;/form&gt;
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is the responsibility of the user to fill in the right value for the form field. Users who prefer to use an HTML
+only solution can fill this value by fetching the the token value from the routing context under the key <code>X-XSRF-TOKEN</code>
+or the header name they have chosen during the instantiation of the <code>CSRFHandler</code> object.</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">router.route().handler(CookieHandler.create());
@@ -3288,6 +3311,147 @@ example <code></strong>.vertx.io</code> or fully domain names as <code>www.vertx
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_oauth2authhandler_handler">OAuth2AuthHandler Handler</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>OAuth2AuthHandler</code> allows quick setup of secure routes using the OAuth2 protocol. This handler simplifies the
+authCode flow. An example of using it to protect some resouce and authenticate with GitHub can be implemented as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2Auth authProvider = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, new JsonObject()
+    .put("clientID", "CLIENT_ID")
+    .put("clientSecret", "CLIENT_SECRET")
+    .put("site", "https://github.com/login")
+    .put("tokenPath", "/oauth/access_token")
+    .put("authorizationPath", "/oauth/authorize"));
+
+// create a oauth2 handler on our domain: "http://localhost:8080"
+OAuth2AuthHandler oauth2 = OAuth2AuthHandler.create(authProvider, "http://localhost:8080");
+
+// setup the callback handler for receiving the GitHub callback
+oauth2.setupCallback(router.get("/callback"));
+
+// protect everything under /protected
+router.route("/protected/*").handler(oauth2);
+// mount some handler under the protected zone
+router.route("/protected/somepage").handler(rc -&gt; {
+  rc.response().end("Welcome to the protected resource!");
+});
+
+// welcome page
+router.get("/").handler(ctx -&gt; {
+  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Github&lt;/a&gt;");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Due to the nature of OAuth2 spec there are slight changes required in order to use other OAuth2 providers, for
+example, if you are planning to use Google Auth you implement it as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2Auth authProvider = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, new JsonObject()
+    .put("clientID", "CLIENT_ID")
+    .put("clientSecret", "CLIENT_SECRET")
+    .put("site", "https://accounts.google.com")
+    .put("tokenPath", "https://www.googleapis.com/oauth2/v3/token")
+    .put("authorizationPath", "/o/oauth2/auth"));
+
+// create a oauth2 handler on our domain: "http://localhost:8080"
+OAuth2AuthHandler oauth2 = OAuth2AuthHandler.create(authProvider, "http://localhost:8080");
+
+// these are the scopes
+oauth2.addAuthority("profile");
+
+// setup the callback handler for receiving the Google callback
+oauth2.setupCallback(router.get("/callback"));
+
+// protect everything under /protected
+router.route("/protected/*").handler(oauth2);
+// mount some handler under the protected zone
+router.route("/protected/somepage").handler(rc -&gt; {
+  rc.response().end("Welcome to the protected resource!");
+});
+
+// welcome page
+router.get("/").handler(ctx -&gt; {
+  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Google&lt;/a&gt;");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The changes are only on the configuration, note that the token uri must now be a full URL since it is generated from
+a different server than the authorization one.</p>
+</div>
+<div class="paragraph">
+<p>Important to note that for google OAuth you must register all your callback URLs in the developer console, so for the
+current example you would need to register <code><a href="http://localhost:8080/callback?redirect_uri=/protected/somepage" class="bare">http://localhost:8080/callback?redirect_uri=/protected/somepage</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re looking to integrate with LinkedIn then your config should be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2Auth authProvider = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, new JsonObject()
+    .put("clientID", "CLIENT_ID")
+    .put("clientSecret", "CLIENT_SECRET")
+    .put("site", "https://www.linkedin.com")
+    .put("authorizationPath", "/uas/oauth2/authorization")
+    .put("tokenPath", "/uas/oauth2/accessToken"));
+
+// create a oauth2 handler on our domain: "http://localhost:8080"
+OAuth2AuthHandler oauth2 = OAuth2AuthHandler.create(authProvider, "http://localhost:8080");
+
+// these are the scopes
+oauth2.addAuthority("r_basicprofile");
+
+// setup the callback handler for receiving the LinkedIn callback
+oauth2.setupCallback(router.get("/callback"));
+
+// protect everything under /protected
+router.route("/protected/*").handler(oauth2);
+// mount some handler under the protected zone
+router.route("/protected/somepage").handler(rc -&gt; {
+  rc.response().end("Welcome to the protected resource!");
+});
+
+// welcome page
+router.get("/").handler(ctx -&gt; {
+  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by LinkedIn&lt;/a&gt;");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As it can be seen from the examples all you need to know is 2 urls, the authorization path and the token path. You
+will find all these configurations on your provider documentation we have also listed on the auth project examples
+for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>google</p>
+</li>
+<li>
+<p>twitter</p>
+</li>
+<li>
+<p>github</p>
+</li>
+<li>
+<p>linkedin</p>
+</li>
+<li>
+<p>facebook</p>
+</li>
+<li>
+<p>keycloak</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 
         
 
@@ -3295,7 +3459,7 @@ example <code></strong>.vertx.io</code> or fully domain names as <code>www.vertx
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

@@ -127,7 +127,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-jwt&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -140,7 +140,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-auth-jwt:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jwt:3.2.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -185,7 +185,7 @@ Sending a user&#8217;s password would be very, very bad.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>To create an instance of the provider you use <code><a href="jsdoc/jwt_auth-JWTAuth.html">JWTAuth</a></code>. You specify the configuration
+<p>To create an instance of the provider you use <code><a href="../../jsdoc/jwt_auth-JWTAuth.html">JWTAuth</a></code>. You specify the configuration
 in a JSON object.</p>
 </div>
 <div class="paragraph">
@@ -287,6 +287,9 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
 keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret -keyalg EC -keysize 256 -alias ES512 -keypass secret -sigalg SHA512withECDSA -dname "CN=,OU=,O=,L=,ST=,C=" -validity 360</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;&lt;a href="mailto:pmlopes@gmail.com"&gt;Paulo Lopes&lt;/a&gt;</p>
+</div>
 </div>
 </div>
 </div>
@@ -297,7 +300,7 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

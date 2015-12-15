@@ -121,17 +121,7 @@
 <td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="inboundPermitted"></a><code>inboundPermitted</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of <a href="dataobjects.html#PermittedOptions">PermittedOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="inboundPermitteds"></a><code>inboundPermitteds</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of <a href="dataobjects.html#PermittedOptions">PermittedOptions</a></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="outboundPermitted"></a><code>outboundPermitted</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of <a href="dataobjects.html#PermittedOptions">PermittedOptions</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -171,9 +161,19 @@
 <td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="ack"></a><code>ack</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the value of the <code>ack</code> header.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="body"></a><code>body</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Buffer</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets the body of the frame.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="bodyAsString"></a><code>bodyAsString</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the body of the frames as a String encoded in the frame encoding.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="command"></a><code>command</code></p></td>
@@ -192,6 +192,11 @@
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="id"></a><code>id</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="receipt"></a><code>receipt</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -224,15 +229,17 @@
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="address"></a><code>address</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The exact address the message is being sent to. If you want to allow messages based on
- an exact address you use this field.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="addressRegex"></a><code>addressRegex</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A regular expression that will be matched against the address. If you want to allow messages
- based on a regular expression you use this field. If the link value is specified
- this will be ignored.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="match"></a><code>match</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Json object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
 </tbody>
 </table>
@@ -635,7 +642,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

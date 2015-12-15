@@ -135,7 +135,7 @@ your Vert.x applications and can be backed by different providers.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-common&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -148,7 +148,7 @@ your Vert.x applications and can be backed by different providers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-auth-common:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-auth-common:3.2.0</code></pre>
 </div>
 </div>
 </div>
@@ -181,7 +181,7 @@ different model of representing authorities.</p>
 <h2 id="_authentication">Authentication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To authenticate a user you use <code><a href="jsdoc/auth_provider-AuthProvider.html#authenticate">authenticate</a></code>.</p>
+<p>To authenticate a user you use <code><a href="../../jsdoc/auth_provider-AuthProvider.html#authenticate">authenticate</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The first argument is a JSON object which contains authentication information. What this actually contains depends
@@ -200,7 +200,7 @@ on the specific implementation; for a simple username/password based authenticat
 </div>
 <div class="paragraph">
 <p>Authentication occurs asynchronously and the result is passed to the user on the result handler that was provided in
-the call. The async result contains an instance of <code><a href="jsdoc/user-User.html">User</a></code> which represents the authenticated
+the call. The async result contains an instance of <code><a href="../../jsdoc/user-User.html">User</a></code> which represents the authenticated
 user and contains operations which allow the user to be authorised.</p>
 </div>
 <div class="paragraph">
@@ -232,10 +232,10 @@ authProvider.authenticate(authInfo, function (res, res_err) {
 <h2 id="_authorisation">Authorisation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have an <code><a href="jsdoc/user-User.html">User</a></code> instance you can call methods on it to authorise it.</p>
+<p>Once you have an <code><a href="../../jsdoc/user-User.html">User</a></code> instance you can call methods on it to authorise it.</p>
 </div>
 <div class="paragraph">
-<p>to check if a user has a specific authority you use <code><a href="jsdoc/user-User.html#isAuthorised">isAuthorised</a></code>.</p>
+<p>to check if a user has a specific authority you use <code><a href="../../jsdoc/user-User.html#isAuthorised">isAuthorised</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The results of all the above are provided asynchronously in the handler.</p>
@@ -276,13 +276,13 @@ implementation and Vert.x makes no assumptions here.</p>
 in the underlying provider being called.</p>
 </div>
 <div class="paragraph">
-<p>In order to clear the internal cache you can use <code><a href="jsdoc/user-User.html#clearCache">clearCache</a></code>.</p>
+<p>In order to clear the internal cache you can use <code><a href="../../jsdoc/user-User.html#clearCache">clearCache</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_the_user_principal">The User Principal</h3>
 <div class="paragraph">
-<p>You can get the Principal corresponding to the authenticated user with <code><a href="jsdoc/user-User.html#principal">principal</a></code>.</p>
+<p>You can get the Principal corresponding to the authenticated user with <code><a href="../../jsdoc/user-User.html#principal">principal</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>What this returns depends on the underlying implementation.</p>
@@ -294,14 +294,15 @@ in the underlying provider being called.</p>
 <h2 id="_creating_your_own_auth_implementation">Creating your own auth implementation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you wish to create your own auth provider you should implement the <code><a href="jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code> interface.</p>
+<p>If you wish to create your own auth provider you should implement the <code><a href="../../jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code> interface.</p>
 </div>
 <div class="paragraph">
 <p>We provide an abstract implementation of user called <code>AbstractUser</code> which you can subclass
 to make your user implementation. This contains the caching logic so you don&#8217;t have to implement that yourself.</p>
 </div>
 <div class="paragraph">
-<p>If you wish your user objects to be clusterable you should make sure they implement <code>ClusterSerializable</code>.</p>
+<p>If you wish your user objects to be clusterable you should make sure they implement <code>ClusterSerializable</code>.
+&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;</p>
 </div>
 </div>
 </div>
@@ -312,7 +313,7 @@ to make your user implementation. This contains the caching logic so you don&#82
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

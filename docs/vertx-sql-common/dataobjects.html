@@ -117,6 +117,16 @@
 <td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keys"></a><code>keys</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Json array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get any generated keys</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="updated"></a><code>updated</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get the number of rows updated</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -141,6 +151,40 @@
 <td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="columnNames"></a><code>columnNames</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get the column names</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="numColumns"></a><code>numColumns</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the number of columns in the result set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="numRows"></a><code>numRows</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the number of rows in the result set</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="output"></a><code>output</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Json array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get the registered outputs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="results"></a><code>results</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of Json array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get the results</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="rows"></a><code>rows</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of Json object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get the rows - each row represented as a JsonObject where the keys are the column names and the values are
+ the column values.
+ <p>
+ Beware that it's legal for a query result in SQL to contain duplicate column names, in which case one will
+ overwrite the other if using this method. If that's the case use link instead.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -152,7 +196,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

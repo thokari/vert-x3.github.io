@@ -244,6 +244,19 @@ the command line:</p>
 not listed in the usage, but can still be used in the user command line (for power-users).</p>
 </div>
 <div class="paragraph">
+<p>If the option value is contrained to a fixed set, you can set the different acceptable choices:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("some-name")
+    .addOption(new Option()
+        .setLongName("color")
+        .setDefaultValue("green")
+        .addChoice("blue").addChoice("red").addChoice("green")
+        .setDescription("a color"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Options can also be instantiated from their JSON form.</p>
 </div>
 </div>
@@ -254,7 +267,7 @@ not listed in the usage, but can still be used in the user command line (for pow
 <code>java com.acme.Foo</code>, <code>com.acme.Foo</code> is an argument.</p>
 </div>
 <div class="paragraph">
-<p>Arguments do not have a name, there are identified using a mandatory 0-based index. The first parameter has the
+<p>Arguments do not have a name, there are identified using a 0-based index. The first parameter has the
 index <code>0</code>:</p>
 </div>
 <div class="listingblock">
@@ -266,6 +279,22 @@ index <code>0</code>:</p>
         .setArgName("arg1"))
     .addArgument(new Argument()
         .setIndex(1)
+        .setDescription("the second argument")
+        .setArgName("arg2"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t set the argument indexes, it computes it automatically by using the declaration order.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("some-name")
+    // will have the index 0
+    .addArgument(new Argument()
+        .setDescription("the first argument")
+        .setArgName("arg1"))
+    // will have the index 1
+    .addArgument(new Argument()
         .setDescription("the second argument")
         .setArgName("arg2"));</code></pre>
 </div>
@@ -286,6 +315,10 @@ index <code>0</code>:</p>
 </li>
 <li>
 <p>have a default value using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setDefaultValue-java.lang.String-">setDefaultValue</a></code></p>
+</li>
+<li>
+<p>receive several values using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setMultiValued-boolean-">setMultiValued</a></code> - only the last argument
+can be multi-valued.</p>
 </li>
 </ul>
 </div>
@@ -355,6 +388,10 @@ and arguments have been set as well as the number of values received by each opt
 validation by passing <code>false</code> as second parameter of <code><a href="../../apidocs/io/vertx/core/cli/CLI.html#parse-java.util.List-boolean-">parse</a></code>.
 This is useful if you want to check an argument or option is present even if the parsed command line is invalid.</p>
 </div>
+<div class="paragraph">
+<p>You can check whether or not the
+<code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html">CommandLine</a></code> is valid using <code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html#isValid--">isValid</a></code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_query_interrogation_stage">Query / Interrogation Stage</h3>
@@ -369,6 +406,28 @@ method:</p>
 String opt = commandLine.getOptionValue("my-option");
 boolean flag = commandLine.isFlagEnabled("my-flag");
 String arg0 = commandLine.getArgumentValue(0);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One of your option can have been marked as "help". If a user command line enabled a "help" option, the validation
+won&#8217;t failed, but give you the opportunity to check if the user asks for help:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("test")
+    .addOption(
+        new Option().setLongName("help").setShortName("h").setFlag(true).setHelp(true))
+    .addOption(
+        new Option().setLongName("mandatory").setRequired(true));
+
+CommandLine line = cli.parse(Collections.singletonList("-h"));
+
+// The parsing does not fail and let you do:
+if (!line.isValid() &amp;&amp; line.isAskingForHelp()) {
+  StringBuilder builder = new StringBuilder();
+  cli.usage(builder);
+  stream.print(builder.toString());
+}</code></pre>
 </div>
 </div>
 </div>
@@ -453,6 +512,9 @@ this converter:</p>
 <div class="paragraph">
 <p>For booleans, the boolean values are evaluated to <code>true</code>: <code>on</code>, <code>yes</code>, <code>1</code>, <code>true</code>.</p>
 </div>
+<div class="paragraph">
+<p>If one of your option as an <code>enum</code> as type, it computes the set of choices automatically.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_using_annotations">Using annotations</h3>
@@ -507,7 +569,7 @@ CLIConfigurator.inject(commandLine, instance);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

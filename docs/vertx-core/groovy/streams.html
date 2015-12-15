@@ -114,36 +114,36 @@
 <p>There are several objects in Vert.x that allow items to be read from and written.</p>
 </div>
 <div class="paragraph">
-<p>In previous versions the streams.adoc package was manipulating <code><a href="groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code>
-objects exclusively. From now, streams are not anymore coupled to buffers and work with any kind of objects.</p>
+<p>In previous versions the streams.adoc package was manipulating <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code>
+objects exclusively. From now, streams are not coupled to buffers anymore and they work with any kind of objects.</p>
 </div>
 <div class="paragraph">
-<p>In Vert.x, calls to write item return immediately and writes are internally queued.</p>
+<p>In Vert.x, write calls return immediately, and writes are queued internally.</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s not hard to see that if you write to an object faster than it can actually write the data to
-its underlying resource then the write queue could grow without bound - eventually resulting in
-exhausting available memory.</p>
+its underlying resource, then the write queue can grow unbounded - eventually resulting in
+memory exhaustion.</p>
 </div>
 <div class="paragraph">
-<p>To solve this problem a simple flow control capability is provided by some objects in the Vert.x API.</p>
+<p>To solve this problem a simple flow control (<em>back-pressure</em>) capability is provided by some objects in the Vert.x API.</p>
 </div>
 <div class="paragraph">
-<p>Any flow control aware object that can be written-to implements <code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code>,
-and any flow control object that can be read-from is said to implement <code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code>.</p>
+<p>Any flow control aware object that can be <em>written-to</em> implements <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code>,
+while any flow control object that can be <em>read-from</em> is said to implement <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> and write the data to a <code>WriteStream</code>.</p>
+<p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> then write the data to a <code>WriteStream</code>.</p>
 </div>
 <div class="paragraph">
-<p>A very simple example would be reading from a <code><a href="groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code> on a server and writing back to the
-same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>, but you can
-do this between any <code>ReadStream</code> and any <code>WriteStream</code>, including HTTP requests and response,
-async files, WebSockets, etc.</p>
+<p>A very simple example would be reading from a <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code> then writing back to the
+same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>. Note that this works
+between any <code>ReadStream</code> and <code>WriteStream</code> compliant object, including HTTP requests, HTTP responses,
+async files I/O, WebSockets, etc.</p>
 </div>
 <div class="paragraph">
-<p>A naive way to do this would be to directly take the data that&#8217;s been read and immediately write it
-to the <code>NetSocket</code>, for example:</p>
+<p>A naive way to do this would be to directly take the data that has been read and immediately write it
+to the <code>NetSocket</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -160,10 +160,10 @@ server.connectHandler({ sock -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>There&#8217;s a problem with the above example: If data is read from the socket faster than it can be
+<p>There is a problem with the example above: if data is read from the socket faster than it can be
 written back to the socket, it will build up in the write queue of the <code>NetSocket</code>, eventually
 running out of RAM. This might happen, for example if the client at the other end of the socket
-wasn&#8217;t reading very fast, effectively putting back-pressure on the connection.</p>
+wasn&#8217;t reading fast enough, effectively putting back-pressure on the connection.</p>
 </div>
 <div class="paragraph">
 <p>Since <code>NetSocket</code> implements <code>WriteStream</code>, we can check if the <code>WriteStream</code> is full before
@@ -187,7 +187,7 @@ server.connectHandler({ sock -&gt;
 </div>
 <div class="paragraph">
 <p>This example won&#8217;t run out of RAM but we&#8217;ll end up losing data if the write queue gets full. What we
-really want to do is pause the <code>NetSocket</code> when the write queue is full. Let&#8217;s do that:</p>
+really want to do is pause the <code>NetSocket</code> when the write queue is full:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -228,15 +228,20 @@ server.connectHandler({ sock -&gt;
 }).listen()</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>And there we have it. The <code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#drainHandler(io.vertx.core.Handler)">drainHandler</a></code> event handler will
-get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> which
-allows it to read more data.</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">And there we have it. The `link:../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#drainHandler((@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler))[drainHandler]` event handler will
+get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> that
+allows more data to be read.</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
-<p>It&#8217;s very common to want to do this when writing Vert.x applications, so we provide a helper class
-called <code><a href="groovydoc/io/vertx/groovy/core/streams/Pump.html">Pump</a></code> which does all this hard work for you. You just feed it the <code>ReadStream</code> and
-the <code>WriteStream</code> and it tell it to start:</p>
+<p>Wanting to do this is quite common while writing Vert.x applications, so we provide a helper class
+called <code><a href="../../groovydoc/io/vertx/groovy/core/streams/Pump.html">Pump</a></code> that does all of this hard work for you.
+You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> then start it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -251,20 +256,20 @@ server.connectHandler({ sock -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>Which does exactly the same thing as the more verbose example.</p>
+<p>This does exactly the same thing as the more verbose example.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s look at the methods on <code>ReadStream</code> and <code>WriteStream</code> in more detail:</p>
+<p>Let&#8217;s now look at the methods on <code>ReadStream</code> and <code>WriteStream</code> in more detail:</p>
 </div>
 <div class="sect2">
 <h3 id="_readstream">ReadStream</h3>
 <div class="paragraph">
-<p><code>ReadStream</code> is implemented by <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/eventbus/MessageConsumer.html">MessageConsumer</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/net/NetSocketStream.html">NetSocketStream</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocketStream.html">WebSocketStream</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/TimeoutStream.html">TimeoutStream</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>.</p>
+<p><code>ReadStream</code> is implemented by <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/eventbus/MessageConsumer.html">MessageConsumer</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocketStream.html">NetSocketStream</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketStream.html">WebSocketStream</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/TimeoutStream.html">TimeoutStream</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -272,23 +277,23 @@ server.connectHandler({ sock -&gt;
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html#handler(io.vertx.core.Handler)">handler</a></code>:
+<p><code>link:../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html#handler@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler[handler]</code>:
 set a handler which will receive items from the ReadStream.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html#pause()">pause</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html#pause()">pause</a></code>:
 pause the handler. When paused no items will be received in the handler.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html#resume()">resume</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html#resume()">resume</a></code>:
 resume the handler. The handler will be called if any item arrives.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code>:
 Will be called if an exception occurs on the ReadStream.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html#endHandler(io.vertx.core.Handler)">endHandler</a></code>:
+<p><code>link:../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html#endHandler@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler[endHandler]</code>:
 Will be called when end of stream is reached. This might be when EOF is reached if the ReadStream represents a file,
 or when end of request is reached if it&#8217;s an HTTP request, or when the connection is closed if it&#8217;s a TCP socket.</p>
 </li>
@@ -298,9 +303,9 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="sect2">
 <h3 id="_writestream">WriteStream</h3>
 <div class="paragraph">
-<p><code>WriteStream</code> is implemented by <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code>
-<code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/datagram/PacketWritestream.html">PacketWritestream</a></code> and <code><a href="groovydoc/io/vertx/groovy/core/eventbus/MessageProducer.html">MessageProducer</a></code></p>
+<p><code>WriteStream</code> is implemented by <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/datagram/PacketWritestream.html">PacketWritestream</a></code> and <code><a href="../../groovydoc/io/vertx/groovy/core/eventbus/MessageProducer.html">MessageProducer</a></code></p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -308,27 +313,27 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#write(java.lang.Object)">write</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#write(java.lang.Object)">write</a></code>:
 write an object to the WriteStream. This method will never block. Writes are queued internally and asynchronously
 written to the underlying resource.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#setWriteQueueMaxSize(int)">setWriteQueueMaxSize</a></code>:
-set the number of object at which the write queue is considered <em>full</em>, and the method <code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#writeQueueFull()">writeQueueFull</a></code>
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#setWriteQueueMaxSize(int)">setWriteQueueMaxSize</a></code>:
+set the number of object at which the write queue is considered <em>full</em>, and the method <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#writeQueueFull()">writeQueueFull</a></code>
 returns <code>true</code>. Note that, when the write queue is considered full, if write is called the data will still be accepted
-and queued. The actual number depends on the stream implementation, for <code><a href="groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code> the size
+and queued. The actual number depends on the stream implementation, for <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code> the size
 represents the actual number of bytes written and not the number of buffers.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#writeQueueFull()">writeQueueFull</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#writeQueueFull()">writeQueueFull</a></code>:
 returns <code>true</code> if the write queue is considered full.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code>:
 Will be called if an exception occurs on the <code>WriteStream</code>.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#drainHandler(io.vertx.core.Handler)">drainHandler</a></code>:
+<p><code>link:../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#drainHandler@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler[drainHandler]</code>:
 The handler will be called if the <code>WriteStream</code> is considered no longer full.</p>
 </li>
 </ul>
@@ -342,16 +347,16 @@ The handler will be called if the <code>WriteStream</code> is considered no long
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/Pump.html#start()">start</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/Pump.html#start()">start</a></code>:
 Start the pump.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/Pump.html#stop()">stop</a></code>:
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/Pump.html#stop()">stop</a></code>:
 Stops the pump. When the pump starts it is in stopped mode.</p>
 </li>
 <li>
-<p><code><a href="groovydoc/io/vertx/groovy/core/streams/Pump.html#setWriteQueueMaxSize(int)">setWriteQueueMaxSize</a></code>:
-This has the same meaning as <code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html#setWriteQueueMaxSize(int)">setWriteQueueMaxSize</a></code> on the <code>WriteStream</code>.</p>
+<p><code><a href="../../groovydoc/io/vertx/groovy/core/streams/Pump.html#setWriteQueueMaxSize(int)">setWriteQueueMaxSize</a></code>:
+This has the same meaning as <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html#setWriteQueueMaxSize(int)">setWriteQueueMaxSize</a></code> on the <code>WriteStream</code>.</p>
 </li>
 </ul>
 </div>
@@ -359,7 +364,8 @@ This has the same meaning as <code><a href="groovydoc/io/vertx/groovy/core/strea
 <p>A pump can be started and stopped multiple times.</p>
 </div>
 <div class="paragraph">
-<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.</p>
+<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.
+&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;</p>
 </div>
 </div>
 </div>
@@ -371,7 +377,7 @@ This has the same meaning as <code><a href="groovydoc/io/vertx/groovy/core/strea
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

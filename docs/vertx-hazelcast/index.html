@@ -86,6 +86,7 @@
           <ul class="sectlevel1">
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
+<li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
 <li><a href="#_multicast_not_enabled_on_the_machine">Multicast not enabled on the machine.</a></li>
@@ -104,6 +105,7 @@
           <ul class="sectlevel1">
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
+<li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
 <li><a href="#_multicast_not_enabled_on_the_machine">Multicast not enabled on the machine.</a></li>
@@ -129,7 +131,7 @@ cluster managers are pluggable.  This implementation is packaged inside:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-hazelcast&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -246,6 +248,30 @@ Hazelcast documentation.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can pass an existing <code>HazelcastInstance</code> in the cluster manager to reuse an existing cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new HazelcastClusterManager(hazelcastInstance);
+VertxOptions options = new VertxOptions().setClusterManager(mgr);
+Vertx.clusteredVertx(options, res -&gt; {
+  if (res.succeeded()) {
+    Vertx vertx = res.result();
+  } else {
+    // failed!
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, vert.x is not the cluster owner and so do not shutdown the cluster on close.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_trouble_shooting_clustering">Trouble shooting clustering</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -346,7 +372,7 @@ java.util.logging.FileHandler.level=INFO</pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

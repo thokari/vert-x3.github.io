@@ -124,7 +124,7 @@
 application.</p>
 </div>
 <div class="paragraph">
-<p>The client API is represented with the interface <code><a href="jsdoc/jdbc_client-JDBCClient.html">JDBCClient</a></code>.</p>
+<p>The client API is represented with the interface <code><a href="../../jsdoc/jdbc_client-JDBCClient.html">JDBCClient</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>To use this project, add the following dependency to the <em>dependencies</em> section of your build descriptor:</p>
@@ -141,7 +141,7 @@ application.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-jdbc-client&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -154,7 +154,7 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-jdbc-client:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-jdbc-client:3.2.0'</code></pre>
 </div>
 </div>
 </div>
@@ -185,7 +185,7 @@ var client = JDBCClient.createShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The first call to <code><a href="jsdoc/jdbc_client-JDBCClient.html#createShared">JDBCClient.createShared</a></code>
+<p>The first call to <code><a href="../../jsdoc/jdbc_client-JDBCClient.html#createShared">JDBCClient.createShared</a></code>
 will actually create the data source, and the specified config will be used.</p>
 </div>
 <div class="paragraph">
@@ -210,7 +210,7 @@ var client = JDBCClient.createShared(vertx, config, "MyDataSource");</code></pre
 share the same data source.</p>
 </div>
 <div class="paragraph">
-<p>The first call to <code><a href="jsdoc/jdbc_client-JDBCClient.html#createShared">JDBCClient.createShared</a></code>
+<p>The first call to <code><a href="../../jsdoc/jdbc_client-JDBCClient.html#createShared">JDBCClient.createShared</a></code>
 will actually create the data source, and the specified config will be used.</p>
 </div>
 <div class="paragraph">
@@ -228,7 +228,7 @@ interacting with different databases.</p>
 However, it&#8217;s possible you want to create a client instance that doesn&#8217;t share its data source with any other client.</p>
 </div>
 <div class="paragraph">
-<p>In that case you can use <code><a href="jsdoc/jdbc_client-JDBCClient.html#createNonShared">JDBCClient.createNonShared</a></code>.</p>
+<p>In that case you can use <code><a href="../../jsdoc/jdbc_client-JDBCClient.html#createNonShared">JDBCClient.createNonShared</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -238,7 +238,7 @@ var client = JDBCClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This is equivalent to calling <code><a href="jsdoc/jdbc_client-JDBCClient.html#createShared">JDBCClient.createShared</a></code>
+<p>This is equivalent to calling <code><a href="../../jsdoc/jdbc_client-JDBCClient.html#createShared">JDBCClient.createShared</a></code>
 with a unique data source name each time.</p>
 </div>
 </div>
@@ -274,7 +274,7 @@ the same data source is closed, the data source will be closed.</p>
 <h2 id="_getting_a_connection">Getting a connection</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you&#8217;ve created a client you use <code><a href="jsdoc/jdbc_client-JDBCClient.html#getConnection">getConnection</a></code> to get
+<p>Once you&#8217;ve created a client you use <code><a href="../../jsdoc/jdbc_client-JDBCClient.html#getConnection">getConnection</a></code> to get
 a connection.</p>
 </div>
 <div class="paragraph">
@@ -303,7 +303,7 @@ client.getConnection(function (res, res_err) {
 </div>
 </div>
 <div class="paragraph">
-<p>The connection is an instance of <code><a href="../../vertx-sql-common/js/jsdoc/sql_connection-SQLConnection.html">SQLConnection</a></code> which is a common interface used by
+<p>The connection is an instance of <code><a href="../../jsdoc/sql_connection-SQLConnection.html">SQLConnection</a></code> which is a common interface used by
 more than Vert.x sql service.</p>
 </div>
 <div class="paragraph">
@@ -426,7 +426,7 @@ in your <em>classpath</em>.</p>
 </div>
 <div class="paragraph">
 <p>If your application is packaged as a <em>fat jar</em>, be sure to embed the jdbc driver. If your application is launched
-with the <code>vertx</code> command line, copy the JDBC driver to <code>${VERTX_HOME}\lib</code>.</p>
+with the <code>vertx</code> command line, copy the JDBC driver to <code>${VERTX_HOME}/lib</code>.</p>
 </div>
 <div class="paragraph">
 <p>The behavior may be different when using a different connection pool.</p>
@@ -440,7 +440,7 @@ with the <code>vertx</code> command line, copy the JDBC driver to <code>${VERTX_
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

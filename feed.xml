@@ -8,6 +8,50 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x 3.2.0 is released !</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;We are pleased to announce the release of Vert.x 3.2.0!&lt;/p&gt;
+&lt;p&gt;Some of the highlights of this release include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-core/ceylon&quot;&gt;vertx-lang-ceylon&lt;/a&gt;: the support of the &lt;a href=&quot;http://ceylon-lang.org/&quot;&gt;Ceylon language&lt;/a&gt;!&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-tcp-eventbus-bridge/java/&quot;&gt;vertx-tcp-bridge&lt;/a&gt;: an event bus bridge that lets any TCP-capable application to interact with vert.x applications using the event bus.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-hawkular-metrics/java/&quot;&gt;vertx-hawkular-metric&lt;/a&gt;: an implementation of the vert.x metrics for &lt;a href=&quot;http://www.hawkular.org/&quot;&gt;Hawkular&lt;/a&gt;. In addition, it lets you report your own metrics to hawkular.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-jgroups/java/&quot;&gt;vertx-jgroups&lt;/a&gt;: an alternative implementation of the vert.x cluster manager using &lt;a href=&quot;http://jgroups.org/&quot;&gt;JGroups&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A new &lt;a href=&quot;http://vertx.io/docs/vertx-stack-manager/stack-manager/&quot;&gt;stack manager&lt;/a&gt; to configure the vert.x distribution with the content you want.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The release also contains many bug fixes and a ton of improvements. Full release notes can be found here:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.2.0---Release-Notes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.2.0---Release-Notes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Breaking changes are here:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.2.0-Breaking-changes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.2.0-Breaking-changes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The event bus client using the SockJS bridge are available from NPM, Bower and as a WebJar:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-eventbus-client&quot;&gt;https://www.npmjs.com/package/vertx3-eventbus-client&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/vertx-bus-bower&quot;&gt;https://github.com/vert-x3/vertx-bus-bower&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.webjars.org/&quot;&gt;http://www.webjars.org/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Dockers images are also available on the &lt;a href=&quot;https://hub.docker.com/u/vertx/&quot;&gt;Docker Hub&lt;/a&gt;
+The vert.x distribution is also available from &lt;a href=&quot;http://sdkman.io/index.html&quot;&gt;SDKMan&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Many thanks to all the committers and community whose contributions made this possible.&lt;/p&gt;
+&lt;p&gt;Next stop is Vert.x 3.3.0 which we hope to have out in March 2016.&lt;/p&gt;
+&lt;p&gt;The artifacts have been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%223.2.0%22&quot;&gt;Maven Central&lt;/a&gt;
+ and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.2.0/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Tue, 15 Dec 2015 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/vert-x-3-2-0-is-released</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-2-0-is-released</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Combine vert.x and mongo to build a giant</title>
           <description>
       &lt;article&gt;&lt;p&gt;This blog post is part of the &lt;em&gt;introduction to vert.x&lt;/em&gt; series. Last time, we have seen how we can use the &lt;code&gt;vertx-jdbc-client&lt;/code&gt; to connect to a database using a JDBC driver. In this post, we are going to replace this JDBC client by the &lt;code&gt;vertx-mongo-client&lt;/code&gt;, and thus connect to a Mongo database.&lt;/p&gt;

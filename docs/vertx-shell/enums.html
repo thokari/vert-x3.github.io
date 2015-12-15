@@ -84,7 +84,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
-<li><a href="#EventType">EventType</a></li>
+<li><a href="#ExecStatus">ExecStatus</a></li>
 </ul>
         </div>
       </div>
@@ -92,13 +92,13 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
-<li><a href="#EventType">EventType</a></li>
+<li><a href="#ExecStatus">ExecStatus</a></li>
 </ul>
         </div>
         <div class="sect1">
-<h2 id="EventType">EventType</h2>
+<h2 id="ExecStatus">ExecStatus</h2>
 <div class="sectionbody">
- An event emitted by a link
+ The status of an execution.
 <hr>
 <table class="tableblock frame-topbot grid-all spread">
 <colgroup>
@@ -111,24 +111,20 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="SIGTSTP"></a><code>SIGTSTP</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fired when the process is running and is stopped.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="READY"></a><code>READY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The job is ready, it can be running or terminated.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="EOF"></a><code>EOF</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fired when an End Of File is encountered.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="RUNNING"></a><code>RUNNING</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The job is running, it can be stopped or terminated.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="SIGINT"></a><code>SIGINT</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fired when the process is interrupted.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="STOPPED"></a><code>STOPPED</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The job is stopped, it can be running or terminated.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="SIGWINCH"></a><code>SIGWINCH</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fired when the size of the terminal changes.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="SIGCONT"></a><code>SIGCONT</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fired when the process is resumed.</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="TERMINATED"></a><code>TERMINATED</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The job is terminated.</p></td>
 </tr>
 </tbody>
 </table>
@@ -141,7 +137,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

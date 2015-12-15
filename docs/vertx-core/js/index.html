@@ -567,12 +567,12 @@ project descriptor to access the Vert.x Core API and enable the JavaScript suppo
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
  &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
- &lt;version&gt;3.1.0&lt;/version&gt;
+ &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-lang-js&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -585,8 +585,8 @@ project descriptor to access the Vert.x Core API and enable the JavaScript suppo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.1.0"
-compile "io.vertx:vertx-lang-js:3.1.0"</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.2.0"
+compile "io.vertx:vertx-lang-js:3.2.0"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -610,7 +610,7 @@ Much of this is Java specific - need someway of swapping in language specific pa
 </table>
 </div>
 <div class="paragraph">
-<p>You can&#8217;t do much in Vert.x-land unless you can commune with a <code><a href="jsdoc/vertx-Vertx.html">Vertx</a></code> object!</p>
+<p>You can&#8217;t do much in Vert.x-land unless you can commune with a <code><a href="../../jsdoc/vertx-Vertx.html">Vertx</a></code> object!</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s the control centre of Vert.x and is how you do pretty much everything, including creating clients and servers,
@@ -973,7 +973,7 @@ blocking APIs safely within a Vert.x application.</p>
 from doing any other useful work. So how can you do this?</p>
 </div>
 <div class="paragraph">
-<p>It&#8217;s done by calling <code><a href="jsdoc/vertx-Vertx.html#executeBlocking">executeBlocking</a></code> specifying both the blocking code to execute and a
+<p>It&#8217;s done by calling <code><a href="../../jsdoc/vertx-Vertx.html#executeBlocking">executeBlocking</a></code> specifying both the blocking code to execute and a
 result handler to be called back asynchronous when the blocking code has been executed.</p>
 </div>
 <div class="listingblock">
@@ -993,7 +993,7 @@ vertx.executeBlocking(function (future) {
 the different executeBlocking are executed <em>serially</em> (i.e. one after another).</p>
 </div>
 <div class="paragraph">
-<p>If you don&#8217;t care about ordering you can call <code><a href="jsdoc/vertx-Vertx.html#executeBlocking">executeBlocking</a></code>
+<p>If you don&#8217;t care about ordering you can call <code><a href="../../jsdoc/vertx-Vertx.html#executeBlocking">executeBlocking</a></code>
 specifying <code>false</code> as the argument to <code>ordered</code>. In this case any executeBlocking may be executed in parallel
 on the worker pool.</p>
 </div>
@@ -1285,7 +1285,7 @@ using standard Java techniques for multi-threaded programming.
 <div class="sect2">
 <h3 id="_deploying_verticles_programmatically">Deploying verticles programmatically</h3>
 <div class="paragraph">
-<p>You can deploy a verticle using one of the <code><a href="jsdoc/vertx-Vertx.html#deployVerticle">deployVerticle</a></code> method, specifying a verticle
+<p>You can deploy a verticle using one of the <code><a href="../../jsdoc/vertx-Vertx.html#deployVerticle">deployVerticle</a></code> method, specifying a verticle
 name or you can pass in a verticle instance you have already created yourself.</p>
 </div>
 <div class="admonitionblock note">
@@ -1372,8 +1372,8 @@ and instantiate that.</p>
 <p>Most Verticle factories are loaded from the classpath and registered at Vert.x startup.</p>
 </div>
 <div class="paragraph">
-<p>You can also programmatically register and unregister verticle factories using <code><a href="jsdoc/vertx-Vertx.html#registerVerticleFactory">registerVerticleFactory</a></code>
-and <code><a href="jsdoc/vertx-Vertx.html#unregisterVerticleFactory">unregisterVerticleFactory</a></code> if you wish.</p>
+<p>You can also programmatically register and unregister verticle factories using <code><a href="../../jsdoc/vertx-Vertx.html#registerVerticleFactory">registerVerticleFactory</a></code>
+and <code><a href="../../jsdoc/vertx-Vertx.html#unregisterVerticleFactory">unregisterVerticleFactory</a></code> if you wish.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1405,7 +1405,7 @@ and <code><a href="jsdoc/vertx-Vertx.html#unregisterVerticleFactory">unregisterV
 <div class="sect2">
 <h3 id="_undeploying_verticle_deployments">Undeploying verticle deployments</h3>
 <div class="paragraph">
-<p>Deployments can be undeployed with <code><a href="jsdoc/vertx-Vertx.html#undeploy">undeploy</a></code>.</p>
+<p>Deployments can be undeployed with <code><a href="../../jsdoc/vertx-Vertx.html#undeploy">undeploy</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Un-deployment is itself asynchronous so if you want to be notified when un-deployment is complete you can deploy specifying a completion handler:</p>
@@ -1459,7 +1459,7 @@ vertx.deployVerticle("MyOrderProcessorVerticle.js", options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This configuration is then available via the <code><a href="../../vertx-core/js/jsdoc/context-Context.html">Context</a></code> object.</p>
+<p>This configuration is then available via the <code><a href="../../jsdoc/context-Context.html">Context</a></code> object.</p>
 </div>
 <div class="paragraph">
 <p>The configuration is returned as a
@@ -1480,8 +1480,8 @@ console.log("Configuration: " + vertx.getOrCreateContext().config().name);</code
 <div class="title">Note</div>
 </td>
 <td class="content">
-The access to the <code>context</code> object is made either using <code><a href="../../vertx-core/js/jsdoc/vertx-Vertx.html#currentContext">Vertx.currentContext</a></code> or using
-<code><a href="../../vertx-core/js/jsdoc/vertx-Vertx.html#getOrCreateContext">getOrCreateContext</a></code>.
+The access to the <code>context</code> object is made either using <code><a href="../../jsdoc/vertx-Vertx.html#currentContext">Vertx.currentContext</a></code> or using
+<code><a href="../../jsdoc/vertx-Vertx.html#getOrCreateContext">getOrCreateContext</a></code>.
 </td>
 </tr>
 </table>
@@ -1639,7 +1639,7 @@ type <code>vertx</code> at the command line.</p>
 <p>Threads maintained by Vert.x instances are not daemon threads so they will prevent the JVM from exiting.</p>
 </div>
 <div class="paragraph">
-<p>If you are embedding Vert.x and you have finished with it, you can call <code><a href="jsdoc/vertx-Vertx.html#close">close</a></code> to close it
+<p>If you are embedding Vert.x and you have finished with it, you can call <code><a href="../../jsdoc/vertx-Vertx.html#close">close</a></code> to close it
 down.</p>
 </div>
 <div class="paragraph">
@@ -1656,7 +1656,7 @@ on that exact same event loop thread. In the case of worker verticles and runnin
 worker context will be associated with the execution which will use a thread from the worker thread pool.</p>
 </div>
 <div class="paragraph">
-<p>To retrieve the context, use the <code><a href="jsdoc/vertx-Vertx.html#getOrCreateContext">getOrCreateContext</a></code> method:</p>
+<p>To retrieve the context, use the <code><a href="../../jsdoc/vertx-Vertx.html#getOrCreateContext">getOrCreateContext</a></code> method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1696,7 +1696,7 @@ you submit a task that will be eventually run in the same context, but later:</p
 <div class="paragraph">
 <p>When several handlers run in the same context, they may want to share data. The context object offers methods to
 store and retrieve data shared in the context. For instance, it lets you pass data to some action run with
-<code><a href="jsdoc/context-Context.html#runOnContext">runOnContext</a></code>:</p>
+<code><a href="../../jsdoc/context-Context.html#runOnContext">runOnContext</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1708,7 +1708,7 @@ context.runOnContext(function (v) {
 </div>
 </div>
 <div class="paragraph">
-<p>The context object also let you access verticle configuration using the <code><a href="jsdoc/context-Context.html#config">config</a></code>
+<p>The context object also let you access verticle configuration using the <code><a href="../../jsdoc/context-Context.html#config">config</a></code>
 method. Check the <a href="#_passing_configuration_to_a_verticle">Passing configuration to a verticle</a> section for more details about this configuration.</p>
 </div>
 </div>
@@ -1729,7 +1729,7 @@ method. Check the <a href="#_passing_configuration_to_a_verticle">Passing config
 <p>A one shot timer calls an event handler after a certain delay, expressed in milliseconds.</p>
 </div>
 <div class="paragraph">
-<p>To set a timer to fire once you use <code><a href="jsdoc/vertx-Vertx.html#setTimer">setTimer</a></code> method passing in the delay and a handler</p>
+<p>To set a timer to fire once you use <code><a href="../../jsdoc/vertx-Vertx.html#setTimer">setTimer</a></code> method passing in the delay and a handler</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1747,7 +1747,7 @@ console.log("First this is printed");</code></pre>
 <div class="sect3">
 <h4 id="_periodic_timers">Periodic Timers</h4>
 <div class="paragraph">
-<p>You can also set a timer to fire periodically by using <code><a href="jsdoc/vertx-Vertx.html#setPeriodic">setPeriodic</a></code>.</p>
+<p>You can also set a timer to fire periodically by using <code><a href="../../jsdoc/vertx-Vertx.html#setPeriodic">setPeriodic</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>There will be an initial delay equal to the period.</p>
@@ -1763,7 +1763,7 @@ console.log("First this is printed");</code></pre>
 your timer events could run continuously or even worse : stack up.</p>
 </div>
 <div class="paragraph">
-<p>In this case, you should consider using <code><a href="jsdoc/vertx-Vertx.html#setTimer">setTimer</a></code> instead. Once your treatment has
+<p>In this case, you should consider using <code><a href="../../jsdoc/vertx-Vertx.html#setTimer">setTimer</a></code> instead. Once your treatment has
 finished, you can set the next timer.</p>
 </div>
 <div class="listingblock">
@@ -1779,7 +1779,7 @@ console.log("First this is printed");</code></pre>
 <div class="sect3">
 <h4 id="_cancelling_timers">Cancelling timers</h4>
 <div class="paragraph">
-<p>To cancel a periodic timer, call <code><a href="jsdoc/vertx-Vertx.html#cancelTimer">cancelTimer</a></code> specifying the timer id. For example:</p>
+<p>To cancel a periodic timer, call <code><a href="../../jsdoc/vertx-Vertx.html#cancelTimer">cancelTimer</a></code> specifying the timer id. For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1801,10 +1801,10 @@ when the verticle is undeployed.</p>
 <h2 id="event_bus">The Event Bus</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code><a href="jsdoc/event_bus-EventBus.html">event bus</a></code> is the <strong>nervous system</strong> of Vert.x.</p>
+<p>The <code><a href="../../jsdoc/event_bus-EventBus.html">event bus</a></code> is the <strong>nervous system</strong> of Vert.x.</p>
 </div>
 <div class="paragraph">
-<p>There is a single event bus instance for every Vert.x instance and it is obtained using the method <code><a href="jsdoc/vertx-Vertx.html#eventBus">eventBus</a></code>.</p>
+<p>There is a single event bus instance for every Vert.x instance and it is obtained using the method <code><a href="../../jsdoc/vertx-Vertx.html#eventBus">eventBus</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The event bus allows different parts of your application to communicate with each other irrespective of what language they are written in,
@@ -1909,7 +1909,7 @@ to retry after recovery.</p>
 <div class="sect3">
 <h4 id="_types_of_messages">Types of messages</h4>
 <div class="paragraph">
-<p>Out of the box Vert.x allows any primitive/simple type, String, or <code><a href="jsdoc/buffer-Buffer.html">buffers</a></code> to
+<p>Out of the box Vert.x allows any primitive/simple type, String, or <code><a href="../../jsdoc/buffer-Buffer.html">buffers</a></code> to
 be sent as messages.</p>
 </div>
 <div class="paragraph">
@@ -1950,7 +1950,7 @@ You do this by defining a <code>codec</code> for the objects you want to send.</
 <div class="sect3">
 <h4 id="_registering_handlers">Registering Handlers</h4>
 <div class="paragraph">
-<p>This simplest way to register a handler is using <code><a href="jsdoc/event_bus-EventBus.html#consumer">consumer</a></code>.
+<p>This simplest way to register a handler is using <code><a href="../../jsdoc/event_bus-EventBus.html#consumer">consumer</a></code>.
 Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -1963,16 +1963,16 @@ eb.consumer("news.uk.sport", function (message) {
 </div>
 </div>
 <div class="paragraph">
-<p>When a message arrives for your handler, your handler will be called, passing in the <code><a href="jsdoc/message-Message.html">message</a></code>.</p>
+<p>When a message arrives for your handler, your handler will be called, passing in the <code><a href="../../jsdoc/message-Message.html">message</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The object returned from call to consumer() is an instance of <code><a href="jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code></p>
+<p>The object returned from call to consumer() is an instance of <code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code></p>
 </div>
 <div class="paragraph">
 <p>This object can subsequently be used to unregister the handler, or use the handler as a stream.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively you can use <code><a href="jsdoc/event_bus-EventBus.html#consumer">consumer</a></code> to
+<p>Alternatively you can use <code><a href="../../jsdoc/event_bus-EventBus.html#consumer">consumer</a></code> to
 to return a MessageConsumer with no handler set, and then set the handler on that. For example:</p>
 </div>
 <div class="listingblock">
@@ -1990,7 +1990,7 @@ consumer.handler(function (message) {
 nodes of the cluster.</p>
 </div>
 <div class="paragraph">
-<p>If you want to be notified when this has completed, you can register a <code><a href="jsdoc/message_consumer-MessageConsumer.html#completionHandler">completion handler</a></code>
+<p>If you want to be notified when this has completed, you can register a <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#completionHandler">completion handler</a></code>
 on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
@@ -2008,11 +2008,11 @@ on the MessageConsumer object.</p>
 <div class="sect3">
 <h4 id="_un_registering_handlers">Un-registering Handlers</h4>
 <div class="paragraph">
-<p>To unregister a handler, call <code><a href="jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
+<p>To unregister a handler, call <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you are on a clustered event bus, un-registering can take some time to propagate across the nodes, if you want to
-be notified when this is complete use <code><a href="jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
+be notified when this is complete use <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2029,7 +2029,7 @@ be notified when this is complete use <code><a href="jsdoc/message_consumer-Mess
 <div class="sect3">
 <h4 id="_publishing_messages">Publishing messages</h4>
 <div class="paragraph">
-<p>Publishing a message is simple. Just use <code><a href="jsdoc/event_bus-EventBus.html#publish">publish</a></code> specifying the
+<p>Publishing a message is simple. Just use <code><a href="../../jsdoc/event_bus-EventBus.html#publish">publish</a></code> specifying the
 address to publish it to.</p>
 </div>
 <div class="listingblock">
@@ -2048,7 +2048,7 @@ address to publish it to.</p>
 This is the point to point messaging pattern. The handler is chosen in a non-strict round-robin fashion.</p>
 </div>
 <div class="paragraph">
-<p>You can send a message with <code><a href="jsdoc/event_bus-EventBus.html#send">send</a></code></p>
+<p>You can send a message with <code><a href="../../jsdoc/event_bus-EventBus.html#send">send</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2095,26 +2095,26 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 <div class="sect3">
 <h4 id="_the_message_object">The Message object</h4>
 <div class="paragraph">
-<p>The object you receive in a message handler is a <code><a href="jsdoc/message-Message.html">Message</a></code>.</p>
+<p>The object you receive in a message handler is a <code><a href="../../jsdoc/message-Message.html">Message</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/message-Message.html#body">body</a></code> of the message corresponds to the object that was sent or published.</p>
+<p>The <code><a href="../../jsdoc/message-Message.html#body">body</a></code> of the message corresponds to the object that was sent or published.</p>
 </div>
 <div class="paragraph">
-<p>The headers of the message are available with <code><a href="jsdoc/message-Message.html#headers">headers</a></code>.</p>
+<p>The headers of the message are available with <code><a href="../../jsdoc/message-Message.html#headers">headers</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_replying_to_messages">Replying to messages</h4>
+<h4 id="_acknowledging_messages_sending_replies">Acknowledging messages / sending replies</h4>
 <div class="paragraph">
-<p>Sometimes after you send a message you want to receive a reply from the recipient.
-This is known as the <strong>request-response pattern</strong>.</p>
+<p>When using <code><a href="../../jsdoc/event_bus-EventBus.html#send">send</a></code> the event bus attempts to deliver the message to a
+<code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code> registered with the event bus.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can specify a reply handler when sending the message.</p>
+<p>In some cases it&#8217;s useful for the sender to know when the consumer has received the message and "processed" it.</p>
 </div>
 <div class="paragraph">
-<p>When the receiver receives the message they can reply to it by calling <code><a href="jsdoc/message-Message.html#reply">reply</a></code>.</p>
+<p>To acknowledge that the message has been processed the consumer can reply to the message by calling <code><a href="../../jsdoc/message-Message.html#reply">reply</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When this happens it causes a reply to be sent back to the sender and the reply handler is invoked with the reply.</p>
@@ -2147,8 +2147,30 @@ consumer.handler(function (message) {
 </div>
 </div>
 <div class="paragraph">
-<p>The replies themselves can also be replied to so you can create a dialog between two different parties
-consisting of multiple rounds.</p>
+<p>The reply can contain a message body which can contain useful information.</p>
+</div>
+<div class="paragraph">
+<p>What the "processing" actually means is application defined and depends entirely on what the message consumer does
+and is not something that the Vert.x event bus itself knows or cares about.</p>
+</div>
+<div class="paragraph">
+<p>Some examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A simple message consumer which implements a service which returns the time of the day would acknowledge with a message
+containing the time of day in the reply body</p>
+</li>
+<li>
+<p>A message consumer which implements a persistent queue, might acknowledge with <code>true</code> if the message was successfully
+persisted in storage, or <code>false</code> if not.</p>
+</li>
+<li>
+<p>A message consumer which processes an order might acknowledge with <code>true</code> when the order has been successfully processed
+so it can be deleted from the database</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -2174,7 +2196,7 @@ consisting of multiple rounds.</p>
 <p>There are no handlers available to send the message to</p>
 </li>
 <li>
-<p>The recipient has explicitly failed the message using <code><a href="jsdoc/message-Message.html#fail">fail</a></code></p>
+<p>The recipient has explicitly failed the message using <code><a href="../../jsdoc/message-Message.html#fail">fail</a></code></p>
 </li>
 </ul>
 </div>
@@ -2256,7 +2278,7 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 <div class="sect2">
 <h3 id="_creating_buffers">Creating buffers</h3>
 <div class="paragraph">
-<p>Buffers can create by using one of the static <code><a href="jsdoc/buffer-Buffer.html#buffer">Buffer.buffer</a></code> methods.</p>
+<p>Buffers can create by using one of the static <code><a href="../../jsdoc/buffer-Buffer.html#buffer">Buffer.buffer</a></code> methods.</p>
 </div>
 <div class="paragraph">
 <p>Buffers can be initialised from strings or byte arrays, or empty buffers can be created.</p>
@@ -2396,21 +2418,21 @@ console.log(buff.getUnsignedByte(pos));</code></pre>
 <div class="sect2">
 <h3 id="_buffer_length">Buffer length</h3>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/buffer-Buffer.html#length">length</a></code> to obtain the length of the buffer.
+<p>Use <code><a href="../../jsdoc/buffer-Buffer.html#length">length</a></code> to obtain the length of the buffer.
 The length of a buffer is the index of the byte in the buffer with the largest index + 1.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_copying_buffers">Copying buffers</h3>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/buffer-Buffer.html#copy">copy</a></code> to make a copy of the buffer</p>
+<p>Use <code><a href="../../jsdoc/buffer-Buffer.html#copy">copy</a></code> to make a copy of the buffer</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_slicing_buffers">Slicing buffers</h3>
 <div class="paragraph">
 <p>A sliced buffer is a new buffer which backs onto the original buffer, i.e. it does not copy the underlying data.
-Use <code><a href="jsdoc/buffer-Buffer.html#slice">slice</a></code> to create a sliced buffers</p>
+Use <code><a href="../../jsdoc/buffer-Buffer.html#slice">slice</a></code> to create a sliced buffers</p>
 </div>
 </div>
 <div class="sect2">
@@ -2456,7 +2478,7 @@ var server = vertx.createNetServer(options);</code></pre>
 <div class="sect2">
 <h3 id="_start_the_server_listening">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="jsdoc/net_server-NetServer.html#listen">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../jsdoc/net_server-NetServer.html#listen">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -2508,7 +2530,7 @@ server.listen(1234, "localhost", function (res, res_err) {
 <p>If <code>0</code> is used as the listening port, the server will find an unused random port to listen on.</p>
 </div>
 <div class="paragraph">
-<p>To find out the real port the server is listening on you can call <code><a href="jsdoc/net_server-NetServer.html#actualPort">actualPort</a></code>.</p>
+<p>To find out the real port the server is listening on you can call <code><a href="../../jsdoc/net_server-NetServer.html#actualPort">actualPort</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2526,7 +2548,7 @@ server.listen(0, "localhost", function (res, res_err) {
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_connections">Getting notified of incoming connections</h3>
 <div class="paragraph">
-<p>To be notified when a connection is made you need to set a <code><a href="jsdoc/net_server-NetServer.html#connectHandler">connectHandler</a></code>:</p>
+<p>To be notified when a connection is made you need to set a <code><a href="../../jsdoc/net_server-NetServer.html#connectHandler">connectHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2537,7 +2559,7 @@ server.connectHandler(function (socket) {
 </div>
 </div>
 <div class="paragraph">
-<p>When a connection is made the handler will be called with an instance of <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code>.</p>
+<p>When a connection is made the handler will be called with an instance of <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This is a socket-like interface to the actual connection, and allows you to read and write data as well as do various
@@ -2547,11 +2569,11 @@ other things like close the socket.</p>
 <div class="sect2">
 <h3 id="_reading_data_from_the_socket">Reading data from the socket</h3>
 <div class="paragraph">
-<p>To read data from the socket you set the <code><a href="jsdoc/net_socket-NetSocket.html#handler">handler</a></code> on the
+<p>To read data from the socket you set the <code><a href="../../jsdoc/net_socket-NetSocket.html#handler">handler</a></code> on the
 socket.</p>
 </div>
 <div class="paragraph">
-<p>This handler will be called with an instance of <code><a href="jsdoc/buffer-Buffer.html">Buffer</a></code> every time data is received on
+<p>This handler will be called with an instance of <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code> every time data is received on
 the socket.</p>
 </div>
 <div class="listingblock">
@@ -2568,7 +2590,7 @@ server.connectHandler(function (socket) {
 <div class="sect2">
 <h3 id="_writing_data_to_a_socket">Writing data to a socket</h3>
 <div class="paragraph">
-<p>You write to a socket using one of <code><a href="jsdoc/net_socket-NetSocket.html#write">write</a></code>.</p>
+<p>You write to a socket using one of <code><a href="../../jsdoc/net_socket-NetSocket.html#write">write</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2592,7 +2614,7 @@ socket.write("some data", "UTF-16");</code></pre>
 <div class="sect2">
 <h3 id="_closed_handler">Closed handler</h3>
 <div class="paragraph">
-<p>If you want to be notified when a socket is closed, you can set a <code><a href="jsdoc/net_socket-NetSocket.html#closeHandler">closeHandler</a></code>
+<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../jsdoc/net_socket-NetSocket.html#closeHandler">closeHandler</a></code>
 on it:</p>
 </div>
 <div class="listingblock">
@@ -2606,7 +2628,7 @@ on it:</p>
 <div class="sect2">
 <h3 id="_handling_exceptions">Handling exceptions</h3>
 <div class="paragraph">
-<p>You can set an <code><a href="jsdoc/net_socket-NetSocket.html#exceptionHandler">exceptionHandler</a></code> to receive any
+<p>You can set an <code><a href="../../jsdoc/net_socket-NetSocket.html#exceptionHandler">exceptionHandler</a></code> to receive any
 exceptions that happen on the socket.</p>
 </div>
 </div>
@@ -2621,23 +2643,23 @@ it writes them to itself.</p>
 different Vert.x instance by sending the buffer to the address of that handler.</p>
 </div>
 <div class="paragraph">
-<p>The address of the handler is given by <code><a href="jsdoc/net_socket-NetSocket.html#writeHandlerID">writeHandlerID</a></code></p>
+<p>The address of the handler is given by <code><a href="../../jsdoc/net_socket-NetSocket.html#writeHandlerID">writeHandlerID</a></code></p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_local_and_remote_addresses">Local and remote addresses</h3>
 <div class="paragraph">
-<p>The local address of a <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="jsdoc/net_socket-NetSocket.html#localAddress">localAddress</a></code>.</p>
+<p>The local address of a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="../../jsdoc/net_socket-NetSocket.html#localAddress">localAddress</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code>
-can be retrieved using <code><a href="jsdoc/net_socket-NetSocket.html#remoteAddress">remoteAddress</a></code>.</p>
+<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>
+can be retrieved using <code><a href="../../jsdoc/net_socket-NetSocket.html#remoteAddress">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_sending_files">Sending files</h3>
 <div class="paragraph">
-<p>Files can be written to the socket directly using <code><a href="jsdoc/net_socket-NetSocket.html#sendFile">sendFile</a></code>. This can be a very
+<p>Files can be written to the socket directly using <code><a href="../../jsdoc/net_socket-NetSocket.html#sendFile">sendFile</a></code>. This can be a very
 efficient way to send files, as it can be handled by the OS kernel directly where supported by the operating system.</p>
 </div>
 <div class="listingblock">
@@ -2649,8 +2671,8 @@ efficient way to send files, as it can be handled by the OS kernel directly wher
 <div class="sect2">
 <h3 id="_streaming_sockets">Streaming sockets</h3>
 <div class="paragraph">
-<p>Instances of <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> are also <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and
-<code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
+<p>Instances of <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> are also <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and
+<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
 read and write streams.</p>
 </div>
 <div class="paragraph">
@@ -2660,7 +2682,7 @@ read and write streams.</p>
 <div class="sect2">
 <h3 id="_upgrading_connections_to_ssl_tls">Upgrading connections to SSL/TLS</h3>
 <div class="paragraph">
-<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="jsdoc/net_socket-NetSocket.html#upgradeToSsl">upgradeToSsl</a></code>.</p>
+<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="../../jsdoc/net_socket-NetSocket.html#upgradeToSsl">upgradeToSsl</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The server or client must be configured for SSL/TLS for this to work correctly. Please see the <a href="#ssl">chapter on SSL/TLS</a>
@@ -2670,7 +2692,7 @@ for more information.</p>
 <div class="sect2">
 <h3 id="_closing_a_tcp_server">Closing a TCP Server</h3>
 <div class="paragraph">
-<p>Call <code><a href="jsdoc/net_server-NetServer.html#close">close</a></code> to close the server. Closing the server closes any open connections
+<p>Call <code><a href="../../jsdoc/net_server-NetServer.html#close">close</a></code> to close the server. Closing the server closes any open connections
 and releases all server resources.</p>
 </div>
 <div class="paragraph">
@@ -2802,9 +2824,9 @@ var client = vertx.createNetClient(options);</code></pre>
 <div class="sect2">
 <h3 id="_making_connections">Making connections</h3>
 <div class="paragraph">
-<p>To make a connection to a server you use <code><a href="jsdoc/net_client-NetClient.html#connect">connect</a></code>,
+<p>To make a connection to a server you use <code><a href="../../jsdoc/net_client-NetClient.html#connect">connect</a></code>,
 specifying the port and host of the server and a handler that will be called with a result containing the
-<code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
+<code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2846,8 +2868,9 @@ only apply to creating initial connections.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "reconnectAttempts" : 10,
+  "reconnectInterval" : 500
 };
-options.reconnectAttempts = 10.reconnectInterval = 500;
 
 var client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -3454,7 +3477,7 @@ var server = vertx.createHttpServer(options);</code></pre>
 <div class="sect2">
 <h3 id="_start_the_server_listening_2">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="jsdoc/http_server-HttpServer.html#listen">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../jsdoc/http_server-HttpServer.html#listen">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -3502,7 +3525,7 @@ server.listen(8080, "myhost.com", function (res, res_err) {
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_requests">Getting notified of incoming requests</h3>
 <div class="paragraph">
-<p>To be notified when a request arrives you need to set a <code><a href="jsdoc/http_server-HttpServer.html#requestHandler">requestHandler</a></code>:</p>
+<p>To be notified when a request arrives you need to set a <code><a href="../../jsdoc/http_server-HttpServer.html#requestHandler">requestHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3516,7 +3539,7 @@ server.requestHandler(function (request) {
 <div class="sect2">
 <h3 id="_handling_requests">Handling requests</h3>
 <div class="paragraph">
-<p>When a request arrives, the request handler is called passing in an instance of <code><a href="jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.
+<p>When a request arrives, the request handler is called passing in an instance of <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.
 This object represents the server side HTTP request.</p>
 </div>
 <div class="paragraph">
@@ -3526,13 +3549,13 @@ This object represents the server side HTTP request.</p>
 <p>If the request contains a body, that body will arrive at the server some time after the request handler has been called.</p>
 </div>
 <div class="paragraph">
-<p>The server request object allows you to retrieve the <code><a href="jsdoc/http_server_request-HttpServerRequest.html#uri">uri</a></code>,
-<code><a href="jsdoc/http_server_request-HttpServerRequest.html#path">path</a></code>, <code><a href="jsdoc/http_server_request-HttpServerRequest.html#params">params</a></code> and
-<code><a href="jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code>, amongst other things.</p>
+<p>The server request object allows you to retrieve the <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#uri">uri</a></code>,
+<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#path">path</a></code>, <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#params">params</a></code> and
+<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code>, amongst other things.</p>
 </div>
 <div class="paragraph">
 <p>Each server request object is associated with one server response object. You use
-<code><a href="jsdoc/http_server_request-HttpServerRequest.html#response">response</a></code> to get a reference to the <code><a href="jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#response">response</a></code> to get a reference to the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
 object.</p>
 </div>
 <div class="paragraph">
@@ -3548,20 +3571,20 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_version">Request version</h4>
 <div class="paragraph">
-<p>The version of HTTP specified in the request can be retrieved with <code><a href="jsdoc/http_server_request-HttpServerRequest.html#version">version</a></code></p>
+<p>The version of HTTP specified in the request can be retrieved with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#version">version</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_method">Request method</h4>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/http_server_request-HttpServerRequest.html#method">method</a></code> to retrieve the HTTP method of the request.
+<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#method">method</a></code> to retrieve the HTTP method of the request.
 (i.e. whether it&#8217;s GET, POST, PUT, DELETE, HEAD, OPTIONS, etc).</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_uri">Request URI</h4>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/http_server_request-HttpServerRequest.html#uri">uri</a></code> to retrieve the URI of the request.</p>
+<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#uri">uri</a></code> to retrieve the URI of the request.</p>
 </div>
 <div class="paragraph">
 <p>Note that this is the actual URI as passed in the HTTP request, and it&#8217;s almost always a relative URI.</p>
@@ -3573,7 +3596,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_path">Request path</h4>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/http_server_request-HttpServerRequest.html#path">path</a></code> to return the path part of the URI</p>
+<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#path">path</a></code> to return the path part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -3595,7 +3618,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_query">Request query</h4>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/http_server_request-HttpServerRequest.html#query">query</a></code> to return the query part of the URI</p>
+<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#query">query</a></code> to return the query part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -3617,10 +3640,10 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_headers">Request headers</h4>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code> to return the headers of the HTTP request.</p>
+<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code> to return the headers of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>This returns an instance of <code><a href="jsdoc/multi_map-MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
+<p>This returns an instance of <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
 values for the same key - this is because HTTP allows multiple header values with the same key.</p>
 </div>
 <div class="paragraph">
@@ -3641,10 +3664,10 @@ console.log("User agent is " + headers.get("User-Agent"));</code></pre>
 <div class="sect3">
 <h4 id="_request_parameters">Request parameters</h4>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/http_server_request-HttpServerRequest.html#params">params</a></code> to return the parameters of the HTTP request.</p>
+<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#params">params</a></code> to return the parameters of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>Just like <code><a href="jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code> this returns an instance of <code><a href="jsdoc/multi_map-MultiMap.html">MultiMap</a></code>
+<p>Just like <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code> this returns an instance of <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code>
 as there can be more than one parameter with the same name.</p>
 </div>
 <div class="paragraph">
@@ -3673,20 +3696,20 @@ then they will not appear in the params here.</p>
 <div class="sect3">
 <h4 id="_remote_address">Remote address</h4>
 <div class="paragraph">
-<p>The address of the sender of the request can be retrieved with <code><a href="jsdoc/http_server_request-HttpServerRequest.html#remoteAddress">remoteAddress</a></code>.</p>
+<p>The address of the sender of the request can be retrieved with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#remoteAddress">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_absolute_uri">Absolute URI</h4>
 <div class="paragraph">
 <p>The URI passed in an HTTP request is usually relative. If you wish to retrieve the absolute URI corresponding
-to the request, you can get it with <code><a href="jsdoc/http_server_request-HttpServerRequest.html#absoluteURI">absoluteURI</a></code></p>
+to the request, you can get it with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#absoluteURI">absoluteURI</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_end_handler">End handler</h4>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/http_server_request-HttpServerRequest.html#endHandler">endHandler</a></code> of the request is invoked when the entire request,
+<p>The <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#endHandler">endHandler</a></code> of the request is invoked when the entire request,
 including any body has been fully read.</p>
 </div>
 </div>
@@ -3701,7 +3724,7 @@ when just the headers of the request have arrived so the request object does not
 body in memory before handing it to you, as that could cause the server to exhaust available memory.</p>
 </div>
 <div class="paragraph">
-<p>To receive the body, you can use the <code><a href="jsdoc/http_server_request-HttpServerRequest.html#handler">handler</a></code>  on the request,
+<p>To receive the body, you can use the <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#handler">handler</a></code>  on the request,
 this will get called every time a chunk of the request body arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -3712,7 +3735,7 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="jsdoc/buffer-Buffer.html">Buffer</a></code>, and the handler can be called
+<p>The object passed into the handler is a <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code>, and the handler can be called
 multiple times as data arrives from the network, depending on the size of the body.</p>
 </div>
 <div class="paragraph">
@@ -3737,7 +3760,7 @@ request.endHandler(function (v) {
 </div>
 </div>
 <div class="paragraph">
-<p>This is such a common case, that Vert.x provides a <code><a href="jsdoc/http_server_request-HttpServerRequest.html#bodyHandler">bodyHandler</a></code> to do this
+<p>This is such a common case, that Vert.x provides a <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#bodyHandler">bodyHandler</a></code> to do this
 for you. The body handler is called once when all the body has been received:</p>
 </div>
 <div class="listingblock">
@@ -3751,8 +3774,8 @@ for you. The body handler is called once when all the body has been received:</p
 <div class="sect3">
 <h4 id="_pumping_requests">Pumping requests</h4>
 <div class="paragraph">
-<p>The request object is a <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The request object is a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>See the chapter on <a href="#streams">streams and pumps</a> for a detailed explanation.</p>
@@ -3775,8 +3798,8 @@ has been read from the wire.</p>
 </div>
 <div class="paragraph">
 <p>If you want to retrieve the attributes of a multi-part form you should tell Vert.x that you expect to receive
-such a form <strong>before</strong> any of the body is read by calling <code><a href="jsdoc/http_server_request-HttpServerRequest.html#setExpectMultipart">setExpectMultipart</a></code>
-with true, and then you should retrieve the actual attributes using <code><a href="jsdoc/http_server_request-HttpServerRequest.html#formAttributes">formAttributes</a></code>
+such a form <strong>before</strong> any of the body is read by calling <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#setExpectMultipart">setExpectMultipart</a></code>
+with true, and then you should retrieve the actual attributes using <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#formAttributes">formAttributes</a></code>
 once the entire body has been read:</p>
 </div>
 <div class="listingblock">
@@ -3798,14 +3821,14 @@ once the entire body has been read:</p>
 </div>
 <div class="paragraph">
 <p>To receive file uploads you tell Vert.x to expect a multi-part form and set an
-<code><a href="jsdoc/http_server_request-HttpServerRequest.html#uploadHandler">uploadHandler</a></code> on the request.</p>
+<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#uploadHandler">uploadHandler</a></code> on the request.</p>
 </div>
 <div class="paragraph">
 <p>This handler will be called once for every
 upload that arrives on the server.</p>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="jsdoc/http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
+<p>The object passed into the handler is a <code><a href="../../jsdoc/http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3831,12 +3854,12 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The upload object is a <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
+<p>The upload object is a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
 detailed explanation.</p>
 </div>
 <div class="paragraph">
-<p>If you just want to upload the file to disk somewhere you can use <code><a href="jsdoc/http_server_file_upload-HttpServerFileUpload.html#streamToFileSystem">streamToFileSystem</a></code>:</p>
+<p>If you just want to upload the file to disk somewhere you can use <code><a href="../../jsdoc/http_server_file_upload-HttpServerFileUpload.html#streamToFileSystem">streamToFileSystem</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3863,8 +3886,8 @@ to arbitrary places on your filesystem. See <a href="#_security_notes">security 
 <div class="sect2">
 <h3 id="_sending_back_responses">Sending back responses</h3>
 <div class="paragraph">
-<p>The server response object is an instance of <code><a href="jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
-request with <code><a href="jsdoc/http_server_request-HttpServerRequest.html#response">response</a></code>.</p>
+<p>The server response object is an instance of <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
+request with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#response">response</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You use the response object to write a response back to the HTTP client.</p>
@@ -3875,10 +3898,10 @@ request with <code><a href="jsdoc/http_server_request-HttpServerRequest.html#res
 <p>The default HTTP status code for a response is <code>200</code>, representing <code>OK</code>.</p>
 </div>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/http_server_response-HttpServerResponse.html#setStatusCode">setStatusCode</a></code> to set a different code.</p>
+<p>Use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#setStatusCode">setStatusCode</a></code> to set a different code.</p>
 </div>
 <div class="paragraph">
-<p>You can also specify a custom status message with <code><a href="jsdoc/http_server_response-HttpServerResponse.html#setStatusMessage">setStatusMessage</a></code>.</p>
+<p>You can also specify a custom status message with <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#setStatusMessage">setStatusMessage</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t specify a status message, the default one corresponding to the status code will be used.</p>
@@ -3887,7 +3910,7 @@ request with <code><a href="jsdoc/http_server_request-HttpServerRequest.html#res
 <div class="sect3">
 <h4 id="_writing_http_responses">Writing HTTP responses</h4>
 <div class="paragraph">
-<p>To write data to an HTTP response, you use one the <code><a href="jsdoc/http_server_response-HttpServerResponse.html#write">write</a></code> operations.</p>
+<p>To write data to an HTTP response, you use one the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#write">write</a></code> operations.</p>
 </div>
 <div class="paragraph">
 <p>These can be invoked multiple times before the response is ended. They can be invoked in a few ways:</p>
@@ -3925,7 +3948,7 @@ response.write("hello world!", "UTF-16");</code></pre>
 </div>
 <div class="paragraph">
 <p>If you are just writing a single string or buffer to the HTTP response you can write it and end the response in a
-single call to the <code><a href="jsdoc/http_server_response-HttpServerResponse.html#end">end</a></code></p>
+single call to the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#end">end</a></code></p>
 </div>
 <div class="paragraph">
 <p>The first call to write results in the response header being being written to the response. Consequently, if you are
@@ -3936,7 +3959,7 @@ be too late otherwise. If you are using HTTP chunking you do not have to worry.<
 <div class="sect3">
 <h4 id="_ending_http_responses">Ending HTTP responses</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP response you should <code><a href="jsdoc/http_server_response-HttpServerResponse.html#end">end</a></code> it.</p>
+<p>Once you have finished with the HTTP response you should <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#end">end</a></code> it.</p>
 </div>
 <div class="paragraph">
 <p>This can be done in several ways:</p>
@@ -3965,7 +3988,7 @@ response.end("hello world!");</code></pre>
 <div class="sect3">
 <h4 id="_closing_the_underlying_connection">Closing the underlying connection</h4>
 <div class="paragraph">
-<p>You can close the underlying TCP connection with <code><a href="jsdoc/http_server_response-HttpServerResponse.html#close">close</a></code>.</p>
+<p>You can close the underlying TCP connection with <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#close">close</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Non keep-alive connections will be automatically closed by Vert.x when the response is ended.</p>
@@ -3979,7 +4002,7 @@ closed after an idle time, then you configure <code><a href="../dataobjects.html
 <h4 id="_setting_response_headers">Setting response headers</h4>
 <div class="paragraph">
 <p>HTTP response headers can be added to the response by adding them directly to the
-<code><a href="jsdoc/http_server_response-HttpServerResponse.html#headers">headers</a></code>:</p>
+<code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#headers">headers</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3990,7 +4013,7 @@ headers.set("other-header", "wibble");</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use <code><a href="jsdoc/http_server_response-HttpServerResponse.html#putHeader">putHeader</a></code></p>
+<p>Or you can use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#putHeader">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4021,7 +4044,7 @@ response.setChunked(true);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="jsdoc/http_server_response-HttpServerResponse.html#write">write</a></code>
+<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#write">write</a></code>
 methods will result in a new HTTP chunk being written out.</p>
 </div>
 <div class="paragraph">
@@ -4029,7 +4052,7 @@ methods will result in a new HTTP chunk being written out.</p>
 the final chunk of the response.</p>
 </div>
 <div class="paragraph">
-<p>To add trailers to the response, add them directly to the <code><a href="jsdoc/http_server_response-HttpServerResponse.html#trailers">trailers</a></code>.</p>
+<p>To add trailers to the response, add them directly to the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#trailers">trailers</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4040,7 +4063,7 @@ trailers.set("X-wibble", "woobble").set("X-quux", "flooble");</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or use <code><a href="jsdoc/http_server_response-HttpServerResponse.html#putTrailer">putTrailer</a></code>.</p>
+<p>Or use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#putTrailer">putTrailer</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4053,11 +4076,11 @@ response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble");</cod
 <div class="sect3">
 <h4 id="_serving_files_directly_from_disk">Serving files directly from disk</h4>
 <div class="paragraph">
-<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>
+<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>
 and pump it to the HTTP response.</p>
 </div>
 <div class="paragraph">
-<p>Or you could load it it one go using <code><a href="jsdoc/file_system-FileSystem.html#readFile">readFile</a></code> and write it straight to the response.</p>
+<p>Or you could load it it one go using <code><a href="../../jsdoc/file_system-FileSystem.html#readFile">readFile</a></code> and write it straight to the response.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively, Vert.x provides a method which allows you to serve a file from disk to an HTTP response in one operation.
@@ -4065,7 +4088,7 @@ Where supported by the underlying operating system this may result in the OS dir
 file to the socket without being copied through user-space at all.</p>
 </div>
 <div class="paragraph">
-<p>This is done by using <code><a href="jsdoc/http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code>, and is usually more efficient for large
+<p>This is done by using <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code>, and is usually more efficient for large
 files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
@@ -4086,7 +4109,7 @@ files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
 <p>Sending a file is asynchronous and may not complete until some time after the call has returned. If you want to
-be notified when the file has been writen you can use <code><a href="jsdoc/http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code></p>
+be notified when the file has been writen you can use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -4164,9 +4187,9 @@ case you can just do:</p>
 <div class="sect3">
 <h4 id="_pumping_responses">Pumping responses</h4>
 <div class="paragraph">
-<p>The server response is a <code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
-<code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code>, e.g. <code><a href="jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>, <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code>,
-<code><a href="jsdoc/web_socket-WebSocket.html">WebSocket</a></code> or <code><a href="jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.</p>
+<p>The server response is a <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
+<code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code>, e.g. <code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>, <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>,
+<code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code> or <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example which echoes the request body back in the response for any PUT methods.
@@ -4227,7 +4250,7 @@ compressions and send it back to the client.</p>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
 <div class="paragraph">
-<p>You create an <code><a href="jsdoc/http_client-HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
+<p>You create an <code><a href="../../jsdoc/http_client-HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4298,7 +4321,7 @@ HEAD requests.</p>
 </div>
 <div class="paragraph">
 <p>The simplest way to do this with the Vert.x http client is using the methods prefixed with <code>Now</code>. For example
-<code><a href="jsdoc/http_client-HttpClient.html#getNow">getNow</a></code>.</p>
+<code><a href="../../jsdoc/http_client-HttpClient.html#getNow">getNow</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods create the http request and send it in a single method call and allow you to provide a handler that will be
@@ -4324,7 +4347,7 @@ client.headNow("/other-uri", function (response) {
 <h4 id="_writing_general_requests">Writing general requests</h4>
 <div class="paragraph">
 <p>At other times you don&#8217;t know the request method you want to send until run-time. For that use case we provide
-general purpose request methods such as <code><a href="jsdoc/http_client-HttpClient.html#request">request</a></code> which allow you to specify
+general purpose request methods such as <code><a href="../../jsdoc/http_client-HttpClient.html#request">request</a></code> which allow you to specify
 the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
@@ -4348,11 +4371,11 @@ client.request('POST', "foo-uri", function (response) {
 before sending it.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can call one of the specific request methods such as <code><a href="jsdoc/http_client-HttpClient.html#post">post</a></code> or
-one of the general purpose request methods such as <code><a href="jsdoc/http_client-HttpClient.html#request">request</a></code>.</p>
+<p>To do this you can call one of the specific request methods such as <code><a href="../../jsdoc/http_client-HttpClient.html#post">post</a></code> or
+one of the general purpose request methods such as <code><a href="../../jsdoc/http_client-HttpClient.html#request">request</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>
+<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>
 which can be used to write to the request body or write headers.</p>
 </div>
 <div class="paragraph">
@@ -4449,7 +4472,7 @@ up-front.</p>
 <div class="sect3">
 <h4 id="_writing_request_headers">Writing request headers</h4>
 <div class="paragraph">
-<p>You can write headers to a request using the <code><a href="jsdoc/http_client_request-HttpClientRequest.html#headers">headers</a></code> multi-map as follows:</p>
+<p>You can write headers to a request using the <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#headers">headers</a></code> multi-map as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4460,11 +4483,11 @@ headers.set("content-type", "application/json").set("other-header", "foo");</cod
 </div>
 </div>
 <div class="paragraph">
-<p>The headers are an instance of <code><a href="jsdoc/multi_map-MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
+<p>The headers are an instance of <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
 entries. Http headers allow more than one value for a specific key.</p>
 </div>
 <div class="paragraph">
-<p>You can also write headers using <code><a href="jsdoc/http_client_request-HttpClientRequest.html#putHeader">putHeader</a></code></p>
+<p>You can also write headers using <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#putHeader">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4480,7 +4503,7 @@ request.putHeader("content-type", "application/json").putHeader("other-header", 
 <div class="sect3">
 <h4 id="_ending_http_requests">Ending HTTP requests</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="jsdoc/http_client_request-HttpClientRequest.html#end">end</a></code>
+<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#end">end</a></code>
 operations.</p>
 </div>
 <div class="paragraph">
@@ -4521,7 +4544,7 @@ request.end(buffer);</code></pre>
 to the server, whose size is not known in advance.</p>
 </div>
 <div class="paragraph">
-<p>You put the HTTP request into chunked mode using <code><a href="jsdoc/http_client_request-HttpClientRequest.html#setChunked">setChunked</a></code>.</p>
+<p>You put the HTTP request into chunked mode using <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#setChunked">setChunked</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>In chunked mode each call to write will cause a new chunk to be written to the wire. In chunked mode there is
@@ -4543,7 +4566,7 @@ request.end();</code></pre>
 <div class="sect3">
 <h4 id="_request_timeouts">Request timeouts</h4>
 <div class="paragraph">
-<p>You can set a timeout for a specific http request using <code><a href="jsdoc/http_client_request-HttpClientRequest.html#setTimeout">setTimeout</a></code>.</p>
+<p>You can set a timeout for a specific http request using <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#setTimeout">setTimeout</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If the request does not return any data within the timeout period an exception will be passed to the exception handler
@@ -4554,7 +4577,7 @@ request.end();</code></pre>
 <h4 id="_handling_exceptions_2">Handling exceptions</h4>
 <div class="paragraph">
 <p>You can handle exceptions corresponding to a request by setting an exception handler on the
-<code><a href="jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
+<code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4569,7 +4592,7 @@ request.exceptionHandler(function (e) {
 </div>
 <div class="paragraph">
 <p>This does not handle non <em>2xx</em> response that need to be handled in the
-<code><a href="jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
+<code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4604,7 +4627,7 @@ request.end();</code></pre>
 <div class="paragraph">
 <p>Instead of providing a response handler in the call to create the client request object, alternatively, you can
 not provide a handler when the request is created and set it later on the request object itself, using
-<code><a href="jsdoc/http_client_request-HttpClientRequest.html#handler">handler</a></code>, for example:</p>
+<code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#handler">handler</a></code>, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4618,8 +4641,8 @@ request.handler(function (response) {
 <div class="sect3">
 <h4 id="_using_the_request_as_a_stream">Using the request as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> which means
-you can pump to it from any <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code> instance.</p>
+<p>The <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> which means
+you can pump to it from any <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>For, example, you could pump a file on disk to a http request body as follows:</p>
@@ -4641,12 +4664,12 @@ pump.start();</code></pre>
 <div class="sect2">
 <h3 id="_handling_http_responses">Handling http responses</h3>
 <div class="paragraph">
-<p>You receive an instance of <code><a href="jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
-the request methods or by setting a handler directly on the <code><a href="jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
+<p>You receive an instance of <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
+the request methods or by setting a handler directly on the <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
 </div>
 <div class="paragraph">
-<p>You can query the status code and the status message of the response with <code><a href="jsdoc/http_client_response-HttpClientResponse.html#statusCode">statusCode</a></code>
-and <code><a href="jsdoc/http_client_response-HttpClientResponse.html#statusMessage">statusMessage</a></code>.</p>
+<p>You can query the status code and the status message of the response with <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#statusCode">statusCode</a></code>
+and <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#statusMessage">statusMessage</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4662,17 +4685,17 @@ and <code><a href="jsdoc/http_client_response-HttpClientResponse.html#statusMess
 <div class="sect3">
 <h4 id="_using_the_response_as_a_stream">Using the response as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code> which means
-you can pump it to any <code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> which means
+you can pump it to any <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_response_headers_and_trailers">Response headers and trailers</h4>
 <div class="paragraph">
-<p>Http responses can contain headers. Use <code><a href="jsdoc/http_client_response-HttpClientResponse.html#headers">headers</a></code> to get the headers.</p>
+<p>Http responses can contain headers. Use <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#headers">headers</a></code> to get the headers.</p>
 </div>
 <div class="paragraph">
-<p>The object returned is a <code><a href="jsdoc/multi_map-MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
+<p>The object returned is a <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4684,7 +4707,7 @@ var contentLength = response.headers().get("content-lengh");</code></pre>
 <p>Chunked HTTP responses can also contain trailers - these are sent in the last chunk of the response body.</p>
 </div>
 <div class="paragraph">
-<p>You use <code><a href="jsdoc/http_client_response-HttpClientResponse.html#trailers">trailers</a></code> to get the trailers. Trailers are also a <code><a href="jsdoc/multi_map-MultiMap.html">MultiMap</a></code>.</p>
+<p>You use <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#trailers">trailers</a></code> to get the trailers. Trailers are also a <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -4698,8 +4721,8 @@ don&#8217;t wait for all the body to arrive before calling the response handler 
 might be waiting a long time, or run out of memory for large responses.</p>
 </div>
 <div class="paragraph">
-<p>As parts of the response body arrive, the <code><a href="jsdoc/http_client_response-HttpClientResponse.html#handler">handler</a></code> is called with
-a <code><a href="jsdoc/buffer-Buffer.html">Buffer</a></code> representing the piece of the body:</p>
+<p>As parts of the response body arrive, the <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#handler">handler</a></code> is called with
+a <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code> representing the piece of the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4738,7 +4761,7 @@ client.getNow("some-uri", function (response) {
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use the convenience <code><a href="jsdoc/http_client_response-HttpClientResponse.html#bodyHandler">bodyHandler</a></code> which
+<p>Or you can use the convenience <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#bodyHandler">bodyHandler</a></code> which
 is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
@@ -4756,14 +4779,14 @@ is called with the entire body when the response has been fully read:</p>
 <div class="sect3">
 <h4 id="_response_end_handler">Response end handler</h4>
 <div class="paragraph">
-<p>The response <code><a href="jsdoc/http_client_response-HttpClientResponse.html#endHandler">endHandler</a></code> is called when the entire response body has been read
+<p>The response <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#endHandler">endHandler</a></code> is called when the entire response body has been read
 or immediately after the headers have been read and the response handler has been called if there is no body.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_reading_cookies_from_the_response">Reading cookies from the response</h4>
 <div class="paragraph">
-<p>You can retrieve the list of cookies from a response using <code><a href="jsdoc/http_client_response-HttpClientResponse.html#cookies">cookies</a></code>.</p>
+<p>You can retrieve the list of cookies from a response using <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#cookies">cookies</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively you can just parse the <code>Set-Cookie</code> headers yourself in the response.</p>
@@ -4785,7 +4808,7 @@ Sending large amounts of data if the request might not be accepted is a waste of
 in reading data that it will just discard.</p>
 </div>
 <div class="paragraph">
-<p>Vert.x allows you to set a <code><a href="jsdoc/http_client_request-HttpClientRequest.html#continueHandler">continueHandler</a></code> on the
+<p>Vert.x allows you to set a <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#continueHandler">continueHandler</a></code> on the
 client request object</p>
 </div>
 <div class="paragraph">
@@ -4793,7 +4816,7 @@ client request object</p>
 the rest of the request.</p>
 </div>
 <div class="paragraph">
-<p>This is used in conjunction with `<a href="jsdoc/http_client_request-HttpClientRequest.html#sendHead">sendHead</a>`to send the head of the request.</p>
+<p>This is used in conjunction with `<a href="../../jsdoc/http_client_request-HttpClientRequest.html#sendHead">sendHead</a>`to send the head of the request.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -4821,7 +4844,7 @@ This is done by setting the option <code><a href="../dataobjects.html#HttpServer
 </div>
 <div class="paragraph">
 <p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
-<code>false</code> (the default), then you can inspect the headers and call <code><a href="jsdoc/http_server_response-HttpServerResponse.html#writeContinue">writeContinue</a></code>
+<code>false</code> (the default), then you can inspect the headers and call <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#writeContinue">writeContinue</a></code>
 if you wish the client to continue sending the body or you can reject the request by sending back a failure status code
 if you don&#8217;t want it to send the body. For example:</p>
 </div>
@@ -5003,12 +5026,12 @@ connection between HTTP servers and HTTP clients (typically browsers).</p>
 <div class="sect4">
 <h5 id="_websocket_handler">WebSocket handler</h5>
 <div class="paragraph">
-<p>The first way involves providing a <code><a href="jsdoc/http_server-HttpServer.html#websocketHandler">websocketHandler</a></code>
+<p>The first way involves providing a <code><a href="../../jsdoc/http_server-HttpServer.html#websocketHandler">websocketHandler</a></code>
 on the server instance.</p>
 </div>
 <div class="paragraph">
 <p>When a WebSocket connection is made to the server, the handler will be called, passing in an instance of
-<code><a href="jsdoc/server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code>.</p>
+<code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5018,7 +5041,7 @@ on the server instance.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You can choose to reject the WebSocket by calling <code><a href="jsdoc/server_web_socket-ServerWebSocket.html#reject">reject</a></code>.</p>
+<p>You can choose to reject the WebSocket by calling <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#reject">reject</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5036,7 +5059,7 @@ on the server instance.</p>
 <h5 id="_upgrading_to_websocket">Upgrading to WebSocket</h5>
 <div class="paragraph">
 <p>The second way of handling WebSockets is to handle the HTTP Upgrade request that was sent from the client, and
-call <code><a href="jsdoc/http_server_request-HttpServerRequest.html#upgrade">upgrade</a></code> on the server request.</p>
+call <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#upgrade">upgrade</a></code> on the server request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5057,23 +5080,23 @@ call <code><a href="jsdoc/http_server_request-HttpServerRequest.html#upgrade">up
 <div class="sect4">
 <h5 id="_the_server_websocket">The server WebSocket</h5>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="jsdoc/server_web_socket-ServerWebSocket.html#headers">headers</a></code>,
-<code><a href="jsdoc/server_web_socket-ServerWebSocket.html#path">path</a></code> path}, <code><a href="jsdoc/server_web_socket-ServerWebSocket.html#query">query</a></code> and
-<code><a href="jsdoc/server_web_socket-ServerWebSocket.html#uri">uri</a></code> URI} of the HTTP request of the WebSocket handshake.</p>
+<p>The <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#headers">headers</a></code>,
+<code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#path">path</a></code> path}, <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#query">query</a></code> and
+<code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#uri">uri</a></code> URI} of the HTTP request of the WebSocket handshake.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_websockets_on_the_client">WebSockets on the client</h4>
 <div class="paragraph">
-<p>The Vert.x <code><a href="jsdoc/http_client-HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
+<p>The Vert.x <code><a href="../../jsdoc/http_client-HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
 </div>
 <div class="paragraph">
-<p>You can connect a WebSocket to a server using one of the <code><a href="jsdoc/http_client-HttpClient.html#websocket">websocket</a></code> operations and
+<p>You can connect a WebSocket to a server using one of the <code><a href="../../jsdoc/http_client-HttpClient.html#websocket">websocket</a></code> operations and
 providing a handler.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with an instance of <code><a href="jsdoc/web_socket-WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
+<p>The handler will be called with an instance of <code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5087,7 +5110,7 @@ providing a handler.</p>
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
 <p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="jsdoc/web_socket-WebSocket.html#writeBinaryMessage">writeBinaryMessage</a></code>:</p>
+<code><a href="../../jsdoc/web_socket-WebSocket.html#writeBinaryMessage">writeBinaryMessage</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5115,10 +5138,10 @@ followed by zero or more <em>continuation</em> frames.</p>
 </div>
 <div class="paragraph">
 <p>To send a message consisting of multiple frames you create frames using
-<code><a href="jsdoc/web_socket_frame-WebSocketFrame.html#binaryFrame">WebSocketFrame.binaryFrame</a></code>
-, <code><a href="jsdoc/web_socket_frame-WebSocketFrame.html#textFrame">WebSocketFrame.textFrame</a></code> or
-<code><a href="jsdoc/web_socket_frame-WebSocketFrame.html#continuationFrame">WebSocketFrame.continuationFrame</a></code> and write them
-to the WebSocket using <code><a href="jsdoc/web_socket-WebSocket.html#writeFrame">writeFrame</a></code>.</p>
+<code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html#binaryFrame">WebSocketFrame.binaryFrame</a></code>
+, <code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html#textFrame">WebSocketFrame.textFrame</a></code> or
+<code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html#continuationFrame">WebSocketFrame.continuationFrame</a></code> and write them
+to the WebSocket using <code><a href="../../jsdoc/web_socket-WebSocket.html#writeFrame">writeFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example for binary frames:</p>
@@ -5140,8 +5163,8 @@ websocket.writeFrame(frame3);</code></pre>
 </div>
 <div class="paragraph">
 <p>In many cases you just want to send a websocket message that consists of a single final frame, so we provide a couple
-of shortcut methods to do that with <code><a href="jsdoc/web_socket-WebSocket.html#writeFinalBinaryFrame">writeFinalBinaryFrame</a></code>
-and <code><a href="jsdoc/web_socket-WebSocket.html#writeFinalTextFrame">writeFinalTextFrame</a></code>.</p>
+of shortcut methods to do that with <code><a href="../../jsdoc/web_socket-WebSocket.html#writeFinalBinaryFrame">writeFinalBinaryFrame</a></code>
+and <code><a href="../../jsdoc/web_socket-WebSocket.html#writeFinalTextFrame">writeFinalTextFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -5165,10 +5188,10 @@ websocket.writeFinalBinaryFrame(buff);</code></pre>
 <div class="sect3">
 <h4 id="_reading_frames_from_websockets">Reading frames from WebSockets</h4>
 <div class="paragraph">
-<p>To read frames from a WebSocket you use the <code><a href="jsdoc/web_socket-WebSocket.html#frameHandler">frameHandler</a></code>.</p>
+<p>To read frames from a WebSocket you use the <code><a href="../../jsdoc/web_socket-WebSocket.html#frameHandler">frameHandler</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The frame handler will be called with instances of <code><a href="jsdoc/web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
+<p>The frame handler will be called with instances of <code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
 for example:</p>
 </div>
 <div class="listingblock">
@@ -5182,14 +5205,14 @@ for example:</p>
 <div class="sect3">
 <h4 id="_closing_websockets">Closing WebSockets</h4>
 <div class="paragraph">
-<p>Use <code><a href="jsdoc/web_socket_base-WebSocketBase.html#close">close</a></code> to close the WebSocket connection when you have finished with it.</p>
+<p>Use <code><a href="../../jsdoc/web_socket_base-WebSocketBase.html#close">close</a></code> to close the WebSocket connection when you have finished with it.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_streaming_websockets">Streaming WebSockets</h4>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/web_socket-WebSocket.html">WebSocket</a></code> instance is also a <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and a
-<code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
+<p>The <code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code> instance is also a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and a
+<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
 </div>
 <div class="paragraph">
 <p>When using a WebSocket as a write stream or a read stream it can only be used with WebSockets connections that are
@@ -5220,12 +5243,12 @@ asynchronous cluster-wide counters.</p>
 <div class="sect2">
 <h3 id="_local_shared_maps">Local shared maps</h3>
 <div class="paragraph">
-<p><code><a href="jsdoc/local_map-LocalMap.html">Local shared maps</a></code> allow you to share data safely between different event
+<p><code><a href="../../jsdoc/local_map-LocalMap.html">Local shared maps</a></code> allow you to share data safely between different event
 loops (e.g. different verticles) in the same Vert.x instance.</p>
 </div>
 <div class="paragraph">
 <p>Local shared maps only allow certain data types to be used as keys and values. Those types must either be immutable,
-or certain other types that can be copied like <code><a href="jsdoc/buffer-Buffer.html">Buffer</a></code>. In the latter case the key/value
+or certain other types that can be copied like <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code>. In the latter case the key/value
 will be copied before putting it in the map.</p>
 </div>
 <div class="paragraph">
@@ -5272,8 +5295,8 @@ other node.</p>
 application.</p>
 </div>
 <div class="paragraph">
-<p>You get an instance of <code><a href="jsdoc/async_map-AsyncMap.html">AsyncMap</a></code> with
-<code><a href="jsdoc/shared_data-SharedData.html#getClusterWideMap">getClusterWideMap</a></code>.</p>
+<p>You get an instance of <code><a href="../../jsdoc/async_map-AsyncMap.html">AsyncMap</a></code> with
+<code><a href="../../jsdoc/shared_data-SharedData.html#getClusterWideMap">getClusterWideMap</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Getting the map is asynchronous and the result is returned to you in the handler that you specify. Here&#8217;s an example:</p>
@@ -5294,7 +5317,7 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
 <div class="sect3">
 <h4 id="_putting_data_in_a_map">Putting data in a map</h4>
 <div class="paragraph">
-<p>You put data in a map with <code><a href="jsdoc/async_map-AsyncMap.html#put">put</a></code>.</p>
+<p>You put data in a map with <code><a href="../../jsdoc/async_map-AsyncMap.html#put">put</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The actual put is asynchronous and the handler is notified once it is complete:</p>
@@ -5314,7 +5337,7 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
 <div class="sect3">
 <h4 id="_getting_data_from_a_map">Getting data from a map</h4>
 <div class="paragraph">
-<p>You get data from a map with <code><a href="jsdoc/async_map-AsyncMap.html#get">get</a></code>.</p>
+<p>You get data from a map with <code><a href="../../jsdoc/async_map-AsyncMap.html#get">get</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The actual get is asynchronous and the handler is notified with the result some time later</p>
@@ -5337,7 +5360,7 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
 <p>You can also remove entries from an asynchronous map, clear them and get the size.</p>
 </div>
 <div class="paragraph">
-<p>See the <code><a href="jsdoc/async_map-AsyncMap.html">API docs</a></code> for more information.</p>
+<p>See the <code><a href="../../jsdoc/async_map-AsyncMap.html">API docs</a></code> for more information.</p>
 </div>
 </div>
 </div>
@@ -5345,7 +5368,7 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
 <div class="sect2">
 <h3 id="_cluster_wide_locks">Cluster-wide locks</h3>
 <div class="paragraph">
-<p><code><a href="jsdoc/lock-Lock.html">Cluster wide locks</a></code> allow you to obtain exclusive locks across the cluster -
+<p><code><a href="../../jsdoc/lock-Lock.html">Cluster wide locks</a></code> allow you to obtain exclusive locks across the cluster -
 this is useful when you want to do something or access a resource on only one node of a cluster at any one time.</p>
 </div>
 <div class="paragraph">
@@ -5353,17 +5376,17 @@ this is useful when you want to do something or access a resource on only one no
 is obtained.</p>
 </div>
 <div class="paragraph">
-<p>To obtain a lock use <code><a href="jsdoc/shared_data-SharedData.html#getLock">getLock</a></code>.</p>
+<p>To obtain a lock use <code><a href="../../jsdoc/shared_data-SharedData.html#getLock">getLock</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This won&#8217;t block, but when the lock is available, the handler will be called with an instance of <code><a href="jsdoc/lock-Lock.html">Lock</a></code>,
+<p>This won&#8217;t block, but when the lock is available, the handler will be called with an instance of <code><a href="../../jsdoc/lock-Lock.html">Lock</a></code>,
 signifying that you now own the lock.</p>
 </div>
 <div class="paragraph">
 <p>While you own the lock no other caller, anywhere on the cluster will be able to obtain the lock.</p>
 </div>
 <div class="paragraph">
-<p>When you&#8217;ve finished with the lock, you call <code><a href="jsdoc/lock-Lock.html#release">release</a></code> to release it, so
+<p>When you&#8217;ve finished with the lock, you call <code><a href="../../jsdoc/lock-Lock.html#release">release</a></code> to release it, so
 another caller can obtain it.</p>
 </div>
 <div class="listingblock">
@@ -5409,10 +5432,10 @@ with a failure:</p>
 <p>It&#8217;s often useful to maintain an atomic counter across the different nodes of your application.</p>
 </div>
 <div class="paragraph">
-<p>You can do this with <code><a href="jsdoc/counter-Counter.html">Counter</a></code>.</p>
+<p>You can do this with <code><a href="../../jsdoc/counter-Counter.html">Counter</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>You obtain an instance with <code><a href="jsdoc/shared_data-SharedData.html#getCounter">getCounter</a></code>:</p>
+<p>You obtain an instance with <code><a href="../../jsdoc/shared_data-SharedData.html#getCounter">getCounter</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5430,7 +5453,7 @@ with a failure:</p>
 it using the various methods.</p>
 </div>
 <div class="paragraph">
-<p>See the <code><a href="jsdoc/counter-Counter.html">API docs</a></code> for more information.</p>
+<p>See the <code><a href="../../jsdoc/counter-Counter.html">API docs</a></code> for more information.</p>
 </div>
 </div>
 </div>
@@ -5439,10 +5462,10 @@ it using the various methods.</p>
 <h2 id="_using_the_file_system_with_vert_x">Using the file system with Vert.x</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Vert.x <code><a href="jsdoc/file_system-FileSystem.html">FileSystem</a></code> object provides many operations for manipulating the file system.</p>
+<p>The Vert.x <code><a href="../../jsdoc/file_system-FileSystem.html">FileSystem</a></code> object provides many operations for manipulating the file system.</p>
 </div>
 <div class="paragraph">
-<p>There is one file system object per Vert.x instance, and you obtain it with  <code><a href="jsdoc/vertx-Vertx.html#fileSystem">fileSystem</a></code>.</p>
+<p>There is one file system object per Vert.x instance, and you obtain it with  <code><a href="../../jsdoc/vertx-Vertx.html#fileSystem">fileSystem</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>A blocking and a non blocking version of each operation is provided. The non blocking versions take a handler
@@ -5484,7 +5507,7 @@ fs.copyBlocking("foo.txt", "bar.txt");</code></pre>
 </div>
 <div class="paragraph">
 <p>Many operations exist to copy, move, truncate, chmod and many other file operations. We won&#8217;t list them all here,
-please consult the <code><a href="jsdoc/file_system-FileSystem.html">API docs</a></code> for the full list.</p>
+please consult the <code><a href="../../jsdoc/file_system-FileSystem.html">API docs</a></code> for the full list.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s see a couple of examples using asynchronous methods:</p>
@@ -5540,7 +5563,7 @@ vertx.fileSystem().exists("target/classes/junk.txt", function (result, result_er
 <p>Vert.x provides an asynchronous file abstraction that allows you to manipulate a file on the file system.</p>
 </div>
 <div class="paragraph">
-<p>You open an <code><a href="jsdoc/async_file-AsyncFile.html">AsyncFile</a></code> as follows:</p>
+<p>You open an <code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code> as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5566,7 +5589,7 @@ files to and from other stream objects such as net sockets, http requests and re
 <h4 id="_random_access_writes">Random access writes</h4>
 <div class="paragraph">
 <p>To use an <code>AsyncFile</code> for random access writing you use the
-<code><a href="jsdoc/async_file-AsyncFile.html#write">write</a></code> method.</p>
+<code><a href="../../jsdoc/async_file-AsyncFile.html#write">write</a></code> method.</p>
 </div>
 <div class="paragraph">
 <p>The parameters to the method are:</p>
@@ -5619,7 +5642,7 @@ vertx.fileSystem().open("target/classes/hello.txt", {
 <h4 id="_random_access_reads">Random access reads</h4>
 <div class="paragraph">
 <p>To use an <code>AsyncFile</code> for random access reads you use the
-<code><a href="jsdoc/async_file-AsyncFile.html#read">read</a></code>
+<code><a href="../../jsdoc/async_file-AsyncFile.html#read">read</a></code>
 method.</p>
 </div>
 <div class="paragraph">
@@ -5696,7 +5719,7 @@ close or when the JVM is shutdown with <code><a href="../dataobjects.html#OpenOp
 <div class="paragraph">
 <p>In the <code>OpenOptions</code>, you can enable/disable the automatic synchronisation of the content on every write using
 <code><a href="../dataobjects.html#OpenOptions#setDsync">dsync</a></code>. In that case, you can manually flush any writes from the OS
-cache by calling the <code><a href="jsdoc/async_file-AsyncFile.html#flush">flush</a></code> method.</p>
+cache by calling the <code><a href="../../jsdoc/async_file-AsyncFile.html#flush">flush</a></code> method.</p>
 </div>
 <div class="paragraph">
 <p>This method can also be called with an handler which will be called when the flush is complete.</p>
@@ -5739,7 +5762,7 @@ vertx.fileSystem().open("target/classes/les_miserables.txt", {
 <div class="sect3">
 <h4 id="_closing_an_asyncfile">Closing an AsyncFile</h4>
 <div class="paragraph">
-<p>To close an <code>AsyncFile</code> call the <code><a href="jsdoc/async_file-AsyncFile.html#close">close</a></code> method. Closing is asynchronous and
+<p>To close an <code>AsyncFile</code> call the <code><a href="../../jsdoc/async_file-AsyncFile.html#close">close</a></code> method. Closing is asynchronous and
 if you want to be notified when the close has been completed you can specify a handler function as an argument.</p>
 </div>
 </div>
@@ -5786,7 +5809,7 @@ and NetClient (see above).</p>
 <div class="sect2">
 <h3 id="_creating_a_datagramsocket">Creating a DatagramSocket</h3>
 <div class="paragraph">
-<p>To use UDP you first need t create a <code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code>. It does not matter here if you only want to send data or send
+<p>To use UDP you first need t create a <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code>. It does not matter here if you only want to send data or send
 and receive.</p>
 </div>
 <div class="listingblock">
@@ -5796,7 +5819,7 @@ and receive.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The returned <code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> will not be bound to a specific port. This is not a
+<p>The returned <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> will not be bound to a specific port. This is not a
 problem if you only want to send data (like a client), but more on this in the next section.</p>
 </div>
 </div>
@@ -5832,26 +5855,26 @@ socket.send("A string used as content", 1234, "10.0.0.1", function (asyncResult,
 <div class="sect2">
 <h3 id="_receiving_datagram_packets">Receiving Datagram packets</h3>
 <div class="paragraph">
-<p>If you want to receive packets you need to bind the <code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> by calling
+<p>If you want to receive packets you need to bind the <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> by calling
 <code>listen(&#8230;&#8203;)}</code> on it.</p>
 </div>
 <div class="paragraph">
-<p>This way you will be able to receive <code><a href="jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a>`s that were sent to the address and port on
-which the `<a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> listens.</p>
+<p>This way you will be able to receive <code><a href="../../jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a>`s that were sent to the address and port on
+which the `<a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> listens.</p>
 </div>
 <div class="paragraph">
-<p>Beside this you also want to set a <code>Handler</code> which will be called for each received <code><a href="jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a></code>.</p>
+<p>Beside this you also want to set a <code>Handler</code> which will be called for each received <code><a href="../../jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
+<p>The <code><a href="../../jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="jsdoc/datagram_packet-DatagramPacket.html#sender">sender</a></code>: The InetSocketAddress which represent the sender of the packet</p>
+<p><code><a href="../../jsdoc/datagram_packet-DatagramPacket.html#sender">sender</a></code>: The InetSocketAddress which represent the sender of the packet</p>
 </li>
 <li>
-<p><code><a href="jsdoc/datagram_packet-DatagramPacket.html#data">data</a></code>: The Buffer which holds the data which was received.</p>
+<p><code><a href="../../jsdoc/datagram_packet-DatagramPacket.html#data">data</a></code>: The Buffer which holds the data which was received.</p>
 </li>
 </ul>
 </div>
@@ -5919,18 +5942,18 @@ socket.send(buffer, 1234, "230.0.0.1", function (asyncResult, asyncResult_err) {
 <div class="sect4">
 <h5 id="_receiving_multicast_packets">Receiving Multicast packets</h5>
 <div class="paragraph">
-<p>If you want to receive packets for specific Multicast group you need to bind the <code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> by
+<p>If you want to receive packets for specific Multicast group you need to bind the <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> by
 calling <code>listen(&#8230;&#8203;)</code> on it and join the Multicast group.</p>
 </div>
 <div class="paragraph">
 <p>This way you will be able to receive DatagramPackets that were sent to the address and port on which the
-<code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> listens and also to those sent to the Multicast group.</p>
+<code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> listens and also to those sent to the Multicast group.</p>
 </div>
 <div class="paragraph">
 <p>Beside this you also want to set a Handler which will be called for each received DatagramPacket.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
+<p>The <code><a href="../../jsdoc/datagram_packet-DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -6043,7 +6066,7 @@ socket.blockMulticastGroup("230.0.0.1", "10.0.0.2", function (asyncResult, async
 <div class="sect3">
 <h4 id="_datagramsocket_properties">DatagramSocket properties</h4>
 <div class="paragraph">
-<p>When creating a <code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> there are multiple properties you can set to
+<p>When creating a <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> there are multiple properties you can set to
 change it&#8217;s behaviour with the <code><a href="../dataobjects.html#DatagramSocketOptions">DatagramSocketOptions</a></code> object. Those are listed here:</p>
 </div>
 <div class="ulist">
@@ -6084,14 +6107,14 @@ the TTL. If the TTL is decremented to 0 by a router, it will not be forwarded.</
 <h4 id="_datagramsocket_local_address">DatagramSocket Local Address</h4>
 <div class="paragraph">
 <p>You can find out the local address of the socket (i.e. the address of this side of the UDP Socket) by calling
-<code><a href="jsdoc/datagram_socket-DatagramSocket.html#localAddress">localAddress</a></code>. This will only return an <code>InetSocketAddress</code> if you
-bound the <code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> with <code>listen(&#8230;&#8203;)</code> before, otherwise it will return null.</p>
+<code><a href="../../jsdoc/datagram_socket-DatagramSocket.html#localAddress">localAddress</a></code>. This will only return an <code>InetSocketAddress</code> if you
+bound the <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code> with <code>listen(&#8230;&#8203;)</code> before, otherwise it will return null.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_closing_a_datagramsocket">Closing a DatagramSocket</h4>
 <div class="paragraph">
-<p>You can close a socket by invoking the <code><a href="jsdoc/datagram_socket-DatagramSocket.html#close">close</a></code> method. This will close
+<p>You can close a socket by invoking the <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html#close">close</a></code> method. This will close
 the socket and release all resources</p>
 </div>
 </div>
@@ -6287,11 +6310,11 @@ client.resolveMX("vertx.io", function (ar, ar_err) {
 </div>
 </div>
 <div class="paragraph">
-<p>Be aware that the List will contain the <code><a href="jsdoc/mx_record-MxRecord.html">MxRecord</a></code> sorted by the priority of them, which
+<p>Be aware that the List will contain the <code><a href="../../jsdoc/mx_record-MxRecord.html">MxRecord</a></code> sorted by the priority of them, which
 means MX records with smaller priority coming first in the List.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/mx_record-MxRecord.html">MxRecord</a></code> allows you to access the priority and the name of the MX record by offer methods for it like:</p>
+<p>The <code><a href="../../jsdoc/mx_record-MxRecord.html">MxRecord</a></code> allows you to access the priority and the name of the MX record by offer methods for it like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6378,7 +6401,7 @@ client.resolveSRV("vertx.io", function (ar, ar_err) {
 with smaller priority coming first in the List.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/srv_record-SrvRecord.html">SrvRecord</a></code> allows you to access all informations contained in the SRV record itself:</p>
+<p>The <code><a href="../../jsdoc/srv_record-SrvRecord.html">SrvRecord</a></code> allows you to access all informations contained in the SRV record itself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6449,36 +6472,36 @@ client.reverseLookup("10.0.0.1", function (ar, ar_err) {
 <p>There are several objects in Vert.x that allow items to be read from and written.</p>
 </div>
 <div class="paragraph">
-<p>In previous versions the streams.adoc package was manipulating <code><a href="jsdoc/buffer-Buffer.html">Buffer</a></code>
-objects exclusively. From now, streams are not anymore coupled to buffers and work with any kind of objects.</p>
+<p>In previous versions the streams.adoc package was manipulating <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code>
+objects exclusively. From now, streams are not coupled to buffers anymore and they work with any kind of objects.</p>
 </div>
 <div class="paragraph">
-<p>In Vert.x, calls to write item return immediately and writes are internally queued.</p>
+<p>In Vert.x, write calls return immediately, and writes are queued internally.</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s not hard to see that if you write to an object faster than it can actually write the data to
-its underlying resource then the write queue could grow without bound - eventually resulting in
-exhausting available memory.</p>
+its underlying resource, then the write queue can grow unbounded - eventually resulting in
+memory exhaustion.</p>
 </div>
 <div class="paragraph">
-<p>To solve this problem a simple flow control capability is provided by some objects in the Vert.x API.</p>
+<p>To solve this problem a simple flow control (<em>back-pressure</em>) capability is provided by some objects in the Vert.x API.</p>
 </div>
 <div class="paragraph">
-<p>Any flow control aware object that can be written-to implements <code><a href="jsdoc/read_stream-ReadStream.html">ReadStream</a></code>,
-and any flow control object that can be read-from is said to implement <code><a href="jsdoc/write_stream-WriteStream.html">WriteStream</a></code>.</p>
+<p>Any flow control aware object that can be <em>written-to</em> implements <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code>,
+while any flow control object that can be <em>read-from</em> is said to implement <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> and write the data to a <code>WriteStream</code>.</p>
+<p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> then write the data to a <code>WriteStream</code>.</p>
 </div>
 <div class="paragraph">
-<p>A very simple example would be reading from a <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> on a server and writing back to the
-same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>, but you can
-do this between any <code>ReadStream</code> and any <code>WriteStream</code>, including HTTP requests and response,
-async files, WebSockets, etc.</p>
+<p>A very simple example would be reading from a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> then writing back to the
+same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>. Note that this works
+between any <code>ReadStream</code> and <code>WriteStream</code> compliant object, including HTTP requests, HTTP responses,
+async files I/O, WebSockets, etc.</p>
 </div>
 <div class="paragraph">
-<p>A naive way to do this would be to directly take the data that&#8217;s been read and immediately write it
-to the <code>NetSocket</code>, for example:</p>
+<p>A naive way to do this would be to directly take the data that has been read and immediately write it
+to the <code>NetSocket</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6495,10 +6518,10 @@ server.connectHandler(function (sock) {
 </div>
 </div>
 <div class="paragraph">
-<p>There&#8217;s a problem with the above example: If data is read from the socket faster than it can be
+<p>There is a problem with the example above: if data is read from the socket faster than it can be
 written back to the socket, it will build up in the write queue of the <code>NetSocket</code>, eventually
 running out of RAM. This might happen, for example if the client at the other end of the socket
-wasn&#8217;t reading very fast, effectively putting back-pressure on the connection.</p>
+wasn&#8217;t reading fast enough, effectively putting back-pressure on the connection.</p>
 </div>
 <div class="paragraph">
 <p>Since <code>NetSocket</code> implements <code>WriteStream</code>, we can check if the <code>WriteStream</code> is full before
@@ -6522,7 +6545,7 @@ server.connectHandler(function (sock) {
 </div>
 <div class="paragraph">
 <p>This example won&#8217;t run out of RAM but we&#8217;ll end up losing data if the write queue gets full. What we
-really want to do is pause the <code>NetSocket</code> when the write queue is full. Let&#8217;s do that:</p>
+really want to do is pause the <code>NetSocket</code> when the write queue is full:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6564,14 +6587,14 @@ server.connectHandler(function (sock) {
 </div>
 </div>
 <div class="paragraph">
-<p>And there we have it. The <code><a href="jsdoc/write_stream-WriteStream.html#drainHandler">drainHandler</a></code> event handler will
-get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> which
-allows it to read more data.</p>
+<p>And there we have it. The <code><a href="../../jsdoc/write_stream-WriteStream.html#drainHandler">drainHandler</a></code> event handler will
+get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> that
+allows more data to be read.</p>
 </div>
 <div class="paragraph">
-<p>It&#8217;s very common to want to do this when writing Vert.x applications, so we provide a helper class
-called <code><a href="jsdoc/pump-Pump.html">Pump</a></code> which does all this hard work for you. You just feed it the <code>ReadStream</code> and
-the <code>WriteStream</code> and it tell it to start:</p>
+<p>Wanting to do this is quite common while writing Vert.x applications, so we provide a helper class
+called <code><a href="../../jsdoc/pump-Pump.html">Pump</a></code> that does all of this hard work for you.
+You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> then start it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6586,20 +6609,20 @@ server.connectHandler(function (sock) {
 </div>
 </div>
 <div class="paragraph">
-<p>Which does exactly the same thing as the more verbose example.</p>
+<p>This does exactly the same thing as the more verbose example.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s look at the methods on <code>ReadStream</code> and <code>WriteStream</code> in more detail:</p>
+<p>Let&#8217;s now look at the methods on <code>ReadStream</code> and <code>WriteStream</code> in more detail:</p>
 </div>
 <div class="sect2">
 <h3 id="_readstream">ReadStream</h3>
 <div class="paragraph">
-<p><code>ReadStream</code> is implemented by <code><a href="jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code>,
-<code><a href="jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="jsdoc/http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
-<code><a href="jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="jsdoc/http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
-<code><a href="jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code>, <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="jsdoc/net_socket_stream-NetSocketStream.html">NetSocketStream</a></code>,
-<code><a href="jsdoc/web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="jsdoc/web_socket_stream-WebSocketStream.html">WebSocketStream</a></code>, <code><a href="jsdoc/timeout_stream-TimeoutStream.html">TimeoutStream</a></code>,
-<code><a href="jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>.</p>
+<p><code>ReadStream</code> is implemented by <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code>,
+<code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../jsdoc/http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
+<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../jsdoc/http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
+<code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code>, <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="../../jsdoc/net_socket_stream-NetSocketStream.html">NetSocketStream</a></code>,
+<code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="../../jsdoc/web_socket_stream-WebSocketStream.html">WebSocketStream</a></code>, <code><a href="../../jsdoc/timeout_stream-TimeoutStream.html">TimeoutStream</a></code>,
+<code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -6607,23 +6630,23 @@ server.connectHandler(function (sock) {
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="jsdoc/read_stream-ReadStream.html#handler">handler</a></code>:
+<p><code><a href="../../jsdoc/read_stream-ReadStream.html#handler">handler</a></code>:
 set a handler which will receive items from the ReadStream.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/read_stream-ReadStream.html#pause">pause</a></code>:
+<p><code><a href="../../jsdoc/read_stream-ReadStream.html#pause">pause</a></code>:
 pause the handler. When paused no items will be received in the handler.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/read_stream-ReadStream.html#resume">resume</a></code>:
+<p><code><a href="../../jsdoc/read_stream-ReadStream.html#resume">resume</a></code>:
 resume the handler. The handler will be called if any item arrives.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/read_stream-ReadStream.html#exceptionHandler">exceptionHandler</a></code>:
+<p><code><a href="../../jsdoc/read_stream-ReadStream.html#exceptionHandler">exceptionHandler</a></code>:
 Will be called if an exception occurs on the ReadStream.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/read_stream-ReadStream.html#endHandler">endHandler</a></code>:
+<p><code><a href="../../jsdoc/read_stream-ReadStream.html#endHandler">endHandler</a></code>:
 Will be called when end of stream is reached. This might be when EOF is reached if the ReadStream represents a file,
 or when end of request is reached if it&#8217;s an HTTP request, or when the connection is closed if it&#8217;s a TCP socket.</p>
 </li>
@@ -6633,9 +6656,9 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="sect2">
 <h3 id="_writestream">WriteStream</h3>
 <div class="paragraph">
-<p><code>WriteStream</code> is implemented by <code><a href="jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
-<code><a href="jsdoc/web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>,
-<code><a href="jsdoc/packet_writestream-PacketWritestream.html">PacketWritestream</a></code> and <code><a href="jsdoc/message_producer-MessageProducer.html">MessageProducer</a></code></p>
+<p><code>WriteStream</code> is implemented by <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>,
+<code><a href="../../jsdoc/packet_writestream-PacketWritestream.html">PacketWritestream</a></code> and <code><a href="../../jsdoc/message_producer-MessageProducer.html">MessageProducer</a></code></p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -6643,27 +6666,27 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="jsdoc/write_stream-WriteStream.html#write">write</a></code>:
+<p><code><a href="../../jsdoc/write_stream-WriteStream.html#write">write</a></code>:
 write an object to the WriteStream. This method will never block. Writes are queued internally and asynchronously
 written to the underlying resource.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
-set the number of object at which the write queue is considered <em>full</em>, and the method <code><a href="jsdoc/write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>
+<p><code><a href="../../jsdoc/write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
+set the number of object at which the write queue is considered <em>full</em>, and the method <code><a href="../../jsdoc/write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>
 returns <code>true</code>. Note that, when the write queue is considered full, if write is called the data will still be accepted
-and queued. The actual number depends on the stream implementation, for <code><a href="jsdoc/buffer-Buffer.html">Buffer</a></code> the size
+and queued. The actual number depends on the stream implementation, for <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code> the size
 represents the actual number of bytes written and not the number of buffers.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>:
+<p><code><a href="../../jsdoc/write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>:
 returns <code>true</code> if the write queue is considered full.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/write_stream-WriteStream.html#exceptionHandler">exceptionHandler</a></code>:
+<p><code><a href="../../jsdoc/write_stream-WriteStream.html#exceptionHandler">exceptionHandler</a></code>:
 Will be called if an exception occurs on the <code>WriteStream</code>.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/write_stream-WriteStream.html#drainHandler">drainHandler</a></code>:
+<p><code><a href="../../jsdoc/write_stream-WriteStream.html#drainHandler">drainHandler</a></code>:
 The handler will be called if the <code>WriteStream</code> is considered no longer full.</p>
 </li>
 </ul>
@@ -6677,16 +6700,16 @@ The handler will be called if the <code>WriteStream</code> is considered no long
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="jsdoc/pump-Pump.html#start">start</a></code>:
+<p><code><a href="../../jsdoc/pump-Pump.html#start">start</a></code>:
 Start the pump.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/pump-Pump.html#stop">stop</a></code>:
+<p><code><a href="../../jsdoc/pump-Pump.html#stop">stop</a></code>:
 Stops the pump. When the pump starts it is in stopped mode.</p>
 </li>
 <li>
-<p><code><a href="jsdoc/pump-Pump.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
-This has the same meaning as <code><a href="jsdoc/write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code> on the <code>WriteStream</code>.</p>
+<p><code><a href="../../jsdoc/pump-Pump.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
+This has the same meaning as <code><a href="../../jsdoc/write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code> on the <code>WriteStream</code>.</p>
 </li>
 </ul>
 </div>
@@ -6694,7 +6717,8 @@ This has the same meaning as <code><a href="jsdoc/write_stream-WriteStream.html#
 <p>A pump can be started and stopped multiple times.</p>
 </div>
 <div class="paragraph">
-<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.</p>
+<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.
+&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;</p>
 </div>
 </div>
 </div>
@@ -6760,7 +6784,7 @@ RecordParser.newFixed(4, function (h) {
 </div>
 </div>
 <div class="paragraph">
-<p>For more details, check out the <code><a href="jsdoc/record_parser-RecordParser.html">RecordParser</a></code> class.</p>
+<p>For more details, check out the <code><a href="../../jsdoc/record_parser-RecordParser.html">RecordParser</a></code> class.</p>
 </div>
 </div>
 </div>
@@ -6772,8 +6796,8 @@ RecordParser.newFixed(4, function (h) {
 accessed from the same context they were created from.</p>
 </div>
 <div class="paragraph">
-<p>For example if you have deployed a verticle which creates a <code><a href="jsdoc/net_server-NetServer.html">NetServer</a></code> which provides
-<code><a href="jsdoc/net_socket-NetSocket.html">NetSocket</a></code> instances in it&#8217;s handler, then it&#8217;s best to always access that socket instance
+<p>For example if you have deployed a verticle which creates a <code><a href="../../jsdoc/net_server-NetServer.html">NetServer</a></code> which provides
+<code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> instances in it&#8217;s handler, then it&#8217;s best to always access that socket instance
 from the event loop of the verticle.</p>
 </div>
 <div class="paragraph">
@@ -6806,51 +6830,56 @@ or Eclipse Equinox. The bundle exports <code>io.vertx.core*</code>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Jackson Annotation [2.5.0,3)</p>
+<p>Jackson Annotation [2.6.0,3)</p>
 </li>
 <li>
-<p>Jackson Core [2.5.0,3)</p>
+<p>Jackson Core [2.6.2,3)</p>
 </li>
 <li>
-<p>Jackson Databind [2.5.0,3)</p>
+<p>Jackson Databind [2.6.2,3)</p>
 </li>
 <li>
-<p>Netty Buffer [4.0.27,5)</p>
+<p>Netty Buffer [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec [4.0.27,5)</p>
+<p>Netty Codec [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Socks [4.0.27,5)</p>
+<p>Netty Codec/Socks [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Common [4.0.27,5)</p>
+<p>Netty Codec/Common [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Handler [4.0.27,5)</p>
+<p>Netty Codec/Handler [4.0.31,5)</p>
 </li>
 <li>
-<p>Netty Codec/Transport [4.0.27,5)</p>
+<p>Netty Codec/Transport [4.0.31,5)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Here is a working deployment on Apache Felix 4.6.1:</p>
+<p>Here is a working deployment on Apache Felix 5.2.0:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>  14|Active     |    1|Jackson-annotations (2.5.3)
-  15|Active     |    1|Jackson-core (2.5.3)
-  16|Active     |    1|jackson-databind (2.5.3)
-  17|Active     |    1|Netty/Buffer (4.0.27.Final)
-  18|Active     |    1|Netty/Codec (4.0.27.Final)
-  19|Active     |    1|Netty/Codec/HTTP (4.0.27.Final)
-  20|Active     |    1|Netty/Codec/Socks (4.0.27.Final)
-  21|Active     |    1|Netty/Common (4.0.27.Final)
-  22|Active     |    1|Netty/Handler (4.0.27.Final)
-  23|Active     |    1|Netty/Transport (4.0.27.Final)
-  25|Active     |    1|Vert.x Core (3.0.0.SNAPSHOT)</code></pre>
+<pre class="prettyprint highlight"><code>14|Active     |    1|Jackson-annotations (2.6.0)
+15|Active     |    1|Jackson-core (2.6.2)
+16|Active     |    1|jackson-databind (2.6.2)
+18|Active     |    1|Netty/Buffer (4.0.31.Final)
+19|Active     |    1|Netty/Codec (4.0.31.Final)
+20|Active     |    1|Netty/Codec/HTTP (4.0.31.Final)
+21|Active     |    1|Netty/Codec/Socks (4.0.31.Final)
+22|Active     |    1|Netty/Common (4.0.31.Final)
+23|Active     |    1|Netty/Handler (4.0.31.Final)
+24|Active     |    1|Netty/Transport (4.0.31.Final)
+25|Active     |    1|Netty/Transport/SCTP (4.0.31.Final)
+26|Active     |    1|Vert.x Core (3.1.0)</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>On Equinox, you may want to disable the <code>ContextFinder</code> with the following framework property:
+<code>eclipse.bundle.setTCCL=false</code></p>
 </div>
 </div>
 </div>
@@ -7277,6 +7306,24 @@ created every time.</p>
 restart. So you can hook your build tool if it updates some runtime artifacts. For instance, you can launch <code>gulp</code>
 or <code>grunt</code> to update your resources.</p>
 </div>
+<div class="paragraph">
+<p>The redeploy feature also supports the following settings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>redeploy-scan-period</code> : the file system check period (in milliseconds), 250ms by default</p>
+</li>
+<li>
+<p><code>redeploy-grace-period</code> : the amount of time (in milliseconds) to wait between 2 re-deployments, 1000ms by default</p>
+</li>
+<li>
+<p><code>redeploy-termination-period</code> : the amount of time to wait after having stopped the application (before
+launching user command). This is useful on Windows, where the process is not killed immediately. The time is given
+in milliseconds. 0 ms by default.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -7359,7 +7406,7 @@ Log4J or SLF4J.</p>
 </div>
 <div class="paragraph">
 <p>To do this you should set a system property called <code>vertx.logger-delegate-factory-class-name</code> with the name of a Java
-class which implements the interface <code>LoggerFactory</code>. We provide pre-built implementations for
+class which implements the interface <code>LogDelegateFactory</code>. We provide pre-built implementations for
 Log4J and SLF4J with the class names <code>io.vertx.core.logging.Log4jLogDelegateFactory</code> and <code>io.vertx.core.logging.SLF4JLogDelegateFactory</code>
 respectively. If you want to use these implementations you should also make sure the relevant Log4J or SLF4J jars
 are on your classpath.</p>
@@ -7728,12 +7775,12 @@ var cli = CLI.create("copy").setSummary("A command line interface to copy files.
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see, you can create a new <code><a href="jsdoc/cli-CLI.html">CLI</a></code> using
-<code><a href="jsdoc/cli-CLI.html#create">CLI.create</a></code>. The passed string is the name of the CLI. Once created you
+<p>As you can see, you can create a new <code><a href="../../jsdoc/cli-CLI.html">CLI</a></code> using
+<code><a href="../../jsdoc/cli-CLI.html#create">CLI.create</a></code>. The passed string is the name of the CLI. Once created you
 can set the summary and description. The summary is intended to be short (one line), while the description can
 contain more details. Each option and argument are also added on the <code>CLI</code> object using the
-<code><a href="jsdoc/cli-CLI.html#addArgument">addArgument</a></code> and
-<code><a href="jsdoc/cli-CLI.html#addOption">addOption</a></code> methods.</p>
+<code><a href="../../jsdoc/cli-CLI.html#addArgument">addArgument</a></code> and
+<code><a href="../../jsdoc/cli-CLI.html#addOption">addOption</a></code> methods.</p>
 </div>
 <div class="sect3">
 <h4 id="_options">Options</h4>
@@ -7798,6 +7845,24 @@ var cli = CLI.create("some-name").addOption({
 not listed in the usage, but can still be used in the user command line (for power-users).</p>
 </div>
 <div class="paragraph">
+<p>If the option value is contrained to a fixed set, you can set the different acceptable choices:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CLI = require("vertx-js/cli");
+var cli = CLI.create("some-name").addOption({
+  "longName" : "color",
+  "defaultValue" : "green",
+  "choices" : [
+    "blue",
+    "red",
+    "green"
+  ],
+  "description" : "a color"
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Options can also be instantiated from their JSON form.</p>
 </div>
 </div>
@@ -7808,7 +7873,7 @@ not listed in the usage, but can still be used in the user command line (for pow
 <code>java com.acme.Foo</code>, <code>com.acme.Foo</code> is an argument.</p>
 </div>
 <div class="paragraph">
-<p>Arguments do not have a name, there are identified using a mandatory 0-based index. The first parameter has the
+<p>Arguments do not have a name, there are identified using a 0-based index. The first parameter has the
 index <code>0</code>:</p>
 </div>
 <div class="listingblock">
@@ -7820,6 +7885,21 @@ var cli = CLI.create("some-name").addArgument({
   "argName" : "arg1"
 }).addArgument({
   "index" : 1,
+  "description" : "the second argument",
+  "argName" : "arg2"
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t set the argument indexes, it computes it automatically by using the declaration order.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CLI = require("vertx-js/cli");
+var cli = CLI.create("some-name").addArgument({
+  "description" : "the first argument",
+  "argName" : "arg1"
+}).addArgument({
   "description" : "the second argument",
   "argName" : "arg2"
 });</code></pre>
@@ -7842,6 +7922,10 @@ var cli = CLI.create("some-name").addArgument({
 <li>
 <p>have a default value using <code><a href="../dataobjects.html#Argument#setDefaultValue">defaultValue</a></code></p>
 </li>
+<li>
+<p>receive several values using <code><a href="../dataobjects.html#Argument#setMultiValued">multiValued</a></code> - only the last argument
+can be multi-valued.</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -7851,7 +7935,7 @@ var cli = CLI.create("some-name").addArgument({
 <div class="sect3">
 <h4 id="_usage_generation">Usage generation</h4>
 <div class="paragraph">
-<p>Once your <code><a href="jsdoc/cli-CLI.html">CLI</a></code> instance is configured, you can generate the <em>usage</em> message:</p>
+<p>Once your <code><a href="../../jsdoc/cli-CLI.html">CLI</a></code> instance is configured, you can generate the <em>usage</em> message:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7895,7 +7979,7 @@ A command line interface to copy files.
 <div class="sect2">
 <h3 id="_parsing_stage">Parsing Stage</h3>
 <div class="paragraph">
-<p>Once your <code><a href="jsdoc/cli-CLI.html">CLI</a></code> instance is configured, you can parse the user command line to evaluate
+<p>Once your <code><a href="../../jsdoc/cli-CLI.html">CLI</a></code> instance is configured, you can parse the user command line to evaluate
 each option and argument:</p>
 </div>
 <div class="listingblock">
@@ -7904,18 +7988,22 @@ each option and argument:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/cli-CLI.html#parse">parse</a></code> method returns a <code><a href="jsdoc/command_line-CommandLine.html">CommandLine</a></code>
+<p>The <code><a href="../../jsdoc/cli-CLI.html#parse">parse</a></code> method returns a <code><a href="../../jsdoc/command_line-CommandLine.html">CommandLine</a></code>
 object containing the values. By default, it validates the user command line and checks that each mandatory options
 and arguments have been set as well as the number of values received by each option. You can disable the
-validation by passing <code>false</code> as second parameter of <code><a href="jsdoc/cli-CLI.html#parse">parse</a></code>.
+validation by passing <code>false</code> as second parameter of <code><a href="../../jsdoc/cli-CLI.html#parse">parse</a></code>.
 This is useful if you want to check an argument or option is present even if the parsed command line is invalid.</p>
+</div>
+<div class="paragraph">
+<p>You can check whether or not the
+<code><a href="../../jsdoc/command_line-CommandLine.html">CommandLine</a></code> is valid using <code><a href="../../jsdoc/command_line-CommandLine.html#isValid">isValid</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_query_interrogation_stage">Query / Interrogation Stage</h3>
 <div class="paragraph">
 <p>Once parsed, you can retrieve the values of the options and arguments from the
-<code><a href="jsdoc/command_line-CommandLine.html">CommandLine</a></code> object returned by the <code><a href="jsdoc/cli-CLI.html#parse">parse</a></code>
+<code><a href="../../jsdoc/command_line-CommandLine.html">CommandLine</a></code> object returned by the <code><a href="../../jsdoc/cli-CLI.html#parse">parse</a></code>
 method:</p>
 </div>
 <div class="listingblock">
@@ -7924,6 +8012,33 @@ method:</p>
 var opt = commandLine.getOptionValue("my-option");
 var flag = commandLine.isFlagEnabled("my-flag");
 var arg0 = commandLine.getArgumentValue(0);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One of your option can have been marked as "help". If a user command line enabled a "help" option, the validation
+won&#8217;t failed, but give you the opportunity to check if the user asks for help:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CLI = require("vertx-js/cli");
+var cli = CLI.create("test").addOption({
+  "longName" : "help",
+  "shortName" : "h",
+  "flag" : true,
+  "help" : true
+}).addOption({
+  "longName" : "mandatory",
+  "required" : true
+});
+
+var line = cli.parse(Java.type("java.util.Collections").singletonList("-h"));
+
+// The parsing does not fail and let you do:
+if (!line.isValid() &amp;&amp; line.isAskingForHelp()) {
+  var builder = new (Java.type("java.lang.StringBuilder"))();
+  cli.usage(builder);
+  stream.print(builder.toString());
+}</code></pre>
 </div>
 </div>
 </div>
@@ -7989,6 +8104,29 @@ java -jar my-fat-jar.jar hello vert.x</code></pre>
 <p>You can also create a sub-class of <code>Launcher</code> to start your application. The class has been
 designed to be easily extensible.</p>
 </div>
+<div class="paragraph">
+<p>A <code>Launcher</code> sub-class can:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>customize the vert.x configuration in <code>beforeStartingVertx</code></p>
+</li>
+<li>
+<p>retrieve the vert.x instance created by the "run" or "bare" command by
+overriding <code>afterStartingVertx</code></p>
+</li>
+<li>
+<p>configure the default verticle and command with
+<code>getMainVerticle</code> and
+<code>getDefaultCommand</code></p>
+</li>
+<li>
+<p>add / remove commands using <code>register</code>
+and <code>unregister</code></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -7999,7 +8137,7 @@ designed to be easily extensible.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

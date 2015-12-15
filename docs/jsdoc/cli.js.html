@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: vertx-js/cli.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: vertx-js/cli.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*
+ * Copyright 2014 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+/** @module vertx-js/cli */
+var utils = require('vertx-js/util/utils');
+var CommandLine = require('vertx-js/command_line');
+
+var io = Packages.io;
+var JsonObject = io.vertx.core.json.JsonObject;
+var JCLI = io.vertx.core.cli.CLI;
+var Option = io.vertx.core.cli.Option;
+var Argument = io.vertx.core.cli.Argument;
+
+/**
+ Interface defining a command-line interface (in other words a command such as 'run', 'ls'...).
+ This interface is polyglot to ease reuse such as in Vert.x Shell.
+ &lt;p/>
+ A command line interface has a name, and defines a set of options and arguments. Options are key-value pair such
+ @class
+*/
+var CLI = function(j_val) {
+
+  var j_cLI = j_val;
+  var that = this;
+
+  /**
+   Parses the user command line interface and create a new {@link CommandLine} containing extracting values.
+
+   @public
+   @param arguments {Array.&lt;string>} the arguments 
+   @param validate {boolean} enable / disable parsing validation 
+   @return {CommandLine} the creates command line
+   */
+  this.parse = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0] instanceof Array) {
+      return utils.convReturnVertxGen(j_cLI["parse(java.util.List)"](__args[0]), CommandLine);
+    }  else if (__args.length === 2 && typeof __args[0] === 'object' && __args[0] instanceof Array && typeof __args[1] ==='boolean') {
+      return utils.convReturnVertxGen(j_cLI["parse(java.util.List,boolean)"](__args[0], __args[1]), CommandLine);
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   @return the CLI name.
+
+   @public
+
+   @return {string}
+   */
+  this.getName = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_cLI["getName()"]();
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Sets the name of the CLI.
+
+   @public
+   @param name {string} the name 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.setName = function(name) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_cLI["setName(java.lang.String)"](name);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   @return the CLI description.
+
+   @public
+
+   @return {string}
+   */
+  this.getDescription = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_cLI["getDescription()"]();
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+
+   @public
+   @param desc {string} 
+   @return {CLI}
+   */
+  this.setDescription = function(desc) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_cLI["setDescription(java.lang.String)"](desc);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   @return the CLI summary.
+
+   @public
+
+   @return {string}
+   */
+  this.getSummary = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_cLI["getSummary()"]();
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Sets the summary of the CLI.
+
+   @public
+   @param summary {string} the summary 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.setSummary = function(summary) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_cLI["setSummary(java.lang.String)"](summary);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Checks whether or not the current {@link CLI} instance is hidden.
+
+   @public
+
+   @return {boolean} &lt;code>true&lt;/code> if the current {@link CLI} is hidden,  otherwise
+   */
+  this.isHidden = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return j_cLI["isHidden()"]();
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Sets whether or not the current instance of {@link CLI} must be hidden. Hidden CLI are not listed when
+   displaying usages / help messages. In other words, hidden commands are for power user.
+
+   @public
+   @param hidden {boolean} enables or disables the hidden aspect of the CI 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.setHidden = function(hidden) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] ==='boolean') {
+      j_cLI["setHidden(boolean)"](hidden);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Gets the list of options.
+
+   @public
+
+   @return {Array.&lt;Object>} the list of options, empty if none.
+   */
+  this.getOptions = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return utils.convReturnListSetDataObject(j_cLI["getOptions()"]());
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Adds an option.
+
+   @public
+   @param option {Object} the option, must not be &lt;code>null&lt;/code>. 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.addOption = function(option) {
+    var __args = arguments;
+    if (__args.length === 1 && (typeof __args[0] === 'object' && __args[0] != null)) {
+      j_cLI["addOption(io.vertx.core.cli.Option)"](option != null ? new Option(new JsonObject(JSON.stringify(option))) : null);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Adds a set of options. Unlike {@link CLI#setOptions}}, this method does not remove the existing options.
+   The given list is appended to the existing list.
+
+   @public
+   @param options {Array.&lt;Object>} the options, must not be &lt;code>null&lt;/code> 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.addOptions = function(options) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0] instanceof Array) {
+      j_cLI["addOptions(java.util.List)"](utils.convParamListDataObject(options, function(json) { return new Option(json); }));
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Sets the list of arguments.
+
+   @public
+   @param options {Array.&lt;Object>} the list of options, must not be &lt;code>null&lt;/code> 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.setOptions = function(options) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0] instanceof Array) {
+      j_cLI["setOptions(java.util.List)"](utils.convParamListDataObject(options, function(json) { return new Option(json); }));
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Gets the list of defined arguments.
+
+   @public
+
+   @return {Array.&lt;Object>} the list of argument, empty if none.
+   */
+  this.getArguments = function() {
+    var __args = arguments;
+    if (__args.length === 0) {
+      return utils.convReturnListSetDataObject(j_cLI["getArguments()"]());
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Adds an argument.
+
+   @public
+   @param arg {Object} the argument, must not be &lt;code>null&lt;/code> 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.addArgument = function(arg) {
+    var __args = arguments;
+    if (__args.length === 1 && (typeof __args[0] === 'object' && __args[0] != null)) {
+      j_cLI["addArgument(io.vertx.core.cli.Argument)"](arg != null ? new Argument(new JsonObject(JSON.stringify(arg))) : null);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Adds a set of arguments. Unlike {@link CLI#setArguments}, this method does not remove the existing arguments.
+   The given list is appended to the existing list.
+
+   @public
+   @param args {Array.&lt;Object>} the arguments, must not be &lt;code>null&lt;/code> 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.addArguments = function(args) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0] instanceof Array) {
+      j_cLI["addArguments(java.util.List)"](utils.convParamListDataObject(args, function(json) { return new Argument(json); }));
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Sets the list of arguments.
+
+   @public
+   @param args {Array.&lt;Object>} the list of arguments, must not be &lt;code>null&lt;/code> 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.setArguments = function(args) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'object' && __args[0] instanceof Array) {
+      j_cLI["setArguments(java.util.List)"](utils.convParamListDataObject(args, function(json) { return new Argument(json); }));
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Gets an &lt;a href="../../dataobjects.html#Option">Option&lt;/a> based on its name (short name, long name or argument name).
+
+   @public
+   @param name {string} the name, must not be &lt;code>null&lt;/code> 
+   @return {Object} the &lt;a href="../../dataobjects.html#Option">Option&lt;/a>, &lt;code>null&lt;/code> if not found
+   */
+  this.getOption = function(name) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      return utils.convReturnDataObject(j_cLI["getOption(java.lang.String)"](name));
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Gets an &lt;a href="../../dataobjects.html#Argument">Argument&lt;/a> based on its index.
+
+   @public
+   @param index {number} the index, must be positive or zero. 
+   @return {Object} the &lt;a href="../../dataobjects.html#Argument">Argument&lt;/a>, &lt;code>null&lt;/code> if not found.
+   */
+  this.getArgument = function() {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      return utils.convReturnDataObject(j_cLI["getArgument(java.lang.String)"](__args[0]));
+    }  else if (__args.length === 1 && typeof __args[0] ==='number') {
+      return utils.convReturnDataObject(j_cLI["getArgument(int)"](__args[0]));
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Removes an option identified by its name. This method does nothing if the option cannot be found.
+
+   @public
+   @param name {string} the option name 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.removeOption = function(name) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] === 'string') {
+      j_cLI["removeOption(java.lang.String)"](name);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+   Removes an argument identified by its index. This method does nothing if the argument cannot be found.
+
+   @public
+   @param index {number} the argument index 
+   @return {CLI} the current {@link CLI} instance
+   */
+  this.removeArgument = function(index) {
+    var __args = arguments;
+    if (__args.length === 1 && typeof __args[0] ==='number') {
+      j_cLI["removeArgument(int)"](index);
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  // A reference to the underlying Java delegate
+  // NOTE! This is an internal API and must not be used in user code.
+  // If you rely on this property your code is likely to break if we change it / remove it without warning.
+  this._jdel = j_cLI;
+};
+
+/**
+ Creates an instance of {@link CLI} using the default implementation.
+
+ @memberof module:vertx-js/cli
+ @param name {string} the name of the CLI (must not be &lt;code>null&lt;/code>) 
+ @return {CLI} the created instance of {@link CLI}
+ */
+CLI.create = function(name) {
+  var __args = arguments;
+  if (__args.length === 1 && typeof __args[0] === 'string') {
+    return utils.convReturnVertxGen(JCLI["create(java.lang.String)"](name), CLI);
+  } else throw new TypeError('function invoked with invalid arguments');
+};
+
+// We export the Constructor function
+module.exports = CLI;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="auth_provider.html">vertx-auth-common-js/auth_provider</a></li><li><a href="shiro_auth.html">vertx-auth-common-js/shiro_auth</a></li><li><a href="user.html">vertx-auth-common-js/user</a></li><li><a href="jdbc_auth.html">vertx-auth-jdbc-js/jdbc_auth</a></li><li><a href="jwt_auth.html">vertx-auth-jwt-js/jwt_auth</a></li><li><a href="hash_strategy.html">vertx-auth-mongo-js/hash_strategy</a></li><li><a href="mongo_auth.html">vertx-auth-mongo-js/mongo_auth</a></li><li><a href="access_token.html">vertx-auth-oauth2-js/access_token</a></li><li><a href="o_auth2_auth.html">vertx-auth-oauth2-js/o_auth2_auth</a></li><li><a href="shiro_auth_.html">vertx-auth-shiro-js/shiro_auth</a></li><li><a href="metrics_service.html">vertx-dropwizard-js/metrics_service</a></li><li><a href="jdbc_client.html">vertx-jdbc-js/jdbc_client</a></li><li><a href="jdbc_connection.html">vertx-jdbc-js/jdbc_connection</a></li><li><a href="async_file.html">vertx-js/async_file</a></li><li><a href="async_map.html">vertx-js/async_map</a></li><li><a href="buffer.html">vertx-js/buffer</a></li><li><a href="cli.html">vertx-js/cli</a></li><li><a href="command_line.html">vertx-js/command_line</a></li><li><a href="context.html">vertx-js/context</a></li><li><a href="counter.html">vertx-js/counter</a></li><li><a href="datagram_packet.html">vertx-js/datagram_packet</a></li><li><a href="datagram_socket.html">vertx-js/datagram_socket</a></li><li><a href="dns_client.html">vertx-js/dns_client</a></li><li><a href="event_bus.html">vertx-js/event_bus</a></li><li><a href="file_props.html">vertx-js/file_props</a></li><li><a href="file_system.html">vertx-js/file_system</a></li><li><a href="file_system_props.html">vertx-js/file_system_props</a></li><li><a href="future.html">vertx-js/future</a></li><li><a href="http_client.html">vertx-js/http_client</a></li><li><a href="http_client_request.html">vertx-js/http_client_request</a></li><li><a href="http_client_response.html">vertx-js/http_client_response</a></li><li><a href="http_server.html">vertx-js/http_server</a></li><li><a href="http_server_file_upload.html">vertx-js/http_server_file_upload</a></li><li><a href="http_server_request.html">vertx-js/http_server_request</a></li><li><a href="http_server_request_stream.html">vertx-js/http_server_request_stream</a></li><li><a href="http_server_response.html">vertx-js/http_server_response</a></li><li><a href="local_map.html">vertx-js/local_map</a></li><li><a href="lock.html">vertx-js/lock</a></li><li><a href="measured.html">vertx-js/measured</a></li><li><a href="message.html">vertx-js/message</a></li><li><a href="message_consumer.html">vertx-js/message_consumer</a></li><li><a href="message_producer.html">vertx-js/message_producer</a></li><li><a href="multi_map.html">vertx-js/multi_map</a></li><li><a href="mx_record.html">vertx-js/mx_record</a></li><li><a href="net_client.html">vertx-js/net_client</a></li><li><a href="net_server.html">vertx-js/net_server</a></li><li><a href="net_socket.html">vertx-js/net_socket</a></li><li><a href="net_socket_stream.html">vertx-js/net_socket_stream</a></li><li><a href="packet_writestream.html">vertx-js/packet_writestream</a></li><li><a href="pump.html">vertx-js/pump</a></li><li><a href="read_stream.html">vertx-js/read_stream</a></li><li><a href="record_parser.html">vertx-js/record_parser</a></li><li><a href="send_context.html">vertx-js/send_context</a></li><li><a href="server_web_socket.html">vertx-js/server_web_socket</a></li><li><a href="server_web_socket_stream.html">vertx-js/server_web_socket_stream</a></li><li><a href="shared_data.html">vertx-js/shared_data</a></li><li><a href="socket_address.html">vertx-js/socket_address</a></li><li><a href="srv_record.html">vertx-js/srv_record</a></li><li><a href="stream_base.html">vertx-js/stream_base</a></li><li><a href="timeout_stream.html">vertx-js/timeout_stream</a></li><li><a href="vertx.html">vertx-js/vertx</a></li><li><a href="web_socket.html">vertx-js/web_socket</a></li><li><a href="web_socket_base.html">vertx-js/web_socket_base</a></li><li><a href="web_socket_frame.html">vertx-js/web_socket_frame</a></li><li><a href="web_socket_stream.html">vertx-js/web_socket_stream</a></li><li><a href="write_stream.html">vertx-js/write_stream</a></li><li><a href="mail_client.html">vertx-mail-js/mail_client</a></li><li><a href="mail_service.html">vertx-mail-js/mail_service</a></li><li><a href="mongo_client.html">vertx-mongo-js/mongo_client</a></li><li><a href="redis_client.html">vertx-redis-js/redis_client</a></li><li><a href="cli_token.html">vertx-shell-js/cli_token</a></li><li><a href="command.html">vertx-shell-js/command</a></li><li><a href="command_builder.html">vertx-shell-js/command_builder</a></li><li><a href="command_process.html">vertx-shell-js/command_process</a></li><li><a href="command_registration.html">vertx-shell-js/command_registration</a></li><li><a href="command_registry.html">vertx-shell-js/command_registry</a></li><li><a href="command_resolver.html">vertx-shell-js/command_resolver</a></li><li><a href="completion.html">vertx-shell-js/completion</a></li><li><a href="input_stream.html">vertx-shell-js/input_stream</a></li><li><a href="job.html">vertx-shell-js/job</a></li><li><a href="job_controller.html">vertx-shell-js/job_controller</a></li><li><a href="output_stream.html">vertx-shell-js/output_stream</a></li><li><a href="process.html">vertx-shell-js/process</a></li><li><a href="pty.html">vertx-shell-js/pty</a></li><li><a href="session.html">vertx-shell-js/session</a></li><li><a href="shell.html">vertx-shell-js/shell</a></li><li><a href="shell_server.html">vertx-shell-js/shell_server</a></li><li><a href="shell_service.html">vertx-shell-js/shell_service</a></li><li><a href="signal_handler.html">vertx-shell-js/signal_handler</a></li><li><a href="sock_js_term_handler.html">vertx-shell-js/sock_js_term_handler</a></li><li><a href="stream.html">vertx-shell-js/stream</a></li><li><a href="term.html">vertx-shell-js/term</a></li><li><a href="term_server.html">vertx-shell-js/term_server</a></li><li><a href="tty.html">vertx-shell-js/tty</a></li><li><a href="sql_connection.html">vertx-sql-js/sql_connection</a></li><li><a href="acknowledgement.html">vertx-stomp-js/acknowledgement</a></li><li><a href="destination.html">vertx-stomp-js/destination</a></li><li><a href="destination_factory.html">vertx-stomp-js/destination_factory</a></li><li><a href="frames.html">vertx-stomp-js/frames</a></li><li><a href="server_frame.html">vertx-stomp-js/server_frame</a></li><li><a href="stomp_client.html">vertx-stomp-js/stomp_client</a></li><li><a href="stomp_client_connection.html">vertx-stomp-js/stomp_client_connection</a></li><li><a href="stomp_server.html">vertx-stomp-js/stomp_server</a></li><li><a href="stomp_server_connection.html">vertx-stomp-js/stomp_server_connection</a></li><li><a href="stomp_server_handler.html">vertx-stomp-js/stomp_server_handler</a></li><li><a href="tcp_event_bus_bridge.html">vertx-tcp-eventbus-bridge-js/tcp_event_bus_bridge</a></li><li><a href="async.html">vertx-unit-js/async</a></li><li><a href="completion_.html">vertx-unit-js/completion</a></li><li><a href="event_bus_collector.html">vertx-unit-js/event_bus_collector</a></li><li><a href="failure.html">vertx-unit-js/failure</a></li><li><a href="test_case.html">vertx-unit-js/test_case</a></li><li><a href="test_case_report.html">vertx-unit-js/test_case_report</a></li><li><a href="test_completion.html">vertx-unit-js/test_completion</a></li><li><a href="test_context.html">vertx-unit-js/test_context</a></li><li><a href="test_result.html">vertx-unit-js/test_result</a></li><li><a href="test_suite.html">vertx-unit-js/test_suite</a></li><li><a href="test_suite_report.html">vertx-unit-js/test_suite_report</a></li><li><a href="auth_handler.html">vertx-web-js/auth_handler</a></li><li><a href="basic_auth_handler.html">vertx-web-js/basic_auth_handler</a></li><li><a href="body_handler.html">vertx-web-js/body_handler</a></li><li><a href="bridge_event.html">vertx-web-js/bridge_event</a></li><li><a href="clustered_session_store.html">vertx-web-js/clustered_session_store</a></li><li><a href="cookie.html">vertx-web-js/cookie</a></li><li><a href="cookie_handler.html">vertx-web-js/cookie_handler</a></li><li><a href="cors_handler.html">vertx-web-js/cors_handler</a></li><li><a href="csrf_handler.html">vertx-web-js/csrf_handler</a></li><li><a href="error_handler.html">vertx-web-js/error_handler</a></li><li><a href="favicon_handler.html">vertx-web-js/favicon_handler</a></li><li><a href="file_upload.html">vertx-web-js/file_upload</a></li><li><a href="form_login_handler.html">vertx-web-js/form_login_handler</a></li><li><a href="handlebars_template_engine.html">vertx-web-js/handlebars_template_engine</a></li><li><a href="jade_template_engine.html">vertx-web-js/jade_template_engine</a></li><li><a href="jwt_auth_handler.html">vertx-web-js/jwt_auth_handler</a></li><li><a href="local_session_store.html">vertx-web-js/local_session_store</a></li><li><a href="locale.html">vertx-web-js/locale</a></li><li><a href="logger_handler.html">vertx-web-js/logger_handler</a></li><li><a href="mvel_template_engine.html">vertx-web-js/mvel_template_engine</a></li><li><a href="o_auth2_auth_handler.html">vertx-web-js/o_auth2_auth_handler</a></li><li><a href="redirect_auth_handler.html">vertx-web-js/redirect_auth_handler</a></li><li><a href="response_time_handler.html">vertx-web-js/response_time_handler</a></li><li><a href="route.html">vertx-web-js/route</a></li><li><a href="router.html">vertx-web-js/router</a></li><li><a href="routing_context.html">vertx-web-js/routing_context</a></li><li><a href="session_.html">vertx-web-js/session</a></li><li><a href="session_handler.html">vertx-web-js/session_handler</a></li><li><a href="session_store.html">vertx-web-js/session_store</a></li><li><a href="sock_js_handler.html">vertx-web-js/sock_js_handler</a></li><li><a href="sock_js_socket.html">vertx-web-js/sock_js_socket</a></li><li><a href="static_handler.html">vertx-web-js/static_handler</a></li><li><a href="template_engine.html">vertx-web-js/template_engine</a></li><li><a href="template_handler.html">vertx-web-js/template_handler</a></li><li><a href="thymeleaf_template_engine.html">vertx-web-js/thymeleaf_template_engine</a></li><li><a href="timeout_handler.html">vertx-web-js/timeout_handler</a></li><li><a href="user_session_handler.html">vertx-web-js/user_session_handler</a></li><li><a href="virtual_host_handler.html">vertx-web-js/virtual_host_handler</a></li></ul><h3>Classes</h3><ul><li><a href="auth_provider-AuthProvider.html">AuthProvider</a></li><li><a href="shiro_auth-ShiroAuth.html">ShiroAuth</a></li><li><a href="user-User.html">User</a></li><li><a href="jdbc_auth-JDBCAuth.html">JDBCAuth</a></li><li><a href="jwt_auth-JWTAuth.html">JWTAuth</a></li><li><a href="hash_strategy-HashStrategy.html">HashStrategy</a></li><li><a href="mongo_auth-MongoAuth.html">MongoAuth</a></li><li><a href="access_token-AccessToken.html">AccessToken</a></li><li><a href="o_auth2_auth-OAuth2Auth.html">OAuth2Auth</a></li><li><a href="shiro_auth-ShiroAuth_.html">ShiroAuth</a></li><li><a href="metrics_service-MetricsService.html">MetricsService</a></li><li><a href="jdbc_client-JDBCClient.html">JDBCClient</a></li><li><a href="jdbc_connection-JdbcConnection.html">JdbcConnection</a></li><li><a href="async_file-AsyncFile.html">AsyncFile</a></li><li><a href="async_map-AsyncMap.html">AsyncMap</a></li><li><a href="buffer-Buffer.html">Buffer</a></li><li><a href="cli-CLI.html">CLI</a></li><li><a href="command_line-CommandLine.html">CommandLine</a></li><li><a href="context-Context.html">Context</a></li><li><a href="counter-Counter.html">Counter</a></li><li><a href="datagram_packet-DatagramPacket.html">DatagramPacket</a></li><li><a href="datagram_socket-DatagramSocket.html">DatagramSocket</a></li><li><a href="dns_client-DnsClient.html">DnsClient</a></li><li><a href="event_bus-EventBus.html">EventBus</a></li><li><a href="file_props-FileProps.html">FileProps</a></li><li><a href="file_system_props-FileSystemProps.html">FileSystemProps</a></li><li><a href="file_system-FileSystem.html">FileSystem</a></li><li><a href="future-Future.html">Future</a></li><li><a href="http_client_request-HttpClientRequest.html">HttpClientRequest</a></li><li><a href="http_client_response-HttpClientResponse.html">HttpClientResponse</a></li><li><a href="http_client-HttpClient.html">HttpClient</a></li><li><a href="http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></li><li><a href="http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></li><li><a href="http_server_request-HttpServerRequest.html">HttpServerRequest</a></li><li><a href="http_server_response-HttpServerResponse.html">HttpServerResponse</a></li><li><a href="http_server-HttpServer.html">HttpServer</a></li><li><a href="local_map-LocalMap.html">LocalMap</a></li><li><a href="lock-Lock.html">Lock</a></li><li><a href="measured-Measured.html">Measured</a></li><li><a href="message_consumer-MessageConsumer.html">MessageConsumer</a></li><li><a href="message_producer-MessageProducer.html">MessageProducer</a></li><li><a href="message-Message.html">Message</a></li><li><a href="multi_map-MultiMap.html">MultiMap</a></li><li><a href="mx_record-MxRecord.html">MxRecord</a></li><li><a href="net_client-NetClient.html">NetClient</a></li><li><a href="net_server-NetServer.html">NetServer</a></li><li><a href="net_socket_stream-NetSocketStream.html">NetSocketStream</a></li><li><a href="net_socket-NetSocket.html">NetSocket</a></li><li><a href="packet_writestream-PacketWritestream.html">PacketWritestream</a></li><li><a href="pump-Pump.html">Pump</a></li><li><a href="read_stream-ReadStream.html">ReadStream</a></li><li><a href="record_parser-RecordParser.html">RecordParser</a></li><li><a href="send_context-SendContext.html">SendContext</a></li><li><a href="server_web_socket_stream-ServerWebSocketStream.html">ServerWebSocketStream</a></li><li><a href="server_web_socket-ServerWebSocket.html">ServerWebSocket</a></li><li><a href="shared_data-SharedData.html">SharedData</a></li><li><a href="socket_address-SocketAddress.html">SocketAddress</a></li><li><a href="srv_record-SrvRecord.html">SrvRecord</a></li><li><a href="stream_base-StreamBase.html">StreamBase</a></li><li><a href="timeout_stream-TimeoutStream.html">TimeoutStream</a></li><li><a href="vertx-Vertx.html">Vertx</a></li><li><a href="web_socket_base-WebSocketBase.html">WebSocketBase</a></li><li><a href="web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></li><li><a href="web_socket_stream-WebSocketStream.html">WebSocketStream</a></li><li><a href="web_socket-WebSocket.html">WebSocket</a></li><li><a href="write_stream-WriteStream.html">WriteStream</a></li><li><a href="mail_client-MailClient.html">MailClient</a></li><li><a href="mail_service-MailService.html">MailService</a></li><li><a href="mongo_client-MongoClient.html">MongoClient</a></li><li><a href="redis_client-RedisClient.html">RedisClient</a></li><li><a href="cli_token-CliToken.html">CliToken</a></li><li><a href="command_builder-CommandBuilder.html">CommandBuilder</a></li><li><a href="command_process-CommandProcess.html">CommandProcess</a></li><li><a href="command_registration-CommandRegistration.html">CommandRegistration</a></li><li><a href="command_registry-CommandRegistry.html">CommandRegistry</a></li><li><a href="command_resolver-CommandResolver.html">CommandResolver</a></li><li><a href="command-Command.html">Command</a></li><li><a href="completion-Completion.html">Completion</a></li><li><a href="input_stream-InputStream.html">InputStream</a></li><li><a href="job_controller-JobController.html">JobController</a></li><li><a href="job-Job.html">Job</a></li><li><a href="output_stream-OutputStream.html">OutputStream</a></li><li><a href="process-Process.html">Process</a></li><li><a href="pty-Pty.html">Pty</a></li><li><a href="session-Session.html">Session</a></li><li><a href="shell_server-ShellServer.html">ShellServer</a></li><li><a href="shell_service-ShellService.html">ShellService</a></li><li><a href="shell-Shell.html">Shell</a></li><li><a href="signal_handler-SignalHandler.html">SignalHandler</a></li><li><a href="sock_js_term_handler-SockJSTermHandler.html">SockJSTermHandler</a></li><li><a href="stream-Stream.html">Stream</a></li><li><a href="term_server-TermServer.html">TermServer</a></li><li><a href="term-Term.html">Term</a></li><li><a href="tty-Tty.html">Tty</a></li><li><a href="sql_connection-SQLConnection.html">SQLConnection</a></li><li><a href="acknowledgement-Acknowledgement.html">Acknowledgement</a></li><li><a href="destination_factory-DestinationFactory.html">DestinationFactory</a></li><li><a href="destination-Destination.html">Destination</a></li><li><a href="frames-Frames.html">Frames</a></li><li><a href="server_frame-ServerFrame.html">ServerFrame</a></li><li><a href="stomp_client_connection-StompClientConnection.html">StompClientConnection</a></li><li><a href="stomp_client-StompClient.html">StompClient</a></li><li><a href="stomp_server_connection-StompServerConnection.html">StompServerConnection</a></li><li><a href="stomp_server_handler-StompServerHandler.html">StompServerHandler</a></li><li><a href="stomp_server-StompServer.html">StompServer</a></li><li><a href="tcp_event_bus_bridge-TcpEventBusBridge.html">TcpEventBusBridge</a></li><li><a href="async-Async.html">Async</a></li><li><a href="completion-Completion_.html">Completion</a></li><li><a href="event_bus_collector-EventBusCollector.html">EventBusCollector</a></li><li><a href="failure-Failure.html">Failure</a></li><li><a href="test_case_report-TestCaseReport.html">TestCaseReport</a></li><li><a href="test_case-TestCase.html">TestCase</a></li><li><a href="test_completion-TestCompletion.html">TestCompletion</a></li><li><a href="test_context-TestContext.html">TestContext</a></li><li><a href="test_result-TestResult.html">TestResult</a></li><li><a href="test_suite_report-TestSuiteReport.html">TestSuiteReport</a></li><li><a href="test_suite-TestSuite.html">TestSuite</a></li><li><a href="auth_handler-AuthHandler.html">AuthHandler</a></li><li><a href="basic_auth_handler-BasicAuthHandler.html">BasicAuthHandler</a></li><li><a href="body_handler-BodyHandler.html">BodyHandler</a></li><li><a href="bridge_event-BridgeEvent.html">BridgeEvent</a></li><li><a href="clustered_session_store-ClusteredSessionStore.html">ClusteredSessionStore</a></li><li><a href="cookie_handler-CookieHandler.html">CookieHandler</a></li><li><a href="cookie-Cookie.html">Cookie</a></li><li><a href="cors_handler-CorsHandler.html">CorsHandler</a></li><li><a href="csrf_handler-CSRFHandler.html">CSRFHandler</a></li><li><a href="error_handler-ErrorHandler.html">ErrorHandler</a></li><li><a href="favicon_handler-FaviconHandler.html">FaviconHandler</a></li><li><a href="file_upload-FileUpload.html">FileUpload</a></li><li><a href="form_login_handler-FormLoginHandler.html">FormLoginHandler</a></li><li><a href="handlebars_template_engine-HandlebarsTemplateEngine.html">HandlebarsTemplateEngine</a></li><li><a href="jade_template_engine-JadeTemplateEngine.html">JadeTemplateEngine</a></li><li><a href="jwt_auth_handler-JWTAuthHandler.html">JWTAuthHandler</a></li><li><a href="local_session_store-LocalSessionStore.html">LocalSessionStore</a></li><li><a href="locale-Locale.html">Locale</a></li><li><a href="logger_handler-LoggerHandler.html">LoggerHandler</a></li><li><a href="mvel_template_engine-MVELTemplateEngine.html">MVELTemplateEngine</a></li><li><a href="o_auth2_auth_handler-OAuth2AuthHandler.html">OAuth2AuthHandler</a></li><li><a href="redirect_auth_handler-RedirectAuthHandler.html">RedirectAuthHandler</a></li><li><a href="response_time_handler-ResponseTimeHandler.html">ResponseTimeHandler</a></li><li><a href="router-Router.html">Router</a></li><li><a href="route-Route.html">Route</a></li><li><a href="routing_context-RoutingContext.html">RoutingContext</a></li><li><a href="session_handler-SessionHandler.html">SessionHandler</a></li><li><a href="session_store-SessionStore.html">SessionStore</a></li><li><a href="session-Session_.html">Session</a></li><li><a href="sock_js_handler-SockJSHandler.html">SockJSHandler</a></li><li><a href="sock_js_socket-SockJSSocket.html">SockJSSocket</a></li><li><a href="static_handler-StaticHandler.html">StaticHandler</a></li><li><a href="template_engine-TemplateEngine.html">TemplateEngine</a></li><li><a href="template_handler-TemplateHandler.html">TemplateHandler</a></li><li><a href="thymeleaf_template_engine-ThymeleafTemplateEngine.html">ThymeleafTemplateEngine</a></li><li><a href="timeout_handler-TimeoutHandler.html">TimeoutHandler</a></li><li><a href="user_session_handler-UserSessionHandler.html">UserSessionHandler</a></li><li><a href="virtual_host_handler-VirtualHostHandler.html">VirtualHostHandler</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.3-dev</a> on Tue Dec 15 2015 08:12:13 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

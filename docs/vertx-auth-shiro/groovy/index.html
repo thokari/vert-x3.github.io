@@ -133,7 +133,7 @@ project, add the following dependency to the <em>dependencies</em> section of yo
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-shiro&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -146,7 +146,7 @@ project, add the following dependency to the <em>dependencies</em> section of yo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-auth-shiro:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-shiro:3.2.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -154,7 +154,7 @@ project, add the following dependency to the <em>dependencies</em> section of yo
 other Shiro Realm which expects username and password for credentials.</p>
 </div>
 <div class="paragraph">
-<p>To create an instance of the provider you use <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html">ShiroAuth</a></code>. You specify the type of
+<p>To create an instance of the provider you use <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html">ShiroAuth</a></code>. You specify the type of
 Shiro auth provider that you want with <code><a href="../enums.html#ShiroAuthRealmType">ShiroAuthRealmType</a></code>, and you specify the
 configuration in a JSON object.</p>
 </div>
@@ -210,7 +210,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="paragraph">
 <p>If validating if a user has a particular permission simply pass the permission into.
-<code><a href="../../vertx-auth-common/groovy/groovydoc/io/vertx/groovy/ext/auth/User.html#isAuthorised(java.lang.String,%20io.vertx.core.Handler)">isAuthorised</a></code> as follows:</p>
+<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/User.html#isAuthorised(java.lang.String,%20io.vertx.core.Handler)">isAuthorised</a></code> as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -238,7 +238,7 @@ can have zero or more permissions.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The default role prefix is <code>role:</code>. You can change this with <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html#setRolePrefix(java.lang.String)">setRolePrefix</a></code>.</p>
+<p>The default role prefix is <code>role:</code>. You can change this with <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html#setRolePrefix(java.lang.String)">setRolePrefix</a></code>.</p>
 </div>
 <div class="sect2">
 <h3 id="_the_shiro_properties_auth_provider">The Shiro properties auth provider</h3>
@@ -248,7 +248,7 @@ can have zero or more permissions.</p>
 <div class="paragraph">
 <p>Note that roles are not available directly on the API due to the fact that vertx-auth tries to be as portable as
 possible. However one can run assertions on role by using the prefix <code>role:</code> or by specifying the prefered prefix
-with <code><a href="groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html#setRolePrefix(java.lang.String)">setRolePrefix</a></code>.</p>
+with <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/shiro/ShiroAuth.html#setRolePrefix(java.lang.String)">setRolePrefix</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The implementation will, by default, look for a file called <code>vertx-users.properties</code> on the classpath.</p>
@@ -327,7 +327,7 @@ actual lookup. This setting is mandatory.</p>
 <dt class="hdlist1"><code>ldap_url</code></dt>
 <dd>
 <p>the url to the LDAP server. The url must start with <code>ldap://</code> and a port must be specified.
-An example is <code>ldap:://myldapserver.mycompany.com:10389</code></p>
+An example is <code>ldap://myldapserver.mycompany.com:10389</code></p>
 </dd>
 <dt class="hdlist1"><code>ldap-authentication-mechanism</code></dt>
 <dd>
@@ -372,7 +372,8 @@ def provider = ShiroAuth.create(vertx, realm)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The implementation currently assumes that user/password based authentication is used.</p>
+<p>The implementation currently assumes that user/password based authentication is used.
+&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;</p>
 </div>
 </div>
 </div>
@@ -384,7 +385,7 @@ def provider = ShiroAuth.create(vertx, realm)</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

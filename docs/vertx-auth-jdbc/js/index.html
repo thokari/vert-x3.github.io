@@ -103,7 +103,7 @@
 <h2 id="_jdbc_auth_provider_implementation">JDBC Auth Provider implementation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We provide an implementation of <code><a href="../../vertx-auth-common/js/jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code> which uses the Vert.x <code><a href="../../vertx-jdbc-client/js/jsdoc/jdbc_client-JDBCClient.html">JDBCClient</a></code>
+<p>We provide an implementation of <code><a href="../../jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code> which uses the Vert.x <code><a href="../../jsdoc/jdbc_client-JDBCClient.html">JDBCClient</a></code>
 to perform authentication and authorisation against any JDBC compliant database.</p>
 </div>
 <div class="paragraph">
@@ -122,7 +122,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-jdbc&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -135,15 +135,15 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-auth-jdbc:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jdbc:3.2.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To create an instance you first need an instance of <code><a href="../../vertx-jdbc-client/js/jsdoc/jdbc_client-JDBCClient.html">JDBCClient</a></code>. To learn how to create one
+<p>To create an instance you first need an instance of <code><a href="../../jsdoc/jdbc_client-JDBCClient.html">JDBCClient</a></code>. To learn how to create one
 of those please consult the documentation for the JDBC client.</p>
 </div>
 <div class="paragraph">
-<p>Once you&#8217;ve got one of those you can create a <code><a href="jsdoc/jdbc_auth-JDBCAuth.html">JDBCAuth</a></code> instance as follows:</p>
+<p>Once you&#8217;ve got one of those you can create a <code><a href="../../jsdoc/jdbc_auth-JDBCAuth.html">JDBCAuth</a></code> instance as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -156,13 +156,13 @@ var authProvider = JDBCAuth.create(jdbcClient);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Once you&#8217;ve got your instance you can authenticate and authorise with it just like any <code><a href="../../vertx-auth-common/js/jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code>.</p>
+<p>Once you&#8217;ve got your instance you can authenticate and authorise with it just like any <code><a href="../../jsdoc/auth_provider-AuthProvider.html">AuthProvider</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The out of the box config assumes certain queries for authentication and authorisation, these can easily be changed
-with the operations <code><a href="jsdoc/jdbc_auth-JDBCAuth.html#setAuthenticationQuery">setAuthenticationQuery</a></code>,
-<code><a href="jsdoc/jdbc_auth-JDBCAuth.html#setPermissionsQuery">setPermissionsQuery</a></code> and
-<code><a href="jsdoc/jdbc_auth-JDBCAuth.html#setRolesQuery">setRolesQuery</a></code>, if you want to use them with a different
+with the operations <code><a href="../../jsdoc/jdbc_auth-JDBCAuth.html#setAuthenticationQuery">setAuthenticationQuery</a></code>,
+<code><a href="../../jsdoc/jdbc_auth-JDBCAuth.html#setPermissionsQuery">setPermissionsQuery</a></code> and
+<code><a href="../../jsdoc/jdbc_auth-JDBCAuth.html#setRolesQuery">setRolesQuery</a></code>, if you want to use them with a different
 database schema.</p>
 </div>
 <div class="paragraph">
@@ -171,7 +171,7 @@ concatenated with a salt. It also assumes the salt is stored in the table too.</
 </div>
 <div class="paragraph">
 <p>If you want to override this behaviour you can do so by providing an alternative hash strategy and setting it with
-<code><a href="jsdoc/jdbc_auth-JDBCAuth.html#setHashStrategy">setHashStrategy</a></code>.</p>
+<code><a href="../../jsdoc/jdbc_auth-JDBCAuth.html#setHashStrategy">setHashStrategy</a></code>.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -224,7 +224,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="paragraph">
 <p>If validating if a user has a particular permission simply pass the permission into.
-<code><a href="../../vertx-auth-common/js/jsdoc/user-User.html#isAuthorised">isAuthorised</a></code> as follows:</p>
+<code><a href="../../jsdoc/user-User.html#isAuthorised">isAuthorised</a></code> as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -252,7 +252,8 @@ can have zero or more permissions.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The default role prefix is <code>role:</code>. You can change this with <code><a href="jsdoc/jdbc_auth-JDBCAuth.html#setRolePrefix">setRolePrefix</a></code>.</p>
+<p>The default role prefix is <code>role:</code>. You can change this with <code><a href="../../jsdoc/jdbc_auth-JDBCAuth.html#setRolePrefix">setRolePrefix</a></code>.
+&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;</p>
 </div>
 </div>
 </div>
@@ -263,7 +264,7 @@ can have zero or more permissions.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

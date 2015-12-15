@@ -111,10 +111,10 @@
 <h2 id="_the_event_bus">The Event Bus</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code><a href="jsdoc/event_bus-EventBus.html">event bus</a></code> is the <strong>nervous system</strong> of Vert.x.</p>
+<p>The <code><a href="../../jsdoc/event_bus-EventBus.html">event bus</a></code> is the <strong>nervous system</strong> of Vert.x.</p>
 </div>
 <div class="paragraph">
-<p>There is a single event bus instance for every Vert.x instance and it is obtained using the method <code><a href="jsdoc/vertx-Vertx.html#eventBus">eventBus</a></code>.</p>
+<p>There is a single event bus instance for every Vert.x instance and it is obtained using the method <code><a href="../../jsdoc/vertx-Vertx.html#eventBus">eventBus</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The event bus allows different parts of your application to communicate with each other irrespective of what language they are written in,
@@ -219,7 +219,7 @@ to retry after recovery.</p>
 <div class="sect3">
 <h4 id="_types_of_messages">Types of messages</h4>
 <div class="paragraph">
-<p>Out of the box Vert.x allows any primitive/simple type, String, or <code><a href="jsdoc/buffer-Buffer.html">buffers</a></code> to
+<p>Out of the box Vert.x allows any primitive/simple type, String, or <code><a href="../../jsdoc/buffer-Buffer.html">buffers</a></code> to
 be sent as messages.</p>
 </div>
 <div class="paragraph">
@@ -260,7 +260,7 @@ You do this by defining a <code>codec</code> for the objects you want to send.</
 <div class="sect3">
 <h4 id="_registering_handlers">Registering Handlers</h4>
 <div class="paragraph">
-<p>This simplest way to register a handler is using <code><a href="jsdoc/event_bus-EventBus.html#consumer">consumer</a></code>.
+<p>This simplest way to register a handler is using <code><a href="../../jsdoc/event_bus-EventBus.html#consumer">consumer</a></code>.
 Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -273,16 +273,16 @@ eb.consumer("news.uk.sport", function (message) {
 </div>
 </div>
 <div class="paragraph">
-<p>When a message arrives for your handler, your handler will be called, passing in the <code><a href="jsdoc/message-Message.html">message</a></code>.</p>
+<p>When a message arrives for your handler, your handler will be called, passing in the <code><a href="../../jsdoc/message-Message.html">message</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The object returned from call to consumer() is an instance of <code><a href="jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code></p>
+<p>The object returned from call to consumer() is an instance of <code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code></p>
 </div>
 <div class="paragraph">
 <p>This object can subsequently be used to unregister the handler, or use the handler as a stream.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively you can use <code><a href="jsdoc/event_bus-EventBus.html#consumer">consumer</a></code> to
+<p>Alternatively you can use <code><a href="../../jsdoc/event_bus-EventBus.html#consumer">consumer</a></code> to
 to return a MessageConsumer with no handler set, and then set the handler on that. For example:</p>
 </div>
 <div class="listingblock">
@@ -300,7 +300,7 @@ consumer.handler(function (message) {
 nodes of the cluster.</p>
 </div>
 <div class="paragraph">
-<p>If you want to be notified when this has completed, you can register a <code><a href="jsdoc/message_consumer-MessageConsumer.html#completionHandler">completion handler</a></code>
+<p>If you want to be notified when this has completed, you can register a <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#completionHandler">completion handler</a></code>
 on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
@@ -318,11 +318,11 @@ on the MessageConsumer object.</p>
 <div class="sect3">
 <h4 id="_un_registering_handlers">Un-registering Handlers</h4>
 <div class="paragraph">
-<p>To unregister a handler, call <code><a href="jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
+<p>To unregister a handler, call <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you are on a clustered event bus, un-registering can take some time to propagate across the nodes, if you want to
-be notified when this is complete use <code><a href="jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
+be notified when this is complete use <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -339,7 +339,7 @@ be notified when this is complete use <code><a href="jsdoc/message_consumer-Mess
 <div class="sect3">
 <h4 id="_publishing_messages">Publishing messages</h4>
 <div class="paragraph">
-<p>Publishing a message is simple. Just use <code><a href="jsdoc/event_bus-EventBus.html#publish">publish</a></code> specifying the
+<p>Publishing a message is simple. Just use <code><a href="../../jsdoc/event_bus-EventBus.html#publish">publish</a></code> specifying the
 address to publish it to.</p>
 </div>
 <div class="listingblock">
@@ -358,7 +358,7 @@ address to publish it to.</p>
 This is the point to point messaging pattern. The handler is chosen in a non-strict round-robin fashion.</p>
 </div>
 <div class="paragraph">
-<p>You can send a message with <code><a href="jsdoc/event_bus-EventBus.html#send">send</a></code></p>
+<p>You can send a message with <code><a href="../../jsdoc/event_bus-EventBus.html#send">send</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -405,26 +405,26 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 <div class="sect3">
 <h4 id="_the_message_object">The Message object</h4>
 <div class="paragraph">
-<p>The object you receive in a message handler is a <code><a href="jsdoc/message-Message.html">Message</a></code>.</p>
+<p>The object you receive in a message handler is a <code><a href="../../jsdoc/message-Message.html">Message</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="jsdoc/message-Message.html#body">body</a></code> of the message corresponds to the object that was sent or published.</p>
+<p>The <code><a href="../../jsdoc/message-Message.html#body">body</a></code> of the message corresponds to the object that was sent or published.</p>
 </div>
 <div class="paragraph">
-<p>The headers of the message are available with <code><a href="jsdoc/message-Message.html#headers">headers</a></code>.</p>
+<p>The headers of the message are available with <code><a href="../../jsdoc/message-Message.html#headers">headers</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_replying_to_messages">Replying to messages</h4>
+<h4 id="_acknowledging_messages_sending_replies">Acknowledging messages / sending replies</h4>
 <div class="paragraph">
-<p>Sometimes after you send a message you want to receive a reply from the recipient.
-This is known as the <strong>request-response pattern</strong>.</p>
+<p>When using <code><a href="../../jsdoc/event_bus-EventBus.html#send">send</a></code> the event bus attempts to deliver the message to a
+<code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code> registered with the event bus.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can specify a reply handler when sending the message.</p>
+<p>In some cases it&#8217;s useful for the sender to know when the consumer has received the message and "processed" it.</p>
 </div>
 <div class="paragraph">
-<p>When the receiver receives the message they can reply to it by calling <code><a href="jsdoc/message-Message.html#reply">reply</a></code>.</p>
+<p>To acknowledge that the message has been processed the consumer can reply to the message by calling <code><a href="../../jsdoc/message-Message.html#reply">reply</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When this happens it causes a reply to be sent back to the sender and the reply handler is invoked with the reply.</p>
@@ -457,8 +457,30 @@ consumer.handler(function (message) {
 </div>
 </div>
 <div class="paragraph">
-<p>The replies themselves can also be replied to so you can create a dialog between two different parties
-consisting of multiple rounds.</p>
+<p>The reply can contain a message body which can contain useful information.</p>
+</div>
+<div class="paragraph">
+<p>What the "processing" actually means is application defined and depends entirely on what the message consumer does
+and is not something that the Vert.x event bus itself knows or cares about.</p>
+</div>
+<div class="paragraph">
+<p>Some examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A simple message consumer which implements a service which returns the time of the day would acknowledge with a message
+containing the time of day in the reply body</p>
+</li>
+<li>
+<p>A message consumer which implements a persistent queue, might acknowledge with <code>true</code> if the message was successfully
+persisted in storage, or <code>false</code> if not.</p>
+</li>
+<li>
+<p>A message consumer which processes an order might acknowledge with <code>true</code> when the order has been successfully processed
+so it can be deleted from the database</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -484,7 +506,7 @@ consisting of multiple rounds.</p>
 <p>There are no handlers available to send the message to</p>
 </li>
 <li>
-<p>The recipient has explicitly failed the message using <code><a href="jsdoc/message-Message.html#fail">fail</a></code></p>
+<p>The recipient has explicitly failed the message using <code><a href="../../jsdoc/message-Message.html#fail">fail</a></code></p>
 </li>
 </ul>
 </div>
@@ -560,7 +582,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

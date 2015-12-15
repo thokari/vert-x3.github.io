@@ -171,7 +171,7 @@ def server = vertx.createHttpServer(options)</code></pre>
 <div class="sect2">
 <h3 id="_start_the_server_listening">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServer.html#listen()">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServer.html#listen()">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -218,8 +218,13 @@ server.listen(8080, "myhost.com", { res -&gt;
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_requests">Getting notified of incoming requests</h3>
-<div class="paragraph">
-<p>To be notified when a request arrives you need to set a <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServer.html#requestHandler(io.vertx.core.Handler)">requestHandler</a></code>:</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">To be notified when a request arrives you need to set a `link:../../groovydoc/io/vertx/groovy/core/http/HttpServer.html#requestHandler((@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler))[requestHandler]`:</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -233,7 +238,7 @@ server.requestHandler({ request -&gt;
 <div class="sect2">
 <h3 id="_handling_requests">Handling requests</h3>
 <div class="paragraph">
-<p>When a request arrives, the request handler is called passing in an instance of <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.
+<p>When a request arrives, the request handler is called passing in an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.
 This object represents the server side HTTP request.</p>
 </div>
 <div class="paragraph">
@@ -243,13 +248,13 @@ This object represents the server side HTTP request.</p>
 <p>If the request contains a body, that body will arrive at the server some time after the request handler has been called.</p>
 </div>
 <div class="paragraph">
-<p>The server request object allows you to retrieve the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uri()">uri</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#path()">path</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#params()">params</a></code> and
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code>, amongst other things.</p>
+<p>The server request object allows you to retrieve the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uri()">uri</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#path()">path</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#params()">params</a></code> and
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code>, amongst other things.</p>
 </div>
 <div class="paragraph">
 <p>Each server request object is associated with one server response object. You use
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#response()">response</a></code> to get a reference to the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#response()">response</a></code> to get a reference to the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code>
 object.</p>
 </div>
 <div class="paragraph">
@@ -265,20 +270,20 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_version">Request version</h4>
 <div class="paragraph">
-<p>The version of HTTP specified in the request can be retrieved with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#version()">version</a></code></p>
+<p>The version of HTTP specified in the request can be retrieved with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#version()">version</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_method">Request method</h4>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#method()">method</a></code> to retrieve the HTTP method of the request.
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#method()">method</a></code> to retrieve the HTTP method of the request.
 (i.e. whether it&#8217;s GET, POST, PUT, DELETE, HEAD, OPTIONS, etc).</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_uri">Request URI</h4>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uri()">uri</a></code> to retrieve the URI of the request.</p>
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uri()">uri</a></code> to retrieve the URI of the request.</p>
 </div>
 <div class="paragraph">
 <p>Note that this is the actual URI as passed in the HTTP request, and it&#8217;s almost always a relative URI.</p>
@@ -290,7 +295,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_path">Request path</h4>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#path()">path</a></code> to return the path part of the URI</p>
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#path()">path</a></code> to return the path part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -312,7 +317,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_query">Request query</h4>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#query()">query</a></code> to return the query part of the URI</p>
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#query()">query</a></code> to return the query part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -334,10 +339,10 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_headers">Request headers</h4>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code> to return the headers of the HTTP request.</p>
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code> to return the headers of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>This returns an instance of <code><a href="groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
+<p>This returns an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
 values for the same key - this is because HTTP allows multiple header values with the same key.</p>
 </div>
 <div class="paragraph">
@@ -358,10 +363,10 @@ println("User agent is ${headers.get("User-Agent")}")</code></pre>
 <div class="sect3">
 <h4 id="_request_parameters">Request parameters</h4>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#params()">params</a></code> to return the parameters of the HTTP request.</p>
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#params()">params</a></code> to return the parameters of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>Just like <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code> this returns an instance of <code><a href="groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code>
+<p>Just like <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code> this returns an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code>
 as there can be more than one parameter with the same name.</p>
 </div>
 <div class="paragraph">
@@ -390,20 +395,20 @@ then they will not appear in the params here.</p>
 <div class="sect3">
 <h4 id="_remote_address">Remote address</h4>
 <div class="paragraph">
-<p>The address of the sender of the request can be retrieved with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#remoteAddress()">remoteAddress</a></code>.</p>
+<p>The address of the sender of the request can be retrieved with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#remoteAddress()">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_absolute_uri">Absolute URI</h4>
 <div class="paragraph">
 <p>The URI passed in an HTTP request is usually relative. If you wish to retrieve the absolute URI corresponding
-to the request, you can get it with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#absoluteURI()">absoluteURI</a></code></p>
+to the request, you can get it with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#absoluteURI()">absoluteURI</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_end_handler">End handler</h4>
 <div class="paragraph">
-<p>The <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#endHandler(io.vertx.core.Handler)">endHandler</a></code> of the request is invoked when the entire request,
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#endHandler(io.vertx.core.Handler)">endHandler</a></code> of the request is invoked when the entire request,
 including any body has been fully read.</p>
 </div>
 </div>
@@ -418,7 +423,7 @@ when just the headers of the request have arrived so the request object does not
 body in memory before handing it to you, as that could cause the server to exhaust available memory.</p>
 </div>
 <div class="paragraph">
-<p>To receive the body, you can use the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#handler(io.vertx.core.Handler)">handler</a></code>  on the request,
+<p>To receive the body, you can use the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#handler(io.vertx.core.Handler)">handler</a></code>  on the request,
 this will get called every time a chunk of the request body arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -429,7 +434,7 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code>, and the handler can be called
+<p>The object passed into the handler is a <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code>, and the handler can be called
 multiple times as data arrives from the network, depending on the size of the body.</p>
 </div>
 <div class="paragraph">
@@ -453,9 +458,14 @@ request.endHandler({ v -&gt;
 })</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>This is such a common case, that Vert.x provides a <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#bodyHandler(io.vertx.core.Handler)">bodyHandler</a></code> to do this
+<div class="dlist">
+<dl>
+<dt class="hdlist1">This is such a common case, that Vert.x provides a `link:../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#bodyHandler((@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler))[bodyHandler]` to do this
 for you. The body handler is called once when all the body has been received:</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -468,8 +478,8 @@ for you. The body handler is called once when all the body has been received:</p
 <div class="sect3">
 <h4 id="_pumping_requests">Pumping requests</h4>
 <div class="paragraph">
-<p>The request object is a <code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The request object is a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>See the chapter on <a href="#streams">streams and pumps</a> for a detailed explanation.</p>
@@ -492,8 +502,8 @@ has been read from the wire.</p>
 </div>
 <div class="paragraph">
 <p>If you want to retrieve the attributes of a multi-part form you should tell Vert.x that you expect to receive
-such a form <strong>before</strong> any of the body is read by calling <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#setExpectMultipart(boolean)">setExpectMultipart</a></code>
-with true, and then you should retrieve the actual attributes using <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#formAttributes()">formAttributes</a></code>
+such a form <strong>before</strong> any of the body is read by calling <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#setExpectMultipart(boolean)">setExpectMultipart</a></code>
+with true, and then you should retrieve the actual attributes using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#formAttributes()">formAttributes</a></code>
 once the entire body has been read:</p>
 </div>
 <div class="listingblock">
@@ -515,14 +525,14 @@ once the entire body has been read:</p>
 </div>
 <div class="paragraph">
 <p>To receive file uploads you tell Vert.x to expect a multi-part form and set an
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uploadHandler(io.vertx.core.Handler)">uploadHandler</a></code> on the request.</p>
+<code>link:../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uploadHandler@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler[uploadHandler]</code> on the request.</p>
 </div>
 <div class="paragraph">
 <p>This handler will be called once for every
 upload that arrives on the server.</p>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
+<p>The object passed into the handler is a <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -548,12 +558,12 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The upload object is a <code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
+<p>The upload object is a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
 detailed explanation.</p>
 </div>
 <div class="paragraph">
-<p>If you just want to upload the file to disk somewhere you can use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html#streamToFileSystem(java.lang.String)">streamToFileSystem</a></code>:</p>
+<p>If you just want to upload the file to disk somewhere you can use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html#streamToFileSystem(java.lang.String)">streamToFileSystem</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -580,8 +590,8 @@ to arbitrary places on your filesystem. See <a href="#Security notes">security n
 <div class="sect2">
 <h3 id="_sending_back_responses">Sending back responses</h3>
 <div class="paragraph">
-<p>The server response object is an instance of <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
-request with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#response()">response</a></code>.</p>
+<p>The server response object is an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
+request with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#response()">response</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You use the response object to write a response back to the HTTP client.</p>
@@ -592,10 +602,10 @@ request with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerReques
 <p>The default HTTP status code for a response is <code>200</code>, representing <code>OK</code>.</p>
 </div>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#setStatusCode(int)">setStatusCode</a></code> to set a different code.</p>
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#setStatusCode(int)">setStatusCode</a></code> to set a different code.</p>
 </div>
 <div class="paragraph">
-<p>You can also specify a custom status message with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#setStatusMessage(java.lang.String)">setStatusMessage</a></code>.</p>
+<p>You can also specify a custom status message with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#setStatusMessage(java.lang.String)">setStatusMessage</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t specify a status message, the default one corresponding to the status code will be used.</p>
@@ -604,7 +614,7 @@ request with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerReques
 <div class="sect3">
 <h4 id="_writing_http_responses">Writing HTTP responses</h4>
 <div class="paragraph">
-<p>To write data to an HTTP response, you use one the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#write(io.vertx.core.buffer.Buffer)">write</a></code> operations.</p>
+<p>To write data to an HTTP response, you use one the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#write(io.vertx.core.buffer.Buffer)">write</a></code> operations.</p>
 </div>
 <div class="paragraph">
 <p>These can be invoked multiple times before the response is ended. They can be invoked in a few ways:</p>
@@ -642,7 +652,7 @@ response.write("hello world!", "UTF-16")</code></pre>
 </div>
 <div class="paragraph">
 <p>If you are just writing a single string or buffer to the HTTP response you can write it and end the response in a
-single call to the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#end(java.lang.String)">end</a></code></p>
+single call to the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#end(java.lang.String)">end</a></code></p>
 </div>
 <div class="paragraph">
 <p>The first call to write results in the response header being being written to the response. Consequently, if you are
@@ -653,7 +663,7 @@ be too late otherwise. If you are using HTTP chunking you do not have to worry.<
 <div class="sect3">
 <h4 id="_ending_http_responses">Ending HTTP responses</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP response you should <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#end(java.lang.String)">end</a></code> it.</p>
+<p>Once you have finished with the HTTP response you should <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#end(java.lang.String)">end</a></code> it.</p>
 </div>
 <div class="paragraph">
 <p>This can be done in several ways:</p>
@@ -682,7 +692,7 @@ response.end("hello world!")</code></pre>
 <div class="sect3">
 <h4 id="_closing_the_underlying_connection">Closing the underlying connection</h4>
 <div class="paragraph">
-<p>You can close the underlying TCP connection with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#close()">close</a></code>.</p>
+<p>You can close the underlying TCP connection with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#close()">close</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Non keep-alive connections will be automatically closed by Vert.x when the response is ended.</p>
@@ -696,7 +706,7 @@ closed after an idle time, then you configure <code><a href="../dataobjects.html
 <h4 id="_setting_response_headers">Setting response headers</h4>
 <div class="paragraph">
 <p>HTTP response headers can be added to the response by adding them directly to the
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#headers()">headers</a></code>:</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#headers()">headers</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -707,7 +717,7 @@ headers.set("other-header", "wibble")</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#putHeader(java.lang.String,%20java.lang.String)">putHeader</a></code></p>
+<p>Or you can use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#putHeader(java.lang.String,%20java.lang.String)">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -738,7 +748,7 @@ response.setChunked(true)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#write(io.vertx.core.buffer.Buffer)">write</a></code>
+<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#write(io.vertx.core.buffer.Buffer)">write</a></code>
 methods will result in a new HTTP chunk being written out.</p>
 </div>
 <div class="paragraph">
@@ -746,7 +756,7 @@ methods will result in a new HTTP chunk being written out.</p>
 the final chunk of the response.</p>
 </div>
 <div class="paragraph">
-<p>To add trailers to the response, add them directly to the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#trailers()">trailers</a></code>.</p>
+<p>To add trailers to the response, add them directly to the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#trailers()">trailers</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -757,7 +767,7 @@ trailers.set("X-wibble", "woobble").set("X-quux", "flooble")</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#putTrailer(java.lang.String,%20java.lang.String)">putTrailer</a></code>.</p>
+<p>Or use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#putTrailer(java.lang.String,%20java.lang.String)">putTrailer</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -770,11 +780,11 @@ response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble")</code
 <div class="sect3">
 <h4 id="_serving_files_directly_from_disk">Serving files directly from disk</h4>
 <div class="paragraph">
-<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>
+<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>
 and pump it to the HTTP response.</p>
 </div>
 <div class="paragraph">
-<p>Or you could load it it one go using <code><a href="groovydoc/io/vertx/groovy/core/file/FileSystem.html#readFile(java.lang.String,%20io.vertx.core.Handler)">readFile</a></code> and write it straight to the response.</p>
+<p>Or you could load it it one go using <code><a href="../../groovydoc/io/vertx/groovy/core/file/FileSystem.html#readFile(java.lang.String,%20io.vertx.core.Handler)">readFile</a></code> and write it straight to the response.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively, Vert.x provides a method which allows you to serve a file from disk to an HTTP response in one operation.
@@ -782,7 +792,7 @@ Where supported by the underlying operating system this may result in the OS dir
 file to the socket without being copied through user-space at all.</p>
 </div>
 <div class="paragraph">
-<p>This is done by using <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#sendFile(java.lang.String)">sendFile</a></code>, and is usually more efficient for large
+<p>This is done by using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#sendFile(java.lang.String)">sendFile</a></code>, and is usually more efficient for large
 files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
@@ -803,7 +813,7 @@ files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
 <p>Sending a file is asynchronous and may not complete until some time after the call has returned. If you want to
-be notified when the file has been writen you can use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#sendFile(java.lang.String,%20io.vertx.core.Handler)">sendFile</a></code></p>
+be notified when the file has been writen you can use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#sendFile(java.lang.String,%20io.vertx.core.Handler)">sendFile</a></code></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -881,9 +891,9 @@ case you can just do:</p>
 <div class="sect3">
 <h4 id="_pumping_responses">Pumping responses</h4>
 <div class="paragraph">
-<p>The server response is a <code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
-<code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code>, e.g. <code><a href="groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>, <code><a href="groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> or <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.</p>
+<p>The server response is a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
+<code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code>, e.g. <code><a href="../../groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> or <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example which echoes the request body back in the response for any PUT methods.
@@ -945,7 +955,7 @@ compressions and send it back to the client.</p>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
 <div class="paragraph">
-<p>You create an <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
+<p>You create an <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1016,7 +1026,7 @@ HEAD requests.</p>
 </div>
 <div class="paragraph">
 <p>The simplest way to do this with the Vert.x http client is using the methods prefixed with <code>Now</code>. For example
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpClient.html#getNow(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">getNow</a></code>.</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#getNow(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">getNow</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods create the http request and send it in a single method call and allow you to provide a handler that will be
@@ -1042,7 +1052,7 @@ client.headNow("/other-uri", { response -&gt;
 <h4 id="_writing_general_requests">Writing general requests</h4>
 <div class="paragraph">
 <p>At other times you don&#8217;t know the request method you want to send until run-time. For that use case we provide
-general purpose request methods such as <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClient.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code> which allow you to specify
+general purpose request methods such as <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code> which allow you to specify
 the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
@@ -1067,11 +1077,11 @@ client.request(HttpMethod.POST, "foo-uri", { response -&gt;
 before sending it.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can call one of the specific request methods such as <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClient.html#post(int,%20java.lang.String,%20java.lang.String)">post</a></code> or
-one of the general purpose request methods such as <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClient.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code>.</p>
+<p>To do this you can call one of the specific request methods such as <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#post(int,%20java.lang.String,%20java.lang.String)">post</a></code> or
+one of the general purpose request methods such as <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code>
+<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code>
 which can be used to write to the request body or write headers.</p>
 </div>
 <div class="paragraph">
@@ -1168,7 +1178,7 @@ up-front.</p>
 <div class="sect3">
 <h4 id="_writing_request_headers">Writing request headers</h4>
 <div class="paragraph">
-<p>You can write headers to a request using the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#headers()">headers</a></code> multi-map as follows:</p>
+<p>You can write headers to a request using the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#headers()">headers</a></code> multi-map as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1179,11 +1189,11 @@ headers.set("content-type", "application/json").set("other-header", "foo")</code
 </div>
 </div>
 <div class="paragraph">
-<p>The headers are an instance of <code><a href="groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
+<p>The headers are an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
 entries. Http headers allow more than one value for a specific key.</p>
 </div>
 <div class="paragraph">
-<p>You can also write headers using <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#putHeader(java.lang.String,%20java.lang.String)">putHeader</a></code></p>
+<p>You can also write headers using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#putHeader(java.lang.String,%20java.lang.String)">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1199,7 +1209,7 @@ request.putHeader("content-type", "application/json").putHeader("other-header", 
 <div class="sect3">
 <h4 id="_ending_http_requests">Ending HTTP requests</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#end(java.lang.String)">end</a></code>
+<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#end(java.lang.String)">end</a></code>
 operations.</p>
 </div>
 <div class="paragraph">
@@ -1240,7 +1250,7 @@ request.end(buffer)</code></pre>
 to the server, whose size is not known in advance.</p>
 </div>
 <div class="paragraph">
-<p>You put the HTTP request into chunked mode using <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#setChunked(boolean)">setChunked</a></code>.</p>
+<p>You put the HTTP request into chunked mode using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#setChunked(boolean)">setChunked</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>In chunked mode each call to write will cause a new chunk to be written to the wire. In chunked mode there is
@@ -1262,7 +1272,7 @@ request.end()</code></pre>
 <div class="sect3">
 <h4 id="_request_timeouts">Request timeouts</h4>
 <div class="paragraph">
-<p>You can set a timeout for a specific http request using <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#setTimeout(long)">setTimeout</a></code>.</p>
+<p>You can set a timeout for a specific http request using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#setTimeout(long)">setTimeout</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If the request does not return any data within the timeout period an exception will be passed to the exception handler
@@ -1273,7 +1283,7 @@ request.end()</code></pre>
 <h4 id="_handling_exceptions">Handling exceptions</h4>
 <div class="paragraph">
 <p>You can handle exceptions corresponding to a request by setting an exception handler on the
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1288,7 +1298,7 @@ request.exceptionHandler({ e -&gt;
 </div>
 <div class="paragraph">
 <p>This does not handle non <em>2xx</em> response that need to be handled in the
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1323,7 +1333,7 @@ request.end()</code></pre>
 <div class="paragraph">
 <p>Instead of providing a response handler in the call to create the client request object, alternatively, you can
 not provide a handler when the request is created and set it later on the request object itself, using
-<code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#handler(io.vertx.core.Handler)">handler</a></code>, for example:</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#handler(io.vertx.core.Handler)">handler</a></code>, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1337,8 +1347,8 @@ request.handler({ response -&gt;
 <div class="sect3">
 <h4 id="_using_the_request_as_a_stream">Using the request as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> which means
-you can pump to it from any <code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> instance.</p>
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> which means
+you can pump to it from any <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>For, example, you could pump a file on disk to a http request body as follows:</p>
@@ -1360,12 +1370,12 @@ pump.start()</code></pre>
 <div class="sect2">
 <h3 id="_handling_http_responses">Handling http responses</h3>
 <div class="paragraph">
-<p>You receive an instance of <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
-the request methods or by setting a handler directly on the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
+<p>You receive an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
+the request methods or by setting a handler directly on the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
 </div>
 <div class="paragraph">
-<p>You can query the status code and the status message of the response with <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#statusCode()">statusCode</a></code>
-and <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#statusMessage()">statusMessage</a></code>.</p>
+<p>You can query the status code and the status message of the response with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#statusCode()">statusCode</a></code>
+and <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#statusMessage()">statusMessage</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1381,17 +1391,17 @@ and <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#s
 <div class="sect3">
 <h4 id="_using_the_response_as_a_stream">Using the response as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> which means
-you can pump it to any <code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> which means
+you can pump it to any <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_response_headers_and_trailers">Response headers and trailers</h4>
 <div class="paragraph">
-<p>Http responses can contain headers. Use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#headers()">headers</a></code> to get the headers.</p>
+<p>Http responses can contain headers. Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#headers()">headers</a></code> to get the headers.</p>
 </div>
 <div class="paragraph">
-<p>The object returned is a <code><a href="groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
+<p>The object returned is a <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1403,7 +1413,7 @@ def contentLength = response.headers().get("content-lengh")</code></pre>
 <p>Chunked HTTP responses can also contain trailers - these are sent in the last chunk of the response body.</p>
 </div>
 <div class="paragraph">
-<p>You use <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#trailers()">trailers</a></code> to get the trailers. Trailers are also a <code><a href="groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code>.</p>
+<p>You use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#trailers()">trailers</a></code> to get the trailers. Trailers are also a <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1417,8 +1427,8 @@ don&#8217;t wait for all the body to arrive before calling the response handler 
 might be waiting a long time, or run out of memory for large responses.</p>
 </div>
 <div class="paragraph">
-<p>As parts of the response body arrive, the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#handler(io.vertx.core.Handler)">handler</a></code> is called with
-a <code><a href="groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code> representing the piece of the body:</p>
+<p>As parts of the response body arrive, the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#handler(io.vertx.core.Handler)">handler</a></code> is called with
+a <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code> representing the piece of the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1457,7 +1467,7 @@ client.getNow("some-uri", { response -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use the convenience <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#bodyHandler(io.vertx.core.Handler)">bodyHandler</a></code> which
+<p>Or you can use the convenience <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#bodyHandler(io.vertx.core.Handler)">bodyHandler</a></code> which
 is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
@@ -1475,14 +1485,14 @@ is called with the entire body when the response has been fully read:</p>
 <div class="sect3">
 <h4 id="_response_end_handler">Response end handler</h4>
 <div class="paragraph">
-<p>The response <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#endHandler(io.vertx.core.Handler)">endHandler</a></code> is called when the entire response body has been read
+<p>The response <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#endHandler(io.vertx.core.Handler)">endHandler</a></code> is called when the entire response body has been read
 or immediately after the headers have been read and the response handler has been called if there is no body.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_reading_cookies_from_the_response">Reading cookies from the response</h4>
 <div class="paragraph">
-<p>You can retrieve the list of cookies from a response using <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#cookies()">cookies</a></code>.</p>
+<p>You can retrieve the list of cookies from a response using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#cookies()">cookies</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively you can just parse the <code>Set-Cookie</code> headers yourself in the response.</p>
@@ -1503,16 +1513,21 @@ it is ok to send the rest of the body.</p>
 Sending large amounts of data if the request might not be accepted is a waste of bandwidth and ties up the server
 in reading data that it will just discard.</p>
 </div>
-<div class="paragraph">
-<p>Vert.x allows you to set a <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#continueHandler(io.vertx.core.Handler)">continueHandler</a></code> on the
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Vert.x allows you to set a `link:../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#continueHandler((@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler))[continueHandler]` on the
 client request object</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
 <p>This will be called if the server sends back a <code>Status: 100 (Continue)</code> response to signify that it is ok to send
 the rest of the request.</p>
 </div>
 <div class="paragraph">
-<p>This is used in conjunction with `<a href="groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#sendHead()">sendHead</a>`to send the head of the request.</p>
+<p>This is used in conjunction with `<a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#sendHead()">sendHead</a>`to send the head of the request.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -1540,7 +1555,7 @@ This is done by setting the option <code><a href="../dataobjects.html#HttpServer
 </div>
 <div class="paragraph">
 <p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
-<code>false</code> (the default), then you can inspect the headers and call <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#writeContinue()">writeContinue</a></code>
+<code>false</code> (the default), then you can inspect the headers and call <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#writeContinue()">writeContinue</a></code>
 if you wish the client to continue sending the body or you can reject the request by sending back a failure status code
 if you don&#8217;t want it to send the body. For example:</p>
 </div>
@@ -1721,13 +1736,18 @@ connection between HTTP servers and HTTP clients (typically browsers).</p>
 </div>
 <div class="sect4">
 <h5 id="_websocket_handler">WebSocket handler</h5>
-<div class="paragraph">
-<p>The first way involves providing a <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServer.html#websocketHandler(io.vertx.core.Handler)">websocketHandler</a></code>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">The first way involves providing a `link:../../groovydoc/io/vertx/groovy/core/http/HttpServer.html#websocketHandler((@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler))[websocketHandler]`
 on the server instance.</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
 <p>When a WebSocket connection is made to the server, the handler will be called, passing in an instance of
-<code><a href="groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html">ServerWebSocket</a></code>.</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html">ServerWebSocket</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1737,7 +1757,7 @@ on the server instance.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You can choose to reject the WebSocket by calling <code><a href="groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#reject()">reject</a></code>.</p>
+<p>You can choose to reject the WebSocket by calling <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#reject()">reject</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1755,7 +1775,7 @@ on the server instance.</p>
 <h5 id="_upgrading_to_websocket">Upgrading to WebSocket</h5>
 <div class="paragraph">
 <p>The second way of handling WebSockets is to handle the HTTP Upgrade request that was sent from the client, and
-call <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#upgrade()">upgrade</a></code> on the server request.</p>
+call <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#upgrade()">upgrade</a></code> on the server request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1776,23 +1796,23 @@ call <code><a href="groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#u
 <div class="sect4">
 <h5 id="_the_server_websocket">The server WebSocket</h5>
 <div class="paragraph">
-<p>The <code><a href="groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#headers()">headers</a></code>,
-<code><a href="groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#path()">path</a></code> path}, <code><a href="groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#query()">query</a></code> and
-<code><a href="groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#uri()">uri</a></code> URI} of the HTTP request of the WebSocket handshake.</p>
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#headers()">headers</a></code>,
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#path()">path</a></code> path}, <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#query()">query</a></code> and
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#uri()">uri</a></code> URI} of the HTTP request of the WebSocket handshake.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_websockets_on_the_client">WebSockets on the client</h4>
 <div class="paragraph">
-<p>The Vert.x <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
+<p>The Vert.x <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
 </div>
 <div class="paragraph">
-<p>You can connect a WebSocket to a server using one of the <code><a href="groovydoc/io/vertx/groovy/core/http/HttpClient.html#websocket(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">websocket</a></code> operations and
+<p>You can connect a WebSocket to a server using one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#websocket(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">websocket</a></code> operations and
 providing a handler.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with an instance of <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
+<p>The handler will be called with an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1806,7 +1826,7 @@ providing a handler.</p>
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
 <p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeBinaryMessage(io.vertx.core.buffer.Buffer)">writeBinaryMessage</a></code>:</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeBinaryMessage(io.vertx.core.buffer.Buffer)">writeBinaryMessage</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1834,10 +1854,10 @@ followed by zero or more <em>continuation</em> frames.</p>
 </div>
 <div class="paragraph">
 <p>To send a message consisting of multiple frames you create frames using
-<code><a href="groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#binaryFrame(io.vertx.core.buffer.Buffer,%20boolean)">WebSocketFrame.binaryFrame</a></code>
-, <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#textFrame(java.lang.String,%20boolean)">WebSocketFrame.textFrame</a></code> or
-<code><a href="groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#continuationFrame(io.vertx.core.buffer.Buffer,%20boolean)">WebSocketFrame.continuationFrame</a></code> and write them
-to the WebSocket using <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFrame(io.vertx.core.http.WebSocketFrame)">writeFrame</a></code>.</p>
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#binaryFrame(io.vertx.core.buffer.Buffer,%20boolean)">WebSocketFrame.binaryFrame</a></code>
+, <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#textFrame(java.lang.String,%20boolean)">WebSocketFrame.textFrame</a></code> or
+<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#continuationFrame(io.vertx.core.buffer.Buffer,%20boolean)">WebSocketFrame.continuationFrame</a></code> and write them
+to the WebSocket using <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFrame(io.vertx.core.http.WebSocketFrame)">writeFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example for binary frames:</p>
@@ -1859,8 +1879,8 @@ websocket.writeFrame(frame3)</code></pre>
 </div>
 <div class="paragraph">
 <p>In many cases you just want to send a websocket message that consists of a single final frame, so we provide a couple
-of shortcut methods to do that with <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFinalBinaryFrame(io.vertx.core.buffer.Buffer)">writeFinalBinaryFrame</a></code>
-and <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFinalTextFrame(java.lang.String)">writeFinalTextFrame</a></code>.</p>
+of shortcut methods to do that with <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFinalBinaryFrame(io.vertx.core.buffer.Buffer)">writeFinalBinaryFrame</a></code>
+and <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFinalTextFrame(java.lang.String)">writeFinalTextFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -1884,10 +1904,10 @@ websocket.writeFinalBinaryFrame(buff)</code></pre>
 <div class="sect3">
 <h4 id="_reading_frames_from_websockets">Reading frames from WebSockets</h4>
 <div class="paragraph">
-<p>To read frames from a WebSocket you use the <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html#frameHandler(io.vertx.core.Handler)">frameHandler</a></code>.</p>
+<p>To read frames from a WebSocket you use the <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#frameHandler(io.vertx.core.Handler)">frameHandler</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The frame handler will be called with instances of <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
+<p>The frame handler will be called with instances of <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
 for example:</p>
 </div>
 <div class="listingblock">
@@ -1901,14 +1921,14 @@ for example:</p>
 <div class="sect3">
 <h4 id="_closing_websockets">Closing WebSockets</h4>
 <div class="paragraph">
-<p>Use <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocketBase.html#close()">close</a></code> to close the WebSocket connection when you have finished with it.</p>
+<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketBase.html#close()">close</a></code> to close the WebSocket connection when you have finished with it.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_streaming_websockets">Streaming WebSockets</h4>
 <div class="paragraph">
-<p>The <code><a href="groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> instance is also a <code><a href="groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> and a
-<code><a href="groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> instance is also a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> and a
+<code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
 </div>
 <div class="paragraph">
 <p>When using a WebSocket as a write stream or a read stream it can only be used with WebSockets connections that are
@@ -1932,7 +1952,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

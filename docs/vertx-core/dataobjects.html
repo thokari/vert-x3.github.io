@@ -93,12 +93,10 @@
 <li><a href="#NetClientOptions">NetClientOptions</a></li>
 <li><a href="#PfxOptions">PfxOptions</a></li>
 <li><a href="#Option">Option</a></li>
-<li><a href="#TrustOptions">TrustOptions</a></li>
 <li><a href="#NetServerOptions">NetServerOptions</a></li>
 <li><a href="#MetricsOptions">MetricsOptions</a></li>
 <li><a href="#ClientOptionsBase">ClientOptionsBase</a></li>
 <li><a href="#DeploymentOptions">DeploymentOptions</a></li>
-<li><a href="#KeyCertOptions">KeyCertOptions</a></li>
 <li><a href="#PemKeyCertOptions">PemKeyCertOptions</a></li>
 <li><a href="#HttpServerOptions">HttpServerOptions</a></li>
 <li><a href="#DatagramSocketOptions">DatagramSocketOptions</a></li>
@@ -121,12 +119,10 @@
 <li><a href="#NetClientOptions">NetClientOptions</a></li>
 <li><a href="#PfxOptions">PfxOptions</a></li>
 <li><a href="#Option">Option</a></li>
-<li><a href="#TrustOptions">TrustOptions</a></li>
 <li><a href="#NetServerOptions">NetServerOptions</a></li>
 <li><a href="#MetricsOptions">MetricsOptions</a></li>
 <li><a href="#ClientOptionsBase">ClientOptionsBase</a></li>
 <li><a href="#DeploymentOptions">DeploymentOptions</a></li>
-<li><a href="#KeyCertOptions">KeyCertOptions</a></li>
 <li><a href="#PemKeyCertOptions">PemKeyCertOptions</a></li>
 <li><a href="#HttpServerOptions">HttpServerOptions</a></li>
 <li><a href="#DatagramSocketOptions">DatagramSocketOptions</a></li>
@@ -494,6 +490,11 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets the argument index.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="multiValued"></a><code>multiValued</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets whether or not the argument can receive several values. Only the last argument can receive several values.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="required"></a><code>required</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets whether or not the current link is required.</p></td>
@@ -719,6 +720,12 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets te arg name for this option.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="choices"></a><code>choices</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the list of values accepted by this option. If the value set by the user does not match once of these
+ values, a link exception is thrown.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="defaultValue"></a><code>defaultValue</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets the default value of this option</p></td>
@@ -738,6 +745,11 @@
  </pre></code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="help"></a><code>help</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets whether or not this option is a "help" option</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="hidden"></a><code>hidden</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets whether or not this option should be hidden</p></td>
@@ -753,6 +765,11 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets whether or not this option can receive several values.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="name"></a><code>name</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@return the option name. It returns the long name if set, the short name otherwise. It cannot return <code>null</code> for valid option</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="required"></a><code>required</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets whether or not this option is mandatory.</p></td>
@@ -766,27 +783,6 @@
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="singleValued"></a><code>singleValued</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets whether or not this option can receive a value.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="TrustOptions">TrustOptions</h2>
-<div class="sectionbody">
- Certification authority configuration options.
-<hr>
-<table class="tableblock frame-topbot grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
 </tr>
 </tbody>
 </table>
@@ -1153,27 +1149,6 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="KeyCertOptions">KeyCertOptions</h2>
-<div class="sectionbody">
- Key/cert configuration options.
-<hr>
-<table class="tableblock frame-topbot grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
 <h2 id="PemKeyCertOptions">PemKeyCertOptions</h2>
 <div class="sectionbody">
  Key store options configuring a private key and its certificate based on
@@ -1326,6 +1301,11 @@
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyStoreOptions"></a><code>keyStoreOptions</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code><a href="dataobjects.html#JksOptions">JksOptions</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert options in jks format, aka Java keystore.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxChunkSize"></a><code>maxChunkSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum HTTP chunk size</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWebsocketFrameSize"></a><code>maxWebsocketFrameSize</code></p></td>
@@ -1546,9 +1526,20 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the key/cert options in jks format, aka Java keystore.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxChunkSize"></a><code>maxChunkSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum HTTP chunk size</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxPoolSize"></a><code>maxPoolSize</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum pool size for connections</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWaitQueueSize"></a><code>maxWaitQueueSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the maximum requests allowed in the wait queue, any requests beyond the max size will result in
+ a ConnectionPoolTooBusyException.  If the value is set to a negative number then the queue will be unbounded.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="maxWebsocketFrameSize"></a><code>maxWebsocketFrameSize</code></p></td>
@@ -1837,7 +1828,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>

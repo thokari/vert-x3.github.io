@@ -98,6 +98,7 @@
 </ul>
 </li>
 <li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
+<li><a href="#_repeating_test">Repeating test</a></li>
 <li><a href="#_sharing_objects">Sharing objects</a></li>
 <li><a href="#reporting">Running</a>
 <ul class="sectlevel2">
@@ -119,6 +120,7 @@
 <li><a href="#_running_a_test_on_a_vert_x_context">Running a test on a Vert.x context</a></li>
 <li><a href="#_timeout">Timeout</a></li>
 <li><a href="#_parameterized_tests">Parameterized tests</a></li>
+<li><a href="#_repeating_a_test">Repeating a test</a></li>
 </ul>
 </li>
 <li><a href="#_java_language_integration">Java language integration</a>
@@ -148,6 +150,7 @@
 </ul>
 </li>
 <li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
+<li><a href="#_repeating_test">Repeating test</a></li>
 <li><a href="#_sharing_objects">Sharing objects</a></li>
 <li><a href="#reporting">Running</a>
 <ul class="sectlevel2">
@@ -169,6 +172,7 @@
 <li><a href="#_running_a_test_on_a_vert_x_context">Running a test on a Vert.x context</a></li>
 <li><a href="#_timeout">Timeout</a></li>
 <li><a href="#_parameterized_tests">Parameterized tests</a></li>
+<li><a href="#_repeating_a_test">Repeating a test</a></li>
 </ul>
 </li>
 <li><a href="#_java_language_integration">Java language integration</a>
@@ -212,7 +216,7 @@ and follows the Vert.x practices.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-unit&lt;/artifactId&gt;
-  &lt;version&gt;3.1.0&lt;/version&gt;
+  &lt;version&gt;3.2.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -225,7 +229,7 @@ and follows the Vert.x practices.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-unit:3.1.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-unit:3.2.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -587,7 +591,8 @@ to implement a setup that depends on one or several asynchronous results:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>It is possible to wait until the completion of a specific <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code>:</p>
+<p>It is possible to wait until the completion of a specific <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code>, similar
+to Java&#8217;s count-down latch:</p>
 </div>
 <div class="listingblock">
 <div class="title">Wait for completion</div>
@@ -601,8 +606,78 @@ server.listen(8080, ar -&gt; {
 });
 
 // Wait until completion
-async.await();</code></pre>
+async.awaitSuccess();</code></pre>
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+this should not be executed from the event loop!
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Async can also be created with an initial count value, it completes when the count-down reaches
+zero using <code><a href="../../apidocs/io/vertx/ext/unit/Async.html#countDown--">countDown</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Wait until the complete count-down reaches zero</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async(2);
+HttpServer server = vertx.createHttpServer();
+server.requestHandler(requestHandler);
+server.listen(8080, ar -&gt; {
+  context.assertTrue(ar.succeeded());
+  async.countDown();
+});
+
+vertx.setTimer(1000, id -&gt; {
+  async.complete();
+});
+
+// Wait until completion of the timer and the http request
+async.awaitSuccess();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Calling <code>complete()</code> on an async completes the async as usual, it actually sets the value to <code>0</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_repeating_test">Repeating test</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When a test fails randomly or not often, for instance a race condition, it is convenient to run the same
+test multiple times to increase the failure likelihood of the test.</p>
+</div>
+<div class="listingblock">
+<div class="title">Repeating a test</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TestSuite.create("my_suite").test("my_test", 1000, context -&gt; {
+  // This will be executed 1000 times
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When declared, <em>beforeEach</em> and <em>afterEach</em> callbacks will be executed as many times as the test is executed.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+test repetition are executed sequentially
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -1227,6 +1302,59 @@ public class SimpleParameterizedTest {
 <p>Parameterized tests can also be done in Groovy with the <code>io.vertx.groovy.ext.unit.junit.VertxUnitRunnerWithParametersFactory</code>.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_repeating_a_test">Repeating a test</h3>
+<div class="paragraph">
+<p>When a test fails randomly or not often, for instance a race condition, it is convenient to run the same
+test multiple times to increase the likelihood failure of the test.</p>
+</div>
+<div class="paragraph">
+<p>With JUnit a test has to be annotated with <code><a href="../../apidocs/io/vertx/ext/unit/junit/Repeat.html">@Repeat</a></code> to be repeated. The test must
+also define the <code><a href="../../apidocs/io/vertx/ext/unit/junit/RepeatRule.html">RepeatRule</a></code> among its rules.</p>
+</div>
+<div class="listingblock">
+<div class="title">Repeating a test with JUnit</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package examples.junit;
+
+import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.Repeat;
+import io.vertx.ext.unit.junit.RepeatRule;
+import io.vertx.ext.unit.junit.VertxUnitRunner;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(VertxUnitRunner.class)
+public class RepeatingTest {
+
+  @Rule
+  RepeatRule rule = new RepeatRule();
+
+  @Repeat(1000)
+  @Test
+  public void testSomething(TestContext context) {
+    // This will be executed 1000 times
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When declared, <em>before</em> and <em>after</em> life cycle will be executed as many times as the test is executed.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+test repetition are executed sequentially
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1428,7 +1556,7 @@ vertx.deployVerticle("my.verticle", context.asyncAssertFailure(cause -&gt; {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-10-07 13:12:22 CEST
+                Last updated 2015-12-15 08:14:02 CET
               
               
             </div>
