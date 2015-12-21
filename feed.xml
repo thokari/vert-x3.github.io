@@ -8,6 +8,65 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Automatic redeployment in Eclipse IDE</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Vert.x 3.1 has (re-) introduced the &lt;em&gt;redeploy&lt;/em&gt; feature. This blog post explains how to use this feature in the Eclipse IDE. However, you can easily adapt the content to your IDE.&lt;/p&gt;
+&lt;h1 id=&quot;how-does-redeploy-work&quot;&gt;How does redeploy work&lt;/h1&gt;
+&lt;p&gt;How is implemented the &lt;code&gt;redeploy&lt;/code&gt; is not as you may expect. First, the redeploy does not rely on a build tool, but is integrated in vert.x. However you can plug your build tools with the redeploy feature. This feature is offered by the &lt;code&gt;io.vertx.core.Launcher&lt;/code&gt; class. The redeployment process is actually very simple:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;the application is launched in &lt;em&gt;redeploy mode&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;it listens for file changes&lt;/li&gt;
+&lt;li&gt;when a &lt;em&gt;matching&lt;/em&gt; file is changed, it stops the application&lt;/li&gt;
+&lt;li&gt;it executes the &lt;code&gt;on-redeploy&lt;/code&gt; actions if any&lt;/li&gt;
+&lt;li&gt;it restarts the application&lt;/li&gt;
+&lt;li&gt;back to (2)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Initially the application is launched in &lt;em&gt;redeploy mode&lt;/em&gt;. The application is actually launched in background, in a separated process. Vert.x listens for file changes. You give it a set of (Ant-style) patterns and every time a matching file changes, Vert.x stops the whole application and restarts it. Optionally you can configure a &lt;code&gt;on-redeploy&lt;/code&gt; action to plug in your build tools.&lt;/p&gt;
+&lt;p&gt;To integrate this process in Eclipse (or in your IDE), you just need to configure the set of listened files, and let the &lt;code&gt;Launcher&lt;/code&gt; class starts and stops your application.&lt;/p&gt;
+&lt;h1 id=&quot;redeploy-in-eclipse&quot;&gt;Redeploy in Eclipse&lt;/h1&gt;
+&lt;p&gt;The following screencast explains how you configure a vert.x application to be run in Eclipse and how to configure the redeploy:&lt;/p&gt;
+&lt;iframe width=&quot;420&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/iyZwAzEVX-o&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;To summarize the last configuration:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;it’s a Java application configuration&lt;/li&gt;
+&lt;li&gt;it’s uses &lt;code&gt;io.vertx.core.Launcher&lt;/code&gt; as main class&lt;/li&gt;
+&lt;li&gt;In the &lt;em&gt;Program arguments&lt;/em&gt; (&lt;em&gt;Arguments&lt;/em&gt; tab), write: &lt;code&gt;run --redeploy=&quot;src/**/*.java&quot; --launcher-class=org.acme.vertx.Main&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;redeploy-with-your-own-main-class&quot;&gt;Redeploy with your own Main class&lt;/h1&gt;
+&lt;p&gt;Let’s now imagine that you have your own &lt;code&gt;Main&lt;/code&gt; class, starting your application. For instance, it can be something like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; org.acme.vertx;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.core.Vertx;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;Main&lt;/span&gt; &lt;/span&gt;{
+
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(String[] args)&lt;/span&gt; &lt;/span&gt;{
+        Vertx vertx = Vertx.vertx();
+        vertx.deployVerticle(MyMainVerticle.class.getName());
+    }
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The redeploy feature from vert.x lets you use your own &lt;code&gt;Main&lt;/code&gt; class:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create another &lt;code&gt;Run&lt;/code&gt; configuration&lt;/li&gt;
+&lt;li&gt;Set the &lt;code&gt;Main-Class&lt;/code&gt; to &lt;code&gt;io.vertx.core.Launcher&lt;/code&gt; (yes, the one from vert.x not yours)&lt;/li&gt;
+&lt;li&gt;In the application parameter add: &lt;code&gt;run --redeploy=&quot;src/**/*.java&quot; --launcher-class=org.acme.vertx.Main&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;With this configuration, the application is launched in background using your own &lt;code&gt;Main&lt;/code&gt; class, and will restart the application every time you change your source code (you can even change the source code of your &lt;code&gt;Main&lt;/code&gt; class).&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Sun, 20 Dec 2015 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/automatic-redeployment-in-eclipse-ide</link>
+          <guid isPermaLink="true">http://vertx.io/blog/automatic-redeployment-in-eclipse-ide</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x 3.2.0 is released !</title>
           <description>
       &lt;article&gt;&lt;p&gt;We are pleased to announce the release of Vert.x 3.2.0!&lt;/p&gt;
