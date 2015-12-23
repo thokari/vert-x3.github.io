@@ -216,13 +216,8 @@ server.listen(8080, "myhost.com", res -&gt; {
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_requests">Getting notified of incoming requests</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">To be notified when a request arrives you need to set a `link:../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[requestHandler]`:</p>
-</dd>
-</dl>
+<div class="paragraph">
+<p>To be notified when a request arrives you need to set a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-io.vertx.core.Handler-">requestHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -453,14 +448,9 @@ request.endHandler(v -&gt; {
 });</code></pre>
 </div>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">This is such a common case, that Vert.x provides a `link:../../apidocs/io/vertx/core/http/HttpServerRequest.html#bodyHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[bodyHandler]` to do this
+<div class="paragraph">
+<p>This is such a common case, that Vert.x provides a <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#bodyHandler-io.vertx.core.Handler-">bodyHandler</a></code> to do this
 for you. The body handler is called once when all the body has been received:</p>
-</dd>
-</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -520,7 +510,7 @@ once the entire body has been read:</p>
 </div>
 <div class="paragraph">
 <p>To receive file uploads you tell Vert.x to expect a multi-part form and set an
-<code>link:../../apidocs/io/vertx/core/http/HttpServerRequest.html#uploadHandler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[uploadHandler]</code> on the request.</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#uploadHandler-io.vertx.core.Handler-">uploadHandler</a></code> on the request.</p>
 </div>
 <div class="paragraph">
 <p>This handler will be called once for every
@@ -929,7 +919,7 @@ at any one time:</p>
 <p>By default compression is not enabled.</p>
 </div>
 <div class="paragraph">
-<p>When HTTP compression is enabled the server will check if the client incldes an <code>Accept-Encoding</code> header which
+<p>When HTTP compression is enabled the server will check if the client includes an <code>Accept-Encoding</code> header which
 includes the supported compressions. Commonly used are deflate and gzip. Both are supported by Vert.x.</p>
 </div>
 <div class="paragraph">
@@ -1477,14 +1467,9 @@ it is ok to send the rest of the body.</p>
 Sending large amounts of data if the request might not be accepted is a waste of bandwidth and ties up the server
 in reading data that it will just discard.</p>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Vert.x allows you to set a `link:../../apidocs/io/vertx/core/http/HttpClientRequest.html#continueHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[continueHandler]` on the
+<div class="paragraph">
+<p>Vert.x allows you to set a <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#continueHandler-io.vertx.core.Handler-">continueHandler</a></code> on the
 client request object</p>
-</dd>
-</dl>
 </div>
 <div class="paragraph">
 <p>This will be called if the server sends back a <code>Status: 100 (Continue)</code> response to signify that it is ok to send
@@ -1700,14 +1685,9 @@ connection between HTTP servers and HTTP clients (typically browsers).</p>
 </div>
 <div class="sect4">
 <h5 id="_websocket_handler">WebSocket handler</h5>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">The first way involves providing a `link:../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[websocketHandler]`
+<div class="paragraph">
+<p>The first way involves providing a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-io.vertx.core.Handler-">websocketHandler</a></code>
 on the server instance.</p>
-</dd>
-</dl>
 </div>
 <div class="paragraph">
 <p>When a WebSocket connection is made to the server, the handler will be called, passing in an instance of
@@ -1761,8 +1741,8 @@ call <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#upgr
 <h5 id="_the_server_websocket">The server WebSocket</h5>
 <div class="paragraph">
 <p>The <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#headers--">headers</a></code>,
-<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#path--">path</a></code> path}, <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#query--">query</a></code> and
-<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#uri--">uri</a></code> URI} of the HTTP request of the WebSocket handshake.</p>
+<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#path--">path</a></code>, <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#query--">query</a></code> and
+<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#uri--">URI</a></code> of the HTTP request of the WebSocket handshake.</p>
 </div>
 </div>
 </div>
@@ -1908,7 +1888,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2015-12-23 09:22:17 CET
               
               
             </div>

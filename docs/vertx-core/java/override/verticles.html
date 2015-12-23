@@ -189,12 +189,12 @@ cleanup that takes some time.</p>
     // Do something
   }
 
-  public void stop(Future&lt;Void&gt; startFuture) {
+  public void stop(Future&lt;Void&gt; stopFuture) {
     obj.doSomethingThatTakesTime(res -&gt; {
       if (res.succeeded()) {
-        startFuture.complete();
+        stopFuture.complete();
       } else {
-        startFuture.fail();
+        stopFuture.fail();
       }
     });
   }
@@ -213,7 +213,7 @@ will automatically undeploy any child verticles when the parent is undeployed.</
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2015-12-23 09:22:17 CET
               
               
             </div>

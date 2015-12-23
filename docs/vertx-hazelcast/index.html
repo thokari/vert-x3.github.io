@@ -269,6 +269,25 @@ Vertx.clusteredVertx(options, res -&gt; {
 <div class="paragraph">
 <p>In this case, vert.x is not the cluster owner and so do not shutdown the cluster on close.</p>
 </div>
+<div class="paragraph">
+<p>Notice that the custom Hazelcast instance need to be configured with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml"> &lt;map name="__vertx.subs"&gt;
+    &lt;backup-count&gt;1&lt;/backup-count&gt;
+    &lt;time-to-live-seconds&gt;0&lt;/time-to-live-seconds&gt;
+    &lt;max-idle-seconds&gt;0&lt;/max-idle-seconds&gt;
+    &lt;eviction-policy&gt;NONE&lt;/eviction-policy&gt;
+    &lt;max-size policy="PER_NODE"&gt;0&lt;/max-size&gt;
+    &lt;eviction-percentage&gt;25&lt;/eviction-percentage&gt;
+    &lt;merge-policy&gt;com.hazelcast.map.merge.LatestUpdateMapMergePolicy&lt;/merge-policy&gt;
+ &lt;/map&gt;
+ &lt;semaphore name="__vertx.*"&gt;
+   &lt;initial-permits&gt;1&lt;/initial-permits&gt;
+ &lt;/semaphore&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -372,7 +391,7 @@ java.util.logging.FileHandler.level=INFO</pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2015-12-23 09:22:17 CET
               
               
             </div>

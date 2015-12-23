@@ -247,13 +247,8 @@ server.listen(0, "localhost", res -&gt; {
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_connections">Getting notified of incoming connections</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">To be notified when a connection is made you need to set a `link:../../apidocs/io/vertx/core/net/NetServer.html#connectHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[connectHandler]`:</p>
-</dd>
-</dl>
+<div class="paragraph">
+<p>To be notified when a connection is made you need to set a <code><a href="../../apidocs/io/vertx/core/net/NetServer.html#connectHandler-io.vertx.core.Handler-">connectHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -315,14 +310,9 @@ socket.write("some data", "UTF-16");</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_closed_handler">Closed handler</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">If you want to be notified when a socket is closed, you can set a `link:../../apidocs/io/vertx/core/net/NetSocket.html#closeHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[closeHandler]`
+<div class="paragraph">
+<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#closeHandler-io.vertx.core.Handler-">closeHandler</a></code>
 on it:</p>
-</dd>
-</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1104,7 +1094,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2015-12-23 09:22:17 CET
               
               
             </div>

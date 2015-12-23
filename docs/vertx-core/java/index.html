@@ -960,7 +960,7 @@ some time. If you see warnings like these in your logs, then you should investig
 skip hand-in-hand with baby lambs across sunny green meadows.</p>
 </div>
 <div class="paragraph">
-<p><strong>But.. the real world is not like that. (Have you watched the news lately?)</strong></p>
+<p><strong>But&#8230;&#8203; the real world is not like that. (Have you watched the news lately?)</strong></p>
 </div>
 <div class="paragraph">
 <p>Fact is, many, if not most libraries, especially in the JVM ecosystem have synchronous APIs and many of the methods are
@@ -1129,12 +1129,12 @@ cleanup that takes some time.</p>
     // Do something
   }
 
-  public void stop(Future&lt;Void&gt; startFuture) {
+  public void stop(Future&lt;Void&gt; stopFuture) {
     obj.doSomethingThatTakesTime(res -&gt; {
       if (res.succeeded()) {
-        startFuture.complete();
+        stopFuture.complete();
       } else {
-        startFuture.fail();
+        stopFuture.fail();
       }
     });
   }
@@ -2619,13 +2619,8 @@ server.listen(0, "localhost", res -&gt; {
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_connections">Getting notified of incoming connections</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">To be notified when a connection is made you need to set a `link:../../apidocs/io/vertx/core/net/NetServer.html#connectHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[connectHandler]`:</p>
-</dd>
-</dl>
+<div class="paragraph">
+<p>To be notified when a connection is made you need to set a <code><a href="../../apidocs/io/vertx/core/net/NetServer.html#connectHandler-io.vertx.core.Handler-">connectHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2687,14 +2682,9 @@ socket.write("some data", "UTF-16");</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_closed_handler">Closed handler</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">If you want to be notified when a socket is closed, you can set a `link:../../apidocs/io/vertx/core/net/NetSocket.html#closeHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[closeHandler]`
+<div class="paragraph">
+<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#closeHandler-io.vertx.core.Handler-">closeHandler</a></code>
 on it:</p>
-</dd>
-</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3550,13 +3540,8 @@ server.listen(8080, "myhost.com", res -&gt; {
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_requests">Getting notified of incoming requests</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">To be notified when a request arrives you need to set a `link:../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[requestHandler]`:</p>
-</dd>
-</dl>
+<div class="paragraph">
+<p>To be notified when a request arrives you need to set a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-io.vertx.core.Handler-">requestHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3787,14 +3772,9 @@ request.endHandler(v -&gt; {
 });</code></pre>
 </div>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">This is such a common case, that Vert.x provides a `link:../../apidocs/io/vertx/core/http/HttpServerRequest.html#bodyHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[bodyHandler]` to do this
+<div class="paragraph">
+<p>This is such a common case, that Vert.x provides a <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#bodyHandler-io.vertx.core.Handler-">bodyHandler</a></code> to do this
 for you. The body handler is called once when all the body has been received:</p>
-</dd>
-</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3854,7 +3834,7 @@ once the entire body has been read:</p>
 </div>
 <div class="paragraph">
 <p>To receive file uploads you tell Vert.x to expect a multi-part form and set an
-<code>link:../../apidocs/io/vertx/core/http/HttpServerRequest.html#uploadHandler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[uploadHandler]</code> on the request.</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#uploadHandler-io.vertx.core.Handler-">uploadHandler</a></code> on the request.</p>
 </div>
 <div class="paragraph">
 <p>This handler will be called once for every
@@ -4263,7 +4243,7 @@ at any one time:</p>
 <p>By default compression is not enabled.</p>
 </div>
 <div class="paragraph">
-<p>When HTTP compression is enabled the server will check if the client incldes an <code>Accept-Encoding</code> header which
+<p>When HTTP compression is enabled the server will check if the client includes an <code>Accept-Encoding</code> header which
 includes the supported compressions. Commonly used are deflate and gzip. Both are supported by Vert.x.</p>
 </div>
 <div class="paragraph">
@@ -4811,14 +4791,9 @@ it is ok to send the rest of the body.</p>
 Sending large amounts of data if the request might not be accepted is a waste of bandwidth and ties up the server
 in reading data that it will just discard.</p>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Vert.x allows you to set a `link:../../apidocs/io/vertx/core/http/HttpClientRequest.html#continueHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[continueHandler]` on the
+<div class="paragraph">
+<p>Vert.x allows you to set a <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#continueHandler-io.vertx.core.Handler-">continueHandler</a></code> on the
 client request object</p>
-</dd>
-</dl>
 </div>
 <div class="paragraph">
 <p>This will be called if the server sends back a <code>Status: 100 (Continue)</code> response to signify that it is ok to send
@@ -5034,14 +5009,9 @@ connection between HTTP servers and HTTP clients (typically browsers).</p>
 </div>
 <div class="sect4">
 <h5 id="_websocket_handler">WebSocket handler</h5>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">The first way involves providing a `link:../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[websocketHandler]`
+<div class="paragraph">
+<p>The first way involves providing a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-io.vertx.core.Handler-">websocketHandler</a></code>
 on the server instance.</p>
-</dd>
-</dl>
 </div>
 <div class="paragraph">
 <p>When a WebSocket connection is made to the server, the handler will be called, passing in an instance of
@@ -5095,8 +5065,8 @@ call <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#upgr
 <h5 id="_the_server_websocket">The server WebSocket</h5>
 <div class="paragraph">
 <p>The <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#headers--">headers</a></code>,
-<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#path--">path</a></code> path}, <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#query--">query</a></code> and
-<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#uri--">uri</a></code> URI} of the HTTP request of the WebSocket handshake.</p>
+<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#path--">path</a></code>, <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#query--">query</a></code> and
+<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#uri--">URI</a></code> of the HTTP request of the WebSocket handshake.</p>
 </div>
 </div>
 </div>
@@ -6649,15 +6619,10 @@ server.connectHandler(sock -&gt; {
 }).listen();</code></pre>
 </div>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">And there we have it. The `link:../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-(@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler)-[drainHandler]` event handler will
+<div class="paragraph">
+<p>And there we have it. The <code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-io.vertx.core.Handler-">drainHandler</a></code> event handler will
 get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> that
 allows more data to be read.</p>
-</dd>
-</dl>
 </div>
 <div class="paragraph">
 <p>Wanting to do this is quite common while writing Vert.x applications, so we provide a helper class
@@ -6696,7 +6661,7 @@ server.connectHandler(sock -&gt; {
 <div class="ulist">
 <ul>
 <li>
-<p><code>link:../../apidocs/io/vertx/core/streams/ReadStream.html#handler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[handler]</code>:
+<p><code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html#handler-io.vertx.core.Handler-">handler</a></code>:
 set a handler which will receive items from the ReadStream.</p>
 </li>
 <li>
@@ -6712,7 +6677,7 @@ resume the handler. The handler will be called if any item arrives.</p>
 Will be called if an exception occurs on the ReadStream.</p>
 </li>
 <li>
-<p><code>link:../../apidocs/io/vertx/core/streams/ReadStream.html#endHandler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[endHandler]</code>:
+<p><code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html#endHandler-io.vertx.core.Handler-">endHandler</a></code>:
 Will be called when end of stream is reached. This might be when EOF is reached if the ReadStream represents a file,
 or when end of request is reached if it&#8217;s an HTTP request, or when the connection is closed if it&#8217;s a TCP socket.</p>
 </li>
@@ -6752,7 +6717,7 @@ returns <code>true</code> if the write queue is considered full.</p>
 Will be called if an exception occurs on the <code>WriteStream</code>.</p>
 </li>
 <li>
-<p><code>link:../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-(@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler)-[drainHandler]</code>:
+<p><code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html#drainHandler-io.vertx.core.Handler-">drainHandler</a></code>:
 The handler will be called if the <code>WriteStream</code> is considered no longer full.</p>
 </li>
 </ul>
@@ -6783,8 +6748,7 @@ This has the same meaning as <code><a href="../../apidocs/io/vertx/core/streams/
 <p>A pump can be started and stopped multiple times.</p>
 </div>
 <div class="paragraph">
-<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.
-&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;</p>
+<p>When a pump is first created it is <em>not</em> started. You need to call the <code>start()</code> method to start it.</p>
 </div>
 </div>
 </div>
@@ -6797,7 +6761,7 @@ This has the same meaning as <code><a href="../../apidocs/io/vertx/core/streams/
 size records.</p>
 </div>
 <div class="paragraph">
-<p>It transforms an sequence of input buffer to a sequence of buffer structured as configured (either
+<p>It transforms a sequence of input buffer to a sequence of buffer structured as configured (either
 fixed size or separated records).</p>
 </div>
 <div class="paragraph">
@@ -7312,9 +7276,10 @@ examples:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run MyVerticle.groovy --redeploy="**/*.groovy"
-vertx run MyVerticle.groovy --redeploy="**/*.groovy,**/*.rb"
-java io.vertx.core.Launcher run org.acme.MyVerticle –redeploy="**/*.class" -cp ...</code></pre>
+<pre class="prettyprint highlight"><code>vertx run MyVerticle.groovy --redeploy="**/*.groovy" --launcher-class=io.vertx.core.Launcher
+vertx run MyVerticle.groovy --redeploy="**/*.groovy,**/*.rb"  --launcher-class=io.vertx.core.Launcher
+java io.vertx.core.Launcher run org.acme.MyVerticle –redeploy="**/*.class"  --launcher-class=io.vertx.core
+.Launcher -cp ...</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7332,21 +7297,24 @@ several sets by separating them using a comma (<code>,</code>). Patterns are rel
 configured using <code>--java-opts</code>.</p>
 </div>
 <div class="paragraph">
+<p>The <code>--launcher-class</code> option determine with with <em>main</em> class the application is launcher. It&#8217;s generally
+<code><a href="../../apidocs/io/vertx/core/Launcher.html">Launcher</a></code>, but you have use you own <em>main</em>.</p>
+</div>
+<div class="paragraph">
 <p>The redeploy feature can be used in your IDE:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
 <p>Eclipse - create a <em>Run</em> configuration, using the <code>io.vertx.core.Launcher</code> class a <em>main class</em>. In the <em>Program
-arguments</em> area (in the <em>Arguments</em> tab), write <code>run your-verticle-fully-qualified-name --redeploy=**/*.java</code>.
-You can also add other parameters. The redeployment works smoothly as Eclipse incrementally compiles your files on
-save.</p>
+arguments</em> area (in the <em>Arguments</em> tab), write <code>run your-verticle-fully-qualified-name --redeploy=**/*.java
+--launcher-class=io.vertx.core.Launcher</code>. You can also add other parameters. The redeployment works smoothly as
+Eclipse incrementally compiles your files on save.</p>
 </li>
 <li>
 <p>IntelliJ - create a <em>Run</em> configuration (<em>Application</em>), set the <em>Main class</em> to <code>io.vertx.core.Launcher</code>. In
 the Program arguments write: <code>run your-verticle-fully-qualified-name --redeploy=**/*.class
---launcher-class=io.vertx.core.Launcher</code>. As you can see, you need to set the <code>launcher-class</code> parameter because
-IntelliJ wraps your main class in its own class. To trigger the redeployment, you need to <em>make</em> the project or
+--launcher-class=io.vertx.core.Launcher</code>. To trigger the redeployment, you need to <em>make</em> the project or
 the module explicitly (<em>Build</em> menu &#8594; <em>Make project</em>).</p>
 </li>
 </ul>
@@ -7361,7 +7329,8 @@ created every time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java –jar target/my-fat-jar.jar –redeploy="**/*.java" --on-redeploy="mvn package"</code></pre>
+<pre class="prettyprint highlight"><code>java –jar target/my-fat-jar.jar –redeploy="**/*.java" --on-redeploy="mvn package"
+java -jar build/libs/my-fat-jar.jar --redeploy="src/**/*.java" --on-redeploy='./gradlew shadowJar'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8308,7 +8277,7 @@ and <code><a href="../../apidocs/io/vertx/core/impl/launcher/VertxCommandLaunche
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2015-12-23 09:22:17 CET
               
               
             </div>
