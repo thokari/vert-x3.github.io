@@ -151,8 +151,8 @@ to the <code>NetSocket</code>:</p>
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     // Write the data straight back
     sock.write(buffer);
   });
@@ -175,8 +175,8 @@ writing to it:</p>
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     if (!sock.writeQueueFull()) {
       sock.write(buffer);
     };
@@ -195,8 +195,8 @@ really want to do is pause the <code>NetSocket</code> when the write queue is fu
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     sock.write(buffer);
     if (sock.writeQueueFull()) {
       sock.pause();
@@ -215,12 +215,12 @@ it when the write queue has processed its backlog:</p>
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     sock.write(buffer);
     if (sock.writeQueueFull()) {
       sock.pause();
-      sock.drainHandler((Void done) =&gt; {
+      sock.drainHandler(() {
         sock.resume();
       });
     };
@@ -245,11 +245,15 @@ You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer(NetServerOptions {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.streams { pump }
+
+...
+
+value server = vertx.createNetServer(NetServerOptions {
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
+server.connectHandler((NetSocket sock) {
   pump.pump(sock, sock).start();
 }).listen();</code></pre>
 </div>
@@ -376,7 +380,7 @@ This has the same meaning as <code><a href="../../ceylondoc/vertx-core//streams/
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

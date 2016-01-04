@@ -577,7 +577,11 @@ getting a reference to the event bus, setting timers, as well as many other thin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -603,7 +607,11 @@ require, for example, isolation between the event bus or different groups of ser
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx(VertxOptions {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx(VertxOptions {
   workerPoolSize = 40;
 });</code></pre>
 </div>
@@ -693,7 +701,7 @@ would do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.setPeriodic(1000, (Long id) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.setPeriodic(1000, (Integer id) {
   // This handler will get called every second
   print("timer fired!");
 });</code></pre>
@@ -705,7 +713,7 @@ would do:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Respond to each http request with "Hello World"
-server.requestHandler((HttpServerRequest request) =&gt; {
+server.requestHandler((HttpServerRequest request) {
   // This handler will be called every time an HTTP request is received at the server
   request.response().end("hello world!");
 });</code></pre>
@@ -929,11 +937,11 @@ result handler to be called back asynchronous when the blocking code has been ex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.executeBlocking((Future&lt;Object&gt; future) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.executeBlocking((Future&lt;Object&gt; future) {
   // Call some blocking API that takes a significant amount of time to return
   value result = someAPI.blockingMethod("hello");
   future.complete(result);
-}, (Object|Throwable res) =&gt; {
+}, (Object|Throwable res) {
   print("The result is: ``res``");
 });</code></pre>
 </div>
@@ -1184,7 +1192,7 @@ and <code><a href="../../ceylondoc/vertx-core//Vertx.type.html#unregisterVerticl
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", (String|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", (String|Throwable res) {
   if (is String res) {
     print("Deployment id is: ``res``");
   } else {
@@ -1210,7 +1218,7 @@ and <code><a href="../../ceylondoc/vertx-core//Vertx.type.html#unregisterVerticl
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.undeploy(deploymentID, (Throwable? res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.undeploy(deploymentID, (Throwable? res) {
   if (!exists res) {
     print("Undeployed ok");
   } else {
@@ -1412,14 +1420,18 @@ context is created. You can test the <em>type</em> of context you have retrieved
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value context = vertx.getOrCreateContext();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { context_ = context }
+
+...
+
+value context = vertx.getOrCreateContext();
 if (context.isEventLoopContext()) {
   print("Context attached to Event Loop");
 } else if (context.isWorkerContext()) {
   print("Context attached to Worker Thread");
 } else if (context.isMultiThreadedWorkerContext()) {
   print("Context attached to Worker Thread - multi threaded worker");
-} else if (!context.isOnVertxThread()) {
+} else if (!context_.isOnVertxThread()) {
   print("Context not attached to a thread managed by vert.x");
 };</code></pre>
 </div>
@@ -1430,7 +1442,7 @@ you submit a task that will be eventually run in the same context, but later:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.getOrCreateContext().runOnContext((Void v) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.getOrCreateContext().runOnContext(() {
   print("This will be executed asynchronously in the same context");
 });</code></pre>
 </div>
@@ -1444,7 +1456,7 @@ store and retrieve data shared in the context. For instance, it lets you pass da
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value context = vertx.getOrCreateContext();
 context.put("data", "hello");
-context.runOnContext((Void v) =&gt; {
+context.runOnContext(() {
   value hello = context.get("data");
 });</code></pre>
 </div>
@@ -1475,7 +1487,7 @@ method. Check the <a href="#Passing configuration to a verticle">[Passing config
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value timerID = vertx.setTimer(1000, (Long id) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value timerID = vertx.setTimer(1000, (Integer id) {
   print("And one second later this is printed");
 });
 
@@ -1510,7 +1522,7 @@ finished, you can set the next timer.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value timerID = vertx.setPeriodic(1000, (Long id) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value timerID = vertx.setPeriodic(1000, (Integer id) {
   print("And every second this is printed");
 });
 
@@ -1699,7 +1711,7 @@ Here&#8217;s an example:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value eb = vertx.eventBus();
 
-eb.consumer("news.uk.sport", (Message&lt;Object&gt; message) =&gt; {
+eb.consumer("news.uk.sport", (Message&lt;Object&gt; message) {
   print("I have received a message: ``message.body()``");
 });</code></pre>
 </div>
@@ -1722,7 +1734,7 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value eb = vertx.eventBus();
 
 value consumer = eb.consumer("news.uk.sport");
-consumer.handler((Message&lt;String&gt; message) =&gt; {
+consumer.handler((Message&lt;String&gt; message) {
   print("I have received a message: ``message.body()``");
 });</code></pre>
 </div>
@@ -1737,7 +1749,7 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.completionHandler((Throwable? res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.completionHandler((Throwable? res) {
   if (!exists res) {
     print("The handler registration has reached all nodes");
   } else {
@@ -1758,7 +1770,7 @@ be notified when this is complete use <code><a href="../../ceylondoc/vertx-core/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.unregister((Throwable? res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.unregister((Throwable? res) {
   if (!exists res) {
     print("The handler un-registration has reached all nodes");
   } else {
@@ -1843,7 +1855,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value consumer = eventBus.consumer("news.uk.sport");
-consumer.handler((Message&lt;String&gt; message) =&gt; {
+consumer.handler((Message&lt;String&gt; message) {
   print("I have received a message: ``message.body()``");
   message.reply("how interesting!");
 });</code></pre>
@@ -1854,7 +1866,7 @@ consumer.handler((Message&lt;String&gt; message) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", (Message&lt;Object&gt;|Throwable ar) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", (Message&lt;Object&gt;|Throwable ar) {
   if (is Message&lt;Object&gt; ar) {
     print("Received reply: ``ar.body()``");
   };
@@ -1937,8 +1949,12 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = VertxOptions();
-vertx.clusteredVertx(options, (Vertx|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value options = VertxOptions();
+vertx_.clusteredVertx(options, (Vertx|Throwable res) {
   if (is Vertx res) {
     value vertx = res;
     value eventBus = vertx.eventBus();
@@ -2004,7 +2020,11 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2012,7 +2032,11 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer("some string");</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer("some string");</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2020,7 +2044,11 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer("some string", "UTF-16");</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer("some string", "UTF-16");</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2036,7 +2064,11 @@ more efficient than the buffer automatically resizing multiple times as data is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer(10000);</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer(10000);</code></pre>
 </div>
 </div>
 </div>
@@ -2058,7 +2090,11 @@ Append methods exist for appending various different types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();
 
 buff.appendInt(123).appendString("hello\n");
 
@@ -2078,7 +2114,11 @@ represents the position in the buffer where to start writing the data.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();
 
 buff.setInt(1000, 123);
 buff.setString(0, "hello");</code></pre>
@@ -2094,7 +2134,11 @@ The first argument to these methods is an index in the buffer from where to get 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();
 variable value i = 0;
 while (i &lt; buff.length()) {
   print("int value at ``i`` is ``buff.getInt(i)``");
@@ -2114,7 +2158,11 @@ network protocol optimized to minimize bandwidth consumption.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer(128);
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer(128);
 value pos = 15;
 buff.setUnsignedByte(pos, 200);
 print(buff.getUnsignedByte(pos));</code></pre>
@@ -2223,7 +2271,7 @@ For example:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
-server.listen(1234, "localhost", (NetServer|Throwable res) =&gt; {
+server.listen(1234, "localhost", (NetServer|Throwable res) {
   if (is NetServer res) {
     print("Server is now listening!");
   } else {
@@ -2244,7 +2292,7 @@ server.listen(1234, "localhost", (NetServer|Throwable res) =&gt; {
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
-server.listen(0, "localhost", (NetServer|Throwable res) =&gt; {
+server.listen(0, "localhost", (NetServer|Throwable res) {
   if (is NetServer res) {
     print("Server is now listening on actual port: ``server.actualPort()``");
   } else {
@@ -2267,7 +2315,7 @@ server.listen(0, "localhost", (NetServer|Throwable res) =&gt; {
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
-server.connectHandler((NetSocket socket) =&gt; {
+server.connectHandler((NetSocket socket) {
   // Handle the connection in here
 });</code></pre>
 </div>
@@ -2293,8 +2341,8 @@ the socket.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
-server.connectHandler((NetSocket socket) =&gt; {
-  socket.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket socket) {
+  socket.handler((Buffer buffer) {
     print("I received some bytes: ``buffer.length()``");
   });
 });</code></pre>
@@ -2308,8 +2356,13 @@ server.connectHandler((NetSocket socket) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Write a buffer
-value buffer = buffer.buffer().appendFloat(12.34).appendInt(123);
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+
+...
+
+
+// Write a buffer
+value buffer = buffer_.buffer().appendFloat(12.34).appendInt(123);
 socket.write(buffer);
 
 // Write a string in UTF-8 encoding
@@ -2336,7 +2389,7 @@ on it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">socket.closeHandler((Void v) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">socket.closeHandler(() {
   print("The socket has been closed");
 });</code></pre>
 </div>
@@ -2421,7 +2474,7 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.close((Throwable? res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.close((Throwable? res) {
   if (!exists res) {
     print("Server is now closed");
   } else {
@@ -2460,8 +2513,8 @@ deployed then you will have at most one core utilised on your server.</p>
 variable value i = 0;
 while (i &lt; 10) {
   value server = vertx.createNetServer();
-  server.connectHandler((NetSocket socket) =&gt; {
-    socket.handler((Buffer buffer) =&gt; {
+  server.connectHandler((NetSocket socket) {
+    socket.handler((Buffer buffer) {
       // Just echo back the data
       socket.write(buffer);
     });
@@ -2552,7 +2605,7 @@ specifying the port and host of the server and a handler that will be called wit
   connectTimeout = 10000;
 };
 value client = vertx.createNetClient(options);
-client.connect(4321, "localhost", (NetSocket|Throwable res) =&gt; {
+client.connect(4321, "localhost", (NetSocket|Throwable res) {
   if (is NetSocket res) {
     print("Connected!");
     value socket = res;
@@ -2751,7 +2804,11 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+
+...
+
+value options = NetServerOptions {
   ssl = true;
   clientAuth = required;
   trustStoreOptions = JksOptions {
@@ -2767,7 +2824,11 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+
+...
+
+value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 value options = NetServerOptions {
   ssl = true;
   clientAuth = required;
@@ -2785,7 +2846,11 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+
+...
+
+value options = NetServerOptions {
   ssl = true;
   clientAuth = required;
   pfxTrustOptions = PfxOptions {
@@ -2801,7 +2866,11 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+
+...
+
+value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 value options = NetServerOptions {
   ssl = true;
   clientAuth = required;
@@ -2818,7 +2887,11 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+
+...
+
+value options = NetServerOptions {
   ssl = true;
   clientAuth = required;
   pemTrustOptions = PemTrustOptions {
@@ -2833,7 +2906,11 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+
+...
+
+value myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
 value options = NetServerOptions {
   ssl = true;
   clientAuth = required;
@@ -3213,7 +3290,7 @@ For example:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer();
-server.listen(8080, "myhost.com", (HttpServer|Throwable res) =&gt; {
+server.listen(8080, "myhost.com", (HttpServer|Throwable res) {
   if (is HttpServer res) {
     print("Server is now listening!");
   } else {
@@ -3236,7 +3313,7 @@ server.listen(8080, "myhost.com", (HttpServer|Throwable res) =&gt; {
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer();
-server.requestHandler((HttpServerRequest request) =&gt; {
+server.requestHandler((HttpServerRequest request) {
   // Handle the request in here
 });</code></pre>
 </div>
@@ -3269,7 +3346,7 @@ object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   request.response().end("Hello world");
 }).listen(8080);</code></pre>
 </div>
@@ -3435,7 +3512,7 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.handler((Buffer buffer) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.handler((Buffer buffer) {
   print("I have received a chunk of the body of length ``buffer.length()``");
 });</code></pre>
 </div>
@@ -3450,15 +3527,20 @@ the aggregation yourself as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Create an empty buffer
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+
+// Create an empty buffer
 value totalBuffer = buffer.buffer();
 
-request.handler((Buffer buffer) =&gt; {
+request.handler((Buffer buffer) {
   print("I have received a chunk of the body of length ``buffer.length()``");
   totalBuffer.appendBuffer(buffer);
 });
 
-request.endHandler((Void v) =&gt; {
+request.endHandler(() {
   print("Full body received, length = ``totalBuffer.length()``");
 });</code></pre>
 </div>
@@ -3474,7 +3556,7 @@ for you. The body handler is called once when all the body has been received:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.bodyHandler((Buffer totalBuffer) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.bodyHandler((Buffer totalBuffer) {
   print("Full body received, length = ``totalBuffer.length()``");
 });</code></pre>
 </div>
@@ -3513,9 +3595,9 @@ once the entire body has been read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
   request.setExpectMultipart(true);
-  request.endHandler((Void v) =&gt; {
+  request.endHandler(() {
     // The body has now been fully read, so retrieve the form attributes
     value formAttributes = request.formAttributes();
   });
@@ -3541,9 +3623,9 @@ upload that arrives on the server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
   request.setExpectMultipart(true);
-  request.uploadHandler((HttpServerFileUpload upload) =&gt; {
+  request.uploadHandler((HttpServerFileUpload upload) {
     print("Got a file upload ``upload.name()``");
   });
 });</code></pre>
@@ -3555,8 +3637,8 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) =&gt; {
-  upload.handler((Buffer chunk) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) {
+  upload.handler((Buffer chunk) {
     print("Received a chunk of the upload of length ``chunk.length()``");
   });
 });</code></pre>
@@ -3572,7 +3654,7 @@ detailed explanation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) {
   upload.streamToFileSystem("myuploads_directory/``upload.filename()``");
 });</code></pre>
 </div>
@@ -3805,7 +3887,7 @@ files, but may be slower for small files.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   value file = "";
   if (request.path() == "/") {
     file = "index.html";
@@ -3852,7 +3934,7 @@ Vert.x Web.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   value offset = 0;
   try {
     offset = Long.parseLong(request.getParam("start"));
@@ -3877,7 +3959,7 @@ case you can just do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   value offset = 0;
   try {
     offset = Long.parseLong(request.getParam("start"));
@@ -3904,14 +3986,17 @@ at any one time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { put }
+import io.vertx.ceylon.core.streams { pump }
+
+...
+
+vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   value response = request.response();
   if (request.method() == put) {
     response.setChunked(true);
     pump.pump(request, response).start();
-    request.endHandler((Void v) =&gt; {
-      response.end()
-    });
+    request.endHandler(() =&gt; response.end());
   } else {
     response.setStatusCode(400).end();
   };
@@ -3991,7 +4076,7 @@ value options = HttpClientOptions {
 };
 // Can also set default port if you want...
 value client = vertx.createHttpClient(options);
-client.getNow("/some-uri", (HttpClientResponse response) =&gt; {
+client.getNow("/some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });</code></pre>
 </div>
@@ -4005,12 +4090,12 @@ simply specify the host/port when doing the request.</p>
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();
 
 // Specify both port and host name
-client.getNow(8080, "myserver.mycompany.com", "/some-uri", (HttpClientResponse response) =&gt; {
+client.getNow(8080, "myserver.mycompany.com", "/some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });
 
 // This time use the default port 80 but specify the host name
-client.getNow("foo.othercompany.com", "/other-uri", (HttpClientResponse response) =&gt; {
+client.getNow("foo.othercompany.com", "/other-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });</code></pre>
 </div>
@@ -4037,12 +4122,12 @@ called with the http response when it comes back.</p>
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();
 
 // Send a GET request
-client.getNow("/some-uri", (HttpClientResponse response) =&gt; {
+client.getNow("/some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });
 
 // Send a GET request
-client.headNow("/other-uri", (HttpClientResponse response) =&gt; {
+client.headNow("/other-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });</code></pre>
 </div>
@@ -4057,13 +4142,17 @@ the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { get, post }
 
-client.request(get, "some-uri", (HttpClientResponse response) =&gt; {
+...
+
+value client = vertx.createHttpClient();
+
+client.request(get, "some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 }).end();
 
-client.request(post, "foo-uri", (HttpClientResponse response) =&gt; {
+client.request(post, "foo-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 }).end("some-data");</code></pre>
 </div>
@@ -4091,7 +4180,7 @@ m</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();
 
-value request = client.post("some-uri", (HttpClientResponse response) =&gt; {
+value request = client.post("some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });
 
@@ -4105,13 +4194,13 @@ request.end();
 
 // Or fluently:
 
-client.post("some-uri", (HttpClientResponse response) =&gt; {
+client.post("some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 }).putHeader("content-length", "1000").putHeader("content-type", "text/plain").write(body).end();
 
 // Or event more simply:
 
-client.post("some-uri", (HttpClientResponse response) =&gt; {
+client.post("some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 }).putHeader("content-type", "text/plain").end(body);</code></pre>
 </div>
@@ -4121,14 +4210,19 @@ client.post("some-uri", (HttpClientResponse response) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Write string encoded in UTF-8
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+
+...
+
+
+// Write string encoded in UTF-8
 request.write("some data");
 
 // Write string encoded in specific encoding
 request.write("some other data", "UTF-16");
 
 // Write a buffer
-value buffer = buffer.buffer();
+value buffer = buffer_.buffer();
 buffer.appendInt(123).appendLong(245);
 request.write(buffer);</code></pre>
 </div>
@@ -4139,11 +4233,16 @@ single call to the <code>end</code> function.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Write string and end the request (send it) in a single call
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+
+...
+
+
+// Write string and end the request (send it) in a single call
 request.end("some simple data");
 
 // Write buffer and end the request (send it) in a single call
-value buffer = buffer.buffer().appendDouble(12.34).appendLong(432);
+value buffer = buffer_.buffer().appendDouble(12.34).appendLong(432);
 request.end(buffer);</code></pre>
 </div>
 </div>
@@ -4225,11 +4324,15 @@ before calling <code>end</code> with no arguments</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// End the request with a string
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+
+...
+
+// End the request with a string
 request.end("some-data");
 
 // End it with a buffer
-value buffer = buffer.buffer().appendFloat(12.3).appendInt(321);
+value buffer = buffer_.buffer().appendFloat(12.3).appendInt(321);
 request.end(buffer);</code></pre>
 </div>
 </div>
@@ -4282,10 +4385,10 @@ request.end();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri", (HttpClientResponse response) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });
-request.exceptionHandler((Throwable e) =&gt; {
+request.exceptionHandler((Throwable e) {
   print("Received exception: ``e.getMessage()``");
   e.printStackTrace();
 });</code></pre>
@@ -4297,7 +4400,7 @@ request.exceptionHandler((Throwable e) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri", (HttpClientResponse response) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri", (HttpClientResponse response) {
   if (response.statusCode() == 200) {
     print("Everything fine");
     return;
@@ -4333,7 +4436,7 @@ not provide a handler when the request is created and set it later on the reques
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri");
-request.handler((HttpClientResponse response) =&gt; {
+request.handler((HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });</code></pre>
 </div>
@@ -4350,11 +4453,14 @@ you can pump to it from any <code><a href="../../ceylondoc/vertx-core//streams/R
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.setChunked(true);
-value pump = pump.pump(file, request);
-file.endHandler((Void v) =&gt; {
-  request.end()
-});
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.streams { pump_ = pump }
+
+...
+
+
+request.setChunked(true);
+value pump = pump_.pump(file, request);
+file.endHandler(() =&gt; request.end());
 pump.start();</code></pre>
 </div>
 </div>
@@ -4372,7 +4478,7 @@ and <code><a href="../../ceylondoc/vertx-core//http/HttpClientResponse.type.html
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) {
   // the status code - e.g. 200 or 404
   print("Status code is ``response.statusCode()``");
 
@@ -4425,9 +4531,9 @@ a <code><a href="../../ceylondoc/vertx-core//buffer/Buffer.type.html">Buffer</a>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) {
 
-  response.handler((Buffer buffer) =&gt; {
+  response.handler((Buffer buffer) {
     print("Received a part of the response body: ``buffer``");
   });
 });</code></pre>
@@ -4439,18 +4545,23 @@ either aggregate it yourself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+
+client.getNow("some-uri", (HttpClientResponse response) {
 
   // Create an empty buffer
   value totalBuffer = buffer.buffer();
 
-  response.handler((Buffer buffer) =&gt; {
+  response.handler((Buffer buffer) {
     print("Received a part of the response body: ``buffer.length()``");
 
     totalBuffer.appendBuffer(buffer);
   });
 
-  response.endHandler((Void v) =&gt; {
+  response.endHandler(() {
     // Now all the body has been read
     print("Total response body length is ``totalBuffer.length()``");
   });
@@ -4463,9 +4574,9 @@ is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) {
 
-  response.bodyHandler((Buffer totalBuffer) =&gt; {
+  response.bodyHandler((Buffer totalBuffer) {
     // Now all the body has been read
     print("Total response body length is ``totalBuffer.length()``");
   });
@@ -4525,13 +4636,13 @@ the rest of the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.put("some-uri", (HttpClientResponse response) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.put("some-uri", (HttpClientResponse response) {
   print("Received response with status code ``response.statusCode()``");
 });
 
 request.putHeader("Expect", "100-Continue");
 
-request.continueHandler((Void v) =&gt; {
+request.continueHandler(() {
   // OK to send rest of body
   request.write("Some data");
   request.write("Some more data");
@@ -4657,7 +4768,7 @@ round-robin strategy.</p>
 <div class="listingblock">
 <div class="title">io.vertx.examples.http.sharing.HttpServerVerticle</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   request.response().end("Hello from server ``this``");
 }).listen(8080);</code></pre>
 </div>
@@ -4675,9 +4786,9 @@ receiving a request it calls the server handlers following a round robin strateg
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.setPeriodic(100, (Long l) =&gt; {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", (HttpClientResponse resp) =&gt; {
-    resp.bodyHandler((Buffer body) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.setPeriodic(100, (Integer l) {
+  vertx.createHttpClient().getNow(8080, "localhost", "/", (HttpClientResponse resp) {
+    resp.bodyHandler((Buffer body) {
       print(body.toString("ISO-8859-1"));
     });
   });
@@ -4742,7 +4853,7 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) {
   print("Connected!");
 });</code></pre>
 </div>
@@ -4752,7 +4863,7 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) {
   if (websocket.path() == "/myapi") {
     websocket.reject();
   } else {
@@ -4770,7 +4881,7 @@ call <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
   if (request.path() == "/myapi") {
 
     value websocket = request.upgrade();
@@ -4807,7 +4918,7 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.websocket("/some-uri", (WebSocket websocket) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.websocket("/some-uri", (WebSocket websocket) {
   print("Connected!");
 });</code></pre>
 </div>
@@ -4821,8 +4932,12 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Write a simple message
-value buffer = buffer.buffer().appendInt(123).appendFloat(1.23);
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+
+...
+
+// Write a simple message
+value buffer = buffer_.buffer().appendInt(123).appendFloat(1.23);
 
 websocket.writeBinaryMessage(buffer);</code></pre>
 </div>
@@ -4854,7 +4969,12 @@ to the WebSocket using <code><a href="../../ceylondoc/vertx-core//http/WebSocket
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value frame1 = webSocketFrame.binaryFrame(buffer1, false);
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { webSocketFrame }
+
+...
+
+
+value frame1 = webSocketFrame.binaryFrame(buffer1, false);
 websocket.writeFrame(frame1);
 
 value frame2 = webSocketFrame.continuationFrame(buffer2, false);
@@ -4875,7 +4995,12 @@ and <code><a href="../../ceylondoc/vertx-core//http/WebSocket.type.html#writeFin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Send a websocket messages consisting of a single final text frame:
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+
+// Send a websocket messages consisting of a single final text frame:
 
 websocket.writeFinalTextFrame("Geronimo!");
 
@@ -4898,7 +5023,7 @@ for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">websocket.frameHandler((WebSocketFrame frame) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">websocket.frameHandler((WebSocketFrame frame) {
   print("Received a frame of size!");
 });</code></pre>
 </div>
@@ -4962,7 +5087,12 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value sd = vertx.sharedData();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+
+value sd = vertx.sharedData();
 
 value map1 = sd.getLocalMap("mymap1");
 
@@ -5005,7 +5135,7 @@ application.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value sd = vertx.sharedData();
 
-sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) =&gt; {
+sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) {
   if (is AsyncMap&lt;String,String&gt; res) {
     value map = res;
   } else {
@@ -5024,7 +5154,7 @@ sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) =&gt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.put("foo", "bar", (Throwable? resPut) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.put("foo", "bar", (Throwable? resPut) {
   if (!exists resPut) {
     // Successfully put the value
   } else {
@@ -5044,7 +5174,7 @@ sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) =&gt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.get("foo", (String|Throwable resGet) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.get("foo", (String|Throwable resGet) {
   if (is String resGet) {
     // Successfully got the value
     value val = resGet;
@@ -5091,16 +5221,14 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLock("mylock", (Lock|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLock("mylock", (Lock|Throwable res) {
   if (is Lock res) {
     // Got the lock!
     value lock = res;
 
     // 5 seconds later we release the lock so someone else can get it
 
-    vertx.setTimer(5000, (Long tid) =&gt; {
-      lock.release()
-    });
+    vertx.setTimer(5000, (Integer tid) =&gt; lock.release());
 
   } else {
     // Something went wrong
@@ -5114,7 +5242,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLockWithTimeout("mylock", 10000, (Lock|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLockWithTimeout("mylock", 10000, (Lock|Throwable res) {
   if (is Lock res) {
     // Got the lock!
     value lock = res;
@@ -5139,7 +5267,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getCounter("mycounter", (Counter|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getCounter("mycounter", (Counter|Throwable res) {
   if (is Counter res) {
     value counter = res;
   } else {
@@ -5179,7 +5307,7 @@ which is called when the operation completes or an error occurs.</p>
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value fs = vertx.fileSystem();
 
 // Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt", (Throwable? res) =&gt; {
+fs.copy("foo.txt", "bar.txt", (Throwable? res) {
   if (!exists res) {
     // Copied ok!
   } else {
@@ -5214,10 +5342,15 @@ please consult the <code><a href="../../ceylondoc/vertx-core//file/FileSystem.ty
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx();
 
 // Read a file
-vertx.fileSystem().readFile("target/classes/readme.txt", (Buffer|Throwable result) =&gt; {
+vertx.fileSystem().readFile("target/classes/readme.txt", (Buffer|Throwable result) {
   if (is Buffer result) {
     print(result);
   } else {
@@ -5226,7 +5359,7 @@ vertx.fileSystem().readFile("target/classes/readme.txt", (Buffer|Throwable resul
 });
 
 // Copy a file
-vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", (Throwable? result) =&gt; {
+vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", (Throwable? result) {
   if (!exists result) {
     print("File copied");
   } else {
@@ -5235,7 +5368,7 @@ vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt
 });
 
 // Write a file
-vertx.fileSystem().writeFile("target/classes/hello.txt", buffer.buffer("Hello"), (Throwable? result) =&gt; {
+vertx.fileSystem().writeFile("target/classes/hello.txt", buffer.buffer("Hello"), (Throwable? result) {
   if (!exists result) {
     print("File written");
   } else {
@@ -5244,9 +5377,9 @@ vertx.fileSystem().writeFile("target/classes/hello.txt", buffer.buffer("Hello"),
 });
 
 // Check existence and delete
-vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) =&gt; {
+vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) {
   if (is Boolean result &amp;&amp; result) {
-    vertx.fileSystem().delete("target/classes/junk.txt", (Throwable? r) =&gt; {
+    vertx.fileSystem().delete("target/classes/junk.txt", (Throwable? r) {
       print("File deleted");
     });
   } else {
@@ -5266,7 +5399,7 @@ vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) 
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = OpenOptions();
-fileSystem.open("myfile.txt", options, (AsyncFile|Throwable res) =&gt; {
+fileSystem.open("myfile.txt", options, (AsyncFile|Throwable res) {
   if (is AsyncFile res) {
     value file = res;
   } else {
@@ -5310,14 +5443,19 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
-vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), (AsyncFile|Throwable result) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx();
+vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     value buff = buffer.buffer("foo");
     variable value i = 0;
     while (i &lt; 5) {
-      file.write(buff, buff.length() * i, (Throwable? ar) =&gt; {
+      file.write(buff, buff.length() * i, (Throwable? ar) {
         if (!exists ar) {
           print("Written ok!");
           // etc
@@ -5367,14 +5505,19 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx();
+vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     value buff = buffer.buffer(1000);
     variable value i = 0;
     while (i &lt; 10) {
-      file.read(buff, i * 100, i * 100, 100, (Buffer|Throwable ar) =&gt; {
+      file.read(buff, i * 100, i * 100, 100, (Buffer|Throwable ar) {
         if (is Buffer ar) {
           print("Read ok!");
         } else {
@@ -5427,14 +5570,19 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+import io.vertx.ceylon.core.streams { pump }
+
+...
+
+value vertx = vertx_.vertx();
 value output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", OpenOptions());
 
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) =&gt; {
+vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     pump.pump(file, output).start();
-    file.endHandler((Void r) =&gt; {
+    file.endHandler(() {
       print("Copy done");
     });
   } else {
@@ -5525,14 +5673,18 @@ them in a persistent fashion.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-value buffer = buffer.buffer("content");
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+
+...
+
+value socket = vertx.createDatagramSocket(DatagramSocketOptions());
+value buffer = buffer_.buffer("content");
 // Send a Buffer
-socket.send(buffer, 1234, "10.0.0.1", (DatagramSocket|Throwable asyncResult) =&gt; {
+socket.send(buffer, 1234, "10.0.0.1", (DatagramSocket|Throwable asyncResult) {
   print("Send succeeded? ``is DatagramSocket asyncResult``");
 });
 // Send a String
-socket.send("A string used as content", 1234, "10.0.0.1", (DatagramSocket|Throwable asyncResult) =&gt; {
+socket.send("A string used as content", 1234, "10.0.0.1", (DatagramSocket|Throwable asyncResult) {
   print("Send succeeded? ``is DatagramSocket asyncResult``");
 });</code></pre>
 </div>
@@ -5570,9 +5722,9 @@ which the `<a href="../../ceylondoc/vertx-core//datagram/DatagramSocket.type.htm
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) =&gt; {
+socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) {
   if (is DatagramSocket asyncResult) {
-    socket.handler((DatagramPacket packet) =&gt; {
+    socket.handler((DatagramPacket packet) {
       // Do something with the packet
     });
   } else {
@@ -5611,10 +5763,14 @@ to which you can send packets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-value buffer = buffer.buffer("content");
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+
+...
+
+value socket = vertx.createDatagramSocket(DatagramSocketOptions());
+value buffer = buffer_.buffer("content");
 // Send a Buffer to a multicast address
-socket.send(buffer, 1234, "230.0.0.1", (DatagramSocket|Throwable asyncResult) =&gt; {
+socket.send(buffer, 1234, "230.0.0.1", (DatagramSocket|Throwable asyncResult) {
   print("Send succeeded? ``is DatagramSocket asyncResult``");
 });</code></pre>
 </div>
@@ -5655,14 +5811,14 @@ would do something like shown here:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) =&gt; {
+socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) {
   if (is DatagramSocket asyncResult) {
-    socket.handler((DatagramPacket packet) =&gt; {
+    socket.handler((DatagramPacket packet) {
       // Do something with the packet
     });
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult2) =&gt; {
+    socket.listenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult2) {
       print("Listen succeeded? ``is DatagramSocket asyncResult2``");
     });
   } else {
@@ -5686,20 +5842,20 @@ socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) =&gt; {
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) =&gt; {
+socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) {
   if (is DatagramSocket asyncResult) {
-    socket.handler((DatagramPacket packet) =&gt; {
+    socket.handler((DatagramPacket packet) {
       // Do something with the packet
     });
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult2) =&gt; {
+    socket.listenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult2) {
       if (is DatagramSocket asyncResult2) {
         // will now receive packets for group
 
         // do some work
 
-        socket.unlistenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult3) =&gt; {
+        socket.unlistenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult3) {
           print("Unlisten succeeded? ``is DatagramSocket asyncResult3``");
         });
       } else {
@@ -5736,7 +5892,7 @@ like shown here:</p>
 // Some code
 
 // This would block packets which are send from 10.0.0.2
-socket.blockMulticastGroup("230.0.0.1", "10.0.0.2", (DatagramSocket|Throwable asyncResult) =&gt; {
+socket.blockMulticastGroup("230.0.0.1", "10.0.0.2", (DatagramSocket|Throwable asyncResult) {
   print("block succeeded? ``is DatagramSocket asyncResult``");
 });</code></pre>
 </div>
@@ -5836,7 +5992,7 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.lookup("vertx.io", (String|Throwable ar) =&gt; {
+client.lookup("vertx.io", (String|Throwable ar) {
   if (is String ar) {
     print(ar);
   } else {
@@ -5858,7 +6014,7 @@ the same way as you may be used from when using "nslookup" on your operation sys
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.lookup4("vertx.io", (String|Throwable ar) =&gt; {
+client.lookup4("vertx.io", (String|Throwable ar) {
   if (is String ar) {
     print(ar);
   } else {
@@ -5880,7 +6036,7 @@ same way as you may be used from when using "nslookup" on your operation system.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.lookup6("vertx.io", (String|Throwable ar) =&gt; {
+client.lookup6("vertx.io", (String|Throwable ar) {
   if (is String ar) {
     print(ar);
   } else {
@@ -5902,7 +6058,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveA("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveA("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -5927,7 +6083,7 @@ operation systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveAAAA("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveAAAA("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -5952,7 +6108,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveCNAME("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveCNAME("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -5977,7 +6133,7 @@ emails for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveMX("vertx.io", (List&lt;MxRecord&gt;|Throwable ar) =&gt; {
+client.resolveMX("vertx.io", (List&lt;MxRecord&gt;|Throwable ar) {
   if (is List&lt;MxRecord&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -6014,7 +6170,7 @@ record.name();</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveTXT("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveTXT("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -6039,7 +6195,7 @@ for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveNS("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveNS("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -6064,7 +6220,7 @@ hostname of services. Some protocols need this extra informations.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveSRV("vertx.io", (List&lt;SrvRecord&gt;|Throwable ar) =&gt; {
+client.resolveSRV("vertx.io", (List&lt;SrvRecord&gt;|Throwable ar) {
   if (is List&lt;SrvRecord&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -6109,7 +6265,7 @@ record.target();</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolvePTR("1.0.0.10.in-addr.arpa", (String|Throwable ar) =&gt; {
+client.resolvePTR("1.0.0.10.in-addr.arpa", (String|Throwable ar) {
   if (is String ar) {
     value record = ar;
     print(record);
@@ -6132,7 +6288,7 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.reverseLookup("10.0.0.1", (String|Throwable ar) =&gt; {
+client.reverseLookup("10.0.0.1", (String|Throwable ar) {
   if (is String ar) {
     value record = ar;
     print(record);
@@ -6192,8 +6348,8 @@ to the <code>NetSocket</code>:</p>
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     // Write the data straight back
     sock.write(buffer);
   });
@@ -6216,8 +6372,8 @@ writing to it:</p>
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     if (!sock.writeQueueFull()) {
       sock.write(buffer);
     };
@@ -6236,8 +6392,8 @@ really want to do is pause the <code>NetSocket</code> when the write queue is fu
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     sock.write(buffer);
     if (sock.writeQueueFull()) {
       sock.pause();
@@ -6256,12 +6412,12 @@ it when the write queue has processed its backlog:</p>
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
-  sock.handler((Buffer buffer) =&gt; {
+server.connectHandler((NetSocket sock) {
+  sock.handler((Buffer buffer) {
     sock.write(buffer);
     if (sock.writeQueueFull()) {
       sock.pause();
-      sock.drainHandler((Void done) =&gt; {
+      sock.drainHandler(() {
         sock.resume();
       });
     };
@@ -6286,11 +6442,15 @@ You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer(NetServerOptions {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.streams { pump }
+
+...
+
+value server = vertx.createNetServer(NetServerOptions {
   port = 1234;
   host = "localhost";
 });
-server.connectHandler((NetSocket sock) =&gt; {
+server.connectHandler((NetSocket sock) {
   pump.pump(sock, sock).start();
 }).listen();</code></pre>
 </div>
@@ -6447,7 +6607,12 @@ buffer3:I AM DOING OK</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value parser = recordParser.newDelimited("\n", (Buffer h) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core.parsetools { recordParser }
+
+...
+
+value parser = recordParser.newDelimited("\n", (Buffer h) {
   print(h.toString());
 });
 
@@ -6462,7 +6627,11 @@ parser.handle(buffer.buffer("\n"));</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">recordParser.newFixed(4, (Buffer h) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.parsetools { recordParser }
+
+...
+
+recordParser.newFixed(4, (Buffer h) {
   print(h.toString());
 });</code></pre>
 </div>
@@ -7441,7 +7610,11 @@ describe options and arguments:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
   longName = "directory";
   shortName = "R";
   description = "enables directory support";
@@ -7477,7 +7650,11 @@ configure the option to receive several values using <code><a href="../../ceylon
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").setSummary("A command line interface illustrating the options valuation.").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").setSummary("A command line interface illustrating the options valuation.").addOption(Option {
   longName = "flag";
   shortName = "f";
   flag = true;
@@ -7500,7 +7677,11 @@ the parsing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addOption(Option {
   longName = "mandatory";
   required = true;
   description = "a mandatory option";
@@ -7513,7 +7694,11 @@ the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addOption(Option {
   longName = "optional";
   defaultValue = "hello";
   description = "an optional option with a default value";
@@ -7529,7 +7714,11 @@ not listed in the usage, but can still be used in the user command line (for pow
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addOption(Option {
   longName = "color";
   defaultValue = "green";
   choices = {"blue" , "red" , "green" };
@@ -7553,7 +7742,11 @@ index <code>0</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addArgument(Argument {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addArgument(Argument {
   index = 0;
   description = "the first argument";
   argName = "arg1";
@@ -7569,7 +7762,11 @@ index <code>0</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addArgument(Argument {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addArgument(Argument {
   description = "the first argument";
   argName = "arg1";
 }).addArgument(Argument {
@@ -7612,7 +7809,11 @@ can be multi-valued.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
   longName = "directory";
   shortName = "R";
   description = "enables directory support";
@@ -7692,7 +7893,11 @@ won&#8217;t failed, but give you the opportunity to check if the user asks for h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("test").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("test").addOption(Option {
   longName = "help";
   shortName = "h";
   flag = true;
@@ -7808,7 +8013,7 @@ and <code>unregister</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

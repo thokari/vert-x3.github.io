@@ -124,7 +124,7 @@ which is called when the operation completes or an error occurs.</p>
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value fs = vertx.fileSystem();
 
 // Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt", (Throwable? res) =&gt; {
+fs.copy("foo.txt", "bar.txt", (Throwable? res) {
   if (!exists res) {
     // Copied ok!
   } else {
@@ -159,10 +159,15 @@ please consult the <code><a href="../../ceylondoc/vertx-core//file/FileSystem.ty
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx();
 
 // Read a file
-vertx.fileSystem().readFile("target/classes/readme.txt", (Buffer|Throwable result) =&gt; {
+vertx.fileSystem().readFile("target/classes/readme.txt", (Buffer|Throwable result) {
   if (is Buffer result) {
     print(result);
   } else {
@@ -171,7 +176,7 @@ vertx.fileSystem().readFile("target/classes/readme.txt", (Buffer|Throwable resul
 });
 
 // Copy a file
-vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", (Throwable? result) =&gt; {
+vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", (Throwable? result) {
   if (!exists result) {
     print("File copied");
   } else {
@@ -180,7 +185,7 @@ vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt
 });
 
 // Write a file
-vertx.fileSystem().writeFile("target/classes/hello.txt", buffer.buffer("Hello"), (Throwable? result) =&gt; {
+vertx.fileSystem().writeFile("target/classes/hello.txt", buffer.buffer("Hello"), (Throwable? result) {
   if (!exists result) {
     print("File written");
   } else {
@@ -189,9 +194,9 @@ vertx.fileSystem().writeFile("target/classes/hello.txt", buffer.buffer("Hello"),
 });
 
 // Check existence and delete
-vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) =&gt; {
+vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) {
   if (is Boolean result &amp;&amp; result) {
-    vertx.fileSystem().delete("target/classes/junk.txt", (Throwable? r) =&gt; {
+    vertx.fileSystem().delete("target/classes/junk.txt", (Throwable? r) {
       print("File deleted");
     });
   } else {
@@ -211,7 +216,7 @@ vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) 
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = OpenOptions();
-fileSystem.open("myfile.txt", options, (AsyncFile|Throwable res) =&gt; {
+fileSystem.open("myfile.txt", options, (AsyncFile|Throwable res) {
   if (is AsyncFile res) {
     value file = res;
   } else {
@@ -255,14 +260,19 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
-vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), (AsyncFile|Throwable result) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx();
+vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     value buff = buffer.buffer("foo");
     variable value i = 0;
     while (i &lt; 5) {
-      file.write(buff, buff.length() * i, (Throwable? ar) =&gt; {
+      file.write(buff, buff.length() * i, (Throwable? ar) {
         if (!exists ar) {
           print("Written ok!");
           // etc
@@ -312,14 +322,19 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx();
+vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     value buff = buffer.buffer(1000);
     variable value i = 0;
     while (i &lt; 10) {
-      file.read(buff, i * 100, i * 100, 100, (Buffer|Throwable ar) =&gt; {
+      file.read(buff, i * 100, i * 100, 100, (Buffer|Throwable ar) {
         if (is Buffer ar) {
           print("Read ok!");
         } else {
@@ -372,14 +387,19 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value vertx = vertx.vertx();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+import io.vertx.ceylon.core.streams { pump }
+
+...
+
+value vertx = vertx_.vertx();
 value output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", OpenOptions());
 
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) =&gt; {
+vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     pump.pump(file, output).start();
-    file.endHandler((Void r) =&gt; {
+    file.endHandler(() {
       print("Copy done");
     });
   } else {
@@ -410,7 +430,7 @@ if you want to be notified when the close has been completed you can specify a h
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

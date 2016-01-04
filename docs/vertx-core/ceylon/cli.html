@@ -161,7 +161,11 @@ describe options and arguments:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
   longName = "directory";
   shortName = "R";
   description = "enables directory support";
@@ -197,7 +201,11 @@ configure the option to receive several values using <code><a href="../../ceylon
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").setSummary("A command line interface illustrating the options valuation.").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").setSummary("A command line interface illustrating the options valuation.").addOption(Option {
   longName = "flag";
   shortName = "f";
   flag = true;
@@ -220,7 +228,11 @@ the parsing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addOption(Option {
   longName = "mandatory";
   required = true;
   description = "a mandatory option";
@@ -233,7 +245,11 @@ the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addOption(Option {
   longName = "optional";
   defaultValue = "hello";
   description = "an optional option with a default value";
@@ -249,7 +265,11 @@ not listed in the usage, but can still be used in the user command line (for pow
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addOption(Option {
   longName = "color";
   defaultValue = "green";
   choices = {"blue" , "red" , "green" };
@@ -273,7 +293,11 @@ index <code>0</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addArgument(Argument {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addArgument(Argument {
   index = 0;
   description = "the first argument";
   argName = "arg1";
@@ -289,7 +313,11 @@ index <code>0</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("some-name").addArgument(Argument {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("some-name").addArgument(Argument {
   description = "the first argument";
   argName = "arg1";
 }).addArgument(Argument {
@@ -332,7 +360,11 @@ can be multi-valued.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("copy").setSummary("A command line interface to copy files.").addOption(Option {
   longName = "directory";
   shortName = "R";
   description = "enables directory support";
@@ -412,7 +444,11 @@ won&#8217;t failed, but give you the opportunity to check if the user asks for h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value cli = cli.create("test").addOption(Option {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.cli { cli_ = cli }
+
+...
+
+value cli = cli_.create("test").addOption(Option {
   longName = "help";
   shortName = "h";
   flag = true;
@@ -440,7 +476,7 @@ if (!line.isValid() &amp;&amp; line.isAskingForHelp()) {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

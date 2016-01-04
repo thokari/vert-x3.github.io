@@ -140,7 +140,12 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value sd = vertx.sharedData();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+
+value sd = vertx.sharedData();
 
 value map1 = sd.getLocalMap("mymap1");
 
@@ -183,7 +188,7 @@ application.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value sd = vertx.sharedData();
 
-sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) =&gt; {
+sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) {
   if (is AsyncMap&lt;String,String&gt; res) {
     value map = res;
   } else {
@@ -202,7 +207,7 @@ sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) =&gt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.put("foo", "bar", (Throwable? resPut) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.put("foo", "bar", (Throwable? resPut) {
   if (!exists resPut) {
     // Successfully put the value
   } else {
@@ -222,7 +227,7 @@ sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) =&gt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.get("foo", (String|Throwable resGet) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.get("foo", (String|Throwable resGet) {
   if (is String resGet) {
     // Successfully got the value
     value val = resGet;
@@ -269,16 +274,14 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLock("mylock", (Lock|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLock("mylock", (Lock|Throwable res) {
   if (is Lock res) {
     // Got the lock!
     value lock = res;
 
     // 5 seconds later we release the lock so someone else can get it
 
-    vertx.setTimer(5000, (Long tid) =&gt; {
-      lock.release()
-    });
+    vertx.setTimer(5000, (Integer tid) =&gt; lock.release());
 
   } else {
     // Something went wrong
@@ -292,7 +295,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLockWithTimeout("mylock", 10000, (Lock|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLockWithTimeout("mylock", 10000, (Lock|Throwable res) {
   if (is Lock res) {
     // Got the lock!
     value lock = res;
@@ -317,7 +320,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getCounter("mycounter", (Counter|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getCounter("mycounter", (Counter|Throwable res) {
   if (is Counter res) {
     value counter = res;
   } else {
@@ -343,7 +346,7 @@ it using the various methods.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

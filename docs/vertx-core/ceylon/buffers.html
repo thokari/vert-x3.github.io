@@ -143,7 +143,11 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -151,7 +155,11 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer("some string");</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer("some string");</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -159,7 +167,11 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer("some string", "UTF-16");</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer("some string", "UTF-16");</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -175,7 +187,11 @@ more efficient than the buffer automatically resizing multiple times as data is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer(10000);</code></pre>
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer(10000);</code></pre>
 </div>
 </div>
 </div>
@@ -197,7 +213,11 @@ Append methods exist for appending various different types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();
 
 buff.appendInt(123).appendString("hello\n");
 
@@ -217,7 +237,11 @@ represents the position in the buffer where to start writing the data.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();
 
 buff.setInt(1000, 123);
 buff.setString(0, "hello");</code></pre>
@@ -233,7 +257,11 @@ The first argument to these methods is an index in the buffer from where to get 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer();
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer();
 variable value i = 0;
 while (i &lt; buff.length()) {
   print("int value at ``i`` is ``buff.getInt(i)``");
@@ -253,7 +281,11 @@ network protocol optimized to minimize bandwidth consumption.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value buff = buffer.buffer(128);
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value buff = buffer.buffer(128);
 value pos = 15;
 buff.setUnsignedByte(pos, 200);
 print(buff.getUnsignedByte(pos));</code></pre>
@@ -298,7 +330,7 @@ Use <code><a href="../../ceylondoc/vertx-core//buffer/Buffer.type.html#slice()">
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

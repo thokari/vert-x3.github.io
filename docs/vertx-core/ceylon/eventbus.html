@@ -267,7 +267,7 @@ Here&#8217;s an example:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value eb = vertx.eventBus();
 
-eb.consumer("news.uk.sport", (Message&lt;Object&gt; message) =&gt; {
+eb.consumer("news.uk.sport", (Message&lt;Object&gt; message) {
   print("I have received a message: ``message.body()``");
 });</code></pre>
 </div>
@@ -290,7 +290,7 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value eb = vertx.eventBus();
 
 value consumer = eb.consumer("news.uk.sport");
-consumer.handler((Message&lt;String&gt; message) =&gt; {
+consumer.handler((Message&lt;String&gt; message) {
   print("I have received a message: ``message.body()``");
 });</code></pre>
 </div>
@@ -305,7 +305,7 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.completionHandler((Throwable? res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.completionHandler((Throwable? res) {
   if (!exists res) {
     print("The handler registration has reached all nodes");
   } else {
@@ -326,7 +326,7 @@ be notified when this is complete use <code><a href="../../ceylondoc/vertx-core/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.unregister((Throwable? res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.unregister((Throwable? res) {
   if (!exists res) {
     print("The handler un-registration has reached all nodes");
   } else {
@@ -411,7 +411,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value consumer = eventBus.consumer("news.uk.sport");
-consumer.handler((Message&lt;String&gt; message) =&gt; {
+consumer.handler((Message&lt;String&gt; message) {
   print("I have received a message: ``message.body()``");
   message.reply("how interesting!");
 });</code></pre>
@@ -422,7 +422,7 @@ consumer.handler((Message&lt;String&gt; message) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", (Message&lt;Object&gt;|Throwable ar) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", (Message&lt;Object&gt;|Throwable ar) {
   if (is Message&lt;Object&gt; ar) {
     print("Received reply: ``ar.body()``");
   };
@@ -505,8 +505,12 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = VertxOptions();
-vertx.clusteredVertx(options, (Vertx|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value options = VertxOptions();
+vertx_.clusteredVertx(options, (Vertx|Throwable res) {
   if (is Vertx res) {
     value vertx = res;
     value eventBus = vertx.eventBus();
@@ -550,7 +554,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

@@ -132,7 +132,12 @@ buffer3:I AM DOING OK</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value parser = recordParser.newDelimited("\n", (Buffer h) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+import io.vertx.ceylon.core.parsetools { recordParser }
+
+...
+
+value parser = recordParser.newDelimited("\n", (Buffer h) {
   print(h.toString());
 });
 
@@ -147,7 +152,11 @@ parser.handle(buffer.buffer("\n"));</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">recordParser.newFixed(4, (Buffer h) =&gt; {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.parsetools { recordParser }
+
+...
+
+recordParser.newFixed(4, (Buffer h) {
   print(h.toString());
 });</code></pre>
 </div>
@@ -164,7 +173,7 @@ parser.handle(buffer.buffer("\n"));</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>

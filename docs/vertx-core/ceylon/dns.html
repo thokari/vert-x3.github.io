@@ -160,7 +160,7 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.lookup("vertx.io", (String|Throwable ar) =&gt; {
+client.lookup("vertx.io", (String|Throwable ar) {
   if (is String ar) {
     print(ar);
   } else {
@@ -182,7 +182,7 @@ the same way as you may be used from when using "nslookup" on your operation sys
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.lookup4("vertx.io", (String|Throwable ar) =&gt; {
+client.lookup4("vertx.io", (String|Throwable ar) {
   if (is String ar) {
     print(ar);
   } else {
@@ -204,7 +204,7 @@ same way as you may be used from when using "nslookup" on your operation system.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.lookup6("vertx.io", (String|Throwable ar) =&gt; {
+client.lookup6("vertx.io", (String|Throwable ar) {
   if (is String ar) {
     print(ar);
   } else {
@@ -226,7 +226,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveA("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveA("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -251,7 +251,7 @@ operation systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveAAAA("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveAAAA("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -276,7 +276,7 @@ systems.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveCNAME("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveCNAME("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -301,7 +301,7 @@ emails for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveMX("vertx.io", (List&lt;MxRecord&gt;|Throwable ar) =&gt; {
+client.resolveMX("vertx.io", (List&lt;MxRecord&gt;|Throwable ar) {
   if (is List&lt;MxRecord&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -338,7 +338,7 @@ record.name();</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveTXT("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveTXT("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -363,7 +363,7 @@ for a given domain.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveNS("vertx.io", (List&lt;String&gt;|Throwable ar) =&gt; {
+client.resolveNS("vertx.io", (List&lt;String&gt;|Throwable ar) {
   if (is List&lt;String&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -388,7 +388,7 @@ hostname of services. Some protocols need this extra informations.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolveSRV("vertx.io", (List&lt;SrvRecord&gt;|Throwable ar) =&gt; {
+client.resolveSRV("vertx.io", (List&lt;SrvRecord&gt;|Throwable ar) {
   if (is List&lt;SrvRecord&gt; ar) {
     value records = ar;
     for (record in records) {
@@ -433,7 +433,7 @@ record.target();</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.resolvePTR("1.0.0.10.in-addr.arpa", (String|Throwable ar) =&gt; {
+client.resolvePTR("1.0.0.10.in-addr.arpa", (String|Throwable ar) {
   if (is String ar) {
     value record = ar;
     print(record);
@@ -456,7 +456,7 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createDnsClient(53, "10.0.0.1");
-client.reverseLookup("10.0.0.1", (String|Throwable ar) =&gt; {
+client.reverseLookup("10.0.0.1", (String|Throwable ar) {
   if (is String ar) {
     value record = ar;
     print(record);
@@ -479,7 +479,7 @@ client.reverseLookup("10.0.0.1", (String|Throwable ar) =&gt; {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:00:20 CET
               
               
             </div>
