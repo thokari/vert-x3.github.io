@@ -8,10 +8,102 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>ECMAScript 6/7 on the JVM with TypeScript and Vert.x</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Following the latest releases of &lt;a href=&quot;http://vertx.io&quot;&gt;Vert.x 3.2&lt;/a&gt; and
+&lt;a href=&quot;https://github.com/michel-kraemer/vertx-lang-typescript&quot;&gt;vertx-lang-typescript 1.1.0&lt;/a&gt;
+I figured it would be a good idea to give you a couple of examples how teaming
+Vert.x and TypeScript helps you use ECMAScript 6 and 7 features on the JVM today.&lt;/p&gt;
+&lt;p&gt;The vertx-lang-typescript library adds &lt;a href=&quot;http://www.typescriptlang.org/&quot;&gt;TypeScript&lt;/a&gt; support to Vert.x 3.
+TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It supports the
+ECMAScript 6 (ECMAScript 2015, ES6) standard and also a few parts of ECMAScript 7 (ES7) already.&lt;/p&gt;
+&lt;p&gt;The library automatically compiles Vert.x verticles written in
+TypeScript to JavaScript and executes them on the JVM. vertx-lang-typescript also provides
+type definitions for the Vert.x JavaScript API. Use them in your favourite
+TypeScript editor/IDE to get auto-completion, API documentation and meaningful error
+messages. See the following screencast:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/michel-kraemer/vertx-lang-typescript/aaa67228c998bf9dc64b5f45fb407ef56169efec/screencast.gif&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;ecmascript-6-7-and-vert-x&quot;&gt;ECMAScript 6/7 and Vert.x&lt;/h2&gt;
+&lt;p&gt;Below you find an example verticle written in TypeScript. Well, I left all
+the TypeScript-specific parts out. In fact the verticle is valid ECMAScript 6
+(except for the last snippet [9] which is ECMAScript 7).&lt;/p&gt;
+&lt;p&gt;First, follow the &lt;a href=&quot;https://github.com/michel-kraemer/vertx-lang-typescript/blob/master/README.md&quot;&gt;vertx-lang-typescript README&lt;/a&gt;
+to install the library and to enable TypeScript in Vert.x. Then extract the
+type definitions (&lt;code&gt;vertx-lang-typescript-1.1.0-typings.zip&lt;/code&gt;) into a new directory.
+Create a new file named &lt;code&gt;es7verticle.ts&lt;/code&gt; in this directory and copy the code
+below into it. Finally, open your command prompt and execute&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;vertx run es7verticle.ts&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will run a small HTTP server that listens to requests on port 8080. If you
+open your browser and go to &lt;a href=&quot;http://localhost:8080&quot;&gt;http://localhost:8080&lt;/a&gt; you will see the following:&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;img-responsive center-block&quot; src=&quot;http://vertx.io/assets/blog/ecmascript-6-7-on-the-jvm-with-typscript-and-vertx/output.png&quot; title=&quot;Output of the verticle written in TypeScript&quot;&gt;&lt;/p&gt;
+&lt;p&gt;So far so good. Now let’s have a look at the code. I numbered the individual
+ECMAScript features used. Here’s a complete list:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use an &lt;em&gt;arrow function&lt;/em&gt; to create a request handler (ES6)&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Block-scoped variables&lt;/em&gt; do not pollute your global namespace (ES6)&lt;/li&gt;
+&lt;li&gt;Specify a &lt;em&gt;default value&lt;/em&gt; for a function parameter (ES6)&lt;/li&gt;
+&lt;li&gt;Use &lt;em&gt;rest parameters&lt;/em&gt; to collect multiple parameters in an array (ES6)&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Spread&lt;/em&gt; the contents of an array to function parameters (ES6)&lt;/li&gt;
+&lt;li&gt;Iterate over array contents using the &lt;em&gt;for…of loop&lt;/em&gt; (ES6)&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;template strings&lt;/em&gt; enable &lt;em&gt;string interpolation&lt;/em&gt; and &lt;em&gt;multi-line strings&lt;/em&gt; (ES6)&lt;/li&gt;
+&lt;li&gt;Use &lt;em&gt;classes&lt;/em&gt; and &lt;em&gt;inheritance&lt;/em&gt; (ES6)&lt;/li&gt;
+&lt;li&gt;Use the new &lt;em&gt;exponentiation operator&lt;/em&gt; as a shortcut for &lt;code&gt;Math.pow()&lt;/code&gt; (ES7)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;script src=&quot;https://gist.github.com/michel-kraemer/892866038dabcb8376e6.js&quot;&gt;&lt;/script&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The example demonstrates very well how you can use ECMAScript 6 (and parts of
+7) on the JVM today. In fact, there are a lot more
+&lt;a href=&quot;http://es6-features.org/&quot;&gt;cool ES6 features&lt;/a&gt; not included in the example such
+as constants (&lt;code&gt;const&lt;/code&gt;), the property shorthand or method properties.&lt;/p&gt;
+&lt;p&gt;TypeScript is so much more than just ES6. It actually has a
+very good static type system that allows you to make compile-time type checks.
+This is makes it much easier to write large Vert.x applications with many
+verticles. Personally I really like the support that I get from my IDE when
+programming TypeScript. Since vertx-lang-typescript comes with type definitions
+for the Vert.x JavaScript API I get auto-completion and access to the documentation
+right in the editor. I mostly use &lt;a href=&quot;http://www.sublimetext.com/&quot;&gt;Sublime&lt;/a&gt; by the
+way, but I have tested it successfully with
+&lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt;, &lt;a href=&quot;http://www.eclipse.org/&quot;&gt;Eclipse&lt;/a&gt;
+and &lt;a href=&quot;https://atom.io/&quot;&gt;Atom&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Unfortunately, the only ES7 feature that you can use at the moment with
+vertx-lang-typescript is the &lt;em&gt;exponentiation operator&lt;/em&gt;. TypeScript 1.7 also
+supports &lt;em&gt;decorators&lt;/em&gt; but this feature is disabled at the moment in
+vertx-lang-typescript because it is experimental and subject to change. I’ll
+keep you up to date when new features are introduced.&lt;/p&gt;
+&lt;h2 id=&quot;alternatives&quot;&gt;Alternatives&lt;/h2&gt;
+&lt;p&gt;We’ve recently &lt;a href=&quot;http://vertx.io/blog/vert-x-es6-back-to-the-future/&quot;&gt;published a post&lt;/a&gt;
+on how to use ECMAScript 6 with Vert.x here on this blog. We used &lt;a href=&quot;https://babeljs.io/&quot;&gt;Babel&lt;/a&gt;, a
+compiler that translates ES6 to ES5.&lt;/p&gt;
+&lt;p&gt;Although this approach works well it is a bit harder to set up and use than the
+one presented here. First, you need to wrap your Vert.x application in a NPM package.
+Second, in order to run your application, you need to execute two commands.
+You have to compile it with &lt;code&gt;npm run build&lt;/code&gt; and then then call &lt;code&gt;npm start&lt;/code&gt;.
+With vertx-lang-typescript you only need one command. vertx-lang-typescript
+also allows you to embed the TypeScript verticle in a larger Vert.x application
+and also mix multiple languages in one project. This is not possible if you wrap
+everything in a NPM package.&lt;/p&gt;
+&lt;p&gt;Finally, the approach based on Babel only supports ECMAScript 6 (2015), although
+more features from ES7 will surely be introduced in Babel in the future.
+TypeScript on the other hand gives you much more features such as static
+typing that you will certainly find useful for any larger project.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Sun, 03 Jan 2016 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/ecmascript-6-7-on-the-jvm-with-typescript-and-vert-x</link>
+          <guid isPermaLink="true">http://vertx.io/blog/ecmascript-6-7-on-the-jvm-with-typescript-and-vert-x</guid>
+          <author>
+            <name>michel-kraemer</name>
+            <uri>http://github.com/michel-kraemer</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Automatic redeployment in Eclipse IDE</title>
           <description>
       &lt;article&gt;&lt;p&gt;Vert.x 3.1 has (re-) introduced the &lt;em&gt;redeploy&lt;/em&gt; feature. This blog post explains how to use this feature in the Eclipse IDE. However, you can easily adapt the content to your IDE.&lt;/p&gt;
-&lt;h1 id=&quot;how-does-redeploy-work&quot;&gt;How does redeploy work&lt;/h1&gt;
+&lt;h2 id=&quot;how-does-redeploy-work&quot;&gt;How does redeploy work&lt;/h2&gt;
 &lt;p&gt;How is implemented the &lt;code&gt;redeploy&lt;/code&gt; is not as you may expect. First, the redeploy does not rely on a build tool, but is integrated in vert.x. However you can plug your build tools with the redeploy feature. This feature is offered by the &lt;code&gt;io.vertx.core.Launcher&lt;/code&gt; class. The redeployment process is actually very simple:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;the application is launched in &lt;em&gt;redeploy mode&lt;/em&gt;.&lt;/li&gt;
@@ -23,7 +115,7 @@
 &lt;/ol&gt;
 &lt;p&gt;Initially the application is launched in &lt;em&gt;redeploy mode&lt;/em&gt;. The application is actually launched in background, in a separated process. Vert.x listens for file changes. You give it a set of (Ant-style) patterns and every time a matching file changes, Vert.x stops the whole application and restarts it. Optionally you can configure a &lt;code&gt;on-redeploy&lt;/code&gt; action to plug in your build tools.&lt;/p&gt;
 &lt;p&gt;To integrate this process in Eclipse (or in your IDE), you just need to configure the set of listened files, and let the &lt;code&gt;Launcher&lt;/code&gt; class starts and stops your application.&lt;/p&gt;
-&lt;h1 id=&quot;redeploy-in-eclipse&quot;&gt;Redeploy in Eclipse&lt;/h1&gt;
+&lt;h2 id=&quot;redeploy-in-eclipse&quot;&gt;Redeploy in Eclipse&lt;/h2&gt;
 &lt;p&gt;The following screencast explains how you configure a vert.x application to be run in Eclipse and how to configure the redeploy:&lt;/p&gt;
 &lt;iframe width=&quot;420&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/iyZwAzEVX-o&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
 
@@ -33,7 +125,7 @@
 &lt;li&gt;it’s uses &lt;code&gt;io.vertx.core.Launcher&lt;/code&gt; as main class&lt;/li&gt;
 &lt;li&gt;In the &lt;em&gt;Program arguments&lt;/em&gt; (&lt;em&gt;Arguments&lt;/em&gt; tab), write: &lt;code&gt;run --redeploy=&quot;src/**/*.java&quot; --launcher-class=org.acme.vertx.Main&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&quot;redeploy-with-your-own-main-class&quot;&gt;Redeploy with your own Main class&lt;/h1&gt;
+&lt;h2 id=&quot;redeploy-with-your-own-main-class&quot;&gt;Redeploy with your own Main class&lt;/h2&gt;
 &lt;p&gt;Let’s now imagine that you have your own &lt;code&gt;Main&lt;/code&gt; class, starting your application. For instance, it can be something like:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; org.acme.vertx;
 
