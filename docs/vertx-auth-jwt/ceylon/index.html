@@ -169,7 +169,12 @@ in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value config = JsonObject {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
+
+...
+
+
+value config = JsonObject {
   keyStore = JsonObject {
     path = "keystore.jceks";
     type = "jceks";
@@ -187,7 +192,12 @@ do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value config = JsonObject {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
+
+...
+
+
+value config = JsonObject {
   keyStore = JsonObject {
     path = "keystore.jceks";
     type = "jceks";
@@ -271,7 +281,7 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:08:50 CET
               
               
             </div>

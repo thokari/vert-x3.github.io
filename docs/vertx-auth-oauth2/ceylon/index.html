@@ -198,7 +198,12 @@ specification).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value oauth2 = oAuth2Auth.create(vertx, auth_code, JsonObject {
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
+
+...
+
+
+value oauth2 = oAuth2Auth.create(vertx, auth_code, JsonObject {
   clientID = "YOUR_CLIENT_ID";
   clientSecret = "YOUR_CLIENT_SECRET";
   site = "https://github.com/login";
@@ -225,7 +230,7 @@ value code = "xxxxxxxxxxxxxxxxxxxxxxxx";
 oauth2.getToken(JsonObject {
   code = code;
   redirect_uri = "http://localhost:8080/callback";
-}, (AccessToken|Throwable res) =&gt; {
+}, (AccessToken|Throwable res) {
   if (is Throwable name) {
     // error, the code provided is not valid
   } else {
@@ -244,7 +249,12 @@ access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
+
+...
+
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "&lt;client-id&gt;";
   clientSecret = "&lt;client-secret&gt;";
@@ -272,7 +282,7 @@ value tokenConfig = JsonObject {
 
 // Callbacks
 // Save the access token
-oauth2.getToken(tokenConfig, (AccessToken|Throwable res) =&gt; {
+oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
   if (is Throwable name) {
     print("Access Token Error: ``res.getMessage()``");
   } else {
@@ -292,7 +302,13 @@ need a fast way to test your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Initialize the OAuth2 Library
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, password }
+import io.vertx.ceylon.core.http { get }
+
+...
+
+
+// Initialize the OAuth2 Library
 value oauth2 = oAuth2Auth.create(vertx, password);
 
 value tokenConfig = JsonObject {
@@ -302,7 +318,7 @@ value tokenConfig = JsonObject {
 
 // Callbacks
 // Save the access token
-oauth2.getToken(tokenConfig, (AccessToken|Throwable res) =&gt; {
+oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
   if (is Throwable name) {
     print("Access Token Error: ``res.getMessage()``");
   } else {
@@ -311,7 +327,7 @@ oauth2.getToken(tokenConfig, (AccessToken|Throwable res) =&gt; {
 
     oauth2.api(get, "/users", JsonObject {
       access_token = token.principal()get("access_token";
-    }, (JsonObject|Throwable res2) =&gt; {
+    }, (JsonObject|Throwable res2) {
       // the user object should be returned here...
     });
   };
@@ -326,7 +342,12 @@ oauth2.getToken(tokenConfig, (AccessToken|Throwable res) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+
+...
+
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "&lt;client-id&gt;";
   clientSecret = "&lt;client-secret&gt;";
@@ -341,7 +362,7 @@ value tokenConfig = JsonObject();
 
 // Callbacks
 // Save the access token
-oauth2.getToken(tokenConfig, (AccessToken|Throwable res) =&gt; {
+oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
   if (is Throwable name) {
     print("Access Token Error: ``res.getMessage()``");
   } else {
@@ -364,7 +385,7 @@ to refresh the access token when it is expired.</p>
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Check if the token is expired. If expired it is refreshed.
 if (token.expired()) {
   // Callbacks
-  token.refresh((Throwable? res) =&gt; {
+  token.refresh((Throwable? res) {
     if (!exists res) {
       // success
     } else {
@@ -380,11 +401,11 @@ if (token.expired()) {
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Revoke only the access token
-token.revoke("access_token", (Throwable? res) =&gt; {
+token.revoke("access_token", (Throwable? res) {
   // Session ended. But the refresh_token is still valid.
 
   // Revoke the refresh_token
-  token.revoke("refresh_token", (Throwable? res1) =&gt; {
+  token.revoke("refresh_token", (Throwable? res1) {
     print("token revoked.");
   });
 });</code></pre>
@@ -397,7 +418,11 @@ token.revoke("access_token", (Throwable? res) =&gt; {
 <h4 id="_google">Google</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+
+...
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
@@ -416,7 +441,11 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_github">GitHub</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+
+...
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
@@ -435,7 +464,11 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_linkedin">Linkedin</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+
+...
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
@@ -454,7 +487,11 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_twitter">Twitter</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+
+...
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
@@ -473,7 +510,11 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_facebook">Facebook</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+
+...
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
@@ -492,7 +533,11 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_jboss_keycloak">JBoss Keycloak</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the client credentials and the OAuth2 server
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+
+...
+
+// Set the client credentials and the OAuth2 server
 value credentials = JsonObject {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
@@ -517,7 +562,7 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:08:50 CET
               
               
             </div>

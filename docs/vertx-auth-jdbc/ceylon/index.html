@@ -123,7 +123,13 @@ of those please consult the documentation for the JDBC client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value jdbcClient = jdbcClient.createShared(vertx, jdbcClientConfig);
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.jdbc { jdbcAuth }
+import io.vertx.ceylon.ext.jdbc { jdbcClient_ = jdbcClient }
+
+...
+
+
+value jdbcClient = jdbcClient_.createShared(vertx, jdbcClientConfig);
 
 value authProvider = jdbcAuth.create(jdbcClient);</code></pre>
 </div>
@@ -176,7 +182,7 @@ authentication info:</p>
   password = "sausages";
 };
 
-authProvider.authenticate(authInfo, (User|Throwable res) =&gt; {
+authProvider.authenticate(authInfo, (User|Throwable res) {
   if (is User res) {
     value user = res;
   } else {
@@ -201,7 +207,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("commit_code", (Boolean|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("commit_code", (Boolean|Throwable res) {
   if (is Boolean res) {
     value hasPermission = res;
   } else {
@@ -215,7 +221,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("role:manager", (Boolean|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("role:manager", (Boolean|Throwable res) {
   if (is Boolean res) {
     value hasRole = res;
   } else {
@@ -237,7 +243,7 @@ can have zero or more permissions.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:08:50 CET
               
               
             </div>

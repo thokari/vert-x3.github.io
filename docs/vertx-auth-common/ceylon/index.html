@@ -190,7 +190,7 @@ user and contains operations which allow the user to be authorised.</p>
   password = "mypassword";
 };
 
-authProvider.authenticate(authInfo, (User|Throwable res) =&gt; {
+authProvider.authenticate(authInfo, (User|Throwable res) {
   if (is User res) {
 
     value user = res;
@@ -222,7 +222,7 @@ authProvider.authenticate(authInfo, (User|Throwable res) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("printers:printer1234", (Boolean|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("printers:printer1234", (Boolean|Throwable res) {
   if (is Boolean res) {
 
     value hasAuthority = res;
@@ -290,7 +290,7 @@ to make your user implementation. This contains the caching logic so you don&#82
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:08:50 CET
               
               
             </div>

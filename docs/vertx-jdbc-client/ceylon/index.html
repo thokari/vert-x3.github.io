@@ -156,7 +156,12 @@ to share the same datasource so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value client = jdbcClient.createShared(vertx, config);</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.jdbc { jdbcClient }
+
+...
+
+
+value client = jdbcClient.createShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -174,7 +179,13 @@ will actually create the data source, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value client = jdbcClient.createShared(vertx, config, "MyDataSource");</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.jdbc { jdbcClient }
+
+...
+
+
+
+value client = jdbcClient.createShared(vertx, config, "MyDataSource");</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -204,7 +215,12 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value client = jdbcClient.createNonShared(vertx, config);</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.jdbc { jdbcClient }
+
+...
+
+
+value client = jdbcClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -219,7 +235,12 @@ with a unique data source name each time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value client = jdbcClient.create(vertx, dataSource);</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.jdbc { jdbcClient }
+
+...
+
+
+value client = jdbcClient.create(vertx, dataSource);</code></pre>
 </div>
 </div>
 </div>
@@ -252,12 +273,12 @@ a connection.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Now do stuff with it:
 
-client.getConnection((SQLConnection|Throwable res) =&gt; {
+client.getConnection((SQLConnection|Throwable res) {
   if (is SQLConnection res) {
 
     value connection = res;
 
-    connection.query("SELECT * FROM some_table", (ResultSet|Throwable res2) =&gt; {
+    connection.query("SELECT * FROM some_table", (ResultSet|Throwable res2) {
       if (is ResultSet res2) {
 
         value rs = res2;
@@ -372,7 +393,12 @@ using the <code>-cp</code> command line flag.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value config = JsonObject {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.jdbc { jdbcClient }
+
+...
+
+
+value config = JsonObject {
   url = "jdbc:hsqldb:mem:test?shutdown=true";
   driver_class = "org.hsqldb.jdbcDriver";
   max_pool_size = 30;
@@ -406,7 +432,7 @@ with the <code>vertx</code> command line, copy the JDBC driver to <code>${VERTX_
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:08:50 CET
               
               
             </div>

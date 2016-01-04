@@ -139,7 +139,12 @@ configuration in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value config = JsonObject {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.shiro { shiroAuth, properties }
+
+...
+
+
+value config = JsonObject {
   properties_path = "classpath:test-auth.properties";
 };
 
@@ -162,7 +167,7 @@ authentication info:</p>
   password = "sausages";
 };
 
-authProvider.authenticate(authInfo, (User|Throwable res) =&gt; {
+authProvider.authenticate(authInfo, (User|Throwable res) {
   if (is User res) {
     value user = res;
   } else {
@@ -187,7 +192,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("newsletter:edit:13", (Boolean|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("newsletter:edit:13", (Boolean|Throwable res) {
   if (is Boolean res) {
     value hasPermission = res;
   } else {
@@ -201,7 +206,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("role:manager", (Boolean|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("role:manager", (Boolean|Throwable res) {
   if (is Boolean res) {
     value hasRole = res;
   } else {
@@ -339,7 +344,12 @@ An example is <code>ldap://myldapserver.mycompany.com:10389</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value provider = shiroAuth.create(vertx, realm);</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.shiro { shiroAuth }
+
+...
+
+
+value provider = shiroAuth.create(vertx, realm);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -356,7 +366,7 @@ An example is <code>ldap://myldapserver.mycompany.com:10389</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 CET
+                Last updated 2016-01-04 16:08:50 CET
               
               
             </div>
