@@ -8,6 +8,281 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Real-time bidding with Websockets and Vert.x</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;The expectations of users for interactivity with web applications have changed over the past few years.
+Users during bidding in auction no longer want to press the refresh button to check if the price
+has changed or the auction is over. This made bidding difficult and less fun.
+Instead, they expect to see the updates in application in real-time.&lt;/p&gt;
+&lt;p&gt;In this article I want to show how to create a simple application that provides real-time bidding.
+We will use WebSockets, &lt;a href=&quot;https://github.com/sockjs/sockjs-client&quot;&gt;SockJS&lt;/a&gt; and Vert.x.&lt;/p&gt;
+&lt;p&gt;We will create a front-end for fast bidding that communicates with a micro-service written in Java and based on Vert.x.&lt;/p&gt;
+&lt;h2 id=&quot;what-are-websockets-&quot;&gt;What are Websockets?&lt;/h2&gt;
+&lt;p&gt;WebSocket is asynchronous, bidirectional, full-duplex protocol that provides a communication channel over a single TCP connection.
+With the &lt;a href=&quot;http://www.w3.org/TR/websockets/&quot;&gt;WebSocket API&lt;/a&gt; it provides bidirectional communication between the website and a remote server.&lt;/p&gt;
+&lt;p&gt;WebSockets solve many problems which prevented the HTTP protocol from being suitable for use in modern,
+real-time applications. Workarounds like polling are no longer needed, which simplifies application architecture.
+WebSockets do not need to open multiple HTTP connections, they provide a reduction of unnecessary network traffic and reduce latency.&lt;/p&gt;
+&lt;h2 id=&quot;websocket-api-vs-sockjs&quot;&gt;Websocket API vs SockJS&lt;/h2&gt;
+&lt;p&gt;Unfortunately, WebSockets are not supported by all web browsers. However, there are libraries that provide a fallback
+when WebSockets are not available. One such library is &lt;a href=&quot;https://github.com/sockjs/sockjs-client&quot;&gt;SockJS&lt;/a&gt;.
+SockJS starts from trying to use the WebSocket protocol. However, if this is not possible,
+it uses  a &lt;a href=&quot;https://github.com/sockjs/sockjs-client#supported-transports-by-browser-html-served-from-http-or-https&quot;&gt;variety of browser-specific transport protocols&lt;/a&gt;.
+SockJS is a library designed to work in all modern browsers and in environments that do not support WebSocket protocol,
+for instance behind restrictive corporate proxy. SockJS provides an API similar to the standard WebSocket API.&lt;/p&gt;
+&lt;h2 id=&quot;frontend-to-fast-bidding&quot;&gt;Frontend to fast bidding&lt;/h2&gt;
+&lt;p&gt;Auction web page contains the bidding form and some simple JavaScript which loads current price from the service,
+opens an event bus connection to the SockJS server and offers bidding.
+HTML source code of sample web page on which we bid might look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;h3&lt;/span&gt;&gt;&lt;/span&gt;Auction 1&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;h3&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;error_message&quot;&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;div&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;form&lt;/span&gt;&gt;&lt;/span&gt;
+    Current price:
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;span&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;current_price&quot;&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;span&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;div&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;for&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;my_bid_value&quot;&lt;/span&gt;&gt;&lt;/span&gt;Your offer:&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;label&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;my_bid_value&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;text&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;button&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;onclick&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;bid();&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;Bid&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;div&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;div&lt;/span&gt;&gt;&lt;/span&gt;
+        Feed:
+        &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;textarea&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;feed&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;rows&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;4&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;cols&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;50&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;readonly&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;textarea&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;div&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;form&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We use the &lt;code&gt;vertx-eventbus.js&lt;/code&gt; library to create a connection to the event bus.
+&lt;code&gt;vertx-eventbus.js&lt;/code&gt; library is a part of the Vert.x distribution. &lt;code&gt;vertx-eventbus.js&lt;/code&gt; internally uses SockJS library
+to send the data to the SockJS server. In the code snippet below we create an instance of the event bus.
+The parameter to the constructor is the URI where to connect to the event bus.
+Then we register the handler listening on address &lt;code&gt;auction.&lt;auction_id&gt;&lt;/code&gt;. Each client has a possibility of registering
+at multiple addresses e.g. when bidding in the auction 1234, they register on the address &lt;code&gt;auction.1234&lt;/code&gt; etc.
+When data arrives in the handler, we change the current price and the bidding feed on the auction’s web page.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;registerHandlerForUpdateCurrentPriceAndFeed&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; eventBus = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; EventBus(&lt;span class=&quot;hljs-string&quot;&gt;&#39;http://localhost:8080/eventbus&#39;&lt;/span&gt;);
+    eventBus.onopen = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+        eventBus.registerHandler(&lt;span class=&quot;hljs-string&quot;&gt;&#39;auction.&#39;&lt;/span&gt; + auction_id, &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(error, message)&lt;/span&gt; &lt;/span&gt;{
+            &lt;span class=&quot;hljs-built_in&quot;&gt;document&lt;/span&gt;.getElementById(&lt;span class=&quot;hljs-string&quot;&gt;&#39;current_price&#39;&lt;/span&gt;).innerHTML = &lt;span class=&quot;hljs-built_in&quot;&gt;JSON&lt;/span&gt;.parse(message.body).price;
+            &lt;span class=&quot;hljs-built_in&quot;&gt;document&lt;/span&gt;.getElementById(&lt;span class=&quot;hljs-string&quot;&gt;&#39;feed&#39;&lt;/span&gt;).value += &lt;span class=&quot;hljs-string&quot;&gt;&#39;New offer: &#39;&lt;/span&gt; + &lt;span class=&quot;hljs-built_in&quot;&gt;JSON&lt;/span&gt;.parse(message.body).price + &lt;span class=&quot;hljs-string&quot;&gt;&#39;\n&#39;&lt;/span&gt;;
+        });
+    }
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Any user attempt to bid generates a PATCH Ajax request
+to the service with information about the new offer made at auction (see &lt;code&gt;bid()&lt;/code&gt; function).
+On the server side we publish this information on the event bus to all clients registered to an address.
+If you receive an HTTP response status code other than &lt;code&gt;200 (OK)&lt;/code&gt;, an error message is displayed on the web page.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;bid&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; newPrice = &lt;span class=&quot;hljs-built_in&quot;&gt;document&lt;/span&gt;.getElementById(&lt;span class=&quot;hljs-string&quot;&gt;&#39;my_bid_value&#39;&lt;/span&gt;).value;
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; xmlhttp = (&lt;span class=&quot;hljs-built_in&quot;&gt;window&lt;/span&gt;.XMLHttpRequest) ? &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; XMLHttpRequest() : &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ActiveXObject(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Microsoft.XMLHTTP&quot;&lt;/span&gt;);
+    xmlhttp.onreadystatechange = &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (xmlhttp.readyState == &lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;) {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (xmlhttp.status != &lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;) {
+                &lt;span class=&quot;hljs-built_in&quot;&gt;document&lt;/span&gt;.getElementById(&lt;span class=&quot;hljs-string&quot;&gt;&#39;error_message&#39;&lt;/span&gt;).innerHTML = &lt;span class=&quot;hljs-string&quot;&gt;&#39;Sorry, something went wrong.&#39;&lt;/span&gt;;
+            }
+        }
+    };
+    xmlhttp.open(&lt;span class=&quot;hljs-string&quot;&gt;&quot;PATCH&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;http://localhost:8080/api/auctions/&quot;&lt;/span&gt; + auction_id);
+    xmlhttp.setRequestHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Content-Type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json&quot;&lt;/span&gt;);
+    xmlhttp.send(&lt;span class=&quot;hljs-built_in&quot;&gt;JSON&lt;/span&gt;.stringify({price: newPrice}));
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;auction-service&quot;&gt;Auction Service&lt;/h2&gt;
+&lt;p&gt;SockJS client requires the server-side part. Now we are going to create a light-weight RESTful auction service.
+We will send and retrieve data in JSON format. Let’s start by creating a verticle.
+First we need to inherit from &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/core/AbstractVerticle.html&quot;&gt;&lt;code&gt;AbstractVerticle&lt;/code&gt;&lt;/a&gt;
+and override the &lt;code&gt;start&lt;/code&gt; method.
+Each verticle instance has a member variable called &lt;code&gt;vertx&lt;/code&gt;. This provides access to the Vert.x core API.
+For example, to create an HTTP server you call the &lt;code&gt;createHttpServer&lt;/code&gt; method on &lt;code&gt;vertx&lt;/code&gt; instance.
+To tell the server to listen on port 8080 for incoming requests you use the &lt;code&gt;listen&lt;/code&gt; method.&lt;/p&gt;
+&lt;p&gt;We need a router with routes. A router takes an HTTP request and finds the first matching route.
+The route can have a handler associated with it, which receives the request
+(e.g. route that matches path &lt;code&gt;/eventbus/*&lt;/code&gt; is  associated with &lt;code&gt;eventBusHandler&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;We can do something with the request, and then, end it or pass it to the next matching handler.&lt;/p&gt;
+&lt;p&gt;If you have a lot of handlers it makes sense to split them up into multiple routers.&lt;/p&gt;
+&lt;p&gt;You can do this by mounting a router at a mount point in another router
+(see &lt;code&gt;auctionApiRouter&lt;/code&gt; that corresponds to &lt;code&gt;/api&lt;/code&gt; mount point in code snippet below).&lt;/p&gt;
+&lt;p&gt;Here’s an example verticle:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AuctionServiceVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+    &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+        Router router = Router.router(vertx);
+
+        router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/eventbus/*&quot;&lt;/span&gt;).handler(eventBusHandler());
+        router.mountSubRouter(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/api&quot;&lt;/span&gt;, auctionApiRouter());
+        router.route().failureHandler(errorHandler());
+        router.route().handler(staticHandler());
+
+        vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);
+    }
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;//…&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we’ll look at things in more detail. We’ll discuss Vert.x features used in verticle:
+error handler, SockJS handler, body handler, shared data, static handler and routing based on method, path etc.&lt;/p&gt;
+&lt;h3 id=&quot;error-handler&quot;&gt;Error handler&lt;/h3&gt;
+&lt;p&gt;As well as setting handlers to handle requests you can also set a handler for failures in routing.
+Failure in routing occurs if a handler throws an exception, or if a handler calls &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/RoutingContext.html#fail-int-&quot;&gt;&lt;code&gt;fail&lt;/code&gt;&lt;/a&gt; method.
+To render error pages we use error handler provides by Vert.x:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; ErrorHandler &lt;span class=&quot;hljs-title&quot;&gt;errorHandler&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; ErrorHandler.create();
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;sockjs-handler&quot;&gt;SockJS handler&lt;/h3&gt;
+&lt;p&gt;Vert.x provides SockJS handler with the event bus bridge which extends
+the server-side Vert.x event bus into client side JavaScript.&lt;/p&gt;
+&lt;p&gt;Configuring the bridge to tell it which messages should pass through is easy.
+You can specify which matches you want to allow for inbound and outbound traffic
+using the &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/handler/sockjs/BridgeOptions.html&quot;&gt;&lt;code&gt;BridgeOptions&lt;/code&gt;&lt;/a&gt;.
+If a message is outbound, before sending it from the server to the client side JavaScript,
+Vert.x will look through any outbound permitted matches. In code snippet below we allow any messages
+from addresses starting with “auction.” and ending with digits (e.g. &lt;code&gt;auction.1&lt;/code&gt;, &lt;code&gt;auction.100&lt;/code&gt; etc).&lt;/p&gt;
+&lt;p&gt;If you want to be notified when an event occurs on the bridge you can provide a handler when calling the bridge.
+For example, &lt;code&gt;SOCKET_CREATED&lt;/code&gt; event will occur when a new SockJS socket is created.
+The event is an instance of &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/core/Future.html&quot;&gt;&lt;code&gt;Future&lt;/code&gt;&lt;/a&gt;.
+When you are finished handling the event you can complete the future with “true” to enable further processing.&lt;/p&gt;
+&lt;p&gt;To start the bridge simply call &lt;code&gt;bridge&lt;/code&gt; method on the SockJS handler:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; SockJSHandler &lt;span class=&quot;hljs-title&quot;&gt;eventBusHandler&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    BridgeOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; BridgeOptions()
+            .addOutboundPermitted(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; PermittedOptions().setAddressRegex(&lt;span class=&quot;hljs-string&quot;&gt;&quot;auction\\.[0-9]+&quot;&lt;/span&gt;));
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; SockJSHandler.create(vertx).bridge(options, event -&gt; {
+         &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (event.type() == BridgeEventType.SOCKET_CREATED) {
+            logger.info(&lt;span class=&quot;hljs-string&quot;&gt;&quot;A socket was created&quot;&lt;/span&gt;);
+        }
+        event.complete(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;);
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;body-handler&quot;&gt;Body handler&lt;/h3&gt;
+&lt;p&gt;The BodyHandler allows you to retrieve the request body, limit the body size and to handle the file upload.
+Body handler should be on a matching route for any requests that require this functionality.
+We need BodyHandler during the bidding process (PATCH method request &lt;code&gt;/auctions/&lt;auction_id&gt;&lt;/code&gt; contains request body
+with information about a new offer made at auction). Creating a new body handler is simple:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;BodyHandler.create();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If request body is in JSON format, you can get it with
+&lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/RoutingContext.html#getBodyAsJson--&quot;&gt;&lt;code&gt;getBodyAsJson&lt;/code&gt;&lt;/a&gt; method.&lt;/p&gt;
+&lt;h3 id=&quot;shared-data&quot;&gt;Shared data&lt;/h3&gt;
+&lt;p&gt;Shared data contains functionality that allows you to safely share the data between different applications
+in the same Vert.x instance or across a cluster of Vert.x instances.
+Shared data includes local shared maps, distributed, cluster-wide maps, asynchronous cluster-wide locks
+and asynchronous cluster-wide counters.&lt;/p&gt;
+&lt;p&gt;To simplify the application we use the local shared map to save information about auctions.
+The local shared map allows you to share data between different verticles in the same Vert.x instance.
+Here’s an example of using a shared local map in an auction service:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AuctionRepository&lt;/span&gt; &lt;/span&gt;{
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;//…&lt;/span&gt;
+
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; Optional&lt;Auction&gt; &lt;span class=&quot;hljs-title&quot;&gt;getById&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(String auctionId)&lt;/span&gt; &lt;/span&gt;{
+        LocalMap&lt;String, String&gt; auctionSharedData = &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.sharedData.getLocalMap(auctionId);
+
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; Optional.of(auctionSharedData)
+            .filter(m -&gt; !m.isEmpty())
+            .map(&lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;::convertToAuction);
+    }
+
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Auction auction)&lt;/span&gt; &lt;/span&gt;{
+        LocalMap&lt;String, String&gt; auctionSharedData = &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.sharedData.getLocalMap(auction.getId());
+
+        auctionSharedData.put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;, auction.getId());
+        auctionSharedData.put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;price&quot;&lt;/span&gt;, auction.getPrice());
+    }
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;//…&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to store auction data in a database, Vert.x provides a few different asynchronous clients
+for accessing various data storages (MongoDB, Redis or JDBC client).&lt;/p&gt;
+&lt;h3 id=&quot;auction-api&quot;&gt;Auction API&lt;/h3&gt;
+&lt;p&gt;Vert.x lets you route HTTP requests to different handlers based on pattern matching on the request path.
+It also enables you to extract values from the path and use them as parameters in the request.
+Corresponding methods exist for each HTTP method. The first matching one will receive the request.
+This functionality is particularly useful when developing REST-style web applications.&lt;/p&gt;
+&lt;p&gt;To extract parameters from the path, you can use the colon character to denote the name of a parameter.
+Regular expressions can also be used to extract more complex matches.
+Any parameters extracted by pattern matching are added to the map of request parameters.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/Route.html#consumes-java.lang.String-&quot;&gt;&lt;code&gt;Consumes&lt;/code&gt;&lt;/a&gt;
+describes which MIME types the handler can consume.
+By using &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/Route.html#produces-java.lang.String-&quot;&gt;&lt;code&gt;produces&lt;/code&gt;&lt;/a&gt;
+you define which MIME types the route produces.
+In the code below the routes will match any request with &lt;code&gt;content-type&lt;/code&gt; header
+and &lt;code&gt;accept&lt;/code&gt; header that matches &lt;code&gt;application/json&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s look at an example of a subrouter mounted on the main router which was created in &lt;code&gt;start&lt;/code&gt; method in verticle:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; Router &lt;span class=&quot;hljs-title&quot;&gt;auctionApiRouter&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    AuctionRepository repository = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; AuctionRepository(vertx.sharedData());
+    AuctionValidator validator = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; AuctionValidator(repository);
+    AuctionHandler handler = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; AuctionHandler(repository, validator);
+
+    Router router = Router.router(vertx);
+    router.route().handler(BodyHandler.create());
+
+    router.route().consumes(&lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json&quot;&lt;/span&gt;);
+    router.route().produces(&lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json&quot;&lt;/span&gt;);
+
+    router.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/auctions/:id&quot;&lt;/span&gt;).handler(handler::handleGetAuction);
+    router.patch(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/auctions/:id&quot;&lt;/span&gt;).handler(handler::handleChangeAuctionPrice);
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; router;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The GET request returns auction data, while the PATCH method request allows you to bid up in the auction.
+Let’s focus on the more interesting method, namely &lt;code&gt;handleChangeAuctionPrice&lt;/code&gt;.
+In the simplest terms, the method might look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;handleChangeAuctionPrice&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext context)&lt;/span&gt; &lt;/span&gt;{
+    String auctionId = context.request().getParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;);
+    Auction auction = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Auction(
+        auctionId,
+        &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; BigDecimal(context.getBodyAsJson().getString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;price&quot;&lt;/span&gt;))
+    );
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.repository.save(auction);
+    context.vertx().eventBus().publish(&lt;span class=&quot;hljs-string&quot;&gt;&quot;auction.&quot;&lt;/span&gt; + auctionId, context.getBodyAsString());
+
+    context.response()
+        .setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;)
+        .end();
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;PATCH&lt;/code&gt; request to &lt;code&gt;/auctions/1&lt;/code&gt; would result in variable &lt;code&gt;auctionId&lt;/code&gt; getting the value 1.
+We save a new offer in the auction and then publish this information on the event bus to all clients
+registered on the address on the client side JavaScript.
+After you have finished with the HTTP response you must call the &lt;code&gt;end&lt;/code&gt; function on it.&lt;/p&gt;
+&lt;h3 id=&quot;static-handler&quot;&gt;Static handler&lt;/h3&gt;
+&lt;p&gt;Vert.x provides the handler for serving static web resources.
+The default directory from which static files are served is &lt;code&gt;webroot&lt;/code&gt;, but this can be configured.
+By default the static handler will set cache headers to enable browsers to cache files.
+Setting cache headers can be disabled with
+&lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/handler/StaticHandler.html#setCachingEnabled-boolean-&quot;&gt;&lt;code&gt;setCachingEnabled&lt;/code&gt;&lt;/a&gt; method.
+To serve the auction HTML page, JS files (and other static files) from auction service, you can create a static handler like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; StaticHandler &lt;span class=&quot;hljs-title&quot;&gt;staticHandler&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; StaticHandler.create()
+        .setCachingEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;false&lt;/span&gt;);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;let-s-run-&quot;&gt;Let’s run!&lt;/h2&gt;
+&lt;p&gt;Full application code is available on &lt;a href=&quot;https://github.com/mwarc/simple-realtime-auctions-vertx3-example&quot;&gt;github&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Clone the repository and run &lt;code&gt;./gradlew run&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Open one or more browsers and point them to &lt;code&gt;http://localhost:8080&lt;/code&gt;. Now you can bid in auction:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/real-time-bidding-with-websockets-and-vertx/bidding_in_application.png&quot; alt=&quot;Real time bidding in application&quot; title=&quot;Real time bidding in application&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+&lt;p&gt;This article presents the outline of a simple application that allows real-time bidding.
+We created a lightweight, high-performance and scalable micro-service written in Java and based on Vert.x.
+We discussed what Vert.x offers, among others, a distributed event bus and an elegant API that allows you to create applications in no time.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Fri, 15 Jan 2016 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/real-time-bidding-with-websockets-and-vert-x</link>
+          <guid isPermaLink="true">http://vertx.io/blog/real-time-bidding-with-websockets-and-vert-x</guid>
+          <author>
+            <name>mwarc</name>
+            <uri>http://github.com/mwarc</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>ECMAScript 6/7 on the JVM with TypeScript and Vert.x</title>
           <description>
       &lt;article&gt;&lt;p&gt;Following the latest releases of &lt;a href=&quot;http://vertx.io&quot;&gt;Vert.x 3.2&lt;/a&gt; and
