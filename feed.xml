@@ -8,6 +8,145 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Using Hamcrest Matchers with Vert.x Unit</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Vert.x Unit is a very elegant library to test asynchronous applications developed with vert.x. However because of this asynchronous aspect, reporting test failures is not natural for JUnit users.  This is because, the failed assertions need to be reported to the &lt;em&gt;test context&lt;/em&gt;, controlling the execution (and so the outcome) of the test. In other words, in a Vert.x Unit test you cannot use the regular Junit assertions and assertion libraries. In this blog post, we propose a way to let you using Hamcrest matchers in Vert.x Unit tests.&lt;/p&gt;
+&lt;h2 id=&quot;using-vert-x-unit&quot;&gt;Using Vert.x Unit&lt;/h2&gt;
+&lt;p&gt;Vert.x Unit is a test library made to ensure the behavior of vert.x applications. It lets you implement tests checking asynchronous behavior.&lt;/p&gt;
+&lt;p&gt;Vert.x Unit can be used with Junit. For this, you just need to add the following dependency to your project:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-unit&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.2.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;test&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;scope&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you are using Gradle, the dependency is:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;testCompile&lt;/span&gt; ‘&lt;span class=&quot;hljs-tag&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.vertx&lt;/span&gt;&lt;span class=&quot;hljs-pseudo&quot;&gt;:vertx-unit&lt;/span&gt;&lt;span class=&quot;hljs-pseudo&quot;&gt;:3&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.2&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.0&lt;/span&gt;’&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you are using an IDE, just add the vertx-unit jar to your project classpath.&lt;/p&gt;
+&lt;p&gt;Obviously, you would need to add JUnit too.&lt;/p&gt;
+&lt;p&gt;Notice that vertx-unit does not need JUnit, and can be used without it. Check the Vert.x Unit &lt;a href=&quot;http://vertx.io/docs/vertx-unit/java/&quot;&gt;documentation&lt;/a&gt; for more details.&lt;/p&gt;
+&lt;h2 id=&quot;vert-x-unit-example&quot;&gt;Vert.x Unit example&lt;/h2&gt;
+&lt;p&gt;Let’s consider this very simple &lt;code&gt;Verticle&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyFirstVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; Future future)&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; Exception &lt;/span&gt;{
+    vertx.createHttpServer()
+        .requestHandler(req -&gt; req.response().end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hello vert.x&quot;&lt;/span&gt;))
+        .listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, done -&gt; {
+          &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (done.failed()) {
+            future.fail(done.cause());
+          } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+            future.complete();
+          }
+        });
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It just creates a new HTTP server and when launched it notifies the &lt;code&gt;future&lt;/code&gt; of the completion.&lt;/p&gt;
+&lt;p&gt;To test this verticle with Vert.x Unit you would write something like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@RunWith&lt;/span&gt;(VertxUnitRunner.class)
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyFirstVerticleTest&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; Vertx vertx;
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Before&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;setUp&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    vertx = Vertx.vertx();
+    vertx.deployVerticle(MyFirstVerticle.class.getName(),
+      context.asyncAssertSuccess());
+  }
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+    Async async = context.async();
+    vertx.createHttpClient().get(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;)
+      .handler(response -&gt; {
+        context.assertEquals(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;, response.statusCode());
+        response.bodyHandler(buffer -&gt; {
+          context.assertEquals(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hello vert.x&quot;&lt;/span&gt;, buffer.toString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;));
+          async.complete();
+        });
+      })
+      .end();
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;First, the test class is annotated with &lt;code&gt;@RunWith(VertxUnitRunner.class)&lt;/code&gt;, instructing JUnit to use this special runner. This runner lets you inject a &lt;code&gt;TestContext&lt;/code&gt; parameter into every test methods (as well as &lt;code&gt;@Before&lt;/code&gt; and &lt;code&gt;@After&lt;/code&gt;) to handle the asynchronous aspect of the test.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;setUp&lt;/code&gt; method, it creates a new instance of &lt;code&gt;Vertx&lt;/code&gt; and deploy the verticle. Thanks to &lt;code&gt;context.asyncAssertSuccess()&lt;/code&gt;, it waits until the successful completion of the verticle deployment. Indeed, the deployment is asynchronous, and we must be sure that the verticle has been deployed and has completed its initialization before starting to test it.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;test()&lt;/code&gt; method creates an &lt;code&gt;Async&lt;/code&gt; object that will be used to report when the test has been completed. Then it creates an HTTP client to emit a request on the server from our verticle and check that:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;the HTTP code is &lt;code&gt;200 (OK)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;the body is &lt;code&gt;hello vert.x&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;As you can see, to implement the checks, the assertions method are called on the &lt;code&gt;TestContext&lt;/code&gt; object, which control the test execution. When everything has been tested, we call &lt;code&gt;async.complete()&lt;/code&gt; to end the test. If an assertion failed, the test is obviously stopped. This would not be the case if you would use regular Junit assertions.&lt;/p&gt;
+&lt;h2 id=&quot;using-the-hamcrest-matchers&quot;&gt;Using the Hamcrest Matchers&lt;/h2&gt;
+&lt;p&gt;In the previous example, we used the the assertions available from the &lt;code&gt;TestContext&lt;/code&gt; instance. However it provides a limited set of methods. Hamcrest is a library of matchers, which can be combined in to create flexible expressions of intent in tests. It is very convenient when testing complex applications.&lt;/p&gt;
+&lt;p&gt;Hamcrest cannot be used directly as it would not report the failure on the &lt;code&gt;TestContext&lt;/code&gt;. For this purpose we create a &lt;code&gt;VertxMatcherAssert&lt;/code&gt; class:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;VertxMatcherAssert&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;T&gt; &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;assertThat&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context, T actual,
+    Matcher&lt;? &lt;span class=&quot;hljs-keyword&quot;&gt;super&lt;/span&gt; T&gt; matcher)&lt;/span&gt; &lt;/span&gt;{
+    assertThat(context, &lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;, actual, matcher);
+  }
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;T&gt; &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;assertThat&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context, String reason,
+    T actual, Matcher&lt;? &lt;span class=&quot;hljs-keyword&quot;&gt;super&lt;/span&gt; T&gt; matcher)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!matcher.matches(actual)) {
+      Description description = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; StringDescription();
+      description.appendText(reason)
+          .appendText(&lt;span class=&quot;hljs-string&quot;&gt;&quot;\nExpected: &quot;&lt;/span&gt;)
+          .appendDescriptionOf(matcher)
+          .appendText(&lt;span class=&quot;hljs-string&quot;&gt;&quot;\n     but: &quot;&lt;/span&gt;);
+      matcher.describeMismatch(actual, description);
+      context.fail(description.toString());
+    }
+  }
+
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;assertThat&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context, String reason,
+    &lt;span class=&quot;hljs-keyword&quot;&gt;boolean&lt;/span&gt; assertion)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!assertion) {
+      context.fail(reason);
+    }
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This class provides &lt;code&gt;assertThat&lt;/code&gt; method that reports error on the given &lt;code&gt;TestContext&lt;/code&gt;. The complete code is available &lt;a href=&quot;https://gist.github.com/cescoffier/5cbf4c69aa094ac9b1a6&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;With this class, we can re-implement our test as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;testWithHamcrest&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(TestContext context)&lt;/span&gt; &lt;/span&gt;{
+  Async async = context.async();
+  vertx.createHttpClient().get(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;).handler(response -&gt; {
+    assertThat(context, response.statusCode(), is(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;));
+    response.bodyHandler(buffer -&gt; {
+      assertThat(context, buffer.toString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;), is(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hello vert.x&quot;&lt;/span&gt;));
+      async.complete();
+    });
+  }).end();
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To ease the usage, I’ve added two &lt;em&gt;import static&lt;/em&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; io.vertx.unit.example.VertxMatcherAssert.assertThat;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; org.hamcrest.core.Is.is;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can use any Hamcrest matcher, or even implement your own as soon as you use the &lt;code&gt;assertThat&lt;/code&gt; method provided by &lt;code&gt;VertxMatcherAssert&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;In this post we have seen how you can combine Hamcrest and Vert.x Unit. So, you are not limited anymore by the set of assert methods provided by Vert.x Unit, and can use the whole expressiveness of Hamcrest Matchers.&lt;/p&gt;
+&lt;p&gt;Don’t forget that you still can’t use the &lt;code&gt;assert&lt;/code&gt; methods from Junit, as they don’t report on the &lt;code&gt;TestContext&lt;/code&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 18 Jan 2016 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/using-hamcrest-matchers-with-vert-x-unit</link>
+          <guid isPermaLink="true">http://vertx.io/blog/using-hamcrest-matchers-with-vert-x-unit</guid>
+          <author>
+            <name>cescoffier</name>
+            <uri>http://github.com/cescoffier</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Real-time bidding with Websockets and Vert.x</title>
           <description>
       &lt;article&gt;&lt;p&gt;The expectations of users for interactivity with web applications have changed over the past few years.
