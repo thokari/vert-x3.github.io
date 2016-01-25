@@ -8,6 +8,123 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Intro to Vert.x Shell</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Vert.x Shell provides an extensible command line for Vert.x, accessible via SSH, Telnet or a nice Web interface. Vert.x Shell comes out of the box with plenty of commands for Vert.x which makes it very handy for doing simple management operations like deploying a Verticle or getting the list of deployed Verticles. One power feature of Vert.x Shell is its extensibility: one can easily augment Vert.x Shell with its own commands. Let’s build an &lt;em&gt;http-client&lt;/em&gt; in JavaScript!&lt;/p&gt;
+&lt;h2 id=&quot;booting-the-shell&quot;&gt;Booting the Shell&lt;/h2&gt;
+&lt;p&gt;Vert.x Shell can be started in a couple of lines depending on the connectors you configure. The documentation provides several examples showing the &lt;a href=&quot;http://vertx.io/docs/vertx-shell/js/#_programmatic_service&quot;&gt;Shell Service configuration&lt;/a&gt;. For testing our command, we will use the Telnet protocol because it is easy to configure and use, so we just need to copy the corresponding section in &lt;em&gt;vertx-http-client.js&lt;/em&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;var ShellService = require(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-shell-js/shell_service&quot;&lt;/span&gt;);
+var &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt; = &lt;span class=&quot;hljs-title&quot;&gt;ShellService&lt;/span&gt;.create(vertx, &lt;/span&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;telnetOptions&quot;&lt;/span&gt; : {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;host&quot;&lt;/span&gt; : &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;,
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;port&quot;&lt;/span&gt; : &lt;span class=&quot;hljs-number&quot;&gt;4000&lt;/span&gt;
+  }
+});
+&lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;service&lt;/span&gt;.&lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can run it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-constant&quot;&gt;Juliens&lt;/span&gt;-&lt;span class=&quot;hljs-constant&quot;&gt;MacBook&lt;/span&gt;-&lt;span class=&quot;hljs-constant&quot;&gt;Pro&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;:java&lt;/span&gt; julien&lt;span class=&quot;hljs-variable&quot;&gt;$ &lt;/span&gt;vertx run vertx-http-client.js
+&lt;span class=&quot;hljs-constant&quot;&gt;Succeeded&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; deploying verticle&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And connect to the shell:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;Juliens-MacBook-Pro:&lt;span class=&quot;hljs-special&quot;&gt;~&lt;/span&gt; julien&lt;span class=&quot;hljs-formula&quot;&gt;$ telnet localhost 5000
+Trying ::1...
+telnet: connect to address ::1: Connection refused
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is &#39;^&lt;span class=&quot;hljs-special&quot;&gt;]&lt;/span&gt;&#39;.
+__      __ ______  _____  _______  __   __
+&lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;&lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;   / /|  ____||  _  &lt;span class=&quot;hljs-command&quot;&gt;\|&lt;/span&gt;__   __| &lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;&lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;/ /
+ &lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;&lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt; / / | |____ | :_) |   | |     &lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;  /
+  &lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;&lt;span class=&quot;hljs-command&quot;&gt;\/&lt;/span&gt; /  |  ____||   __/   | |      &gt; /
+   &lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt; /   | |____ | |&lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;&lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;   | |     / //&lt;span class=&quot;hljs-command&quot;&gt;\
+&lt;/span&gt;    &lt;span class=&quot;hljs-command&quot;&gt;\/&lt;/span&gt;    |______||_| &lt;span class=&quot;hljs-command&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;hljs-command&quot;&gt;\ &lt;/span&gt;  |_| o  /_/ &lt;span class=&quot;hljs-command&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;hljs-command&quot;&gt;\
+&lt;/span&gt;
+
+%&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can now already use the shell, the &lt;em&gt;help&lt;/em&gt; command lists the available commands.&lt;/p&gt;
+&lt;h2 id=&quot;creating-a-command&quot;&gt;Creating a command&lt;/h2&gt;
+&lt;p&gt;For the sake of simplicity we will write a single script that starts the Shell service and deploys our command. In the real world you would probably have the command in one file and the deployment in another.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;http://vertx.io/docs/vertx-shell/js/#_extending_vert_x_shell&quot;&gt;documentation&lt;/a&gt; explains how to add a new command to Vert.x shell, we can just copy this section and append it to the &lt;em&gt;vertx-http-client.js&lt;/em&gt; script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; CommandBuilder = &lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-shell-js/command_builder&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; CommandRegistry = &lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;vertx-shell-js/command_registry&quot;&lt;/span&gt;);
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; builder = CommandBuilder.command(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http-client&quot;&lt;/span&gt;);
+builder.processHandler(&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-params&quot;&gt;(process)&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Write a message to the console&lt;/span&gt;
+  process.write(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Implement the client\n&quot;&lt;/span&gt;);
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// End the process&lt;/span&gt;
+  process.end();
+});
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// Register the command&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; registry = CommandRegistry.getShared(vertx);
+registry.registerCommand(builder.build(vertx));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can use the command just to see it in action:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;% http-&lt;span class=&quot;hljs-keyword&quot;&gt;client&lt;/span&gt;
+Implement the &lt;span class=&quot;hljs-keyword&quot;&gt;client&lt;/span&gt;
+%&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;checking-arguments&quot;&gt;Checking arguments&lt;/h2&gt;
+&lt;p&gt;The &lt;em&gt;http-client&lt;/em&gt; requires an &lt;code&gt;url&lt;/code&gt; argument, an argument check is performed at the beginning of the process handler:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Check the url argument&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (process.args().length &lt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;) {
+  process.write(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Missing URL\n&quot;&lt;/span&gt;).end();
+  &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
+}
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; url = process.args()[&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;];&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;implementing-the-command&quot;&gt;Implementing the command&lt;/h2&gt;
+&lt;p&gt;The final step of this tutorial is the actual implementation of the client logic based on Vert.x HttpClient:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Create the client request&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; request = client.getAbs(url, &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(response)&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Print the response in the shell console&lt;/span&gt;
+  response.handler(&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(buffer)&lt;/span&gt; &lt;/span&gt;{
+    process.write(buffer.toString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;));
+  });
+
+  &lt;span class=&quot;hljs-comment&quot;&gt;// End the command when the response ends&lt;/span&gt;
+  response.endHandler(&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    process.end();
+  });
+});
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// Set a request handler to end the command with error&lt;/span&gt;
+request.exceptionHandler(&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(err)&lt;/span&gt; &lt;/span&gt;{
+  process.write(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Error: &quot;&lt;/span&gt; + err.getMessage());
+  process.end();
+});
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// End the http request&lt;/span&gt;
+request.end();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we can test the command in the shell:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;% http-client http://vertx.io
+http-client http://vertx.io
+&lt;!DOCTYPE html&gt;&lt;html lang=en&gt;&lt;head&gt;&lt;title&gt;Vert.x&lt;/title&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;...&lt;/span&gt;
+/javascripts/sticky_header.js&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;%&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;finally&quot;&gt;Finally&lt;/h2&gt;
+&lt;p&gt;We have seen how easy it is to extend Vert.x with a shell and create an &lt;em&gt;http-client&lt;/em&gt; custom command, you can get the full source code &lt;a href=&quot;https://gist.github.com/vietj/51ff223bfb7cfcbc97ce&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Our command is very simple, it only implements the very minimum, in future posts we will improve the command with support with more HTTP methods, SSL support or header support with the the Vert.x CLI API.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 25 Jan 2016 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/intro-to-vert-x-shell</link>
+          <guid isPermaLink="true">http://vertx.io/blog/intro-to-vert-x-shell</guid>
+          <author>
+            <name>vietj</name>
+            <uri>http://github.com/vietj</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Using Hamcrest Matchers with Vert.x Unit</title>
           <description>
       &lt;article&gt;&lt;p&gt;Vert.x Unit is a very elegant library to test asynchronous applications developed with vert.x. However because of this asynchronous aspect, reporting test failures is not natural for JUnit users.  This is because, the failed assertions need to be reported to the &lt;em&gt;test context&lt;/em&gt;, controlling the execution (and so the outcome) of the test. In other words, in a Vert.x Unit test you cannot use the regular Junit assertions and assertion libraries. In this blog post, we propose a way to let you using Hamcrest matchers in Vert.x Unit tests.&lt;/p&gt;
@@ -1590,9 +1707,9 @@ shared in real time on their screen.&lt;/p&gt;
 what is being drawn, however the external application has limited read write access to a single address on Vert.x
 event bus, ensuring that other services running on the cluster will not be exposed.&lt;/p&gt;
 &lt;p&gt;This is what you should expect to see:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx3-realtime-webapps/screencast.gif&quot; alt=&quot;Screencast&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://vertx.io/assets/blog/vertx3-realtime-webapps/screencast.gif&quot; alt=&quot;Screencast&quot;&gt;&lt;/p&gt;
 &lt;h2 id=&quot;bootstrap-a-project&quot;&gt;Bootstrap a project&lt;/h2&gt;
-&lt;p&gt;If you followed the previous &lt;a href=&quot;(/blog/my-first-vert-x-3-application/index.html&quot;&gt;series&lt;/a&gt; on Vert.x development, you saw
+&lt;p&gt;If you followed the previous &lt;a href=&quot;http://vertx.io/blog/my-first-vert-x-3-application/index.html&quot;&gt;series&lt;/a&gt; on Vert.x development, you saw
 that Java and Maven were the main topic, since Vert.x is polyglot I will focus on JavaScript and
 &lt;a href=&quot;https://www.npmjs.com/&quot;&gt;NPM&lt;/a&gt; as my programming language and package management tool.&lt;/p&gt;
 &lt;p&gt;With NPM start by creating a &lt;code&gt;package.json&lt;/code&gt;, in order to do this we should run:&lt;/p&gt;
@@ -1619,7 +1736,7 @@ you can run the application. You can add it to the &lt;code&gt;dependencies&lt;/
 }&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;If you do not know why there is the dependency on &lt;code&gt;vertx3-full&lt;/code&gt; or why the added &lt;code&gt;scripts&lt;/code&gt; property please check the
-&lt;a href=&quot;/blog/vert-x3-says-hello-to-npm-users/index.html&quot;&gt;older&lt;/a&gt; blog post about it.&lt;/p&gt;
+&lt;a href=&quot;http://vertx.io/blog/vert-x3-says-hello-to-npm-users/index.html&quot;&gt;older&lt;/a&gt; blog post about it.&lt;/p&gt;
 &lt;h2 id=&quot;project-structure&quot;&gt;Project Structure&lt;/h2&gt;
 &lt;p&gt;This post has no preference over project structure, so if you do not agree with the structure used here feel free to
 use what you feel best. For this example I will keep it to:&lt;/p&gt;
